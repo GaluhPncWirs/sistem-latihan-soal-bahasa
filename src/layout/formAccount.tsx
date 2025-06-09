@@ -13,7 +13,7 @@ export default function LayoutFormAccount({ formTitle, children }: any) {
         </h1>
         {children}
       </div>
-      {pathName === "/register" ? <ButtonLogin /> : <ButtonRegister />}
+      {pathName === "/Autentikasi/Login" ? <ButtonLogin /> : <ButtonRegister />}
     </div>
   );
 }

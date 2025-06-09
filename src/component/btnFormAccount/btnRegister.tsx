@@ -4,12 +4,12 @@ export default function ButtonRegister() {
   return (
     <div className="text-center mt-5">
       <p>
-        Belum Punya Akun ?{" "}
+        Sudah Punya Akun ?{" "}
         <Link
           className="font-semibold text-blue-700 hover:underline"
-          href="/Autentikasi/Daftar"
+          href="/Autentikasi/Login"
         >
-          Register
+          Login
         </Link>{" "}
       </p>
     </div>

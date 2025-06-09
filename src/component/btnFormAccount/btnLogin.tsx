@@ -4,12 +4,12 @@ export default function ButtonLogin() {
   return (
     <div className="text-center mt-5">
       <p>
-        Sudah Punya Akun ?{" "}
+        Belum Punya Akun ?{" "}
         <Link
           className="font-semibold text-blue-700 hover:underline"
-          href="/Autentikasi/Login"
+          href="/Autentikasi/Daftar"
         >
-          Login
+          Daftar
         </Link>{" "}
       </p>
     </div>
