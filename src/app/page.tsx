@@ -2,55 +2,36 @@ import NavigasiBar from "@/component/navigasiBar/navbar";
 
 export default function Home() {
   return (
-    <div className="bg-slate-200">
+    <div className="bg-slate-200 h-screen">
       <NavigasiBar />
 
-      {/* dasboard untuk siswa */}
       <div className="w-3/4 mx-auto mt-10 p-5">
-        <h1 className="text-2xl font-bold">Dashboard Siswa</h1>
-        <div className="w-10/12 mx-auto mt-8">
-          <h1 className="text-xl font-semibold bg-amber-400 text-center rounded-md py-2 mb-5">
-            Ujian Yang Tersedia
+        <div>
+          <h1 className="text-5xl font-bold text-center mb-10">
+            Platform Ujian Online
           </h1>
-          <table className="border-collapse w-full">
-            <thead>
-              <tr className="bg-slate-300 border">
-                <th>Ujian</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border">
-                <td className="px-3">lorem ipsum dolor</td>
-                <td className="px-3">Complete</td>
-              </tr>
-            </tbody>
-          </table>
-          <div className="mt-5">
-            <h1 className="text-lg font-semibold">
-              Pertanyaan <span className="text-red-600">ke-1</span>
-            </h1>
-            <div>
-              <h1>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Officiis totam, blanditiis
-              </h1>
-              <ul>
-                <li>
-                  <span>A.</span> lorem ipsum
-                </li>
-                <li>
-                  <span>B.</span> lorem ipsum
-                </li>
-                <li>
-                  <span>C.</span> lorem ipsum
-                </li>
-                <li>
-                  <span>D.</span> lorem ipsum
-                </li>
-              </ul>
-            </div>
+          <p className="text-lg text-justify">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Provident
+            veniam neque aliquid laboriosam ipsum animi repudiandae,
+            reprehenderit modi, maxime exercitationem numquam. Voluptas
+            perferendis quae quasi magni nihil cum totam suscipit.
+          </p>
+          <div className="mt-5 w-1/5 mx-auto">
+            <button className="text-center w-full bg-blue-400 rounded-md py-2 text-lg font-semibold cursor-pointer hover:bg-blue-500">
+              Mulai
+            </button>
           </div>
+        </div>
+        <div className="mt-10 border-t-2 border-slate-800 flex justify-around items-center h-20 pt-10">
+          <button className="bg-amber-300 px-10 py-3 rounded-lg hover:bg-amber-400 cursor-pointer text-lg font-semibold">
+            Lihat Ujian
+          </button>
+          <button className="bg-amber-300 px-10 py-3 rounded-lg hover:bg-amber-400 cursor-pointer text-lg font-semibold">
+            Kerjakan Ujian
+          </button>
+          <button className="bg-amber-300 px-10 py-3 rounded-lg hover:bg-amber-400 cursor-pointer text-lg font-semibold">
+            Lihat Hasil
+          </button>
         </div>
       </div>
     </div>

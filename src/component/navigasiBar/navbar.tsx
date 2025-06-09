@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function NavigasiBar() {
   return (
@@ -12,10 +13,19 @@ export default function NavigasiBar() {
           <li className="cursor-pointer text-xl font-semibold">Soal</li>
           <li className="cursor-pointer text-xl font-semibold">Profil</li>
         </ul>
-        <div className="basis-1/5 h-full flex items-center justify-center">
-          <button className="bg-blue-400 py-1.5 px-10 rounded-lg hover:bg-blue-500 cursor-pointer font-semibold text-lg">
+        <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5">
+          <Link
+            href="/Autentikasi/Daftar"
+            className="bg-blue-400 py-1.5 px-5 rounded-lg hover:bg-blue-500 cursor-pointer font-semibold text-lg"
+          >
+            Daftar
+          </Link>
+          <Link
+            href="/Autentikasi/Login"
+            className="bg-blue-400 py-1.5 px-5 rounded-lg hover:bg-blue-500 cursor-pointer font-semibold text-lg"
+          >
             Login
-          </button>
+          </Link>
         </div>
       </div>
     </div>
