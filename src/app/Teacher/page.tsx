@@ -43,7 +43,7 @@ export default function Teacher() {
       {/* dasboard untuk siswa */}
       <div className="w-3/4 mx-auto mt-5 p-5 pb-10">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
-        <ul className="w-10/12 mx-auto mt-10 flex justify-around">
+        <ul className="w-10/12 mx-auto mt-16 flex justify-around">
           <li
             className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500"
             id="createQusetions"
@@ -66,7 +66,7 @@ export default function Teacher() {
             <Link href="">Kelola Siswa</Link>
           </li>
         </ul>
-        <div className="border border-slate-800 mt-10 rounded-xl" />
+        <div className="border border-slate-800 mt-10 mb-7 rounded-xl" />
 
         <div className="mt-5">
           {dashboardButton.viewResult === true ? (
