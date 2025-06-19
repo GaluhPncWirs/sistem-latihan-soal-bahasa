@@ -43,7 +43,7 @@ export default function Teacher() {
       {/* dasboard untuk siswa */}
       <div className="w-3/4 mx-auto mt-5 p-5 pb-10">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
-        <ul className="w-10/12 mx-auto mt-16 flex justify-around">
+        <ul className="w-10/12 mx-auto mt-16 flex justify-around font-semibold text-lg">
           <li
             className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500"
             id="createQusetions"
