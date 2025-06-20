@@ -1,7 +1,9 @@
-import { useRef, useState } from "react";
+import { supabase } from "@/lib/supabase/data";
+import { useEffect, useRef, useState } from "react";
 
 export default function CreateNewQuestions() {
-  const [allData, setAllData] = useState({});
+  // const [data, setData] = useState<any>([]);
+  // const [allData, setAllData] = useState({});
   const [answer, setAnswer] = useState({
     answer_a: "",
     answer_b: "",
@@ -21,14 +23,32 @@ export default function CreateNewQuestions() {
     }));
   }
 
-  function handleCreateAddQuestion() {
+  // function handleCreateAddQuestion() {
+  //   const questionValue = question.current.value || "";
+  //   const correctAnswer = selectCorrectAnswer.current.value || "";
+  //   setAllData({
+  //     question: questionValue,
+  //     correct: correctAnswer,
+  //     ...answer,
+  //   });
+  // }
+
+  async function handleCreateAddQuestion() {
     const questionValue = question.current.value || "";
     const correctAnswer = selectCorrectAnswer.current.value || "";
-    setAllData({
-      question: questionValue,
-      correct: correctAnswer,
-      ...answer,
-    });
+    const { data, error } = await supabase.from("for-questions").insert([
+      {
+        questions: questionValue,
+        answer: answer,
+        correctAnswer: correctAnswer,
+      },
+    ]);
+
+    if (error) {
+      console.log("Gagal menambahkan data: ", error.message);
+    } else {
+      console.log("Data berhasil ditambahkan:", data);
+    }
   }
 
   return (
