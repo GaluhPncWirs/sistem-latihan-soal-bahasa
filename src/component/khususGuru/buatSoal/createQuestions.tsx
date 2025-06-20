@@ -1,9 +1,9 @@
 import { supabase } from "@/lib/supabase/data";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import ModalBoxAddQuestionsSuccess from "./modalBoxs/addSuccess";
+import ModalBoxAddQuestionsFailed from "./modalBoxs/addFailed";
 
 export default function CreateNewQuestions() {
-  // const [data, setData] = useState<any>([]);
-  // const [allData, setAllData] = useState({});
   const [answer, setAnswer] = useState({
     answer_a: "",
     answer_b: "",
@@ -11,9 +11,12 @@ export default function CreateNewQuestions() {
     answer_d: "",
     answer_e: "",
   });
-
   const question = useRef<any>(null);
   const selectCorrectAnswer = useRef<any>(null);
+  const [modal, setModal] = useState({
+    success: false,
+    failed: false,
+  });
 
   function handleAddAnswer(event: any) {
     const { id, value } = event.target;
@@ -22,16 +25,6 @@ export default function CreateNewQuestions() {
       [id]: value,
     }));
   }
-
-  // function handleCreateAddQuestion() {
-  //   const questionValue = question.current.value || "";
-  //   const correctAnswer = selectCorrectAnswer.current.value || "";
-  //   setAllData({
-  //     question: questionValue,
-  //     correct: correctAnswer,
-  //     ...answer,
-  //   });
-  // }
 
   async function handleCreateAddQuestion() {
     const questionValue = question.current.value || "";
@@ -46,7 +39,15 @@ export default function CreateNewQuestions() {
 
     if (error) {
       console.log("Gagal menambahkan data: ", error.message);
+      setModal({
+        success: false,
+        failed: true,
+      });
     } else {
+      setModal({
+        success: true,
+        failed: false,
+      });
       console.log("Data berhasil ditambahkan:", data);
     }
   }
@@ -167,12 +168,17 @@ export default function CreateNewQuestions() {
           </div>
         </form>
         <button
-          className="text-center mt-5 bg-blue-200 px-10 rounded-md py-1.5 font-semibold"
+          className="text-center mt-5 bg-blue-200 px-10 rounded-md py-1.5 font-semibold cursor-pointer"
           onClick={handleCreateAddQuestion}
         >
           Buat
         </button>
       </div>
+      {modal.failed === true ? (
+        <ModalBoxAddQuestionsFailed setModal={setModal} />
+      ) : modal.success === true ? (
+        <ModalBoxAddQuestionsSuccess setModal={setModal} />
+      ) : null}
     </div>
   );
 }
