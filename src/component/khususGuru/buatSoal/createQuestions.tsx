@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase/data";
 import { useRef, useState } from "react";
 import ModalBoxAddQuestionsSuccess from "./modalBoxs/addSuccess";
 import ModalBoxAddQuestionsFailed from "./modalBoxs/addFailed";
+import { Button } from "@/components/ui/button";
 
 export default function CreateNewQuestions() {
   const [answer, setAnswer] = useState({
@@ -48,7 +49,6 @@ export default function CreateNewQuestions() {
         success: true,
         failed: false,
       });
-      console.log("Data berhasil ditambahkan:", data);
     }
   }
 
@@ -167,12 +167,13 @@ export default function CreateNewQuestions() {
             </select>
           </div>
         </form>
-        <button
-          className="text-center mt-5 bg-blue-200 px-10 rounded-md py-1.5 font-semibold cursor-pointer"
+        <Button
+          className="text-center mt-5 px-8 rounded-md py-1.5 font-semibold cursor-pointer"
           onClick={handleCreateAddQuestion}
+          variant="outline"
         >
           Buat
-        </button>
+        </Button>
       </div>
       {modal.failed === true ? (
         <ModalBoxAddQuestionsFailed setModal={setModal} />

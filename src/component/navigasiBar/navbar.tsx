@@ -10,8 +10,12 @@ export default function NavigasiBar() {
           <h1>Logo</h1>
         </div>
         <ul className="basis-3/5 flex justify-around h-full items-center">
-          <li className="cursor-pointer text-xl font-semibold">Soal</li>
-          <li className="cursor-pointer text-xl font-semibold">Profil</li>
+          <li className="cursor-pointer text-xl font-semibold">
+            <Link href="/Soal">Soal</Link>
+          </li>
+          <li className="cursor-pointer text-xl font-semibold">
+            <Link href="/Profile">Profil</Link>
+          </li>
         </ul>
         <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5">
           <Link
