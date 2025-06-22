@@ -11,7 +11,7 @@ export default function NavigasiBar() {
         </div>
         <ul className="basis-3/5 flex justify-around h-full items-center">
           <li className="cursor-pointer text-xl font-semibold">
-            <Link href="/Soal">Soal</Link>
+            <Link href="/Exams">Soal</Link>
           </li>
           <li className="cursor-pointer text-xl font-semibold">
             <Link href="/Profile">Profil</Link>
