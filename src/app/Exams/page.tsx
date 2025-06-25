@@ -46,8 +46,7 @@ export default function Soal() {
                     {["a", "b", "c", "d", "e"].map((opt) => {
                       const answerKey = `answer_${opt}`;
                       const answerText = item.answer[answerKey];
-                      const isSelected =
-                        clickedAnswer[item.id] === item.answer[answerKey];
+                      const isSelected = clickedAnswer[item.id] === answerText;
                       return (
                         <Button
                           key={opt}
@@ -56,10 +55,7 @@ export default function Soal() {
                             isSelected ? "line-through" : ""
                           }`}
                           onClick={() =>
-                            handleSelectedAnswer(
-                              item.id,
-                              item.answer[answerKey]
-                            )
+                            handleSelectedAnswer(item.id, answerText)
                           }
                         >
                           {opt.toUpperCase()}. {answerText}

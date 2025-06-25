@@ -10,12 +10,31 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/lib/supabase/data";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ViewQuestions() {
   const [viewQuestions, setViewQuestions] = useState<any>([]);
+  const [newAnswer, setNewAnswer] = useState({
+    answer_a: "",
+    answer_b: "",
+    answer_c: "",
+    answer_d: "",
+    answer_e: "",
+  });
+  const newQuestion = useRef<any>(null);
+  const [selectCorrectNewAnswer, setSelectCorrectNewAnswer] = useState("");
+  // const [modal, setModal] = useState({
+  //   success: false,
+  //   failed: false,
+  // });
 
   useEffect(() => {
     async function handleViewQuestions() {
@@ -23,12 +42,48 @@ export default function ViewQuestions() {
       setViewQuestions(data);
       if (error) {
         console.log("data gagal ditampilkan:", error.message);
-      } else {
-        console.log("Data berhasil ditampilkan:", data);
       }
     }
     handleViewQuestions();
   }, []);
+
+  async function handleDeleteQuestions(idQuestion: number) {
+    const { data, error } = await supabase
+      .from("for-questions")
+      .delete()
+      .eq("id", idQuestion);
+    if (error) {
+      console.log("data gagal dihapus:", error.message);
+    } else {
+      console.log("data berhasil dihapus:", data);
+    }
+  }
+
+  async function handleUpdateQuestions(idQuestion: number) {
+    const updateData = {
+      questions: newQuestion.current.value || "",
+      answer: newAnswer,
+      correctAnswer: selectCorrectNewAnswer,
+    };
+
+    const { data, error } = await supabase
+      .from("for-questions")
+      .update(updateData)
+      .eq("id", idQuestion);
+    if (error) {
+      console.log("data gagal diedit:", error.message);
+    } else {
+      console.log("data berhasil diedit:", data);
+    }
+  }
+
+  function handleUpdateAnswer(event: any) {
+    const { id, value } = event.target;
+    setNewAnswer((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  }
 
   return (
     <table className="border-collapse w-full">
@@ -93,14 +148,6 @@ export default function ViewQuestions() {
                   </ul>
                 </td>
                 <td className="flex justify-center gap-3 items-center">
-                  {/* <ul className="flex gap-3 flex-col justify-center items-center">
-                    <li className="text-blue-500 font-semibold hover:text-blue-600 hover:underline">
-                      <Link href="">Edit</Link>
-                    </li>
-                    <li className="text-blue-500 font-semibold hover:text-blue-600 hover:underline">
-                      <Link href="">Hapus</Link>
-                    </li>
-                  </ul> */}
                   <Dialog>
                     <form>
                       <DialogTrigger asChild>
@@ -118,40 +165,108 @@ export default function ViewQuestions() {
                             <label htmlFor="editPertannyaan">
                               Edit Pertanyaan
                             </label>
-                            <Input id="editPertannyaan" className="mt-2" />
+                            <Input
+                              id="editPertannyaan"
+                              className="mt-2"
+                              ref={newQuestion}
+                            />
                           </div>
 
                           <div className="mt-3">
-                            <h1 className="mb-5">Edit Jawaban</h1>
+                            <h1 className="mb-2">Edit Jawaban</h1>
                             <div className="flex flex-wrap justify-center gap-5">
                               <div>
-                                <label htmlFor="">Jawaban A</label>
-                                <Input />
+                                <label htmlFor="answer_a">Jawaban A</label>
+                                <Input
+                                  id="answer_a"
+                                  onChange={handleUpdateAnswer}
+                                  value={newAnswer.answer_a}
+                                />
                               </div>
                               <div>
-                                <label htmlFor="">Jawaban B</label>
-                                <Input />
+                                <label htmlFor="answer_b">Jawaban B</label>
+                                <Input
+                                  id="answer_b"
+                                  onChange={handleUpdateAnswer}
+                                  value={newAnswer.answer_b}
+                                />
                               </div>
                               <div>
-                                <label htmlFor="">Jawaban C</label>
-                                <Input />
+                                <label htmlFor="answer_c">Jawaban C</label>
+                                <Input
+                                  id="answer_c"
+                                  onChange={handleUpdateAnswer}
+                                  value={newAnswer.answer_c}
+                                />
                               </div>
                               <div>
-                                <label htmlFor="">Jawaban D</label>
-                                <Input />
+                                <label htmlFor="answer_d">Jawaban D</label>
+                                <Input
+                                  id="answer_d"
+                                  onChange={handleUpdateAnswer}
+                                  value={newAnswer.answer_d}
+                                />
                               </div>
                               <div>
-                                <label htmlFor="">Jawaban E</label>
-                                <Input />
+                                <label htmlFor="answer_e">Jawaban E</label>
+                                <Input
+                                  id="answer_e"
+                                  onChange={handleUpdateAnswer}
+                                  value={newAnswer.answer_e}
+                                />
                               </div>
                             </div>
+                          </div>
+
+                          <div className="mt-2">
+                            <h1 className="mb-3">Pilih Jawaban</h1>
+                            <Select
+                              onValueChange={(val) =>
+                                setSelectCorrectNewAnswer(val)
+                              }
+                            >
+                              <SelectTrigger className="w-2/3">
+                                <SelectValue placeholder="Pilih Jawaban Yang Benar" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value={newAnswer.answer_a || "tes"}>
+                                  {newAnswer.answer_a || "tes"}
+                                </SelectItem>
+                                <SelectItem
+                                  value={newAnswer.answer_b || "tes2"}
+                                >
+                                  {newAnswer.answer_b || "tes2"}
+                                </SelectItem>
+                                <SelectItem
+                                  value={newAnswer.answer_c || "tes3"}
+                                >
+                                  {newAnswer.answer_c || "tes3"}
+                                </SelectItem>
+                                <SelectItem
+                                  value={newAnswer.answer_d || "tes4"}
+                                >
+                                  {newAnswer.answer_d || "tes4"}
+                                </SelectItem>
+                                <SelectItem
+                                  value={newAnswer.answer_e || "tes5"}
+                                >
+                                  {newAnswer.answer_e || "tes5"}
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                         </div>
                         <DialogFooter>
                           <DialogClose asChild>
                             <Button variant="outline">Cancel</Button>
                           </DialogClose>
-                          <Button type="submit">Save Changes</Button>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => handleUpdateQuestions(data.id)}
+                            >
+                              Save Changes
+                            </Button>
+                          </DialogClose>
                         </DialogFooter>
                       </DialogContent>
                     </form>
@@ -173,7 +288,13 @@ export default function ViewQuestions() {
                           <DialogClose asChild>
                             <Button variant="outline">Cancel</Button>
                           </DialogClose>
-                          <Button type="submit">Hapus</Button>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => handleDeleteQuestions(data.id)}
+                            >
+                              Hapus
+                            </Button>
+                          </DialogClose>
                         </DialogFooter>
                       </DialogContent>
                     </form>
