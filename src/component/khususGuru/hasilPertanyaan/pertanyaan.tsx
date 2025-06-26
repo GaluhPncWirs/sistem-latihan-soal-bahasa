@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/lib/supabase/data";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 export default function ViewQuestions() {
   const [viewQuestions, setViewQuestions] = useState<any>([]);
@@ -53,9 +54,13 @@ export default function ViewQuestions() {
       .delete()
       .eq("id", idQuestion);
     if (error) {
-      console.log("data gagal dihapus:", error.message);
+      toast("Gagal ❌", {
+        description: "Soal Gagal Dihapus",
+      });
     } else {
-      console.log("data berhasil dihapus:", data);
+      toast("Berhasil ✅", {
+        description: "Soal Telah Berhasil Dihapus",
+      });
     }
   }
 
@@ -71,9 +76,13 @@ export default function ViewQuestions() {
       .update(updateData)
       .eq("id", idQuestion);
     if (error) {
-      console.log("data gagal diedit:", error.message);
+      toast("Gagal ❌", {
+        description: "Soal Gagal Diedit Periksa Kembali Soalnya",
+      });
     } else {
-      console.log("data berhasil diedit:", data);
+      toast("Berhasil ✅", {
+        description: "Soal Telah Berhasil Diedit",
+      });
     }
   }
 
@@ -229,28 +238,30 @@ export default function ViewQuestions() {
                                 <SelectValue placeholder="Pilih Jawaban Yang Benar" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value={newAnswer.answer_a || "tes"}>
-                                  {newAnswer.answer_a || "tes"}
+                                <SelectItem
+                                  value={newAnswer.answer_a || "Jawaban A"}
+                                >
+                                  {newAnswer.answer_a || "Jawaban A"}
                                 </SelectItem>
                                 <SelectItem
-                                  value={newAnswer.answer_b || "tes2"}
+                                  value={newAnswer.answer_b || "Jawaban B"}
                                 >
-                                  {newAnswer.answer_b || "tes2"}
+                                  {newAnswer.answer_b || "Jawaban B"}
                                 </SelectItem>
                                 <SelectItem
-                                  value={newAnswer.answer_c || "tes3"}
+                                  value={newAnswer.answer_c || "Jawaban C"}
                                 >
-                                  {newAnswer.answer_c || "tes3"}
+                                  {newAnswer.answer_c || "Jawaban C"}
                                 </SelectItem>
                                 <SelectItem
-                                  value={newAnswer.answer_d || "tes4"}
+                                  value={newAnswer.answer_d || "Jawaban D"}
                                 >
-                                  {newAnswer.answer_d || "tes4"}
+                                  {newAnswer.answer_d || "Jawaban D"}
                                 </SelectItem>
                                 <SelectItem
-                                  value={newAnswer.answer_e || "tes5"}
+                                  value={newAnswer.answer_e || "Jawaban E"}
                                 >
-                                  {newAnswer.answer_e || "tes5"}
+                                  {newAnswer.answer_e || "Jawaban E"}
                                 </SelectItem>
                               </SelectContent>
                             </Select>

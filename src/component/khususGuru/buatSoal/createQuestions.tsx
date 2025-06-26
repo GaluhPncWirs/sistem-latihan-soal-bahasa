@@ -1,8 +1,25 @@
 import { supabase } from "@/lib/supabase/data";
-import { useRef, useState } from "react";
-import ModalBoxAddQuestionsSuccess from "./modalBoxs/addSuccess";
-import ModalBoxAddQuestionsFailed from "./modalBoxs/addFailed";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function CreateNewQuestions() {
   const [answer, setAnswer] = useState({
@@ -12,12 +29,9 @@ export default function CreateNewQuestions() {
     answer_d: "",
     answer_e: "",
   });
-  const question = useRef<any>(null);
-  const selectCorrectAnswer = useRef<any>(null);
-  const [modal, setModal] = useState({
-    success: false,
-    failed: false,
-  });
+  const [question, setQuestion] = useState("");
+  const [selectCorrectAnswer, setSelectCorrectAnswer] = useState("");
+  const [clearInput, setClearInput] = useState(false);
 
   function handleAddAnswer(event: any) {
     const { id, value } = event.target;
@@ -28,48 +42,73 @@ export default function CreateNewQuestions() {
   }
 
   async function handleCreateAddQuestion() {
-    const questionValue = question.current.value || "";
-    const correctAnswer = selectCorrectAnswer.current.value || "";
-    const { data, error } = await supabase.from("for-questions").insert([
-      {
-        questions: questionValue,
-        answer: answer,
-        correctAnswer: correctAnswer,
-      },
-    ]);
+    const { data, error }: any = await supabase
+      .from("for-questions")
+      .select("*")
+      .eq("questions", question);
 
-    if (error) {
-      console.log("Gagal menambahkan data: ", error.message);
-      setModal({
-        success: false,
-        failed: true,
+    if (data?.length > 0) {
+      toast("Gagal ❌", {
+        description: "Soalnya Sama Seperti Yang Sebelumnya Telah Dibuat",
+      });
+    } else if (error) {
+      toast("Gagal ❌", {
+        description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
       });
     } else {
-      setModal({
-        success: true,
-        failed: false,
-      });
+      setClearInput(true);
+      const { data, error } = await supabase.from("for-questions").insert([
+        {
+          questions: question,
+          answer: answer,
+          correctAnswer: selectCorrectAnswer,
+        },
+      ]);
+
+      if (error) {
+        toast("Gagal ❌", {
+          description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+        });
+      } else {
+        toast("Berhasil ✅", {
+          description: "Soal Berhasil Ditambahkan",
+        });
+      }
     }
   }
 
+  useEffect(() => {
+    if (clearInput) {
+      setAnswer({
+        answer_a: "",
+        answer_b: "",
+        answer_c: "",
+        answer_d: "",
+        answer_e: "",
+      });
+      setSelectCorrectAnswer("");
+      setQuestion("");
+    }
+  }, [clearInput]);
+
   return (
     <div>
-      <div className="bg-[#3674B5] p-5 rounded-lg">
+      <div className="bg-[#3674B5] p-5 rounded-lg w-11/12 mx-auto">
         <h1 className="text-2xl font-semibold text-center mb-7 text-slate-100">
           Buat Soal Ujian
         </h1>
         <form className="flex flex-col gap-5">
-          <div className="flex items-center w-full bg-blue-400 p-5 rounded-lg">
+          <div className="flex items-center w-full bg-slate-100 p-5 rounded-lg">
             <label htmlFor="questions" className="text-lg font-semibold mr-5 ">
               Pertanyaan
             </label>
-            <input
+            <Input
               id="questions"
               className="border border-black rounded-sm p-1 px-2 w-3/5"
-              ref={question}
-            ></input>
+              onChange={(e: any) => setQuestion(e.currentTarget.value)}
+            />
           </div>
-          <div className="bg-blue-300 p-5 rounded-lg">
+          <div className="bg-slate-100 p-5 rounded-lg">
             <h1 className="text-lg font-semibold">Isi Jawaban</h1>
             <div className="flex gap-5 mt-3 items-center justify-center flex-wrap">
               <div className="text-center">
@@ -79,7 +118,7 @@ export default function CreateNewQuestions() {
                 >
                   Jawaban A
                 </label>
-                <input
+                <Input
                   id="answer_a"
                   type="text"
                   className="border border-black rounded-sm p-1 px-2"
@@ -94,7 +133,7 @@ export default function CreateNewQuestions() {
                 >
                   Jawaban B
                 </label>
-                <input
+                <Input
                   id="answer_b"
                   type="text"
                   className="border border-black rounded-sm p-1 px-2"
@@ -109,7 +148,7 @@ export default function CreateNewQuestions() {
                 >
                   Jawaban C
                 </label>
-                <input
+                <Input
                   id="answer_c"
                   type="text"
                   className="border border-black rounded-sm p-1 px-2"
@@ -124,7 +163,7 @@ export default function CreateNewQuestions() {
                 >
                   Jawaban D
                 </label>
-                <input
+                <Input
                   id="answer_d"
                   type="text"
                   className="border border-black rounded-sm p-1 px-2"
@@ -139,7 +178,7 @@ export default function CreateNewQuestions() {
                 >
                   Jawaban E
                 </label>
-                <input
+                <Input
                   id="answer_e"
                   type="text"
                   className="border border-black rounded-sm p-1 px-2"
@@ -149,37 +188,80 @@ export default function CreateNewQuestions() {
               </div>
             </div>
           </div>
-          <div className="bg-blue-400 p-5 rounded-lg">
+          <div className="bg-slate-100 p-5 rounded-lg">
             <h1 className="text-lg font-semibold mb-3">Jawaban Yang Benar</h1>
-            <select
-              id="correctAnswer"
-              className="cursor-pointer bg-blue-300 rounded-md p-2 text-sm w-1/2"
-              ref={selectCorrectAnswer}
-            >
-              <option value="" disabled hidden>
-                Pilih
-              </option>
-              <option value={answer.answer_a}>{answer.answer_a}</option>
-              <option value={answer.answer_b}>{answer.answer_b}</option>
-              <option value={answer.answer_c}>{answer.answer_c}</option>
-              <option value={answer.answer_d}>{answer.answer_d}</option>
-              <option value={answer.answer_e}>{answer.answer_e}</option>
-            </select>
+            <Select onValueChange={(val) => setSelectCorrectAnswer(val)}>
+              <SelectTrigger className="w-2/3">
+                <SelectValue placeholder="Pilih Jawaban Yang Benar" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={answer.answer_a || "Jawaban A"}>
+                  {answer.answer_a || "Jawaban A"}
+                </SelectItem>
+                <SelectItem value={answer.answer_b || "Jawaban B"}>
+                  {answer.answer_b || "Jawaban B"}
+                </SelectItem>
+                <SelectItem value={answer.answer_c || "Jawaban C"}>
+                  {answer.answer_c || "Jawaban C"}
+                </SelectItem>
+                <SelectItem value={answer.answer_d || "Jawaban D"}>
+                  {answer.answer_d || "Jawaban D"}
+                </SelectItem>
+                <SelectItem value={answer.answer_e || "Jawaban E"}>
+                  {answer.answer_e || "Jawaban E"}
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </form>
-        <Button
-          className="text-center mt-5 px-8 rounded-md py-1.5 font-semibold cursor-pointer"
-          onClick={handleCreateAddQuestion}
-          variant="outline"
-        >
-          Buat
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="text-center mt-5 px-8 text-black rounded-md py-1.5 font-semibold cursor-pointer bg-blue-400 hover:bg-blue-500">
+              Buat
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Apakah Soal ini Sudah Benar ?</DialogTitle>
+              <DialogDescription className="mt-3">
+                Dengan Soal Seperti ini
+              </DialogDescription>
+              <DialogDescription>
+                Pertanyaan <span className="font-bold">{question}</span>
+              </DialogDescription>
+              <DialogDescription>
+                Jawaban A <span className="font-bold">{answer.answer_a}</span>
+              </DialogDescription>
+              <DialogDescription>
+                Jawaban B <span className="font-bold">{answer.answer_b}</span>
+              </DialogDescription>
+              <DialogDescription>
+                Jawaban C <span className="font-bold">{answer.answer_c}</span>
+              </DialogDescription>
+              <DialogDescription>
+                Jawaban D <span className="font-bold">{answer.answer_d}</span>
+              </DialogDescription>
+              <DialogDescription>
+                Jawaban E <span className="font-bold">{answer.answer_e}</span>
+              </DialogDescription>
+              <DialogDescription>
+                Jawaban Yang Benar{" "}
+                <span className="font-bold">{selectCorrectAnswer}</span>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button variant="default" onClick={handleCreateAddQuestion}>
+                  Buat
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-      {modal.failed === true ? (
-        <ModalBoxAddQuestionsFailed setModal={setModal} />
-      ) : modal.success === true ? (
-        <ModalBoxAddQuestionsSuccess setModal={setModal} />
-      ) : null}
     </div>
   );
 }
