@@ -43,29 +43,29 @@ export default function Teacher() {
       <Toaster richColors />
 
       {/* dasboard untuk siswa */}
-      <div className="w-3/4 mx-auto mt-5 p-5 pb-10">
+      <div className="w-4/5 mx-auto mt-5 p-5 pb-10">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
         <ul className="w-10/12 mx-auto mt-16 flex justify-around font-semibold text-lg">
           <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500"
+            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer"
             id="createQusetions"
             onClick={(e) => handleClickItem(e.currentTarget.id)}
           >
-            <Link href="">Buat Soal</Link>
+            Buat Soal
           </li>
           <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500"
+            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer"
             id="viewResult"
             onClick={(e) => handleClickItem(e.currentTarget.id)}
           >
-            <Link href="">Lihat Hasil</Link>
+            Lihat Hasil
           </li>
           <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500"
+            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer"
             id="manageStudent"
             onClick={(e) => handleClickItem(e.currentTarget.id)}
           >
-            <Link href="">Kelola Siswa</Link>
+            Kelola Siswa
           </li>
         </ul>
         <div className="border border-slate-800 mt-10 mb-7 rounded-xl" />

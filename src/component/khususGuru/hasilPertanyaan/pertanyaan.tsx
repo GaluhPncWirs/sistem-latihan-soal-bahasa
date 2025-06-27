@@ -30,12 +30,8 @@ export default function ViewQuestions() {
     answer_d: "",
     answer_e: "",
   });
-  const newQuestion = useRef<any>(null);
   const [selectCorrectNewAnswer, setSelectCorrectNewAnswer] = useState("");
-  // const [modal, setModal] = useState({
-  //   success: false,
-  //   failed: false,
-  // });
+  const [updateQuestion, setUpdateQuestion] = useState("");
 
   useEffect(() => {
     async function handleViewQuestions() {
@@ -66,7 +62,7 @@ export default function ViewQuestions() {
 
   async function handleUpdateQuestions(idQuestion: number) {
     const updateData = {
-      questions: newQuestion.current.value || "",
+      questions: updateQuestion,
       answer: newAnswer,
       correctAnswer: selectCorrectNewAnswer,
     };
@@ -98,14 +94,16 @@ export default function ViewQuestions() {
     <table className="border-collapse w-full">
       <thead>
         <tr className="bg-slate-500 border-2 border-black">
+          <th className="text-slate-100 p-2">No</th>
           <th className="text-slate-100 p-2">Pertanyaan</th>
           <th className="text-slate-100 p-2">Kelola</th>
         </tr>
       </thead>
       <tbody>
         {viewQuestions.length > 0
-          ? viewQuestions.map((data: any) => (
+          ? viewQuestions.map((data: any, i: number) => (
               <tr className="border-2 border-black" key={data.id}>
+                <td className="px-3 bg-slate-300">{i + 1}</td>
                 <td className="px-3 bg-stone-100 w-11/12">
                   <h1>{data.questions}</h1>
                   <ul className="flex justify-around flex-wrap items-center my-2">
@@ -160,7 +158,12 @@ export default function ViewQuestions() {
                   <Dialog>
                     <form>
                       <DialogTrigger asChild>
-                        <Button variant="outline">Edit</Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setUpdateQuestion(data.questions)}
+                        >
+                          Edit
+                        </Button>
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
@@ -177,7 +180,10 @@ export default function ViewQuestions() {
                             <Input
                               id="editPertannyaan"
                               className="mt-2"
-                              ref={newQuestion}
+                              onChange={(e: any) =>
+                                setUpdateQuestion(e.currentTarget.value)
+                              }
+                              value={updateQuestion}
                             />
                           </div>
 
@@ -189,7 +195,10 @@ export default function ViewQuestions() {
                                 <Input
                                   id="answer_a"
                                   onChange={handleUpdateAnswer}
-                                  value={newAnswer.answer_a}
+                                  value={
+                                    newAnswer.answer_a || data.answer.answer_a
+                                  }
+                                  placeholder={data.answer.answer_a}
                                 />
                               </div>
                               <div>
@@ -198,6 +207,7 @@ export default function ViewQuestions() {
                                   id="answer_b"
                                   onChange={handleUpdateAnswer}
                                   value={newAnswer.answer_b}
+                                  placeholder={data.answer.answer_b}
                                 />
                               </div>
                               <div>
@@ -206,6 +216,7 @@ export default function ViewQuestions() {
                                   id="answer_c"
                                   onChange={handleUpdateAnswer}
                                   value={newAnswer.answer_c}
+                                  placeholder={data.answer.answer_c}
                                 />
                               </div>
                               <div>
@@ -214,6 +225,7 @@ export default function ViewQuestions() {
                                   id="answer_d"
                                   onChange={handleUpdateAnswer}
                                   value={newAnswer.answer_d}
+                                  placeholder={data.answer.answer_d}
                                 />
                               </div>
                               <div>
@@ -222,6 +234,7 @@ export default function ViewQuestions() {
                                   id="answer_e"
                                   onChange={handleUpdateAnswer}
                                   value={newAnswer.answer_e}
+                                  placeholder={data.answer.answer_e}
                                 />
                               </div>
                             </div>
@@ -239,29 +252,39 @@ export default function ViewQuestions() {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem
-                                  value={newAnswer.answer_a || "Jawaban A"}
+                                  value={
+                                    newAnswer.answer_a || data.answer.answer_a
+                                  }
                                 >
-                                  {newAnswer.answer_a || "Jawaban A"}
+                                  {newAnswer.answer_a || data.answer.answer_a}
                                 </SelectItem>
                                 <SelectItem
-                                  value={newAnswer.answer_b || "Jawaban B"}
+                                  value={
+                                    newAnswer.answer_b || data.answer.answer_b
+                                  }
                                 >
-                                  {newAnswer.answer_b || "Jawaban B"}
+                                  {newAnswer.answer_b || data.answer.answer_b}
                                 </SelectItem>
                                 <SelectItem
-                                  value={newAnswer.answer_c || "Jawaban C"}
+                                  value={
+                                    newAnswer.answer_c || data.answer.answer_c
+                                  }
                                 >
-                                  {newAnswer.answer_c || "Jawaban C"}
+                                  {newAnswer.answer_c || data.answer.answer_c}
                                 </SelectItem>
                                 <SelectItem
-                                  value={newAnswer.answer_d || "Jawaban D"}
+                                  value={
+                                    newAnswer.answer_d || data.answer.answer_d
+                                  }
                                 >
-                                  {newAnswer.answer_d || "Jawaban D"}
+                                  {newAnswer.answer_d || data.answer.answer_d}
                                 </SelectItem>
                                 <SelectItem
-                                  value={newAnswer.answer_e || "Jawaban E"}
+                                  value={
+                                    newAnswer.answer_e || data.answer.answer_e
+                                  }
                                 >
-                                  {newAnswer.answer_e || "Jawaban E"}
+                                  {newAnswer.answer_e || data.answer.answer_e}
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -313,8 +336,11 @@ export default function ViewQuestions() {
                 </td>
               </tr>
             ))
-          : Array.from({ length: 3 }).map((_, i) => (
+          : Array.from({ length: 5 }).map((_, i) => (
               <tr key={i}>
+                <td className="bg-stone-300 px-4 py-6 animate-pulse w-1/12">
+                  <div className="h-4 bg-gray-500 rounded w-full mb-2"></div>
+                </td>
                 <td className="bg-stone-300 px-4 py-6 animate-pulse w-10/12">
                   <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
                   <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
