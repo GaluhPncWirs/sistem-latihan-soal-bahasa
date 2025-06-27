@@ -90,6 +90,14 @@ export default function ViewQuestions() {
     }));
   }
 
+  function getDataBeforeUpdate(questions: any, answers: any) {
+    setUpdateQuestion(questions);
+    setNewAnswer((prev) => ({
+      ...prev,
+      ...answers,
+    }));
+  }
+
   return (
     <table className="border-collapse w-full">
       <thead>
@@ -160,7 +168,9 @@ export default function ViewQuestions() {
                       <DialogTrigger asChild>
                         <Button
                           variant="outline"
-                          onClick={() => setUpdateQuestion(data.questions)}
+                          onClick={() =>
+                            getDataBeforeUpdate(data.questions, data.answer)
+                          }
                         >
                           Edit
                         </Button>
@@ -195,9 +205,7 @@ export default function ViewQuestions() {
                                 <Input
                                   id="answer_a"
                                   onChange={handleUpdateAnswer}
-                                  value={
-                                    newAnswer.answer_a || data.answer.answer_a
-                                  }
+                                  value={newAnswer.answer_a}
                                   placeholder={data.answer.answer_a}
                                 />
                               </div>
