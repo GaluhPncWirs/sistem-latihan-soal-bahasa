@@ -1,4 +1,10 @@
 import NavigasiBar from "@/component/navigasiBar/navbar";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import Link from "next/link";
 
 export default function Student() {
   return (
@@ -50,7 +56,23 @@ export default function Student() {
               </thead>
               <tbody>
                 <tr className="border-2 border-black">
-                  <td className="px-3">lorem ipsum dolor</td>
+                  <td className="px-3">
+                    <HoverCard openDelay={200} closeDelay={200}>
+                      <HoverCardTrigger asChild>
+                        <Link
+                          href="/Student/ResultExam"
+                          className="hover:underline hover:text-blue-700"
+                        >
+                          lorem ipsum dolor
+                        </Link>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="w-fit p-2">
+                        <h1 className="font-semibold text-xs">
+                          Lihat Hasil Ujian
+                        </h1>
+                      </HoverCardContent>
+                    </HoverCard>
+                  </td>
                   <td className="px-3">94</td>
                 </tr>
                 <tr className="border-2 border-black">

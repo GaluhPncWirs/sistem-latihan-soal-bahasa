@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/lib/supabase/data";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function ViewQuestions() {
@@ -71,6 +71,8 @@ export default function ViewQuestions() {
       .from("for-questions")
       .update(updateData)
       .eq("id", idQuestion);
+
+    console.log(data);
     if (error) {
       toast("Gagal ❌", {
         description: "Soal Gagal Diedit Periksa Kembali Soalnya",
@@ -90,7 +92,7 @@ export default function ViewQuestions() {
     }));
   }
 
-  function getDataBeforeUpdate(questions: any, answers: any) {
+  function getDataBeforeUpdate(questions: string, answers: object) {
     setUpdateQuestion(questions);
     setNewAnswer((prev) => ({
       ...prev,
@@ -184,16 +186,14 @@ export default function ViewQuestions() {
                         </DialogHeader>
                         <div className="grid gap-2">
                           <div>
-                            <label htmlFor="editPertannyaan">
-                              Edit Pertanyaan
-                            </label>
+                            <label htmlFor="questions">Edit Pertanyaan</label>
                             <Input
-                              id="editPertannyaan"
+                              id="questions"
                               className="mt-2"
                               onChange={(e: any) =>
                                 setUpdateQuestion(e.currentTarget.value)
                               }
-                              value={updateQuestion}
+                              defaultValue={updateQuestion}
                             />
                           </div>
 
@@ -205,8 +205,7 @@ export default function ViewQuestions() {
                                 <Input
                                   id="answer_a"
                                   onChange={handleUpdateAnswer}
-                                  value={newAnswer.answer_a}
-                                  placeholder={data.answer.answer_a}
+                                  defaultValue={newAnswer.answer_a}
                                 />
                               </div>
                               <div>
@@ -214,8 +213,7 @@ export default function ViewQuestions() {
                                 <Input
                                   id="answer_b"
                                   onChange={handleUpdateAnswer}
-                                  value={newAnswer.answer_b}
-                                  placeholder={data.answer.answer_b}
+                                  defaultValue={newAnswer.answer_b}
                                 />
                               </div>
                               <div>
@@ -223,8 +221,7 @@ export default function ViewQuestions() {
                                 <Input
                                   id="answer_c"
                                   onChange={handleUpdateAnswer}
-                                  value={newAnswer.answer_c}
-                                  placeholder={data.answer.answer_c}
+                                  defaultValue={newAnswer.answer_c}
                                 />
                               </div>
                               <div>
@@ -232,8 +229,7 @@ export default function ViewQuestions() {
                                 <Input
                                   id="answer_d"
                                   onChange={handleUpdateAnswer}
-                                  value={newAnswer.answer_d}
-                                  placeholder={data.answer.answer_d}
+                                  defaultValue={newAnswer.answer_d}
                                 />
                               </div>
                               <div>
@@ -241,8 +237,7 @@ export default function ViewQuestions() {
                                 <Input
                                   id="answer_e"
                                   onChange={handleUpdateAnswer}
-                                  value={newAnswer.answer_e}
-                                  placeholder={data.answer.answer_e}
+                                  defaultValue={newAnswer.answer_e}
                                 />
                               </div>
                             </div>
@@ -254,6 +249,7 @@ export default function ViewQuestions() {
                               onValueChange={(val) =>
                                 setSelectCorrectNewAnswer(val)
                               }
+                              defaultValue={data.correctAnswer}
                             >
                               <SelectTrigger className="w-2/3">
                                 <SelectValue placeholder="Pilih Jawaban Yang Benar" />
@@ -323,7 +319,7 @@ export default function ViewQuestions() {
                         <DialogHeader>
                           <DialogTitle>Hapus Soal</DialogTitle>
                           <DialogDescription>
-                            Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?
+                            {`Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?`}
                           </DialogDescription>
                         </DialogHeader>
                         <DialogFooter>
