@@ -1,18 +1,29 @@
+"use client";
 import NavigasiBar from "@/component/navigasiBar/navbar";
+import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Profil() {
+  const getDataStudent = localStorage.getItem("dataLoginSiswa");
+  const [dataStudent, setDataStudent] = useState<any>(
+    JSON.parse(getDataStudent!)
+  );
+
   return (
     <div>
       <NavigasiBar />
-      <div className="w-9/12 mx-auto flex justify-center mt-16">
-        <div className="w-1/2 bg-sky-600 h-3/4 shadow-md shadow-slate-600 pb-5">
+      <Toaster />
+      <div className="w-full mx-auto flex justify-center items-center h-screen pt-14">
+        <div className="w-1/2 bg-sky-500 shadow-md shadow-slate-600 pb-5 rounded-lg">
           <h1 className="font-semibold text-xl text-center my-1.5">
-            Your Profile
+            Profile Kamu
           </h1>
-          <div className="flex">
-            <div className="basis-1/3">
+          <div className="flex bg-amber-200">
+            <div className="basis-1/4">
               <Image
                 src="/img/profile/userProfile.png"
                 alt="Profile"
@@ -21,19 +32,19 @@ export default function Profil() {
                 className="w-full"
               />
             </div>
-            <ul className="tracking-wide font-semibold basis-2/3 flex flex-col bg-slate-200 justify-center pl-7">
+            <ul className="tracking-wide font-semibold basis-2/3 flex flex-col justify-center pl-7">
               <li>
-                id : <span className="font-bold">143</span>
+                id : <span className="font-bold">{dataStudent.idStudent}</span>
               </li>
               <li>
-                Nama : <span className="font-bold">reolem ipsum</span>
+                Nama : <span className="font-bold">{dataStudent.fullName}</span>
               </li>
               <li>
-                Kelas : <span className="font-bold">4A</span>
+                Kelas : <span className="font-bold">{dataStudent.classes}</span>
               </li>
             </ul>
           </div>
-          <div className="overflow-auto h-40 p-3">
+          <div className="overflow-auto p-5 mb-5">
             <h1>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
               beatae error quisquam temporibus itaque illum quibusdam
@@ -42,10 +53,10 @@ export default function Profil() {
             </h1>
           </div>
           <Link
-            className="bg-slate-300 px-10 py-1.5 rounded-md ml-5"
+            className="bg-slate-300 px-10 py-1.5 rounded-md ml-5 text-lg font-bold"
             href="/Student"
           >
-            Back
+            Kembali
           </Link>
         </div>
       </div>

@@ -2,9 +2,26 @@
 
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function RegisterAccount() {
+  const [clearForm, setClearForm] = useState(false);
+
+  function randomIdStudent(len = 7) {
+    const alphabetLowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const alphabetUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const num = "0123456789";
+
+    const allCharacter = alphabetLowerCase + alphabetUpperCase + num;
+    let result = `STD-`;
+    for (let i = 0; i < len; i++) {
+      const randomIndex = Math.floor(Math.random() * allCharacter.length);
+      result += allCharacter[randomIndex];
+    }
+    return result;
+  }
+
   async function handleRegister(e: any) {
     e.preventDefault();
     const dataRegister = {
@@ -12,16 +29,29 @@ export default function RegisterAccount() {
       classes: e.currentTarget.kelas.value,
       email: e.currentTarget.email.value,
       password: e.currentTarget.password.value,
+      idStudent: randomIdStudent(),
     };
     const { data, error }: any = await supabase
       .from("data-account-student")
-      .insert([dataRegister]);
-    if (error) {
-      toast("akun telah ada");
+      .select("*")
+      .eq("email", dataRegister.email);
+    if (data.length > 0) {
+      toast("Akun Telah Ada, Buat Akun Yang berbeda");
+      setClearForm(true);
+    } else if (error) {
+      toast("Error");
     } else {
-      toast("Berhasil Membuat Akun");
+      const { data, error }: any = await supabase
+        .from("data-account-student")
+        .insert([dataRegister]);
+      if (error) {
+        toast("Gagal Membuat Akun");
+      } else {
+        toast("Berhasil Membuat Akun");
+      }
     }
   }
+
   return (
     <LayoutFormAccount formTitle={"Buat Akun"}>
       <form

@@ -33,8 +33,8 @@ export default function Soal() {
   return (
     <div>
       <NavigasiBar />
-      <div className="bg-blue-300 w-10/12 mx-auto my-10 rounded-xl">
-        <div className="p-10">
+      <div className="w-10/12 mx-auto rounded-xl pt-24">
+        <div className="p-10 bg-blue-400 rounded-lg">
           <h1 className="text-2xl font-semibold">Pertanyaaan Pilihan Ganda</h1>
           <div className="grid grid-cols-2 gap-5">
             {questions.length > 0
@@ -67,7 +67,7 @@ export default function Soal() {
                   </div>
                 ))
               : Array.from({ length: 7 }).map((_, i) => (
-                  <div className="mt-5" key={i}>
+                  <div className="mt-5 animate-pulse" key={i}>
                     <div className="bg-slate-400 w-full h-8 rounded-md"></div>
                     <div className="flex flex-col gap-5 mt-5">
                       <div className="bg-slate-400 w-11/12 h-5 rounded-md"></div>

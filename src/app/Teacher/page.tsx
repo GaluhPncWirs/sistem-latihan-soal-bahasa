@@ -38,12 +38,12 @@ export default function Teacher() {
   }
 
   return (
-    <div className="bg-slate-200">
+    <div>
       <NavigasiBar />
       <Toaster richColors />
 
       {/* dasboard untuk siswa */}
-      <div className="w-4/5 mx-auto mt-5 p-5 pb-10">
+      <div className="w-4/5 mx-auto pt-24 mb-12">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
         <ul className="w-10/12 mx-auto mt-16 flex justify-around font-semibold text-lg">
           <li

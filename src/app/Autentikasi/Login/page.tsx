@@ -2,7 +2,6 @@
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function LoginAccount() {
@@ -21,6 +20,7 @@ export default function LoginAccount() {
     if (error) {
       toast("Email dan Password Salah Input Kembali");
     } else {
+      localStorage.setItem("dataLoginSiswa", JSON.stringify(data));
       push("/");
     }
   }

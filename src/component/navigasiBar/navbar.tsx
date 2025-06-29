@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function NavigasiBar() {
   return (
-    <div className="w-full h-16 bg-amber-300">
+    <div className="w-full h-16 bg-amber-300 fixed">
       <div className="flex items-center h-full gap-x-3">
         <div className="basis-1/5 h-full flex items-center justify-center">
           {/* <Image src="" alt="" width={500} height={500}/> */}

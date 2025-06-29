@@ -8,11 +8,10 @@ import Link from "next/link";
 
 export default function Student() {
   return (
-    <div className="bg-slate-200">
+    <div>
       <NavigasiBar />
-
       {/* dasboard untuk siswa */}
-      <div className="w-3/4 mx-auto mt-5 p-5 pb-10">
+      <div className="w-11/12 mx-auto p-24">
         <h1 className="text-4xl font-bold text-center">Dashboard Siswa</h1>
         <h1 className="text-2xl font-bold mt-5">Halo lorem ipsum</h1>
         <div className="w-10/12 mx-auto mt-8">

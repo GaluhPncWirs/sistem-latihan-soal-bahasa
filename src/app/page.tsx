@@ -3,10 +3,10 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="bg-slate-200 h-screen">
+    <div>
       <NavigasiBar />
 
-      <div className="w-3/4 mx-auto mt-10 p-5">
+      <div className="w-3/4 mx-auto h-screen pt-32">
         <div className="flex flex-col justify-center items-center">
           <h1 className="text-5xl font-bold text-center mb-10">
             Platform Ujian Online
