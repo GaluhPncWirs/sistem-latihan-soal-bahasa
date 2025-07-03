@@ -1,18 +1,11 @@
 "use client";
 import NavigasiBar from "@/component/navigasiBar/navbar";
 import { Toaster } from "@/components/ui/sonner";
-import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-
+import { getDataUser } from "../hooks/getDataUser";
 export default function Profil() {
-  const getDataStudent = localStorage.getItem("dataLoginSiswa");
-  const [dataStudent, setDataStudent] = useState<any>(
-    JSON.parse(getDataStudent!)
-  );
-
+  const getDataStudent = getDataUser();
   return (
     <div>
       <NavigasiBar />
@@ -34,13 +27,16 @@ export default function Profil() {
             </div>
             <ul className="tracking-wide font-semibold basis-2/3 flex flex-col justify-center pl-7">
               <li>
-                id : <span className="font-bold">{dataStudent.idStudent}</span>
+                id :{" "}
+                <span className="font-bold">{getDataStudent.idStudent}</span>
               </li>
               <li>
-                Nama : <span className="font-bold">{dataStudent.fullName}</span>
+                Nama :{" "}
+                <span className="font-bold">{getDataStudent.fullName}</span>
               </li>
               <li>
-                Kelas : <span className="font-bold">{dataStudent.classes}</span>
+                Kelas :{" "}
+                <span className="font-bold">{getDataStudent.classes}</span>
               </li>
             </ul>
           </div>
