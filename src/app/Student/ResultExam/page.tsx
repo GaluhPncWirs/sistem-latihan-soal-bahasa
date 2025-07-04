@@ -1,6 +1,7 @@
 "use client";
 import { seeResultExams } from "@/app/service/seeResultExam";
 import NavigasiBar from "@/component/navigasiBar/navbar";
+import { supabase } from "@/lib/supabase/data";
 import {
   useParams,
   usePathname,
@@ -21,6 +22,18 @@ export default function ResultExam() {
   }, []);
 
   // console.log(getData[0]);
+
+  // useEffect(() => {
+  //   async function handleView() {
+  //     const { data, error } = await supabase.from("result-exam-PG").select("*");
+  //     if (error) {
+  //       console.log("data gagal ditampilkan:", error.message);
+  //     } else {
+  //       console.log("Data berhasil ditampilkan:", data);
+  //     }
+  //   }
+  //   handleView();
+  // }, []);
 
   return (
     <div>
