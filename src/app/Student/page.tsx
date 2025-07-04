@@ -58,12 +58,21 @@ export default function Student() {
                         {data.statusExam === true ? (
                           "Complete"
                         ) : (
-                          <Link
-                            href="/Exams"
-                            className="hover:underline cursor-pointer hover:text-blue-700"
-                          >
-                            Uncomplete
-                          </Link>
+                          <HoverCard openDelay={200} closeDelay={200}>
+                            <HoverCardTrigger asChild>
+                              <Link
+                                href="/Exams"
+                                className="hover:underline hover:text-blue-700"
+                              >
+                                Uncomplete
+                              </Link>
+                            </HoverCardTrigger>
+                            <HoverCardContent className="w-fit p-2">
+                              <h1 className="font-semibold text-xs">
+                                Kerjakan Ujian
+                              </h1>
+                            </HoverCardContent>
+                          </HoverCard>
                         )}
                       </td>
                     </tr>
@@ -90,23 +99,33 @@ export default function Student() {
                   <tbody key={data.id}>
                     <tr className="border-2 border-black">
                       <td className="px-3">
-                        <HoverCard openDelay={200} closeDelay={200}>
-                          <HoverCardTrigger asChild>
-                            <Link
-                              href="/Student/ResultExam"
-                              className="hover:underline hover:text-blue-700"
-                            >
-                              {data.nameExam}
-                            </Link>
-                          </HoverCardTrigger>
-                          <HoverCardContent className="w-fit p-2">
-                            <h1 className="font-semibold text-xs">
-                              Lihat Hasil Ujian
-                            </h1>
-                          </HoverCardContent>
-                        </HoverCard>
+                        {data.statusExam === true ? (
+                          <HoverCard openDelay={200} closeDelay={200}>
+                            <HoverCardTrigger asChild>
+                              <Link
+                                href={`/Student/ResultExam/?id=${data.id}`}
+                                className="hover:underline hover:text-blue-700"
+                              >
+                                {data.nameExam}
+                              </Link>
+                            </HoverCardTrigger>
+                            <HoverCardContent className="w-fit p-2">
+                              <h1 className="font-semibold text-xs">
+                                Lihat Hasil Ujian
+                              </h1>
+                            </HoverCardContent>
+                          </HoverCard>
+                        ) : (
+                          <h1>{data.nameExam}</h1>
+                        )}
                       </td>
-                      <td className="px-3">{data.resultExamScore}</td>
+                      <td className="px-3">
+                        {data.statusExam === true ? (
+                          data.resultExamScore
+                        ) : (
+                          <span>Belum Ada Nilai</span>
+                        )}
+                      </td>
                     </tr>
                   </tbody>
                 ))}

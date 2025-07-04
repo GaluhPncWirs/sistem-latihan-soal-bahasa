@@ -16,8 +16,6 @@ export default function Soal() {
       setQuestions(data);
       if (error) {
         console.log("data gagal ditampilkan:", error.message);
-      } else {
-        console.log("Data berhasil ditampilkan:", data);
       }
     }
     handleViewQuestions();
@@ -29,6 +27,20 @@ export default function Soal() {
       [questionsId]: answer,
     }));
   }
+
+  useEffect(() => {
+    async function handleViewQuestions() {
+      const { data, error } = await supabase
+        .from("result-exam-PG")
+        .select("id");
+      if (error) {
+        console.log("data gagal ditampilkan:", error.message);
+      } else {
+        console.log("Data berhasil ditampilkan:", data);
+      }
+    }
+    handleViewQuestions();
+  }, []);
 
   return (
     <div>
