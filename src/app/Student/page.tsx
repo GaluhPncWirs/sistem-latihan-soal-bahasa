@@ -16,9 +16,7 @@ export default function Student() {
   const [resultExam, setResultExam] = useState<any>([]);
   useEffect(() => {
     async function getDataExamResult() {
-      const { data, error } = await supabase
-        .from("for-result-exams")
-        .select("*");
+      const { data, error }: any = await supabase.from("exams").select("*");
       setResultExam(data);
       if (error) {
         toast("data tidak bisa ditampilkan, error");
@@ -53,15 +51,15 @@ export default function Student() {
                 {resultExam.map((data: any) => (
                   <tbody key={data.id}>
                     <tr className="border-2 border-black">
-                      <td className="px-3">{data.nameExam}</td>
+                      <td className="px-3">{data.nama_ujian}</td>
                       <td className="px-3">
-                        {data.statusExam === true ? (
+                        {data.status_pengerjaan === true ? (
                           "Complete"
                         ) : (
                           <HoverCard openDelay={200} closeDelay={200}>
                             <HoverCardTrigger asChild>
                               <Link
-                                href="/Exams"
+                                href={`/Exams/?id=${data.id}`}
                                 className="hover:underline hover:text-blue-700"
                               >
                                 Uncomplete
@@ -99,14 +97,14 @@ export default function Student() {
                   <tbody key={data.id}>
                     <tr className="border-2 border-black">
                       <td className="px-3">
-                        {data.statusExam === true ? (
+                        {data.status_pengerjaan === true ? (
                           <HoverCard openDelay={200} closeDelay={200}>
                             <HoverCardTrigger asChild>
                               <Link
                                 href={`/Student/ResultExam/?id=${data.id}`}
                                 className="hover:underline hover:text-blue-700"
                               >
-                                {data.nameExam}
+                                {data.nama_ujian}
                               </Link>
                             </HoverCardTrigger>
                             <HoverCardContent className="w-fit p-2">
@@ -116,12 +114,12 @@ export default function Student() {
                             </HoverCardContent>
                           </HoverCard>
                         ) : (
-                          <h1>{data.nameExam}</h1>
+                          <h1>{data.nama_ujian}</h1>
                         )}
                       </td>
                       <td className="px-3">
-                        {data.statusExam === true ? (
-                          data.resultExamScore
+                        {data.status_pengerjaan === true ? (
+                          <span>{data.hasil_ujian}</span>
                         ) : (
                           <span>Belum Ada Nilai</span>
                         )}
