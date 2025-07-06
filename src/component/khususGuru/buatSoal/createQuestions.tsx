@@ -31,7 +31,10 @@ export default function CreateNewQuestions() {
   });
   const [question, setQuestion] = useState("");
   const [selectCorrectAnswer, setSelectCorrectAnswer] = useState("");
+  const [nameExam, setNameExams] = useState("");
+  const [selectedValueNameExam, setSelectedValueNameExam] = useState("");
   const [clearInput, setClearInput] = useState(false);
+  const [dataNameExam, setDataNameExam] = useState([]);
 
   function handleAddAnswer(event: any) {
     const { id, value } = event.target;
@@ -41,11 +44,50 @@ export default function CreateNewQuestions() {
     }));
   }
 
+  // function isNamaUjian() {
+  //   const existingNames = dataNameExam.map((nameExam: any) =>
+  //     nameExam.nama_ujian.toLowerCase().trim()
+  //   );
+  //   return existingNames.includes(selectedValueNameExam.toLowerCase().trim());
+  // }
+
+  // console.log(isNamaUjian());
+
+  useEffect(() => {
+    async function getNameExam() {
+      const { data, error }: any = await supabase
+        .from("exams")
+        .select("nama_ujian");
+
+      if (error) {
+        toast("Gagal ❌", {
+          description: "gagal mndapatkan nama soal",
+        });
+      }
+      setDataNameExam(data);
+    }
+    getNameExam();
+  }, []);
+
+  function randomIdExam(len = 3) {
+    const alphabetLowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const alphabetUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const num = "0123456789";
+
+    const allCharacter = alphabetLowerCase + alphabetUpperCase + num;
+    let result = `EX-`;
+    for (let i = 0; i < len; i++) {
+      const randomIndex = Math.floor(Math.random() * allCharacter.length);
+      result += allCharacter[randomIndex];
+    }
+    return result;
+  }
+
   async function handleCreateAddQuestion() {
     const { data, error }: any = await supabase
-      .from("for-questions")
+      .from("exams")
       .select("*")
-      .eq("questions", question);
+      .eq("nama_ujian", nameExam);
 
     if (data?.length > 0) {
       toast("Gagal ❌", {
@@ -57,22 +99,69 @@ export default function CreateNewQuestions() {
       });
     } else {
       setClearInput(true);
-      const { data, error } = await supabase.from("for-questions").insert([
-        {
-          questions: question,
-          answer: answer,
-          correctAnswer: selectCorrectAnswer,
-        },
-      ]);
+      if (selectedValueNameExam === "buatUjianBaru") {
+        const { error }: any = await supabase.from("exams").insert([
+          {
+            created_at: new Date().toISOString(),
+            nama_ujian: nameExam,
+            status_pengerjaan: null,
+            hasil_ujian: null,
+            questions_exam: [
+              {
+                id: randomIdExam(),
+                questions: question,
+                answerPg: answer,
+                correctAnswer: selectCorrectAnswer,
+              },
+            ],
+          },
+        ]);
 
-      if (error) {
-        toast("Gagal ❌", {
-          description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
-        });
+        if (error) {
+          toast("Gagal ❌", {
+            description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+          });
+        } else {
+          toast("Berhasil ✅", {
+            description: "Soal Berhasil Ditambahkan",
+          });
+        }
       } else {
-        toast("Berhasil ✅", {
-          description: "Soal Berhasil Ditambahkan",
-        });
+        const { data, error } = await supabase
+          .from("exams")
+          .select("questions_exam")
+          .eq("nama_ujian", selectedValueNameExam)
+          .single();
+
+        if (error) {
+          toast("Gagal ❌", {
+            description: "Ujian tidak ditemukan.",
+          });
+        } else {
+          const addQuestions = [
+            ...(data.questions_exam || []),
+            {
+              id: randomIdExam(),
+              questions: question,
+              answerPg: answer,
+              correctAnswer: selectCorrectAnswer,
+            },
+          ];
+          const { error }: any = await supabase
+            .from("exams")
+            .update({ questions_exam: addQuestions })
+            .eq("nama_ujian", selectedValueNameExam);
+
+          if (error) {
+            toast("Gagal ❌", {
+              description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+            });
+          } else {
+            toast("Berhasil ✅", {
+              description: "Soal Berhasil Ditambahkan",
+            });
+          }
+        }
       }
     }
   }
@@ -88,23 +177,65 @@ export default function CreateNewQuestions() {
       });
       setSelectCorrectAnswer("");
       setQuestion("");
+      setNameExams("");
     }
   }, [clearInput]);
 
   return (
     <div>
-      <div className="bg-[#3674B5] p-5 rounded-lg w-11/12 mx-auto">
+      <div className="bg-[#3674B5] p-5 rounded-lg w-10/12 mx-auto">
         <h1 className="text-2xl font-semibold text-center mb-7 text-slate-100">
           Buat Soal Ujian
         </h1>
         <form className="flex flex-col gap-5">
-          <div className="flex items-center w-full bg-slate-100 p-5 rounded-lg">
-            <label htmlFor="questions" className="text-lg font-semibold mr-5 ">
+          <div className="bg-slate-100 p-5 rounded-lg">
+            <Select onValueChange={(val) => setSelectedValueNameExam(val)}>
+              <SelectTrigger className="w-2/3">
+                <SelectValue placeholder="Pilih Nama Ujiannya" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem
+                  value="buatUjianBaru"
+                  className="border-black border bg-slate-300"
+                >
+                  Buat Ujian Baru
+                </SelectItem>
+                {dataNameExam.map((nameExam: any, i: number) => (
+                  <SelectItem
+                    value={nameExam.nama_ujian || "nama ujian"}
+                    key={i}
+                  >
+                    {nameExam.nama_ujian || "Nama Ujian"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex bg-slate-100 p-5 rounded-lg flex-col justify-center items-center gap-3">
+            {selectedValueNameExam === "buatUjianBaru" && (
+              <>
+                <label
+                  htmlFor="nama_ujian"
+                  className="text-lg font-semibold mb-2 w-10/12"
+                >
+                  Nama Ujian
+                </label>
+                <Input
+                  id="nama_ujian"
+                  className="border border-black rounded-sm p-1 px-2 w-10/12"
+                  onChange={(e: any) => setNameExams(e.currentTarget.value)}
+                />
+              </>
+            )}
+            <label
+              htmlFor="questions"
+              className="text-lg font-semibold mb-2 w-10/12"
+            >
               Pertanyaan
             </label>
             <Input
               id="questions"
-              className="border border-black rounded-sm p-1 px-2 w-3/5"
+              className="border border-black rounded-sm p-1 px-2 w-10/12"
               onChange={(e: any) => setQuestion(e.currentTarget.value)}
             />
           </div>
