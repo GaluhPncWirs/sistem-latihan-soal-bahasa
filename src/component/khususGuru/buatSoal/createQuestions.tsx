@@ -44,15 +44,6 @@ export default function CreateNewQuestions() {
     }));
   }
 
-  // function isNamaUjian() {
-  //   const existingNames = dataNameExam.map((nameExam: any) =>
-  //     nameExam.nama_ujian.toLowerCase().trim()
-  //   );
-  //   return existingNames.includes(selectedValueNameExam.toLowerCase().trim());
-  // }
-
-  // console.log(isNamaUjian());
-
   useEffect(() => {
     async function getNameExam() {
       const { data, error }: any = await supabase
