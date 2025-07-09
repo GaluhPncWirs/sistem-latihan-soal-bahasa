@@ -60,7 +60,7 @@ export default function CreateNewQuestions() {
     getNameExam();
   }, []);
 
-  function randomIdExam(len = 3) {
+  function randomIdExam(len = 7) {
     const alphabetLowerCase = "abcdefghijklmnopqrstuvwxyz";
     const alphabetUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const num = "0123456789";
@@ -71,6 +71,7 @@ export default function CreateNewQuestions() {
       const randomIndex = Math.floor(Math.random() * allCharacter.length);
       result += allCharacter[randomIndex];
     }
+
     return result;
   }
 

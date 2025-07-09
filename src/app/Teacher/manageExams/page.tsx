@@ -36,18 +36,19 @@ export default function ViewQuestions() {
   });
   const [selectCorrectNewAnswer, setSelectCorrectNewAnswer] = useState("");
   const [updateQuestion, setUpdateQuestion] = useState("");
-  const searchParams = useSearchParams();
-  const idExams = searchParams.get("id");
+  const [searchParams, setSearchParams] = useState(useSearchParams().get("id"));
 
   useEffect(() => {
     async function handleViewQuestions() {
       const { data, error } = await supabase
         .from("exams")
         .select("questions_exam")
-        .eq("id", Number(idExams));
+        .eq("id", Number(searchParams));
       setViewQuestions(data);
       if (error) {
-        console.log("data gagal ditampilkan:", error.message);
+        toast("Gagal ❌", {
+          description: "Soal gagal ditampilkan.",
+        });
       }
     }
     handleViewQuestions();
@@ -58,15 +59,26 @@ export default function ViewQuestions() {
       .from("exams")
       .select("questions_exam");
 
-    // const inQuestionData = examData.flatMap((data: any) => data.questions_exam);
-    const inQuestionData = examData.find((exam: any) =>
-      exam.questions_exam?.some((q: any) => q.id === idQuestion)
-    );
+    const inQuestionData = examData.flatMap((data: any) => data.questions_exam);
+    // const inQuestionData = examData.find((exam: any) =>
+    //   exam.questions_exam?.some((q: any) => q.id === idQuestion)
+    // );
 
     if (fetchError) {
       toast("Gagal Ambil Data", { description: "Ujian tidak ditemukan" });
     } else {
-      const updateData = inQuestionData.questions_exam.map((q: any) =>
+      // const updateData = inQuestionData.questions_exam.map((q: any) =>
+      //   q.id === idQuestion
+      //     ? {
+      //         ...q,
+      //         questions: updateQuestion,
+      //         answerPg: newAnswer,
+      //         correctAnswer: selectCorrectNewAnswer,
+      //       }
+      //     : q
+      // );
+
+      const updateData: any = (inQuestionData || []).map((q: any) =>
         q.id === idQuestion
           ? {
               ...q,
@@ -76,10 +88,11 @@ export default function ViewQuestions() {
             }
           : q
       );
+
       const { error } = await supabase
         .from("exams")
         .update({ questions_exam: updateData })
-        .eq("id", idQuestion);
+        .eq("id", Number(searchParams));
 
       if (error) {
         toast("Gagal ❌", {
