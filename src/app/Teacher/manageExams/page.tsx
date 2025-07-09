@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/lib/supabase/data";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -107,18 +108,35 @@ export default function ViewQuestions() {
   }
 
   async function handleDeleteQuestions(idQuestion: number) {
-    const { error } = await supabase
+    const { data, error }: any = await supabase
       .from("exams")
-      .delete()
-      .eq("id", idQuestion);
+      .select("id, questions_exam")
+      .eq("id", Number(searchParams))
+      .single();
+
+    const updatedQuestions = data.questions_exam.filter(
+      (q: any) => q.id !== idQuestion
+    );
+
     if (error) {
       toast("Gagal ❌", {
         description: "Soal Gagal Dihapus",
       });
     } else {
-      toast("Berhasil ✅", {
-        description: "Soal Telah Berhasil Dihapus",
-      });
+      const { error: errorDeleteData }: any = await supabase
+        .from("exams")
+        .update({ questions_exam: updatedQuestions })
+        .eq("id", Number(searchParams));
+
+      if (errorDeleteData) {
+        toast("Gagal ❌", {
+          description: "Soal Gagal Dihapus",
+        });
+      } else {
+        toast("Berhasil ✅", {
+          description: "Soal Telah Berhasil Dihapus",
+        });
+      }
     }
   }
 
@@ -217,6 +235,7 @@ export default function ViewQuestions() {
                             onClick={() =>
                               getDataBeforeUpdate(data.questions, data.answerPg)
                             }
+                            className="cursor-pointer"
                           >
                             Edit
                           </Button>
@@ -366,37 +385,46 @@ export default function ViewQuestions() {
                     </Dialog>
 
                     <Dialog>
-                      <form>
-                        <DialogTrigger asChild>
-                          <Button variant="destructive">Hapus</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Hapus Soal</DialogTitle>
-                            <DialogDescription>
-                              {`Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?`}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <DialogFooter>
-                            <DialogClose asChild>
-                              <Button variant="outline">Cancel</Button>
-                            </DialogClose>
-                            <DialogClose asChild>
-                              <Button
-                                onClick={() => handleDeleteQuestions(data.id)}
-                              >
-                                Hapus
-                              </Button>
-                            </DialogClose>
-                          </DialogFooter>
-                        </DialogContent>
-                      </form>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          className="cursor-pointer"
+                        >
+                          Hapus
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Hapus Soal</DialogTitle>
+                          <DialogDescription>
+                            {`Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?`}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => handleDeleteQuestions(data.id)}
+                              variant="destructive"
+                            >
+                              Hapus
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </DialogContent>
                     </Dialog>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
+        <div className="mt-8">
+          <Link href="/Teacher" className="text-md">
+            Kembali
+          </Link>
+        </div>
       </div>
     </div>
   );
