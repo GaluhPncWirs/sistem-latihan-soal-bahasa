@@ -40,7 +40,6 @@ export default function Teacher() {
   return (
     <div>
       <NavigasiBar />
-      <Toaster richColors />
 
       {/* dasboard untuk siswa */}
       <div className="w-4/5 mx-auto pt-24 mb-12">

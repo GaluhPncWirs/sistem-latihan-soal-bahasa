@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
 import { getDataUser } from "../hooks/getDataUser";
 import { useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -16,17 +17,32 @@ export default function Soal() {
   // const [historyQuestions, setHistoryQuestions] = useState<any>([]);
 
   useEffect(() => {
-    async function handleViewQuestions() {
-      const { data, error }: any = await supabase
-        .from("exams")
-        .select("*")
-        .eq("id", Number(idExams));
-      setQuestions(data);
-      if (error) {
-        console.log("data gagal ditampilkan:", error.message);
+    if (idExams) {
+      async function handleViewQuestionsUseParam() {
+        const { data, error }: any = await supabase
+          .from("exams")
+          .select("*")
+          .eq("id", Number(idExams));
+        setQuestions(data);
+        if (error) {
+          toast("Gagal ❌", {
+            description: "data gagal ditampilkan:",
+          });
+        }
       }
+      handleViewQuestionsUseParam();
+    } else {
+      async function handleViewQuestions() {
+        const { data, error }: any = await supabase.from("exams").select("*");
+        setQuestions(data);
+        if (error) {
+          toast("Gagal ❌", {
+            description: "data gagal ditampilkan:",
+          });
+        }
+      }
+      handleViewQuestions();
     }
-    handleViewQuestions();
   }, []);
 
   function handleSelectedAnswer(questionsId: string, answer: string) {

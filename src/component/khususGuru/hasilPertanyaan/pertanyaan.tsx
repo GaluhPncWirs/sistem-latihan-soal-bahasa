@@ -71,7 +71,6 @@ export default function ViewQuestions() {
                   >
                     Edit
                   </Link>
-
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="destructive">Hapus</Button>
