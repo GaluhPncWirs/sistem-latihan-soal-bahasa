@@ -14,6 +14,7 @@ export default function Soal() {
   }>({});
   const searchParams = useSearchParams();
   const idExams = searchParams.get("id");
+  const idStudent = getDataUser().id;
   // const [historyQuestions, setHistoryQuestions] = useState<any>([]);
 
   useEffect(() => {
@@ -52,10 +53,26 @@ export default function Soal() {
     }));
   }
 
-  // async function handleSendExam() {
-  //   const studentId = getDataUser().id;
-  //   const examId
-  // }
+  async function handleSendExam() {
+    const { error } = await supabase.from("result-exam").insert([
+      {
+        created_at: new Date().toISOString(),
+        student_id: idStudent,
+        exam_id: Number(idExams),
+        answer_student: clickedAnswer,
+      },
+    ]);
+
+    if (error) {
+      toast("Gagal ❌", {
+        description: "data gagal ditambahkan",
+      });
+    } else {
+      toast("Berhasil ✅", {
+        description: "data berhasil ditambahkan",
+      });
+    }
+  }
 
   return (
     <div>
@@ -109,7 +126,7 @@ export default function Soal() {
                 ))}
           </div>
           <div className="mt-10">
-            <Button type="submit" className="cursor-pointer">
+            <Button className="cursor-pointer" onClick={handleSendExam}>
               Selesai
             </Button>
           </div>

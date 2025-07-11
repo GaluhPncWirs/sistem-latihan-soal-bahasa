@@ -103,6 +103,7 @@ export default function Student() {
                               <Link
                                 href={`/Student/ResultExam/?id=${data.id}`}
                                 className="hover:underline hover:text-blue-700"
+                                target="_blank"
                               >
                                 {data.nama_ujian}
                               </Link>
