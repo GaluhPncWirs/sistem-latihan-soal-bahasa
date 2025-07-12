@@ -20,7 +20,7 @@ export default function LoginAccount() {
     if (error) {
       toast("Email dan Password Salah Input Kembali");
     } else {
-      localStorage.setItem("dataLoginSiswa", JSON.stringify(data));
+      localStorage.setItem("idLoginSiswa", data.idStudent);
       push("/");
     }
   }

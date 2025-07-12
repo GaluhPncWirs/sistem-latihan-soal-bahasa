@@ -6,13 +6,11 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import Link from "next/link";
-import { getDataUser } from "../hooks/getDataUser";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
 import { toast } from "sonner";
 
 export default function Student() {
-  const getDataStudent = getDataUser();
   const [resultExam, setResultExam] = useState<any>([]);
   useEffect(() => {
     async function getDataExamResult() {
@@ -33,7 +31,7 @@ export default function Student() {
       <div className="w-11/12 mx-auto p-24">
         <h1 className="text-4xl font-bold text-center">Dashboard Siswa</h1>
         <h1 className="text-2xl font-bold mt-5">
-          Halo {getDataStudent.fullName}
+          {/* Halo {getDataStudent.fullName} */}
         </h1>
         <div className="w-10/12 mx-auto mt-8">
           <div className="mb-7">
@@ -103,7 +101,6 @@ export default function Student() {
                               <Link
                                 href={`/Student/ResultExam/?id=${data.id}`}
                                 className="hover:underline hover:text-blue-700"
-                                target="_blank"
                               >
                                 {data.nama_ujian}
                               </Link>

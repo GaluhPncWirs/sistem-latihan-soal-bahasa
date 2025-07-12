@@ -19,7 +19,7 @@ export default function ResultExam() {
     if (!getDataStudent || getDataStudent.length === 0) return null;
     const answerStudentObj = getDataStudent[0].answer_student;
     const studentAnswer = answerStudentObj[questionsId];
-    return studentAnswer === pg ? "bg-green-400 rounded-md" : "";
+    return studentAnswer === pg ? "bg-amber-400 rounded-sm" : "";
   }
 
   useEffect(() => {
@@ -102,8 +102,13 @@ export default function ResultExam() {
                   </div>
                 ))}
           </div>
-          <Link href="/Student">Kembali</Link>
         </div>
+        <Link
+          href="/Student"
+          className="mt-5 block px-8 bg-amber-300 w-fit py-2 rounded-lg font-semibold hover:bg-amber-400"
+        >
+          Kembali
+        </Link>
       </div>
     </div>
   );

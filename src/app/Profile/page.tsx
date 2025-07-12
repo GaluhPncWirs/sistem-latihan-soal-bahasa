@@ -3,9 +3,18 @@ import NavigasiBar from "@/component/navigasiBar/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import Image from "next/image";
 import Link from "next/link";
-import { getDataUser } from "../hooks/getDataUser";
+import { getDataStudent } from "../hooks/getDataStudent";
+import { useEffect, useState } from "react";
 export default function Profil() {
-  const getDataStudent = getDataUser();
+  const [dataStudent, setDataStudent] = useState({});
+  const getId = localStorage.getItem("idLoginSiswa");
+  useEffect(() => {
+    if (getId) {
+      const getDataSiswa = getDataStudent(getId || "");
+      setDataStudent(getDataSiswa);
+    }
+  }, []);
+
   return (
     <div>
       <NavigasiBar />
@@ -25,20 +34,20 @@ export default function Profil() {
                 className="w-full"
               />
             </div>
-            <ul className="tracking-wide font-semibold basis-2/3 flex flex-col justify-center pl-7">
+            {/* <ul className="tracking-wide font-semibold basis-2/3 flex flex-col justify-center pl-7">
               <li>
                 id :{" "}
-                <span className="font-bold">{getDataStudent.idStudent}</span>
+                <span className="font-bold">{getDataStuden.idStudent}</span>
               </li>
               <li>
                 Nama :{" "}
-                <span className="font-bold">{getDataStudent.fullName}</span>
+                <span className="font-bold">{getDataStuden.fullName}</span>
               </li>
               <li>
                 Kelas :{" "}
-                <span className="font-bold">{getDataStudent.classes}</span>
+                <span className="font-bold">{getDataStuden.classes}</span>
               </li>
-            </ul>
+            </ul> */}
           </div>
           <div className="overflow-auto p-5 mb-5">
             <h1>
