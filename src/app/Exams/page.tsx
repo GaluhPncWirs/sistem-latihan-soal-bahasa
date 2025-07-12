@@ -54,7 +54,7 @@ export default function Soal() {
   }
 
   async function handleSendExam() {
-    const { error } = await supabase.from("result-exam").insert([
+    const { error } = await supabase.from("history-exam-student").insert([
       {
         created_at: new Date().toISOString(),
         student_id: idStudent,
