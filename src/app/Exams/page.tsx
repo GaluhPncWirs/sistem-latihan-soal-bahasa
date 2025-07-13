@@ -3,9 +3,9 @@ import NavigasiBar from "@/component/navigasiBar/navbar";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
-import { getDataUser } from "../hooks/getDataUser";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { useGetIdStudent } from "../hooks/getIdStudent";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -14,7 +14,7 @@ export default function Soal() {
   }>({});
   const searchParams = useSearchParams();
   const idExams = searchParams.get("id");
-  const idStudent = getDataUser().id;
+  const idStudent = useGetIdStudent();
   // const [historyQuestions, setHistoryQuestions] = useState<any>([]);
 
   useEffect(() => {

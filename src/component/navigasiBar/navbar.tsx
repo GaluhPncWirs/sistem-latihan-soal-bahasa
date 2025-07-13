@@ -1,18 +1,24 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function NavigasiBar() {
   const [isUserThere, setIsUserThere] = useState<boolean>(false);
+  const { push } = useRouter();
   useEffect(() => {
-    const isUserData = localStorage.getItem("dataLoginSiswa");
+    const isUserData = localStorage.getItem("idLoginSiswa");
     if (isUserData) {
-      const convertToObject = JSON.parse(isUserData);
-      const isObjectTrue = Object.keys(convertToObject).length > 0;
+      const isObjectTrue = Object.keys(isUserData).length > 0;
       setIsUserThere(isObjectTrue);
     }
   }, []);
+
+  function handleLogout() {
+    localStorage.removeItem("idLoginSiswa");
+    push("/Autentikasi/Login");
+  }
 
   return (
     <div className="w-full h-16 bg-amber-300 fixed z-[9999]">
@@ -34,12 +40,12 @@ export default function NavigasiBar() {
         </ul>
         <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5">
           {isUserThere === true ? (
-            <Link
-              href="/Autentikasi/Login"
+            <button
+              onClick={handleLogout}
               className="bg-blue-400 py-1.5 px-5 rounded-lg hover:bg-blue-500 cursor-pointer font-semibold text-lg"
             >
               Logout
-            </Link>
+            </button>
           ) : (
             <>
               <Link
