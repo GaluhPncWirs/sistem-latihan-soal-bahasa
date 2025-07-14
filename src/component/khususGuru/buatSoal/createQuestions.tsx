@@ -346,29 +346,31 @@ export default function CreateNewQuestions() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Apakah Soal ini Sudah Benar ?</DialogTitle>
-              <DialogDescription className="mt-3">
+              <DialogDescription className="mt-3 text-md">
                 Dengan Soal Seperti ini
               </DialogDescription>
               <DialogDescription>
-                Pertanyaan <span className="font-bold">{question}</span>
+                Pertanyaan = <span className="font-bold">"{question}"</span>
               </DialogDescription>
+              <div className="flex justify-around items-center my-3">
+                <DialogDescription>
+                  Jawaban A <span className="font-bold">{answer.answer_a}</span>
+                </DialogDescription>
+                <DialogDescription>
+                  Jawaban B <span className="font-bold">{answer.answer_b}</span>
+                </DialogDescription>
+                <DialogDescription>
+                  Jawaban C <span className="font-bold">{answer.answer_c}</span>
+                </DialogDescription>
+                <DialogDescription>
+                  Jawaban D <span className="font-bold">{answer.answer_d}</span>
+                </DialogDescription>
+                <DialogDescription>
+                  Jawaban E <span className="font-bold">{answer.answer_e}</span>
+                </DialogDescription>
+              </div>
               <DialogDescription>
-                Jawaban A <span className="font-bold">{answer.answer_a}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban B <span className="font-bold">{answer.answer_b}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban C <span className="font-bold">{answer.answer_c}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban D <span className="font-bold">{answer.answer_d}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban E <span className="font-bold">{answer.answer_e}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban Yang Benar{" "}
+                Jawaban Yang Benar ={" "}
                 <span className="font-bold">{selectCorrectAnswer}</span>
               </DialogDescription>
             </DialogHeader>

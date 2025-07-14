@@ -12,10 +12,8 @@ export default function Soal() {
   const [clickedAnswer, setClickedAnswer] = useState<{
     [questions: string]: string;
   }>({});
-  const searchParams = useSearchParams();
-  const idExams = searchParams.get("id");
+  const idExams = useSearchParams().get("id");
   const idStudent = useGetIdStudent();
-  // const [historyQuestions, setHistoryQuestions] = useState<any>([]);
 
   useEffect(() => {
     if (idExams) {
@@ -73,6 +71,29 @@ export default function Soal() {
       });
     }
   }
+
+  async function handleSendExam2() {
+    const { data, error }: any = await supabase
+      .from("exams")
+      .select("*")
+      .eq("id", idExams);
+
+    if (error) {
+      toast("Gagal ❌", {
+        description: "data gagal ditambahkan",
+      });
+    } else {
+      const pilihanSiswa = Object.values(clickedAnswer);
+      const jawabanYangBenar = data
+        .flatMap((getQuestions: any) => getQuestions.questions_exam)
+        .map((item: any) => item.correctAnswer)
+        .filter((jawabanBenar: any) => pilihanSiswa.includes(jawabanBenar));
+
+      console.log(jawabanYangBenar);
+    }
+  }
+
+  handleSendExam2();
 
   return (
     <div>
