@@ -52,27 +52,6 @@ export default function Soal() {
   }
 
   async function handleSendExam() {
-    const { error } = await supabase.from("history-exam-student").insert([
-      {
-        created_at: new Date().toISOString(),
-        student_id: idStudent,
-        exam_id: Number(idExams),
-        answer_student: clickedAnswer,
-      },
-    ]);
-
-    if (error) {
-      toast("Gagal ❌", {
-        description: "data gagal ditambahkan",
-      });
-    } else {
-      toast("Berhasil ✅", {
-        description: "data berhasil ditambahkan",
-      });
-    }
-  }
-
-  async function handleSendExam2() {
     const { data, error }: any = await supabase
       .from("exams")
       .select("*")
@@ -88,12 +67,42 @@ export default function Soal() {
         .flatMap((getQuestions: any) => getQuestions.questions_exam)
         .map((item: any) => item.correctAnswer)
         .filter((jawabanBenar: any) => pilihanSiswa.includes(jawabanBenar));
+      const resultExam = jawabanYangBenar.length * 10;
 
-      console.log(jawabanYangBenar);
+      const payload = {
+        created_at: new Date().toISOString(),
+        student_id: idStudent,
+        exam_id: Number(idExams),
+        answer_student: clickedAnswer,
+        hasil_ujian: resultExam,
+      };
+
+      const { error: err }: any = await supabase
+        .from("exams")
+        .update({ status_pengerjaan: true, hasil_ujian: resultExam })
+        .eq("id", idExams);
+
+      if (err) {
+        toast("Gagal ❌", {
+          description: "data gagal diupdate",
+        });
+      } else {
+        const { error: err } = await supabase
+          .from("history-exam-student")
+          .insert([payload]);
+
+        if (err) {
+          toast("Gagal ❌", {
+            description: "data gagal ditambahkan",
+          });
+        } else {
+          toast("Berhasil ✅", {
+            description: "Ujian Selesai",
+          });
+        }
+      }
     }
   }
-
-  handleSendExam2();
 
   return (
     <div>
