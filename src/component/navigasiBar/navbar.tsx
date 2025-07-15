@@ -8,15 +8,20 @@ export default function NavigasiBar() {
   const [isUserThere, setIsUserThere] = useState<boolean>(false);
   const { push } = useRouter();
   useEffect(() => {
-    const isUserData = localStorage.getItem("idLoginSiswa");
-    if (isUserData) {
-      const isObjectTrue = Object.keys(isUserData).length > 0;
+    const isUserDataSiswa = localStorage.getItem("idLoginSiswa");
+    const isUserDataGuru = localStorage.getItem("idLoginGuru");
+    if (isUserDataSiswa) {
+      const isObjectTrue = Object.keys(isUserDataSiswa).length > 0;
+      setIsUserThere(isObjectTrue);
+    } else if (isUserDataGuru) {
+      const isObjectTrue = Object.keys(isUserDataGuru).length > 0;
       setIsUserThere(isObjectTrue);
     }
   }, []);
 
   function handleLogout() {
     localStorage.removeItem("idLoginSiswa");
+    localStorage.removeItem("idLoginGuru");
     push("/Autentikasi/Login");
   }
 

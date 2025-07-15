@@ -1,27 +1,51 @@
 "use client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export default function LoginAccount() {
   const { push } = useRouter();
+  const [valueTypeAccount, setValueTypeAccount] = useState<string>("");
 
   async function handleLogin(e: any) {
     e.preventDefault();
     const valueEmail = e.currentTarget.email.value;
     const valuePassword = e.currentTarget.password.value;
-    const { data, error }: any = await supabase
-      .from("data-account-student")
-      .select("*")
-      .eq("email", valueEmail)
-      .eq("password", valuePassword)
-      .single();
-    if (error) {
-      toast("Email dan Password Salah Input Kembali");
+    if (valueTypeAccount === "siswa") {
+      const { data, error }: any = await supabase
+        .from("account-student")
+        .select("*")
+        .eq("email", valueEmail)
+        .eq("password", valuePassword)
+        .single();
+      if (error) {
+        toast("Email dan Password Salah Input Kembali");
+      } else {
+        localStorage.setItem("idLoginSiswa", data.idStudent);
+        push("/");
+      }
     } else {
-      localStorage.setItem("idLoginSiswa", data.idStudent);
-      push("/");
+      const { data, error }: any = await supabase
+        .from("account_teacher")
+        .select("*")
+        .eq("email", valueEmail)
+        .eq("password", valuePassword)
+        .single();
+      if (error) {
+        toast("Email dan Password Salah Input Kembali");
+      } else {
+        localStorage.setItem("idLoginGuru", data.id_teacher);
+        push("/Teacher");
+      }
     }
   }
 
@@ -31,6 +55,21 @@ export default function LoginAccount() {
         className="flex justify-center flex-col w-3/4 gap-3 mx-auto"
         onSubmit={(e) => handleLogin(e)}
       >
+        <label
+          htmlFor="akunGuru"
+          className="text-xl font-semibold text-blue-500"
+        >
+          Jenis Akun
+        </label>
+        <Select onValueChange={(val) => setValueTypeAccount(val)}>
+          <SelectTrigger className="w-full bg-blue-200 cursor-pointer">
+            <SelectValue placeholder="Pilih Jenis" />
+          </SelectTrigger>
+          <SelectContent className="bg-blue-200 p-1">
+            <SelectItem value="guru">Guru</SelectItem>
+            <SelectItem value="siswa">Siswa</SelectItem>
+          </SelectContent>
+        </Select>
         <label htmlFor="email" className="text-xl font-semibold text-blue-500">
           Email
         </label>
@@ -54,7 +93,6 @@ export default function LoginAccount() {
         />
         <button
           className="bg-blue-300 rounded-md w-full py-1.5 mt-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
-          // onClick={loginAccount}
           type="submit"
         >
           Login

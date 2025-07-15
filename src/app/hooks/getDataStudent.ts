@@ -6,7 +6,7 @@ export function useGetDataStudent(idStudent:string) {
   useEffect(() => {
     if(!idStudent) return;
     async function dataStudent(){
-      const {data, error} = await supabase.from("data-account-student").select("*").eq("idStudent", idStudent).single()
+      const {data, error} = await supabase.from("account-student").select("*").eq("idStudent", idStudent).single()
       setStudent(data)
       if(error){
           console.log("error")

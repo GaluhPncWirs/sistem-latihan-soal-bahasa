@@ -32,7 +32,7 @@ export default function RegisterAccount() {
       idStudent: randomIdStudent(),
     };
     const { data, error }: any = await supabase
-      .from("data-account-student")
+      .from("account-student")
       .select("*")
       .eq("email", dataRegister.email);
     if (data.length > 0) {

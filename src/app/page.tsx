@@ -19,7 +19,7 @@ export default function Home() {
           </p>
           <div className="mt-5">
             <Link
-              href="/Exams"
+              href="#"
               className="text-center w-full bg-blue-400 rounded-md py-2 text-lg font-semibold cursor-pointer hover:bg-blue-500 px-10"
             >
               Mulai
@@ -34,7 +34,7 @@ export default function Home() {
             Dasboard Siswa
           </Link>
           <Link
-            href="/Exams"
+            href="#"
             className="bg-amber-300 px-10 py-3 rounded-lg hover:bg-amber-400 cursor-pointer text-lg font-semibold"
           >
             Kerjakan Ujian
