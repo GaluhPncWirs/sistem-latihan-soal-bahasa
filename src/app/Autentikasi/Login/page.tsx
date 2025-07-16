@@ -9,12 +9,13 @@ import {
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function LoginAccount() {
   const { push } = useRouter();
   const [valueTypeAccount, setValueTypeAccount] = useState<string>("");
+  const [validate, setValidate] = useState<boolean>(false);
 
   async function handleLogin(e: any) {
     e.preventDefault();
@@ -44,10 +45,17 @@ export default function LoginAccount() {
         toast("Email dan Password Salah Input Kembali");
       } else {
         localStorage.setItem("idLoginGuru", data.id_teacher);
-        push("/Teacher");
+        setValidate(true);
+        push("/Teacher/dashboard");
       }
     }
   }
+
+  useEffect(() => {
+    if (validate) {
+      document.cookie = "role=pengajar;";
+    }
+  }, [validate]);
 
   return (
     <LayoutFormAccount formTitle={"Login Akun"}>

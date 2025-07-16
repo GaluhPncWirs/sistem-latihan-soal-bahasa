@@ -4,7 +4,6 @@ import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions"
 import ViewQuestions from "@/component/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/component/khususGuru/kelolaSiswa/manageStudent";
 import NavigasiBar from "@/component/navigasiBar/navbar";
-import { Toaster } from "@/components/ui/sonner";
 import Link from "next/link";
 import { useState } from "react";
 
