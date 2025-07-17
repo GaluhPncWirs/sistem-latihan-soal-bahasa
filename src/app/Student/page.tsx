@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 export default function Student() {
   const [resultExam, setResultExam] = useState<any>([]);
+  const [statusExam, setStatusExam] = useState<any>([]);
   useEffect(() => {
     async function getDataExamResult() {
       const { data, error }: any = await supabase.from("exams").select("*");
@@ -23,6 +24,26 @@ export default function Student() {
 
     getDataExamResult();
   }, []);
+
+  useEffect(() => {
+    async function getDataExamResulta() {
+      const { data, error }: any = await supabase
+        .from("history-exam-student")
+        .select("*, exams (nama_ujian,status_pengerjaan_siswa,hasil_ujian,id)");
+      setStatusExam(data);
+      if (error) {
+        toast("data tidak bisa ditampilkan, error");
+      }
+    }
+
+    getDataExamResulta();
+  }, []);
+
+  // console.log(
+  //   resultExam
+  //     .flatMap((i: any) => i.status_pengerjaan_siswa)
+  //     .map((s: any) => s.student_id)
+  // );
 
   return (
     <div>
@@ -38,7 +59,7 @@ export default function Student() {
             <h1 className="text-xl font-semibold bg-amber-400 text-center rounded-md py-2 mb-5">
               Ujian Yang Tersedia
             </h1>
-            {resultExam.length > 0 ? (
+            {statusExam.length > 0 ? (
               <table className="border-collapse w-full">
                 <thead>
                   <tr className="bg-slate-500 border-2 border-black">
@@ -46,34 +67,73 @@ export default function Student() {
                     <th className="text-slate-100 p-2">Status</th>
                   </tr>
                 </thead>
-                {resultExam.map((data: any) => (
+                {/* {statusExam.flatMap((data: any) => (
                   <tbody key={data.id}>
                     <tr className="border-2 border-black">
                       <td className="px-3">{data.nama_ujian}</td>
                       <td className="px-3">
-                        {data.status_pengerjaan === true ? (
-                          "Complete"
-                        ) : (
-                          <HoverCard openDelay={200} closeDelay={200}>
-                            <HoverCardTrigger asChild>
-                              <Link
-                                href={`/Exams/?id=${data.id}`}
-                                className="hover:underline hover:text-blue-700"
-                              >
-                                Uncomplete
-                              </Link>
-                            </HoverCardTrigger>
-                            <HoverCardContent className="w-fit p-2">
-                              <h1 className="font-semibold text-xs">
-                                Kerjakan Ujian
-                              </h1>
-                            </HoverCardContent>
-                          </HoverCard>
+                        {data.exams.map((tes: any) =>
+                          tes.status_exam === true ? (
+                            "Complete"
+                          ) : (
+                            <HoverCard openDelay={200} closeDelay={200}>
+                              <HoverCardTrigger asChild>
+                                <Link
+                                  href={`/Exams/?id=${data.id}`}
+                                  className="hover:underline hover:text-blue-700"
+                                >
+                                  Uncomplete
+                                </Link>
+                              </HoverCardTrigger>
+                              <HoverCardContent className="w-fit p-2">
+                                <h1 className="font-semibold text-xs">
+                                  Kerjakan Ujian
+                                </h1>
+                              </HoverCardContent>
+                            </HoverCard>
+                          )
                         )}
                       </td>
                     </tr>
                   </tbody>
-                ))}
+                ))} */}
+                {statusExam
+                  .flatMap((data: any) => data.exams)
+                  .map((tes: any, i: number) => (
+                    <tbody key={i}>
+                      <tr className="border-2 border-black">
+                        <td className="px-3">{tes.nama_ujian}</td>
+                        <td className="px-3">
+                          {tes.status_pengerjaan_siswa.map(
+                            (test: any, i: number) =>
+                              test.status_exam === true ? (
+                                "Complete"
+                              ) : (
+                                <HoverCard
+                                  openDelay={200}
+                                  closeDelay={200}
+                                  key={i}
+                                >
+                                  <HoverCardTrigger asChild>
+                                    <Link
+                                      href={`/Exams/?id=${tes.id}`}
+                                      className="hover:underline hover:text-blue-700"
+                                    >
+                                      Uncomplete
+                                    </Link>
+                                  </HoverCardTrigger>
+                                  <HoverCardContent className="w-fit p-2">
+                                    <h1 className="font-semibold text-xs">
+                                      Kerjakan Ujian
+                                    </h1>
+                                  </HoverCardContent>
+                                </HoverCard>
+                              )
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))}
               </table>
             ) : (
               <h1>Loading ...</h1>
@@ -83,7 +143,7 @@ export default function Student() {
             <h1 className="text-xl font-semibold bg-amber-400 text-center rounded-md py-2 mb-5">
               Hasil Nilai Ujian
             </h1>
-            {resultExam.length > 0 ? (
+            {statusExam.length > 0 ? (
               <table className="border-collapse w-full">
                 <thead>
                   <tr className="bg-slate-500 border-2 border-black">
@@ -91,7 +151,7 @@ export default function Student() {
                     <th className="text-slate-100 p-2">Nilai Ujian</th>
                   </tr>
                 </thead>
-                {resultExam.map((data: any) => (
+                {statusExam.map((data: any) => (
                   <tbody key={data.id}>
                     <tr className="border-2 border-black">
                       <td className="px-3">

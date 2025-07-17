@@ -1,8 +1,10 @@
 "use client";
+import { Toaster } from "@/components/ui/sonner";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function NavigasiBar() {
   const [isUserThere, setIsUserThere] = useState<boolean>(false);
@@ -38,10 +40,14 @@ export default function NavigasiBar() {
             <Link href="/">Home</Link>
           </li>
           <li className="cursor-pointer text-xl font-semibold">
-            <Link href="/Profile">Profil</Link>
+            <Link href={`${isUserThere === true ? `/Profile` : `/`}`}>
+              Profil
+            </Link>
           </li>
           <li className="cursor-pointer text-xl font-semibold">
-            <Link href="/Student">Dashboard</Link>
+            <Link href={`${isUserThere === true ? `/Student` : `/`}`}>
+              Dashboard
+            </Link>
           </li>
         </ul>
         <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5">

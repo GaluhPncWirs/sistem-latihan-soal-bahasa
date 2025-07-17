@@ -7,10 +7,6 @@ export function middleware(req: NextRequest){
     if(role !== "pengajar"){
         return NextResponse.redirect(new URL('/', req.url))
     }
-
-    // if(role === "pengajar"){
-    //     return NextResponse.redirect(new URL('/Teacher', req.url))
-    // }
     return NextResponse.next()
 }
 
