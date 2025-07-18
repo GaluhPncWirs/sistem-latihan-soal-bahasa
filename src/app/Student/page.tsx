@@ -29,7 +29,7 @@ export default function Student() {
     async function getDataExamResulta() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
-        .select("*, exams (nama_ujian,status_pengerjaan_siswa,hasil_ujian,id)");
+        .select("*, exams (nama_ujian,status_pengerjaan_siswa,id)");
       setStatusExam(data);
       if (error) {
         toast("data tidak bisa ditampilkan, error");
@@ -142,7 +142,7 @@ export default function Student() {
                                   </HoverCardContent>
                                 </HoverCard>
                               ) : (
-                                <h1>{data.nama_ujian}</h1>
+                                <h1 key={i}>{data.nama_ujian}</h1>
                               )
                           )}
                         </td>
@@ -151,7 +151,7 @@ export default function Student() {
                             (stat: any, i: number) =>
                               stat.status_exam === true ? (
                                 <div key={i}>
-                                  <span>{data.hasil_ujian}</span>
+                                  <span>{stat.hasil_ujian}</span>
                                 </div>
                               ) : (
                                 <div key={i}>

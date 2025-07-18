@@ -74,16 +74,18 @@ export default function Soal() {
         student_id: idStudent,
         exam_id: Number(idExams),
         answer_student: clickedAnswer,
-        hasil_ujian: resultExam,
       };
 
       const { error: err }: any = await supabase
         .from("exams")
         .update({
           status_pengerjaan_siswa: [
-            { student_id: idStudent, status_exam: true },
+            {
+              student_id: idStudent,
+              status_exam: true,
+              hasil_ujian: resultExam,
+            },
           ],
-          hasil_ujian: resultExam,
         })
         .eq("id", idExams);
 
