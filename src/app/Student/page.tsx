@@ -9,10 +9,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
 import { toast } from "sonner";
+import { useGetIdStudent } from "../hooks/getIdStudent";
 
 export default function Student() {
   const [resultExam, setResultExam] = useState<any>([]);
-  const [statusExam, setStatusExam] = useState<any>([]);
+  const getIdStudent = useGetIdStudent();
+  const [dataStudent, setDataStudent] = useState<any>([]);
   useEffect(() => {
     async function getDataExamResult() {
       const { data, error }: any = await supabase.from("exams").select("*");
@@ -26,17 +28,17 @@ export default function Student() {
   }, []);
 
   useEffect(() => {
-    async function getDataExamResulta() {
+    async function getDataExamStudent() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
         .select("*, exams (nama_ujian,status_pengerjaan_siswa,id)");
-      setStatusExam(data);
+      setDataStudent(data);
       if (error) {
         toast("data tidak bisa ditampilkan, error");
       }
     }
 
-    getDataExamResulta();
+    getDataExamStudent();
   }, []);
 
   return (
@@ -68,7 +70,8 @@ export default function Student() {
                       <td className="px-3">
                         {tes.status_pengerjaan_siswa.map(
                           (test: any, i: number) =>
-                            test.status_exam === true ? (
+                            test.status_exam === true &&
+                            test.student_id === getIdStudent ? (
                               "Complete"
                             ) : (
                               <HoverCard
@@ -98,14 +101,25 @@ export default function Student() {
                 ))}
               </table>
             ) : (
-              <h1>Loading ...</h1>
+              Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-stone-300 px-4 py-6 w-full flex gap-5">
+                    <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
+                    <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
+                  </div>
+                  <div className="bg-stone-300 px-4 py-6 w-full flex gap-5">
+                    <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
+                    <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
+                  </div>
+                </div>
+              ))
             )}
           </div>
           <div>
             <h1 className="text-xl font-semibold bg-amber-400 text-center rounded-md py-2 mb-5">
               Hasil Nilai Ujian
             </h1>
-            {statusExam.length > 0 ? (
+            {dataStudent.length > 0 ? (
               <table className="border-collapse w-full">
                 <thead>
                   <tr className="bg-slate-500 border-2 border-black">
@@ -113,7 +127,7 @@ export default function Student() {
                     <th className="text-slate-100 p-2">Nilai Ujian</th>
                   </tr>
                 </thead>
-                {statusExam
+                {dataStudent
                   .flatMap((datas: any) => datas.exams)
                   .map((data: any, i: number) => (
                     <tbody key={i}>
@@ -121,7 +135,8 @@ export default function Student() {
                         <td className="px-3">
                           {data.status_pengerjaan_siswa.map(
                             (status: any, i: number) =>
-                              status.status_exam === true ? (
+                              status.status_exam === true &&
+                              status.student_id === getIdStudent ? (
                                 <HoverCard
                                   openDelay={200}
                                   closeDelay={200}
@@ -142,64 +157,35 @@ export default function Student() {
                                   </HoverCardContent>
                                 </HoverCard>
                               ) : (
-                                <h1 key={i}>{data.nama_ujian}</h1>
+                                data.nama_ujian
                               )
                           )}
                         </td>
                         <td className="px-3">
-                          {data.status_pengerjaan_siswa.map(
-                            (stat: any, i: number) =>
-                              stat.status_exam === true ? (
-                                <div key={i}>
-                                  <span>{stat.hasil_ujian}</span>
-                                </div>
-                              ) : (
-                                <div key={i}>
-                                  <span>Belum Ada Nilai</span>
-                                </div>
-                              )
+                          {data.status_pengerjaan_siswa.map((stat: any) =>
+                            stat.status_exam === true &&
+                            stat.student_id === getIdStudent
+                              ? stat.hasil_ujian
+                              : "Belum Ada Nilai"
                           )}
                         </td>
                       </tr>
                     </tbody>
                   ))}
-                {/* {statusExam.map((data: any) => (
-                  <tbody key={data.id}>
-                    <tr className="border-2 border-black">
-                      <td className="px-3">
-                        {data.status_pengerjaan === true ? (
-                          <HoverCard openDelay={200} closeDelay={200}>
-                            <HoverCardTrigger asChild>
-                              <Link
-                                href={`/Student/ResultExam/?id=${data.id}`}
-                                className="hover:underline hover:text-blue-700"
-                              >
-                                {data.nama_ujian}
-                              </Link>
-                            </HoverCardTrigger>
-                            <HoverCardContent className="w-fit p-2">
-                              <h1 className="font-semibold text-xs">
-                                Lihat Hasil Ujian
-                              </h1>
-                            </HoverCardContent>
-                          </HoverCard>
-                        ) : (
-                          <h1>{data.nama_ujian}</h1>
-                        )}
-                      </td>
-                      <td className="px-3">
-                        {data.status_pengerjaan === true ? (
-                          <span>{data.hasil_ujian}</span>
-                        ) : (
-                          <span>Belum Ada Nilai</span>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                ))} */}
               </table>
             ) : (
-              <h1>Loading ...</h1>
+              Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-stone-300 px-4 py-6 w-full flex gap-5">
+                    <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
+                    <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
+                  </div>
+                  <div className="bg-stone-300 px-4 py-6 w-full flex gap-5">
+                    <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
+                    <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>
