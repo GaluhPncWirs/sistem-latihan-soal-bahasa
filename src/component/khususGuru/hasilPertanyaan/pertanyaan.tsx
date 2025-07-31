@@ -66,7 +66,7 @@ export default function ViewQuestions() {
                 </td>
                 <td className="flex justify-center gap-3 items-center">
                   <Link
-                    href={`/Teacher/manageExams?id=${data.id}`}
+                    href={`/Teacher/dashboard/manageExams?id=${data.id}`}
                     className="hover:bg-blue-500 bg-blue-400 px-3 py-1.5 rounded-md text-white"
                   >
                     Edit

@@ -34,7 +34,9 @@ export default function LoginAccount() {
         localStorage.setItem("idLoginSiswa", data.idStudent);
         push("/");
       }
-    } else {
+    }
+
+    if (valueTypeAccount === "guru") {
       const { data, error }: any = await supabase
         .from("account_teacher")
         .select("*")
@@ -45,17 +47,11 @@ export default function LoginAccount() {
         toast("Email dan Password Salah Input Kembali");
       } else {
         localStorage.setItem("idLoginGuru", data.id_teacher);
-        setValidate(true);
+        document.cookie = "role=pengajar";
         push("/Teacher/dashboard");
       }
     }
   }
-
-  useEffect(() => {
-    if (validate) {
-      document.cookie = "role=pengajar;";
-    }
-  }, [validate]);
 
   return (
     <LayoutFormAccount formTitle={"Login Akun"}>

@@ -458,7 +458,10 @@ export default function ViewQuestions() {
           </tbody>
         </table>
         <div className="mt-8 mb-10">
-          <Link href="/Teacher" className="text-md">
+          <Link
+            href="/Teacher/dashboard"
+            className="text-md bg-amber-300 px-5 py-2 rounded-lg hover:bg-amber-400 font-semibold"
+          >
             Kembali
           </Link>
         </div>
