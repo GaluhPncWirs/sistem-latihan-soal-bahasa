@@ -45,7 +45,7 @@ export default function NavigasiBar() {
           ) : (
             <>
               <li className="cursor-pointer text-xl font-semibold">
-                <Link href="/">Home</Link>
+                <Link href="/">Beranda</Link>
               </li>
               <li className="cursor-pointer text-xl font-semibold">
                 <Link
@@ -53,6 +53,9 @@ export default function NavigasiBar() {
                 >
                   Profil
                 </Link>
+              </li>
+              <li className="cursor-pointer text-xl font-semibold">
+                <Link href="#">Panduan</Link>
               </li>
               <li className="cursor-pointer text-xl font-semibold">
                 <Link
@@ -82,7 +85,7 @@ export default function NavigasiBar() {
               </Link>
               <Link
                 href="/Autentikasi/Login"
-                className="bg-blue-400 py-1.5 px-5 rounded-lg hover:bg-blue-500 cursor-pointer font-semibold text-lg"
+                className="border border-black py-1.5 px-5 rounded-lg hover:bg-blue-400 cursor-pointer font-semibold text-lg"
               >
                 Login
               </Link>
