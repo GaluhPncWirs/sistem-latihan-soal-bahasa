@@ -31,7 +31,7 @@ export default function NavigasiBar() {
   }
 
   return (
-    <div className="w-full h-16 bg-amber-300 fixed z-10">
+    <div className="w-full h-16 bg-[#A6E3E9] fixed z-10">
       <div className="flex items-center h-full gap-x-3">
         <div className="basis-1/5 h-full flex items-center justify-center">
           {/* <Image src="" alt="" width={500} height={500}/> */}
@@ -71,7 +71,7 @@ export default function NavigasiBar() {
           {isUserThereStudent === true || isUserThereTeacher === true ? (
             <button
               onClick={handleLogout}
-              className="bg-blue-400 py-1.5 px-5 rounded-lg hover:bg-blue-500 cursor-pointer font-semibold text-lg"
+              className="bg-[#71C9CE] py-1.5 px-5 rounded-lg hover:bg-teal-500 cursor-pointer font-semibold text-lg"
             >
               Logout
             </button>
@@ -79,13 +79,13 @@ export default function NavigasiBar() {
             <>
               <Link
                 href="/Autentikasi/Daftar"
-                className="bg-blue-400 py-1.5 px-5 rounded-lg hover:bg-blue-500 cursor-pointer font-semibold text-lg"
+                className="bg-[#71C9CE] py-1.5 px-5 rounded-lg hover:bg-teal-500 cursor-pointer font-semibold text-lg"
               >
                 Daftar
               </Link>
               <Link
                 href="/Autentikasi/Login"
-                className="border border-black py-1.5 px-5 rounded-lg hover:bg-blue-400 cursor-pointer font-semibold text-lg"
+                className="border border-black py-1.5 px-5 rounded-lg hover:bg-teal-400 cursor-pointer font-semibold text-lg"
               >
                 Login
               </Link>
