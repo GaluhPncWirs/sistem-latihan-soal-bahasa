@@ -1,20 +1,17 @@
 "use client";
-import NavigasiBar from "@/component/navigasiBar/navbar";
-import { Toaster } from "@/components/ui/sonner";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetDataStudent } from "../hooks/getDataStudent";
 import { useGetIdStudent } from "../hooks/getIdStudent";
+import LayoutBodyContent from "@/layout/bodyContent";
 
 export default function Profil() {
   const id = useGetIdStudent();
   const dataStudent = useGetDataStudent(id);
 
   return (
-    <div>
-      <NavigasiBar />
-      <Toaster />
-      <div className="w-full mx-auto flex justify-center items-center h-screen pt-14">
+    <LayoutBodyContent>
+      <div className="w-full mx-auto flex justify-center items-center pt-32 bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
         {!dataStudent ? (
           <div className="w-1/2 bg-slate-400 rounded-lg h-80 p-5 animate-pulse">
             <h1 className="w-full bg-slate-300 h-8 rounded-md"></h1>
@@ -37,11 +34,11 @@ export default function Profil() {
             <div className="w-1/4 bg-slate-300 h-5 mt-4 rounded-md"></div>
           </div>
         ) : (
-          <div className="w-1/2 bg-sky-500 shadow-md shadow-slate-600 pb-5 rounded-lg">
-            <h1 className="font-semibold text-xl text-center my-1.5">
+          <div className="w-1/2 bg-[#3282B8] pb-5 rounded-lg">
+            <h1 className="font-semibold text-xl text-center my-3">
               Profile Kamu
             </h1>
-            <div className="flex bg-amber-200">
+            <div className="flex bg-[#3FC1C9]">
               <div className="basis-1/4">
                 <Image
                   src="/img/profile/userProfile.png"
@@ -75,7 +72,7 @@ export default function Profil() {
               </h1>
             </div>
             <Link
-              className="bg-slate-300 px-10 py-1.5 rounded-md ml-5 text-lg font-bold"
+              className="bg-[#71C9CE] px-10 py-1.5 rounded-md ml-5 text-lg font-bold hover:bg-[#A6E3E9]"
               href="/Student"
             >
               Kembali
@@ -83,6 +80,6 @@ export default function Profil() {
           </div>
         )}
       </div>
-    </div>
+    </LayoutBodyContent>
   );
 }

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useGetIdStudent } from "../hooks/getIdStudent";
+import LayoutBodyContent from "@/layout/bodyContent";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -112,63 +113,68 @@ export default function Soal() {
   }
 
   return (
-    <div>
-      <NavigasiBar />
-      <div className="w-10/12 mx-auto rounded-xl pt-24">
-        <div className="p-10 bg-blue-400 rounded-lg">
-          <h1 className="text-2xl font-semibold">Pertanyaaan Pilihan Ganda</h1>
-          <div className="grid grid-cols-2 gap-5">
-            {questions.length > 0
-              ? questions
-                  .flatMap((getQuestions: any) => getQuestions.questions_exam)
-                  .map((item: any, i: number) => (
-                    <div className="mt-5" key={item.id}>
-                      <span className="font-bold mr-1 text-lg">{i + 1}.</span>
-                      <h1 className="inline-block text-lg">{item.questions}</h1>
-                      <ul className="ml-2 flex flex-col gap-2 mt-3">
-                        {["a", "b", "c", "d", "e"].map((opt) => {
-                          const answerKey = `answer_${opt}`;
-                          const answerText = item.answerPg[answerKey];
-                          const isSelected =
-                            clickedAnswer[item.id] === answerText;
-                          return (
-                            <Button
-                              key={opt}
-                              variant="outline"
-                              className={`cursor-pointer w-fit px-3 ${
-                                isSelected ? "line-through" : ""
-                              }`}
-                              onClick={() =>
-                                handleSelectedAnswer(item.id, answerText)
-                              }
-                            >
-                              {opt.toUpperCase()}. {answerText}
-                            </Button>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  ))
-              : Array.from({ length: 5 }).map((_, i) => (
-                  <div className="mt-5 animate-pulse" key={i}>
-                    <div className="bg-slate-400 w-full h-8 rounded-md"></div>
-                    <div className="flex flex-col gap-5 mt-5">
-                      <div className="bg-slate-400 w-11/12 h-5 rounded-md"></div>
-                      <div className="bg-slate-400 w-4/5 h-5 rounded-md"></div>
-                      <div className="bg-slate-400 w-full h-5 rounded-md"></div>
-                      <div className="bg-slate-400 w-1/2 h-5 rounded-md"></div>
-                      <div className="bg-slate-400 w-3/5 h-5 rounded-md"></div>
-                    </div>
+    <LayoutBodyContent>
+      <div className="w-10/12 mx-auto pt-24">
+        <div className="mt-7">
+          <h1 className="text-3xl font-semibold">Pertanyaaan Pilihan Ganda</h1>
+          {questions.length > 0
+            ? questions
+                .flatMap((getQuestions: any) => getQuestions.questions_exam)
+                .map((item: any, i: number) => (
+                  <div
+                    className="mt-5 bg-[#08D9D6] rounded-lg p-7"
+                    key={item.id}
+                  >
+                    <span className="font-bold mr-1 text-lg">{i + 1}.</span>
+                    <h1 className="inline-block text-lg font-semibold">
+                      {item.questions}
+                    </h1>
+                    <ul className="flex justify-evenly items-center mt-5">
+                      {["a", "b", "c", "d", "e"].map((opt) => {
+                        const answerKey = `answer_${opt}`;
+                        const answerText = item.answerPg[answerKey];
+                        const isSelected =
+                          clickedAnswer[item.id] === answerText;
+                        return (
+                          <Button
+                            key={opt}
+                            variant="outline"
+                            className={`cursor-pointer w-fit px-3 ${
+                              isSelected ? "line-through" : ""
+                            }`}
+                            onClick={() =>
+                              handleSelectedAnswer(item.id, answerText)
+                            }
+                          >
+                            {opt.toUpperCase()}. {answerText}
+                          </Button>
+                        );
+                      })}
+                    </ul>
                   </div>
-                ))}
-          </div>
+                ))
+            : Array.from({ length: 5 }).map((_, i) => (
+                <div className="mt-5 animate-pulse" key={i}>
+                  <div className="bg-slate-400 w-full h-8 rounded-md"></div>
+                  <div className="flex flex-col gap-5 mt-5">
+                    <div className="bg-slate-400 w-11/12 h-5 rounded-md"></div>
+                    <div className="bg-slate-400 w-4/5 h-5 rounded-md"></div>
+                    <div className="bg-slate-400 w-full h-5 rounded-md"></div>
+                    <div className="bg-slate-400 w-1/2 h-5 rounded-md"></div>
+                    <div className="bg-slate-400 w-3/5 h-5 rounded-md"></div>
+                  </div>
+                </div>
+              ))}
           <div className="mt-10">
-            <Button className="cursor-pointer" onClick={handleSendExam}>
+            <Button
+              className="cursor-pointer px-7 py-5 text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]"
+              onClick={handleSendExam}
+            >
               Selesai
             </Button>
           </div>
         </div>
       </div>
-    </div>
+    </LayoutBodyContent>
   );
 }

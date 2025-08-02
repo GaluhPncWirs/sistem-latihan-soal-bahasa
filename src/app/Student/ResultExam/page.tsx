@@ -2,12 +2,7 @@
 import NavigasiBar from "@/component/navigasiBar/navbar";
 import { supabase } from "@/lib/supabase/data";
 import Link from "next/link";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ResultExam() {
