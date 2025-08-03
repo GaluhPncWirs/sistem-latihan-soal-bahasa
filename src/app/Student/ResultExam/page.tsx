@@ -1,5 +1,4 @@
 "use client";
-import NavigasiBar from "@/component/navigasiBar/navbar";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import Link from "next/link";
