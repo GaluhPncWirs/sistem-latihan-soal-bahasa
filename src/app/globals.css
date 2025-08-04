@@ -214,3 +214,7 @@ tbody > tr > td {
     @apply border-border outline-ring/50;}
   body {
     @apply bg-background text-foreground;}}
+
+  .scrollBarDesign{
+    @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-[#CBF1F5] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#3282B8]
+  }

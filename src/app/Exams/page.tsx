@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { useGetIdStudent } from "../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
+import Link from "next/link";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -14,6 +15,27 @@ export default function Soal() {
   }>({});
   const idExams = useSearchParams().get("id");
   const idStudent = useGetIdStudent();
+  const [time, setTime] = useState<number>(3600);
+  const [timeOut, setTimeOut] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime((prev) => {
+        if (prev <= 0) {
+          clearInterval(timer);
+          setTimeOut(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const minute = Math.floor(time / 60);
+  const second = time % 60;
+  const formatedTime = `${minute}:${String(second).padStart(2, "0")}`;
 
   useEffect(() => {
     async function handleViewQuestionsUseParam() {
@@ -105,16 +127,16 @@ export default function Soal() {
           Ujian {questions[0]?.nama_ujian}
         </h1>
         <div className="flex flex-row-reverse gap-7 items-center justify-center">
-          <div className="bg-amber-300 basis-1/3 p-5 rounded-lg">
+          <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg">
             <div className="flex justify-between items-center">
               <h1 className="text-xl font-semibold">
                 Pertanyaaan Pilihan Ganda
               </h1>
               <div className="text-2xl font-semibold bg-[#F38181] px-5 py-1.5 rounded-lg">
-                00:00
+                {/* {formatedTime} */}00:00
               </div>
             </div>
-            <div className="bg-amber-200 mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
+            <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
               {questions.length > 0
                 ? questions
                     .flatMap((getQuestions: any) => getQuestions.questions_exam)
@@ -124,7 +146,7 @@ export default function Soal() {
                       return (
                         <div
                           className={`h-10 w-10  rounded-md flex items-center justify-center font-bold text-lg ${
-                            isAnswer ? "bg-green-400" : "bg-slate-300"
+                            isAnswer ? "bg-green-400" : "bg-[#E3FDFD]"
                           }`}
                           key={i}
                         >
@@ -135,13 +157,13 @@ export default function Soal() {
                 : null}
             </div>
           </div>
-          <div className="basis-2/3 overflow-y-auto h-[28rem]">
+          <div className="basis-2/3 overflow-y-auto h-[28rem] scrollBarDesign">
             {questions.length > 0
               ? questions
                   .flatMap((getQuestions: any) => getQuestions.questions_exam)
                   .map((item: any, i: number) => (
                     <div
-                      className="mt-4 bg-[#08D9D6] rounded-lg p-7"
+                      className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3"
                       key={item.id}
                     >
                       <span className="font-bold mr-1 text-lg">{i + 1}.</span>
@@ -186,13 +208,20 @@ export default function Soal() {
                 ))}
           </div>
         </div>
-        <div className="mt-10">
+        <div className="mt-10 flex justify-between">
           <Button
             className="cursor-pointer px-7 py-5 text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]"
             onClick={handleSendExam}
           >
             Selesai
           </Button>
+          <Link
+            href="/Student"
+            className="cursor-pointer px-7 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]"
+            onClick={handleSendExam}
+          >
+            Kembali
+          </Link>
         </div>
       </div>
     </LayoutBodyContent>

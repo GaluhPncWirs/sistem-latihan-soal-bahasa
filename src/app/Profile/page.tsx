@@ -13,6 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/data";
 
 export default function Profil() {
   const id = useGetIdStudent();
@@ -22,6 +24,38 @@ export default function Profil() {
     "id-ID",
     options
   );
+  const optionsTime: any = {
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Jakarta",
+  };
+
+  const [historyStudent, setHistoryStudent] = useState([]);
+  // const namaUjian = historyStudent
+  //   .flatMap((item: any) => item.exams)
+  //   .map((nilai: any, i: any) => {
+  //     return <TableCell key={i}>{nilai.nama_ujian}</TableCell>;
+  //   });
+
+  // const waktuPengerjaan = historyStudent.map((data: any, i: any) => {
+  //   return <TableCell key={i}>{data.created_at}</TableCell>;
+  // });
+
+  useEffect(() => {
+    async function getHistoryStudent() {
+      const { data, error }: any = await supabase
+        .from("history-exam-student")
+        .select("created_at, exams (nama_ujian,status_pengerjaan_siswa)");
+      setHistoryStudent(data);
+      if (error) {
+        console.log("gagal di tampilkan");
+      }
+    }
+
+    getHistoryStudent();
+  }, []);
 
   return (
     <LayoutBodyContent>
@@ -40,7 +74,7 @@ export default function Profil() {
           <Button className="px-5 cursor-pointer">Edit Profile</Button>
         </div>
         <div className="mt-16 basis-2/3">
-          <div className="bg-[#769FCD] rounded-lg p-7">
+          <div className="bg-[#71C9CE] rounded-lg p-7">
             <h1 className="mb-10 text-center text-2xl font-semibold">
               Riwayat Ujian
             </h1>
@@ -55,27 +89,31 @@ export default function Profil() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell>1</TableCell>
-                  <TableCell>mtk</TableCell>
-                  <TableCell>hari ini</TableCell>
-                  <TableCell>40</TableCell>
-                  <TableCell>selesai</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>2</TableCell>
-                  <TableCell>ppkn</TableCell>
-                  <TableCell>kemaren</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>belum</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>3</TableCell>
-                  <TableCell>ppkn</TableCell>
-                  <TableCell>kemaren</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>belum</TableCell>
-                </TableRow>
+                {historyStudent
+                  .flatMap((item: any) => item.exams)
+                  .flatMap((data: any) => data.status_pengerjaan_siswa)
+                  .map((nilai: any, i: number) => (
+                    <TableRow key={i}>
+                      <TableCell>{i + 1}</TableCell>
+                      <TableCell>sad</TableCell>
+                      <TableCell>sekarang</TableCell>
+                      <TableCell>{nilai.hasil_ujian}</TableCell>
+                      <TableCell>
+                        {nilai.status_exam === true
+                          ? "Selesai"
+                          : "Belum Selesai"}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                {/* {historyStudent.flatMap((data: any, i: any) => (
+                  <TableRow key={i}>
+                    <TableCell>1</TableCell>
+                    <TableCell>mtk</TableCell>
+                    <TableCell>{data.created_at}</TableCell>
+                    <TableCell>40</TableCell>
+                    <TableCell>selesai</TableCell>
+                  </TableRow>
+                ))} */}
               </TableBody>
             </Table>
           </div>
