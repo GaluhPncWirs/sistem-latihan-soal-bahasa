@@ -64,7 +64,7 @@ export default function Soal() {
     const { data, error }: any = await supabase
       .from("exams")
       .select("*")
-      .eq("id", idExams);
+      .eq("id", Number(idExams));
 
     if (error) {
       toast("Gagal ❌", {
@@ -96,25 +96,42 @@ export default function Soal() {
             },
           ],
         })
-        .eq("id", idExams);
+        .eq("id", Number(idExams));
 
       if (err) {
         toast("Gagal ❌", {
           description: "data gagal diupdate",
         });
       } else {
-        const { error: err } = await supabase
+        const { data: sudahAda } = await supabase
           .from("history-exam-student")
-          .insert([payload]);
+          .select("*")
+          .eq("exam_id", Number(idExams))
+          .eq("student_id", idStudent)
+          .single();
 
-        if (err) {
-          toast("Gagal ❌", {
-            description: "data gagal ditambahkan",
-          });
+        if (sudahAda) {
+          const { error: updateErr } = await supabase
+            .from("history-exam-student")
+            .update(payload)
+            .eq("exam_id", Number(idExams))
+            .eq("student_id", idStudent);
+
+          if (updateErr) {
+            toast("Gagal ❌", { description: "Gagal memperbarui data" });
+          } else {
+            toast("Berhasil ✅", { description: "Ujian Selesai" });
+          }
         } else {
-          toast("Berhasil ✅", {
-            description: "Ujian Selesai",
-          });
+          const { error: insertErr } = await supabase
+            .from("history-exam-student")
+            .insert(payload);
+
+          if (insertErr) {
+            toast("Gagal ❌", { description: "Gagal menyimpan data" });
+          } else {
+            toast("Berhasil ✅", { description: "Ujian Selesai" });
+          }
         }
       }
     }
@@ -218,7 +235,6 @@ export default function Soal() {
           <Link
             href="/Student"
             className="cursor-pointer px-7 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]"
-            onClick={handleSendExam}
           >
             Kembali
           </Link>

@@ -31,23 +31,15 @@ export default function Profil() {
     minute: "2-digit",
     timeZone: "Asia/Jakarta",
   };
-
   const [historyStudent, setHistoryStudent] = useState([]);
-  // const namaUjian = historyStudent
-  //   .flatMap((item: any) => item.exams)
-  //   .map((nilai: any, i: any) => {
-  //     return <TableCell key={i}>{nilai.nama_ujian}</TableCell>;
-  //   });
-
-  // const waktuPengerjaan = historyStudent.map((data: any, i: any) => {
-  //   return <TableCell key={i}>{data.created_at}</TableCell>;
-  // });
 
   useEffect(() => {
     async function getHistoryStudent() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
-        .select("created_at, exams (nama_ujian,status_pengerjaan_siswa)");
+        .select(
+          "created_at, student_id, exams (nama_ujian,status_pengerjaan_siswa)"
+        );
       setHistoryStudent(data);
       if (error) {
         console.log("gagal di tampilkan");
@@ -89,7 +81,51 @@ export default function Profil() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {historyStudent
+                {historyStudent.map((item: any, i: number) => (
+                  <TableRow key={i}>
+                    <TableCell>{i + 1}</TableCell>
+                    <TableCell>{item.exams?.nama_ujian}</TableCell>
+                    <TableCell>
+                      {new Date(item.created_at).toLocaleDateString(
+                        "id-ID",
+                        optionsTime
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {item.exams?.status_pengerjaan_siswa[0]?.hasil_ujian}
+                    </TableCell>
+                    <TableCell>
+                      {item.exams?.status_pengerjaan_siswa[0]?.status_exam ===
+                      true
+                        ? "Selesai"
+                        : "Belum Selesai"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+
+                {/* {historyStudent
+                  .flatMap((item: any) =>
+                    item.exams.map((item: any) => ({
+                      nama_ujian: item.nama_ujian,
+                      created_at: item.created_at,
+                      hasil_ujian: item.status_pengerjaan_siswa?.hasil_ujian,
+                      status_exam: item.status_pengerjaan_siswa?.status_exam,
+                    }))
+                  )
+                  .map((nilai: any, i: number) => (
+                    <TableRow key={i}>
+                      <TableCell>{i + 1}</TableCell>
+                      <TableCell>{nilai.nama_ujian}</TableCell>
+                      <TableCell>{nilai.created_at}</TableCell>
+                      <TableCell>{nilai.hasil_ujian}</TableCell>
+                      <TableCell>
+                        {nilai.status_exam === true
+                          ? "Selesai"
+                          : "Belum Selesai"}
+                      </TableCell>
+                    </TableRow>
+                  ))} */}
+                {/* {historyStudent
                   .flatMap((item: any) => item.exams)
                   .flatMap((data: any) => data.status_pengerjaan_siswa)
                   .map((nilai: any, i: number) => (
@@ -104,7 +140,7 @@ export default function Profil() {
                           : "Belum Selesai"}
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ))} */}
                 {/* {historyStudent.flatMap((data: any, i: any) => (
                   <TableRow key={i}>
                     <TableCell>1</TableCell>

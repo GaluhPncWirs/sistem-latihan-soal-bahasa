@@ -25,6 +25,13 @@ export default function Student() {
   const getIdStudent = useGetIdStudent();
   const [dataStudent, setDataStudent] = useState<any>([]);
   const getNameStudent = useGetDataStudent(getIdStudent);
+  const isSameId = resultExam.map(
+    (item: any) => item.status_pengerjaan_siswa[0]?.student_id === getIdStudent
+  );
+  const isCompleteExams = resultExam.map(
+    (item: any) => item.status_pengerjaan_siswa[0]?.status_exam
+  );
+
   useEffect(() => {
     async function getDataExamResult() {
       const { data, error }: any = await supabase.from("exams").select("*");
@@ -41,6 +48,7 @@ export default function Student() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
         .select("*, exams (nama_ujian,status_pengerjaan_siswa,id)");
+
       setDataStudent(data);
       if (error) {
         toast("data tidak bisa ditampilkan, error");
@@ -64,15 +72,29 @@ export default function Student() {
           <div className="flex justify-evenly items-center mt-10">
             <div className="bg-[#F38181] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Jumlah Ujian Yang Diikuti</h1>
-              <div className="text-xl">5</div>
+              <div className="text-xl">
+                {isSameId[0] === true ? isCompleteExams.length : "0"}
+              </div>
             </div>
             <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Nilai Rata Rata</h1>
-              <div className="text-xl">77</div>
+              <div className="text-xl">
+                {isSameId[0] === true
+                  ? resultExam
+                      .map(
+                        (item: any) =>
+                          item.status_pengerjaan_siswa[0]?.hasil_ujian
+                      )
+                      .reduce((acc: any, cur: any) => acc + cur) /
+                    resultExam.length
+                  : "0"}
+              </div>
             </div>
             <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Ujian Terjadwal Hari ini</h1>
-              <div className="text-xl">2</div>
+              <div className="text-xl">
+                {isSameId[0] === true ? resultExam.length : "0"}
+              </div>
             </div>
           </div>
           <div className="w-3/4 mx-auto mt-8">
