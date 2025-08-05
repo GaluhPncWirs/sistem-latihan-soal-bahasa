@@ -52,7 +52,7 @@ export default function CreateNewQuestions() {
 
       if (error) {
         toast("Gagal ❌", {
-          description: "gagal mndapatkan nama soal",
+          description: "gagal mendapatkan nama soal",
         });
       }
       setDataNameExam(data);
@@ -94,10 +94,8 @@ export default function CreateNewQuestions() {
       if (selectedValueNameExam === "buatUjianBaru") {
         const { error }: any = await supabase.from("exams").insert([
           {
-            created_at: new Date().toISOString(),
+            created_at_exams: new Date().toISOString(),
             nama_ujian: nameExam,
-            status_pengerjaan: null,
-            hasil_ujian: null,
             questions_exam: [
               {
                 id: randomIdExam(),

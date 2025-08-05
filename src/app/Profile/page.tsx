@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
+import { useConvertDate } from "../hooks/getConvertDate";
 
 export default function Profil() {
   const id = useGetIdStudent();
@@ -24,28 +25,23 @@ export default function Profil() {
     "id-ID",
     options
   );
-  const optionsTime: any = {
-    day: "numeric",
-    month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Jakarta",
-  };
   const [historyStudent, setHistoryStudent] = useState([]);
 
   useEffect(() => {
+    if (!id) return;
     async function getHistoryStudent() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
-        .select("*, exams (nama_ujian)");
-      setHistoryStudent(data);
+        .select("*, exams (nama_ujian)")
+        .eq("student_id", id);
       if (error) {
         console.log("gagal di tampilkan");
       }
+      setHistoryStudent(data);
     }
 
     getHistoryStudent();
-  }, []);
+  }, [id]);
 
   return (
     <LayoutBodyContent>
@@ -84,12 +80,7 @@ export default function Profil() {
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{item.exams?.nama_ujian}</TableCell>
-                      <TableCell>
-                        {new Date(item.created_at).toLocaleDateString(
-                          "id-ID",
-                          optionsTime
-                        )}
-                      </TableCell>
+                      <TableCell>{useConvertDate(item.created_at)}</TableCell>
                       <TableCell>{item.hasil_ujian}</TableCell>
                       <TableCell>
                         {item.status_exam === true

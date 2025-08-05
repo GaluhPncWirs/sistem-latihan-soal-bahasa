@@ -53,6 +53,8 @@ export default function Soal() {
     handleViewQuestionsUseParam();
   }, []);
 
+  console.log(questions);
+
   function handleSelectedAnswer(questionsId: string, answer: string) {
     setClickedAnswer((prev) => ({
       ...prev,
@@ -124,7 +126,7 @@ export default function Soal() {
     <LayoutBodyContent>
       <div className="w-10/12 mx-auto pt-24">
         <h1 className="text-3xl font-semibold mb-7 text-center mt-5">
-          Ujian {questions[0]?.nama_ujian}
+          {/* Ujian {questions[0]?.nama_ujian} */}
         </h1>
         <div className="flex flex-row-reverse gap-7 items-center justify-center">
           <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg">

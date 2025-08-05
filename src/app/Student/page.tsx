@@ -19,34 +19,45 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useConvertDate } from "../hooks/getConvertDate";
 
 export default function Student() {
   const [resultExam, setResultExam] = useState<any>([]);
   const getIdStudent = useGetIdStudent();
-  const [dataStudent, setDataStudent] = useState<any>([]);
   const getNameStudent = useGetDataStudent(getIdStudent);
 
-  // const isSameId = resultExam.map(
-  //   (item: any) => item.status_pengerjaan_siswa[0]?.student_id === getIdStudent
-  // );
-  // const isCompleteExams = resultExam.map(
-  //   (item: any) => item.status_pengerjaan_siswa[0]?.status_exam
-  // );
-
   useEffect(() => {
+    if (!getIdStudent) return;
     async function getDataExamResult() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
-        .select("*, exams (nama_ujian,created_at_exams)");
-      setResultExam(data);
+        .select("*, exams (nama_ujian,created_at_exams,id)")
+        .eq("student_id", getIdStudent);
+
       if (error) {
         toast("data tidak bisa ditampilkan, error");
       }
+      setResultExam(data);
     }
     getDataExamResult();
-  }, []);
+  }, [getIdStudent]);
 
-  const re = resultExam.flatMap((a: any) => a.exams.created_at_exams);
+  // useEffect(() => {
+  //   async function getDatasExamResult() {
+  //     const { data, error }: any = await supabase.from("exams").select("*");
+
+  //     if (error) {
+  //       toast("data tidak bisa ditampilkan, error");
+  //     }
+  //     // console.log(data);
+  //   }
+  //   getDatasExamResult();
+  // }, []);
+
+  const isExamComplete = resultExam.map((res: any) => res.status_exam === true);
+  const averageValue = resultExam.map((avg: any) => avg.exams);
+  // .reduce((acc: any, cur: any) => acc + cur) / resultExam.length;
+  // console.log("buat relasi ", averageValue);
 
   return (
     <LayoutBodyContent>
@@ -63,29 +74,15 @@ export default function Student() {
           <div className="flex justify-evenly items-center mt-10">
             <div className="bg-[#F38181] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Jumlah Ujian Yang Diikuti</h1>
-              <div className="text-xl">
-                {/* {isSameId[0] === true ? isCompleteExams.length : "0"} */}
-              </div>
+              <div className="text-xl">{isExamComplete.length || "0"}</div>
             </div>
             <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Nilai Rata Rata</h1>
-              <div className="text-xl">
-                {/* {isSameId[0] === true
-                  ? resultExam
-                      .map(
-                        (item: any) =>
-                          item.status_pengerjaan_siswa[0]?.hasil_ujian
-                      )
-                      .reduce((acc: any, cur: any) => acc + cur) /
-                    resultExam.length
-                  : "0"} */}
-              </div>
+              {/* <div className="text-xl">{averageValue || "0"}</div> */}
             </div>
             <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Ujian Terjadwal Hari ini</h1>
-              <div className="text-xl">
-                {/* {isSameId[0] === true ? resultExam.length : "0"} */}
-              </div>
+              <div className="text-xl">{resultExam.length || "0"}</div>
             </div>
           </div>
           <div className="w-3/4 mx-auto mt-8">
@@ -108,37 +105,29 @@ export default function Student() {
                       <TableRow key={i}>
                         <TableCell>{i + 1}</TableCell>
                         <TableCell>{data.exams.nama_ujian}</TableCell>
-                        {data.status_exam === true &&
-                        data.student_id === getIdStudent ? (
-                          <>
-                            <TableCell>Complete</TableCell>
-                            <TableCell>{data.exams.created_at_exams}</TableCell>
-                          </>
+                        <TableCell>
+                          {useConvertDate(data.exams.created_at_exams)}
+                        </TableCell>
+                        {data.status_exam === true ? (
+                          <TableCell>Complete</TableCell>
                         ) : (
-                          <>
-                            <TableCell>Belum Selesai</TableCell>
-                            <TableCell>
-                              <HoverCard
-                                openDelay={200}
-                                closeDelay={200}
-                                key={i}
-                              >
-                                <HoverCardTrigger asChild>
-                                  <Link
-                                    href={`/Exams/?id=${data.id}`}
-                                    className="hover:underline hover:text-blue-700"
-                                  >
-                                    Uncomplete
-                                  </Link>
-                                </HoverCardTrigger>
-                                <HoverCardContent className="w-fit p-2">
-                                  <h1 className="font-semibold text-xs">
-                                    Kerjakan Ujian
-                                  </h1>
-                                </HoverCardContent>
-                              </HoverCard>
-                            </TableCell>
-                          </>
+                          <TableCell>
+                            <HoverCard openDelay={200} closeDelay={200} key={i}>
+                              <HoverCardTrigger asChild>
+                                <Link
+                                  href={`/Exams/?id=${data.exams.id}`}
+                                  className="hover:underline hover:text-blue-700"
+                                >
+                                  Uncomplete
+                                </Link>
+                              </HoverCardTrigger>
+                              <HoverCardContent className="w-fit p-2">
+                                <h1 className="font-semibold text-xs">
+                                  Kerjakan Ujian
+                                </h1>
+                              </HoverCardContent>
+                            </HoverCard>
+                          </TableCell>
                         )}
                       </TableRow>
                     ))}
@@ -171,7 +160,6 @@ export default function Student() {
                   </TableHeader>
                   <TableBody>
                     {resultExam.flatMap((item: any, i: number) =>
-                      item.student_id === getIdStudent &&
                       item.status_exam === true ? (
                         <TableRow key={i}>
                           <TableCell>{i + 1}</TableCell>
@@ -192,7 +180,9 @@ export default function Student() {
                               </HoverCardContent>
                             </HoverCard>
                           </TableCell>
-                          <TableCell>{item.created_at}</TableCell>
+                          <TableCell>
+                            {useConvertDate(item.created_at)}
+                          </TableCell>
                           <TableCell>{item.hasil_ujian}</TableCell>
                         </TableRow>
                       ) : (
