@@ -83,55 +83,38 @@ export default function Soal() {
         student_id: idStudent,
         exam_id: Number(idExams),
         answer_student: clickedAnswer,
+        hasil_ujian: resultExam,
+        status_exam: true,
       };
 
-      const { error: err }: any = await supabase
-        .from("exams")
-        .update({
-          status_pengerjaan_siswa: [
-            {
-              student_id: idStudent,
-              status_exam: true,
-              hasil_ujian: resultExam,
-            },
-          ],
-        })
-        .eq("id", Number(idExams));
+      const { data: sudahAda } = await supabase
+        .from("history-exam-student")
+        .select("*")
+        .eq("exam_id", Number(idExams))
+        .eq("student_id", idStudent)
+        .single();
 
-      if (err) {
-        toast("Gagal ❌", {
-          description: "data gagal diupdate",
-        });
-      } else {
-        const { data: sudahAda } = await supabase
+      if (sudahAda) {
+        const { error: updateErr } = await supabase
           .from("history-exam-student")
-          .select("*")
+          .update(payload)
           .eq("exam_id", Number(idExams))
-          .eq("student_id", idStudent)
-          .single();
+          .eq("student_id", idStudent);
 
-        if (sudahAda) {
-          const { error: updateErr } = await supabase
-            .from("history-exam-student")
-            .update(payload)
-            .eq("exam_id", Number(idExams))
-            .eq("student_id", idStudent);
-
-          if (updateErr) {
-            toast("Gagal ❌", { description: "Gagal memperbarui data" });
-          } else {
-            toast("Berhasil ✅", { description: "Ujian Selesai" });
-          }
+        if (updateErr) {
+          toast("Gagal ❌", { description: "Gagal memperbarui data" });
         } else {
-          const { error: insertErr } = await supabase
-            .from("history-exam-student")
-            .insert(payload);
+          toast("Berhasil ✅", { description: "Ujian Selesai" });
+        }
+      } else {
+        const { error: insertErr } = await supabase
+          .from("history-exam-student")
+          .insert(payload);
 
-          if (insertErr) {
-            toast("Gagal ❌", { description: "Gagal menyimpan data" });
-          } else {
-            toast("Berhasil ✅", { description: "Ujian Selesai" });
-          }
+        if (insertErr) {
+          toast("Gagal ❌", { description: "Gagal menyimpan data" });
+        } else {
+          toast("Berhasil ✅", { description: "Ujian Selesai" });
         }
       }
     }

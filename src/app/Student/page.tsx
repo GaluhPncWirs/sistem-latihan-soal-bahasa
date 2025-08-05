@@ -25,16 +25,19 @@ export default function Student() {
   const getIdStudent = useGetIdStudent();
   const [dataStudent, setDataStudent] = useState<any>([]);
   const getNameStudent = useGetDataStudent(getIdStudent);
-  const isSameId = resultExam.map(
-    (item: any) => item.status_pengerjaan_siswa[0]?.student_id === getIdStudent
-  );
-  const isCompleteExams = resultExam.map(
-    (item: any) => item.status_pengerjaan_siswa[0]?.status_exam
-  );
+
+  // const isSameId = resultExam.map(
+  //   (item: any) => item.status_pengerjaan_siswa[0]?.student_id === getIdStudent
+  // );
+  // const isCompleteExams = resultExam.map(
+  //   (item: any) => item.status_pengerjaan_siswa[0]?.status_exam
+  // );
 
   useEffect(() => {
     async function getDataExamResult() {
-      const { data, error }: any = await supabase.from("exams").select("*");
+      const { data, error }: any = await supabase
+        .from("history-exam-student")
+        .select("*, exams (nama_ujian,created_at_exams)");
       setResultExam(data);
       if (error) {
         toast("data tidak bisa ditampilkan, error");
@@ -43,19 +46,7 @@ export default function Student() {
     getDataExamResult();
   }, []);
 
-  useEffect(() => {
-    async function getDataExamStudent() {
-      const { data, error }: any = await supabase
-        .from("history-exam-student")
-        .select("*, exams (nama_ujian,status_pengerjaan_siswa,id)");
-
-      setDataStudent(data);
-      if (error) {
-        toast("data tidak bisa ditampilkan, error");
-      }
-    }
-    getDataExamStudent();
-  }, []);
+  const re = resultExam.flatMap((a: any) => a.exams.created_at_exams);
 
   return (
     <LayoutBodyContent>
@@ -73,13 +64,13 @@ export default function Student() {
             <div className="bg-[#F38181] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Jumlah Ujian Yang Diikuti</h1>
               <div className="text-xl">
-                {isSameId[0] === true ? isCompleteExams.length : "0"}
+                {/* {isSameId[0] === true ? isCompleteExams.length : "0"} */}
               </div>
             </div>
             <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Nilai Rata Rata</h1>
               <div className="text-xl">
-                {isSameId[0] === true
+                {/* {isSameId[0] === true
                   ? resultExam
                       .map(
                         (item: any) =>
@@ -87,13 +78,13 @@ export default function Student() {
                       )
                       .reduce((acc: any, cur: any) => acc + cur) /
                     resultExam.length
-                  : "0"}
+                  : "0"} */}
               </div>
             </div>
             <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Ujian Terjadwal Hari ini</h1>
               <div className="text-xl">
-                {isSameId[0] === true ? resultExam.length : "0"}
+                {/* {isSameId[0] === true ? resultExam.length : "0"} */}
               </div>
             </div>
           </div>
@@ -108,7 +99,7 @@ export default function Student() {
                     <TableRow className="bg-[#3282B8]">
                       <TableHead>No</TableHead>
                       <TableHead>Nama Ujian</TableHead>
-                      <TableHead>Tanggal</TableHead>
+                      <TableHead>Dibuat Tanggal</TableHead>
                       <TableHead>Status Ujian</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -116,37 +107,39 @@ export default function Student() {
                     {resultExam.flatMap((data: any, i: number) => (
                       <TableRow key={i}>
                         <TableCell>{i + 1}</TableCell>
-                        <TableCell>{data.nama_ujian}</TableCell>
-                        <TableCell>hari ini</TableCell>
-                        <TableCell>
-                          {data.status_pengerjaan_siswa.map(
-                            (test: any, i: number) =>
-                              test.status_exam === true &&
-                              test.student_id === getIdStudent ? (
-                                "Complete"
-                              ) : (
-                                <HoverCard
-                                  openDelay={200}
-                                  closeDelay={200}
-                                  key={i}
-                                >
-                                  <HoverCardTrigger asChild>
-                                    <Link
-                                      href={`/Exams/?id=${data.id}`}
-                                      className="hover:underline hover:text-blue-700"
-                                    >
-                                      Uncomplete
-                                    </Link>
-                                  </HoverCardTrigger>
-                                  <HoverCardContent className="w-fit p-2">
-                                    <h1 className="font-semibold text-xs">
-                                      Kerjakan Ujian
-                                    </h1>
-                                  </HoverCardContent>
-                                </HoverCard>
-                              )
-                          )}
-                        </TableCell>
+                        <TableCell>{data.exams.nama_ujian}</TableCell>
+                        {data.status_exam === true &&
+                        data.student_id === getIdStudent ? (
+                          <>
+                            <TableCell>Complete</TableCell>
+                            <TableCell>{data.exams.created_at_exams}</TableCell>
+                          </>
+                        ) : (
+                          <>
+                            <TableCell>Belum Selesai</TableCell>
+                            <TableCell>
+                              <HoverCard
+                                openDelay={200}
+                                closeDelay={200}
+                                key={i}
+                              >
+                                <HoverCardTrigger asChild>
+                                  <Link
+                                    href={`/Exams/?id=${data.id}`}
+                                    className="hover:underline hover:text-blue-700"
+                                  >
+                                    Uncomplete
+                                  </Link>
+                                </HoverCardTrigger>
+                                <HoverCardContent className="w-fit p-2">
+                                  <h1 className="font-semibold text-xs">
+                                    Kerjakan Ujian
+                                  </h1>
+                                </HoverCardContent>
+                              </HoverCard>
+                            </TableCell>
+                          </>
+                        )}
                       </TableRow>
                     ))}
                   </TableBody>
@@ -166,7 +159,7 @@ export default function Student() {
               <h1 className="text-xl font-semibold bg-[#0F4C75] text-center rounded-md py-2 mb-5 text-slate-100">
                 Hasil Nilai Ujian
               </h1>
-              {dataStudent.length > 0 ? (
+              {resultExam.length > 0 ? (
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-[#3282B8]">
@@ -177,51 +170,42 @@ export default function Student() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {dataStudent
-                      .flatMap((datas: any) => datas.exams)
-                      .map((data: any, i: number) => (
+                    {resultExam.flatMap((item: any, i: number) =>
+                      item.student_id === getIdStudent &&
+                      item.status_exam === true ? (
                         <TableRow key={i}>
                           <TableCell>{i + 1}</TableCell>
                           <TableCell>
-                            {data.status_pengerjaan_siswa.map(
-                              (status: any, i: number) =>
-                                status.status_exam === true &&
-                                status.student_id === getIdStudent ? (
-                                  <HoverCard
-                                    openDelay={200}
-                                    closeDelay={200}
-                                    key={i}
-                                  >
-                                    <HoverCardTrigger asChild>
-                                      <Link
-                                        href={`/Student/ResultExam/?id=${data.id}`}
-                                        className="hover:underline hover:text-blue-700"
-                                      >
-                                        {data.nama_ujian}
-                                      </Link>
-                                    </HoverCardTrigger>
-                                    <HoverCardContent className="w-fit p-2">
-                                      <h1 className="font-semibold text-xs">
-                                        Lihat Hasil Ujian
-                                      </h1>
-                                    </HoverCardContent>
-                                  </HoverCard>
-                                ) : (
-                                  data.nama_ujian
-                                )
-                            )}
+                            <HoverCard openDelay={200} closeDelay={200} key={i}>
+                              <HoverCardTrigger asChild>
+                                <Link
+                                  href={`/Student/ResultExam/?id=${item.id}`}
+                                  className="hover:underline hover:text-blue-700"
+                                >
+                                  {item.exams.nama_ujian}
+                                </Link>
+                              </HoverCardTrigger>
+                              <HoverCardContent className="w-fit p-2">
+                                <h1 className="font-semibold text-xs">
+                                  Lihat Hasil Ujian
+                                </h1>
+                              </HoverCardContent>
+                            </HoverCard>
                           </TableCell>
-                          <TableCell>hari ini</TableCell>
-                          <TableCell>
-                            {data.status_pengerjaan_siswa.map((stat: any) =>
-                              stat.status_exam === true &&
-                              stat.student_id === getIdStudent
-                                ? stat.hasil_ujian
-                                : "Belum Ada Nilai"
-                            )}
+                          <TableCell>{item.created_at}</TableCell>
+                          <TableCell>{item.hasil_ujian}</TableCell>
+                        </TableRow>
+                      ) : (
+                        <TableRow key={i}>
+                          <TableCell
+                            colSpan={4}
+                            className="text-center text-lg font-semibold"
+                          >
+                            Belum Ada Nilai
                           </TableCell>
                         </TableRow>
-                      ))}
+                      )
+                    )}
                   </TableBody>
                 </Table>
               ) : (
