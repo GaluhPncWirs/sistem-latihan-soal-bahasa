@@ -39,8 +39,9 @@ export default function NavigasiBar() {
         </div>
         <ul className="basis-3/5 flex justify-around h-full items-center">
           {isUserThereTeacher === true ? (
-            <ul className="cursor-pointer text-xl font-semibold">
+            <ul className="cursor-pointer text-xl basis-3/5 flex justify-around h-full items-center font-semibold">
               <li>Dashboard</li>
+              <li>Profil</li>
             </ul>
           ) : (
             <>

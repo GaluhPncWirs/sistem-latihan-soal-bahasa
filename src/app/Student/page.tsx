@@ -23,7 +23,6 @@ import { useConvertDate } from "../hooks/getConvertDate";
 
 export default function Student() {
   const [resultExam, setResultExam] = useState<any>([]);
-  const [getDataExams, setGetDataExam] = useState<any>([]);
   const getIdStudent = useGetIdStudent();
   const getNameStudent = useGetDataStudent(getIdStudent);
 
@@ -59,9 +58,10 @@ export default function Student() {
     getDataExamResult();
   }, [getIdStudent]);
 
-  const isExamComplete = resultExam.map((res: any) => res.status_exam === true);
-  const averageValue = resultExam.map((avg: any) => avg);
-  // .reduce((acc: any, cur: any) => acc + cur) / resultExam.length;
+  const isCompleteExam = resultExam
+    .map((isDone: any) => isDone.status_exam === true)
+    .filter((complete: any) => complete).length;
+  const averageValue = resultExam.map((avg: any) => avg.hasil_ujian);
 
   return (
     <LayoutBodyContent>
@@ -78,14 +78,19 @@ export default function Student() {
           <div className="flex justify-evenly items-center mt-10">
             <div className="bg-[#F38181] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Jumlah Ujian Yang Diikuti</h1>
-              <div className="text-xl">{isExamComplete.length || "0"}</div>
+              <div className="text-xl">{isCompleteExam}</div>
             </div>
             <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center">
               <h1 className="text-lg">Nilai Rata Rata</h1>
-              {/* <div className="text-xl">{averageValue || "0"}</div> */}
+              <div className="text-xl">
+                {averageValue.length > 0
+                  ? averageValue.reduce((acc: any, cur: any) => acc + cur, 0) /
+                    resultExam.length
+                  : 0}
+              </div>
             </div>
             <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center">
-              <h1 className="text-lg">Ujian Terjadwal Hari ini</h1>
+              <h1 className="text-lg">Ujian Yang Terjadwal</h1>
               <div className="text-xl">{resultExam.length || "0"}</div>
             </div>
           </div>

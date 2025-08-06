@@ -75,8 +75,8 @@ export default function Profil() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {historyStudent.map((item: any, i: number) =>
-                  item.student_id === id ? (
+                {historyStudent.length > 0 ? (
+                  historyStudent.map((item: any, i: number) => (
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{item.exams?.nama_ujian}</TableCell>
@@ -88,16 +88,16 @@ export default function Profil() {
                           : "Belum Selesai"}
                       </TableCell>
                     </TableRow>
-                  ) : (
-                    <TableRow key={i}>
-                      <TableCell
-                        colSpan={5}
-                        className="text-center text-lg font-semibold"
-                      >
-                        Belum Ada History
-                      </TableCell>
-                    </TableRow>
-                  )
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="text-center text-lg font-semibold"
+                    >
+                      Belum Ada History
+                    </TableCell>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>
