@@ -23,41 +23,45 @@ import { useConvertDate } from "../hooks/getConvertDate";
 
 export default function Student() {
   const [resultExam, setResultExam] = useState<any>([]);
+  const [getDataExams, setGetDataExam] = useState<any>([]);
   const getIdStudent = useGetIdStudent();
   const getNameStudent = useGetDataStudent(getIdStudent);
 
   useEffect(() => {
     if (!getIdStudent) return;
     async function getDataExamResult() {
-      const { data, error }: any = await supabase
+      const { data: examsData, error: examsError } = await supabase
+        .from("exams")
+        .select("id,nama_ujian,created_at_exams");
+
+      const { data: historyData, error: historyError }: any = await supabase
         .from("history-exam-student")
-        .select("*, exams (nama_ujian,created_at_exams,id)")
+        .select("*")
         .eq("student_id", getIdStudent);
 
-      if (error) {
+      if (examsError || historyError) {
         toast("data tidak bisa ditampilkan, error");
+        return;
       }
-      setResultExam(data);
+
+      const mergeDatas = examsData?.map((exam: any) => {
+        const histori = historyData.find((h: any) => h.exam_id === exam.id);
+        return {
+          ...exam,
+          hasil_ujian: histori?.hasil_ujian ?? null,
+          status_exam: histori?.status_exam ?? false,
+          created_at: histori?.created_at ?? null,
+        };
+      });
+
+      setResultExam(mergeDatas);
     }
     getDataExamResult();
   }, [getIdStudent]);
 
-  // useEffect(() => {
-  //   async function getDatasExamResult() {
-  //     const { data, error }: any = await supabase.from("exams").select("*");
-
-  //     if (error) {
-  //       toast("data tidak bisa ditampilkan, error");
-  //     }
-  //     // console.log(data);
-  //   }
-  //   getDatasExamResult();
-  // }, []);
-
   const isExamComplete = resultExam.map((res: any) => res.status_exam === true);
-  const averageValue = resultExam.map((avg: any) => avg.exams);
+  const averageValue = resultExam.map((avg: any) => avg);
   // .reduce((acc: any, cur: any) => acc + cur) / resultExam.length;
-  // console.log("buat relasi ", averageValue);
 
   return (
     <LayoutBodyContent>
@@ -101,12 +105,12 @@ export default function Student() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {resultExam.flatMap((data: any, i: number) => (
+                    {resultExam.map((data: any, i: number) => (
                       <TableRow key={i}>
                         <TableCell>{i + 1}</TableCell>
-                        <TableCell>{data.exams.nama_ujian}</TableCell>
+                        <TableCell>{data.nama_ujian}</TableCell>
                         <TableCell>
-                          {useConvertDate(data.exams.created_at_exams)}
+                          {useConvertDate(data.created_at_exams)}
                         </TableCell>
                         {data.status_exam === true ? (
                           <TableCell>Complete</TableCell>
@@ -115,7 +119,7 @@ export default function Student() {
                             <HoverCard openDelay={200} closeDelay={200} key={i}>
                               <HoverCardTrigger asChild>
                                 <Link
-                                  href={`/Exams/?id=${data.exams.id}`}
+                                  href={`/Exams/?id=${data.id}`}
                                   className="hover:underline hover:text-blue-700"
                                 >
                                   Uncomplete
@@ -159,7 +163,7 @@ export default function Student() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {resultExam.flatMap((item: any, i: number) =>
+                    {resultExam.map((item: any, i: number) =>
                       item.status_exam === true ? (
                         <TableRow key={i}>
                           <TableCell>{i + 1}</TableCell>
@@ -170,7 +174,7 @@ export default function Student() {
                                   href={`/Student/ResultExam/?id=${item.id}`}
                                   className="hover:underline hover:text-blue-700"
                                 >
-                                  {item.exams.nama_ujian}
+                                  {item.nama_ujian}
                                 </Link>
                               </HoverCardTrigger>
                               <HoverCardContent className="w-fit p-2">
