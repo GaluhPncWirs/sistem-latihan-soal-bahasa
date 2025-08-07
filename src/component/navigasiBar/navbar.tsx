@@ -38,16 +38,18 @@ export default function NavigasiBar() {
           <h1>Logo</h1>
         </div>
         <ul className="basis-3/5 flex justify-around h-full items-center">
+          <li className="cursor-pointer text-xl font-semibold">
+            <Link href="/">Beranda</Link>
+          </li>
           {isUserThereTeacher === true ? (
-            <ul className="cursor-pointer text-xl basis-3/5 flex justify-around h-full items-center font-semibold">
-              <li>Dashboard</li>
-              <li>Profil</li>
-            </ul>
-          ) : (
             <>
               <li className="cursor-pointer text-xl font-semibold">
-                <Link href="/">Beranda</Link>
+                <Link href="/Teacher/dashboard">Dashboard</Link>
               </li>
+              <li className="cursor-pointer text-xl font-semibold">Profil</li>
+            </>
+          ) : (
+            <>
               <li className="cursor-pointer text-xl font-semibold">
                 <Link
                   href={`${isUserThereStudent === true ? `/Profile` : `/`}`}
