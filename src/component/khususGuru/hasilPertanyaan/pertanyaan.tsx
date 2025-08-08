@@ -1,4 +1,6 @@
+import { useManageExamsData } from "@/app/hooks/getDataManageExams";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogClose,
@@ -9,6 +11,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -25,41 +32,56 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { supabase } from "@/lib/supabase/data";
+import { ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function ViewQuestions() {
-  const [viewQuestions, setViewQuestions] = useState<any>([]);
+  // const [viewQuestions, setViewQuestions] = useState<any>([]);
+  const [chooseClass, setChooseClass] = useState<string>("");
+  // const [openCalendar, setOpenCalendar] = useState<boolean>(false);
+  const [dateExam, setDateExam] = useState<Date | undefined>(undefined);
+  // const [dateExam, setDateExam] = useState<Date | undefined>(undefined);
+  const viewQuestions = useManageExamsData();
 
-  useEffect(() => {
-    async function handleViewQuestions() {
-      const { data: examsCollections, error: examsError } = await supabase
-        .from("exams")
-        .select("*");
-      const { data: classCollections, error: classError } = await supabase
-        .from("choose_class")
-        .select("*");
-      if (examsError || classError) {
-        toast("Gagal ❌", {
-          description: "data gagal ditampilkan:",
-        });
-      }
+  console.log(dateExam);
 
-      const mergeDatas = examsCollections?.map((item: any) => {
-        const chooseClass = classCollections?.find(
-          (f: any) => f.exam_id === item.id
-        );
-        return {
-          ...item,
-          kelas: chooseClass?.kelas ?? null,
-          status: chooseClass?.status ?? false,
-        };
-      });
-      setViewQuestions(mergeDatas);
-    }
-    handleViewQuestions();
-  }, []);
+  // useEffect(() => {
+  //   async function handleViewQuestions() {
+  //     const { data: examsCollections, error: examsError } = await supabase
+  //       .from("exams")
+  //       .select("*");
+  //     const { data: classCollections, error: classError } = await supabase
+  //       .from("choose_class")
+  //       .select("*");
+  //     if (examsError || classError) {
+  //       toast("Gagal ❌", {
+  //         description: "data gagal ditampilkan:",
+  //       });
+  //     }
+
+  //     const mergeDatas = examsCollections?.map((item: any) => {
+  //       const chooseClass = classCollections?.find(
+  //         (f: any) => f.exam_id === item.id
+  //       );
+
+  //       return {
+  //         ...item,
+  //         kelas: chooseClass?.kelas.match(/.{1,2}/g) ?? null,
+  //         status: chooseClass?.status ?? false,
+  //       };
+  //     });
+  //     setViewQuestions(mergeDatas);
+  //   }
+  //   handleViewQuestions();
+  // }, []);
+
+  // useEffect(() => {
+  //   async function getDataManageExams() {
+  //     const { data, error } = await supabase.from("managed_exams").select("*");
+  //   }
+  // }, []);
 
   async function handleDeleteExam(idExams: number) {
     const { error } = await supabase
@@ -80,6 +102,9 @@ export default function ViewQuestions() {
 
   return (
     <div className="w-11/12 mx-auto">
+      <h1 className="mb-7 text-2xl text-center font-semibold">
+        Kelola Soal Ujian
+      </h1>
       <Table>
         <TableHeader>
           <TableRow className="bg-[#3282B8]">
@@ -88,6 +113,7 @@ export default function ViewQuestions() {
             <TableHead className="text-center text-base">
               Kirimkan Ke Kelas
             </TableHead>
+            <TableHead className="text-center text-base">Waktu Ujian</TableHead>
             <TableHead className="text-center text-base">Kelola</TableHead>
           </TableRow>
         </TableHeader>
@@ -98,16 +124,52 @@ export default function ViewQuestions() {
                   <TableCell>{i + 1}</TableCell>
                   <TableCell className="w-1/2">{data.nama_ujian}</TableCell>
                   <TableCell>
-                    <Select>
-                      <SelectTrigger>
+                    <Select onValueChange={(val) => setChooseClass(val)}>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Pilih kelas" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={data.kelas}>{data.kelas}</SelectItem>
+                        <SelectItem value="1A">1A</SelectItem>
+                        <SelectItem value="2B">2B</SelectItem>
+                        <SelectItem value="3A">3A</SelectItem>
+                        <SelectItem value="4E">4E</SelectItem>
+                        <SelectItem value="5A">5A</SelectItem>
+                        <SelectItem value="2C">2C</SelectItem>
                       </SelectContent>
                     </Select>
                   </TableCell>
-                  <TableCell className="flex gap-3">
+                  <TableCell>
+                    <div className="flex gap-2 items-center">
+                      <div>
+                        <Popover
+                        // open={openCalendar}
+                        // onOpenChange={setOpenCalendar}
+                        >
+                          <PopoverTrigger asChild>
+                            <Button variant="outline">
+                              {dateExam ? dateExam.toDateString() : "Pilih Tgl"}
+                              <ChevronDownIcon />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto overflow-hidden p-0">
+                            <Calendar
+                              mode="single"
+                              selected={dateExam}
+                              captionLayout="dropdown"
+                              onSelect={(date) => {
+                                setDateExam(date);
+                                // setOpenCalendar(false);
+                              }}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <div>
+                        <input type="time" step="1" defaultValue="00:00" />
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="flex gap-3 justify-center">
                     <Link
                       href={`/Teacher/dashboard/manageExams?id=${data.id}`}
                       className="hover:bg-blue-500 bg-blue-400 px-5 py-2 rounded-md text-white"
@@ -155,6 +217,10 @@ export default function ViewQuestions() {
                     <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
                     <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
                   </td>
+                  <td className="bg-stone-300 px-4 py-6 animate-pulse w-10/12">
+                    <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
+                    <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
+                  </td>
                   <td className="bg-stone-300 px-4 py-6 animate-pulse">
                     <div className="h-4 bg-gray-500 rounded w-10/12 mb-2"></div>
                     <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
@@ -163,6 +229,30 @@ export default function ViewQuestions() {
               ))}
         </TableBody>
       </Table>
+      <div className="mt-7">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="text-base px-7 bg-[#3282B8] hover:bg-blue-800 cursor-pointer">
+              Kirim
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Konfirmasi Soal</DialogTitle>
+            <DialogDescription className="my-2 text-base max-w-10/12 mx-auto">
+              Apakah Anda Sudah Benar - Benar Ingin Mengirimkan Soalnya Ke Siswa
+              ?
+            </DialogDescription>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Batal</Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button variant="default">Ya Tentu</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }
