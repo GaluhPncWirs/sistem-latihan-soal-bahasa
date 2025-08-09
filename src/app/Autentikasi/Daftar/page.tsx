@@ -1,5 +1,6 @@
 "use client";
 
+import { useRandomId } from "@/app/hooks/getRandomId";
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
@@ -8,20 +9,6 @@ import { toast } from "sonner";
 export default function RegisterAccount() {
   const [clearForm, setClearForm] = useState(false);
 
-  function randomIdStudent(len = 7) {
-    const alphabetLowerCase = "abcdefghijklmnopqrstuvwxyz";
-    const alphabetUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const num = "0123456789";
-
-    const allCharacter = alphabetLowerCase + alphabetUpperCase + num;
-    let result = `STD-`;
-    for (let i = 0; i < len; i++) {
-      const randomIndex = Math.floor(Math.random() * allCharacter.length);
-      result += allCharacter[randomIndex];
-    }
-    return result;
-  }
-
   async function handleRegister(e: any) {
     e.preventDefault();
     const dataRegister = {
@@ -29,7 +16,7 @@ export default function RegisterAccount() {
       classes: e.currentTarget.kelas.value,
       email: e.currentTarget.email.value,
       password: e.currentTarget.password.value,
-      idStudent: randomIdStudent(),
+      idStudent: useRandomId(7, "STD"),
     };
     const { data, error }: any = await supabase
       .from("account-student")
@@ -41,7 +28,7 @@ export default function RegisterAccount() {
     } else if (error) {
       toast("Error");
     } else {
-      const { data, error }: any = await supabase
+      const { error }: any = await supabase
         .from("data-account-student")
         .insert([dataRegister]);
       if (error) {

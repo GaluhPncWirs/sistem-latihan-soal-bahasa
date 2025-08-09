@@ -20,6 +20,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useRandomId } from "@/app/hooks/getRandomId";
+import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
+import { useManageExamsData } from "@/app/hooks/getDataManageExams";
 
 export default function CreateNewQuestions() {
   const [answer, setAnswer] = useState({
@@ -34,7 +37,8 @@ export default function CreateNewQuestions() {
   const [nameExam, setNameExams] = useState("");
   const [selectedValueNameExam, setSelectedValueNameExam] = useState("");
   const [clearInput, setClearInput] = useState(false);
-  const [dataNameExam, setDataNameExam] = useState([]);
+  const idTeacher = useGetIdTeacher();
+  const dataNameExam = useManageExamsData(idTeacher);
 
   function handleAddAnswer(event: any) {
     const { id, value } = event.target;
@@ -44,36 +48,21 @@ export default function CreateNewQuestions() {
     }));
   }
 
-  useEffect(() => {
-    async function getNameExam() {
-      const { data, error }: any = await supabase
-        .from("exams")
-        .select("nama_ujian");
+  // useEffect(() => {
+  //   async function getNameExam() {
+  //     const { data, error }: any = await supabase
+  //       .from("exams")
+  //       .select("nama_ujian");
 
-      if (error) {
-        toast("Gagal ❌", {
-          description: "gagal mendapatkan nama soal",
-        });
-      }
-      setDataNameExam(data);
-    }
-    getNameExam();
-  }, []);
-
-  function randomIdExam(len = 7) {
-    const alphabetLowerCase = "abcdefghijklmnopqrstuvwxyz";
-    const alphabetUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const num = "0123456789";
-
-    const allCharacter = alphabetLowerCase + alphabetUpperCase + num;
-    let result = `EX-`;
-    for (let i = 0; i < len; i++) {
-      const randomIndex = Math.floor(Math.random() * allCharacter.length);
-      result += allCharacter[randomIndex];
-    }
-
-    return result;
-  }
+  //     if (error) {
+  //       toast("Gagal ❌", {
+  //         description: "gagal mendapatkan nama soal",
+  //       });
+  //     }
+  //     setDataNameExam(data);
+  //   }
+  //   getNameExam();
+  // }, []);
 
   async function handleCreateAddQuestion() {
     const { data, error }: any = await supabase
@@ -98,7 +87,7 @@ export default function CreateNewQuestions() {
             nama_ujian: nameExam,
             questions_exam: [
               {
-                id: randomIdExam(),
+                id: useRandomId(7, "EX"),
                 questions: question,
                 answerPg: answer,
                 correctAnswer: selectCorrectAnswer,
@@ -131,7 +120,7 @@ export default function CreateNewQuestions() {
           const addQuestions = [
             ...(data.questions_exam || []),
             {
-              id: randomIdExam(),
+              id: useRandomId(7, "EX"),
               questions: question,
               answerPg: answer,
               correctAnswer: selectCorrectAnswer,
@@ -192,7 +181,7 @@ export default function CreateNewQuestions() {
                 </SelectItem>
                 {dataNameExam.map((nameExam: any, i: number) => (
                   <SelectItem
-                    value={nameExam.nama_ujian || "nama ujian"}
+                    value={nameExam.nama_ujian || "Nama ujian"}
                     key={i}
                   >
                     {nameExam.nama_ujian || "Nama Ujian"}

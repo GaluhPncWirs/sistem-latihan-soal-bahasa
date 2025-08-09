@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/component/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/component/khususGuru/kelolaSiswa/manageStudent";
@@ -14,8 +15,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import LayoutBodyContent from "@/layout/bodyContent";
+import { supabase } from "@/lib/supabase/data";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -23,6 +25,8 @@ export default function Teacher() {
     viewResult: false,
     manageStudent: false,
   });
+  const [dataManageExams, setDataManageExams] = useState([]);
+  const idTeacher = useGetIdTeacher();
 
   function handleClickItem(event: any) {
     if (event === "viewResult") {
@@ -45,6 +49,23 @@ export default function Teacher() {
       });
     }
   }
+
+  useEffect(() => {
+    async function getDataManageExams() {
+      const { data, error }: any = await supabase
+        .from("managed_exams")
+        .select("*")
+        .eq("id_Teacher", idTeacher);
+
+      if (error) {
+        console.log("data error ditampilkan");
+      } else {
+        setDataManageExams(data);
+      }
+    }
+
+    getDataManageExams();
+  }, []);
 
   return (
     <LayoutBodyContent>
@@ -112,23 +133,40 @@ export default function Teacher() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#3282B8]">
-                    <TableHead>No</TableHead>
-                    <TableHead>Nama Ujian</TableHead>
-                    <TableHead>Kelas</TableHead>
-                    <TableHead>Dibuat Tanggal</TableHead>
-                    <TableHead>Waktu Mulai</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead className="text-base">No</TableHead>
+                    <TableHead className="text-base">Nama Ujian</TableHead>
+                    <TableHead className="text-base">Kelas</TableHead>
+                    <TableHead className="text-base">Dibuat Tanggal</TableHead>
+                    <TableHead className="text-base">Waktu Mulai</TableHead>
+                    <TableHead className="text-base">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell>1</TableCell>
-                    <TableCell>tes2</TableCell>
-                    <TableCell>tes 3</TableCell>
-                    <TableCell>tes 4</TableCell>
-                    <TableCell>tes 3</TableCell>
-                    <TableCell>tes 4</TableCell>
-                  </TableRow>
+                  {dataManageExams.length > 0 ? (
+                    dataManageExams.map((item: any, i: number) => (
+                      <TableRow key={i}>
+                        <TableCell>{i + 1}</TableCell>
+                        <TableCell>{item.kelola_nama_ujian}</TableCell>
+                        <TableCell>{item.kelas}</TableCell>
+                        <TableCell>{item.dibuat_tgl}</TableCell>
+                        <TableCell>{item.waktu_mulai}</TableCell>
+                        <TableCell>
+                          {item.statusExam === true
+                            ? "Selesai"
+                            : "Belum Selesai"}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        className="text-center text-lg font-bold"
+                        colSpan={6}
+                      >
+                        Belum Ada Tugas Yang Dibuat
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </div>
