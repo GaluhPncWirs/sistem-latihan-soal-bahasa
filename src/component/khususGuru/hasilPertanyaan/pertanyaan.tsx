@@ -39,13 +39,12 @@ import { toast } from "sonner";
 
 export default function ViewQuestions() {
   // const [viewQuestions, setViewQuestions] = useState<any>([]);
-  const [chooseClass, setChooseClass] = useState<string>("");
-  // const [openCalendar, setOpenCalendar] = useState<boolean>(false);
-  const [dateExam, setDateExam] = useState<Date | undefined>(undefined);
-  // const [dateExam, setDateExam] = useState<Date | undefined>(undefined);
+  const [chooseClass, setChooseClass] = useState<any>([]);
+  // const [openCalendar, setOpenCalendar] = useState<boolean>();
+  const [dates, setDates] = useState<{ [key: string]: Date | undefined }>({});
+  const [times, setTimes] = useState<{ [key: string]: string }>({});
   const viewQuestions = useManageExamsData();
-
-  console.log(dateExam);
+  const [dataManageExams, setDataManageExams] = useState();
 
   // useEffect(() => {
   //   async function handleViewQuestions() {
@@ -82,6 +81,28 @@ export default function ViewQuestions() {
   //     const { data, error } = await supabase.from("managed_exams").select("*");
   //   }
   // }, []);
+
+  async function managedExams() {
+    const { data, error: errExam }: any = await supabase
+      .from("exams")
+      .select("nama_ujian");
+
+    if (errExam) {
+      console.log("tidak bisa ditambahkan");
+    } else {
+      // const nama = data.map((tes: any) => tes.nama_ujian);
+      //    const dataArray = {
+      //   created_at: new Date().toISOString(),
+      //   kelola_nama_ujian : nama,
+      //   kelas: chooseClass,
+      //   waktu_mulai: ,
+      //   status: ,
+      // }
+      // const { error }: any = await supabase.from("managed_exams");
+      // if (error) {
+      //   console.log("tidak bisa ditambahkan");
+    }
+  }
 
   async function handleDeleteExam(idExams: number) {
     const { error } = await supabase
@@ -122,9 +143,15 @@ export default function ViewQuestions() {
             ? viewQuestions.map((data: any, i: number) => (
                 <TableRow key={i}>
                   <TableCell>{i + 1}</TableCell>
-                  <TableCell className="w-1/2">{data.nama_ujian}</TableCell>
+                  <TableCell className="w-1/2" id="tes">
+                    {data.nama_ujian}
+                  </TableCell>
                   <TableCell>
-                    <Select onValueChange={(val) => setChooseClass(val)}>
+                    <Select
+                      onValueChange={(val) =>
+                        setChooseClass((prev: any) => [...prev, val])
+                      }
+                    >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Pilih kelas" />
                       </SelectTrigger>
@@ -140,33 +167,40 @@ export default function ViewQuestions() {
                   </TableCell>
                   <TableCell>
                     <div className="flex gap-2 items-center">
-                      <div>
-                        <Popover
-                        // open={openCalendar}
-                        // onOpenChange={setOpenCalendar}
-                        >
-                          <PopoverTrigger asChild>
-                            <Button variant="outline">
-                              {dateExam ? dateExam.toDateString() : "Pilih Tgl"}
-                              <ChevronDownIcon />
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto overflow-hidden p-0">
-                            <Calendar
-                              mode="single"
-                              selected={dateExam}
-                              captionLayout="dropdown"
-                              onSelect={(date) => {
-                                setDateExam(date);
-                                // setOpenCalendar(false);
-                              }}
-                            />
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-                      <div>
-                        <input type="time" step="1" defaultValue="00:00" />
-                      </div>
+                      {/* Tanggal */}
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline">
+                            {dates[data.id]
+                              ? dates[data.id]?.toDateString()
+                              : "Pilih Tgl"}
+                            <ChevronDownIcon />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto overflow-hidden p-0">
+                          <Calendar
+                            mode="single"
+                            selected={dates[data.id]}
+                            captionLayout="dropdown"
+                            onSelect={(date) =>
+                              setDates((prev) => ({ ...prev, [data.id]: date }))
+                            }
+                          />
+                        </PopoverContent>
+                      </Popover>
+
+                      {/* Jam */}
+                      <input
+                        type="time"
+                        step="1"
+                        value={times[data.id] || "00:00"}
+                        onChange={(e) =>
+                          setTimes((prev) => ({
+                            ...prev,
+                            [data.id]: e.target.value,
+                          }))
+                        }
+                      />
                     </div>
                   </TableCell>
                   <TableCell className="flex gap-3 justify-center">
@@ -247,7 +281,9 @@ export default function ViewQuestions() {
                 <Button variant="outline">Batal</Button>
               </DialogClose>
               <DialogClose asChild>
-                <Button variant="default">Ya Tentu</Button>
+                <Button variant="default" type="submit">
+                  Ya Tentu
+                </Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>
