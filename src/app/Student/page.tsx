@@ -31,7 +31,9 @@ export default function Student() {
     async function getDataExamResult() {
       const { data: examsData, error: examsError } = await supabase
         .from("exams")
-        .select("id,nama_ujian,created_at_exams,account_teacher(fullName)");
+        .select(
+          "id,nama_ujian,created_at_exams,questions_exam,account_teacher(fullName)"
+        );
 
       const { data: historyData, error: historyError }: any = await supabase
         .from("history-exam-student")
@@ -57,8 +59,6 @@ export default function Student() {
     }
     getDataExamResult();
   }, [getIdStudent]);
-
-  // console.log()
 
   const isCompleteExam = resultExam
     .map((isDone: any) => isDone.status_exam === true)
@@ -200,7 +200,10 @@ export default function Student() {
                           <TableCell>
                             {useConvertDate(item.created_at)}
                           </TableCell>
-                          <TableCell>{item.hasil_ujian}</TableCell>
+                          <TableCell>
+                            {item.hasil_ujian} Dari{" "}
+                            {item.questions_exam.length * 10}
+                          </TableCell>
                         </TableRow>
                       ) : (
                         <TableRow key={i}>

@@ -49,37 +49,43 @@ export default function ViewQuestions() {
   const viewQuestions = useManageExamsData(idTeacher);
 
   const tenggatWaktu = fromTimes.map(
-    (time: any, i: any) => `${time} : ${toTimes[i]}`
+    (time: any, i: any) => `${time} - ${toTimes[i]}`
   );
 
   const manipulateDate = dates.map((localDate: any) =>
-    localDate.toDateString()
+    localDate?.toDateString()
   );
 
   async function managedExams() {
-    const nama = viewQuestions.map((tes: any) => tes.nama_ujian);
-    const dataMapping = {
+    // const nama = viewQuestions.map((tes: any) => tes.nama_ujian);
+
+    const filteredData = chooseClass
+      .map((kelas: any, index: any) => ({
+        kelas: kelas,
+        tanggal: manipulateDate[index],
+        tenggatWaktu: tenggatWaktu[index],
+      }))
+      .filter((item: any) => item.kelas && item.tanggal && item.tenggatWaktu);
+
+    const dataPayload = filteredData.map((item: any) => ({
       created_at: new Date().toISOString(),
-      kelola_nama_ujian: nama,
-      kelas: chooseClass,
-      dibuat_tgl: manipulateDate,
-      waktu_mulai: tenggatWaktu,
-    };
-    const dataPayload = dataMapping.kelola_nama_ujian.map((_: any, i: any) => ({
-      created_at: dataMapping.created_at,
-      kelola_nama_ujian: dataMapping.kelola_nama_ujian[i],
-      kelas: dataMapping.kelas[i],
-      dibuat_tgl: dataMapping.dibuat_tgl[i],
-      waktu_mulai: dataMapping.waktu_mulai[i],
+      // idExams: nama,
+      kelas: item.kelas,
+      dibuat_tgl: item.tanggal,
+      id_Teacher: idTeacher,
+      tenggat_waktu: item.tenggatWaktu,
+      isManageExam: true,
     }));
 
-    const { error }: any = await supabase
-      .from("managed_exams")
-      .insert(dataPayload);
-    if (error) {
-      console.log("tidak bisa ditambahkan");
-    } else {
-      console.log("data berhasil di tambahkan");
+    if (dataPayload.length > 0) {
+      const { error }: any = await supabase
+        .from("managed_exams")
+        .insert(dataPayload);
+      if (error) {
+        console.log("tidak bisa ditambahkan");
+      } else {
+        console.log("data berhasil di tambahkan");
+      }
     }
   }
 
@@ -122,13 +128,15 @@ export default function ViewQuestions() {
             viewQuestions.map((data: any, i: number) => (
               <TableRow key={i}>
                 <TableCell>{i + 1}</TableCell>
-                <TableCell className="w-1/2" id="tes">
-                  {data.nama_ujian}
-                </TableCell>
+                <TableCell>{data.nama_ujian}</TableCell>
                 <TableCell>
                   <Select
                     onValueChange={(val) =>
-                      setChooseClass((prev: any) => [...prev, val])
+                      setChooseClass((prev: any) => {
+                        const update = [...prev];
+                        update[i] = val;
+                        return update;
+                      })
                     }
                   >
                     <SelectTrigger className="w-full">

@@ -54,7 +54,7 @@ export default function Teacher() {
     async function getDataManageExams() {
       const { data, error }: any = await supabase
         .from("managed_exams")
-        .select("*, account_teacher(fullName)")
+        .select("*, account_teacher(fullName), exams(nama_ujian)")
         .eq("id_Teacher", idTeacher);
 
       if (error) {
@@ -139,7 +139,7 @@ export default function Teacher() {
                     <TableHead className="text-base">Nama Ujian</TableHead>
                     <TableHead className="text-base">Kelas</TableHead>
                     <TableHead className="text-base">Dibuat Tanggal</TableHead>
-                    <TableHead className="text-base">Waktu Mulai</TableHead>
+                    <TableHead className="text-base">Tenggat Waktu</TableHead>
                     <TableHead className="text-base">Status</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -148,10 +148,10 @@ export default function Teacher() {
                     dataManageExams.map((item: any, i: number) => (
                       <TableRow key={i}>
                         <TableCell>{i + 1}</TableCell>
-                        <TableCell>{item.kelola_nama_ujian}</TableCell>
+                        <TableCell>{item.exams.nama_ujian}</TableCell>
                         <TableCell>{item.kelas}</TableCell>
                         <TableCell>{item.dibuat_tgl}</TableCell>
-                        <TableCell>{item.waktu_mulai}</TableCell>
+                        <TableCell>{item.tenggat_waktu}</TableCell>
                         <TableCell>
                           {item.statusExam === true
                             ? "Selesai"
