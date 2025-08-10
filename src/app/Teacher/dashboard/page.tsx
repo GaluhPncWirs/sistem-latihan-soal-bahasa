@@ -25,9 +25,8 @@ export default function Teacher() {
     viewResult: false,
     manageStudent: false,
   });
-  const [dataManageExams, setDataManageExams] = useState([]);
   const idTeacher = useGetIdTeacher();
-
+  const [dataManageExams, setDataManageExams] = useState<any>([]);
   function handleClickItem(event: any) {
     if (event === "viewResult") {
       setDashboardButton({
@@ -51,10 +50,11 @@ export default function Teacher() {
   }
 
   useEffect(() => {
+    if (!idTeacher) return;
     async function getDataManageExams() {
       const { data, error }: any = await supabase
         .from("managed_exams")
-        .select("*")
+        .select("*, account_teacher(fullName)")
         .eq("id_Teacher", idTeacher);
 
       if (error) {
@@ -65,13 +65,15 @@ export default function Teacher() {
     }
 
     getDataManageExams();
-  }, []);
+  }, [idTeacher]);
 
   return (
     <LayoutBodyContent>
       <div className="pt-28 w-3/4 mx-auto">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
-        <h1 className="text-2xl font-bold my-5">Halo, Selamat Datang</h1>
+        <h1 className="text-2xl font-bold my-5">
+          Halo, Selamat Datang {dataManageExams[0]?.account_teacher.fullName}
+        </h1>
         <div className="flex justify-evenly items-center mt-10">
           <div className="bg-amber-300 p-5 rounded-lg text-center">
             <h1 className="font-semibold text-lg">Total Ujian Dibuat</h1>{" "}

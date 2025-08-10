@@ -48,26 +48,10 @@ export default function CreateNewQuestions() {
     }));
   }
 
-  // useEffect(() => {
-  //   async function getNameExam() {
-  //     const { data, error }: any = await supabase
-  //       .from("exams")
-  //       .select("nama_ujian");
-
-  //     if (error) {
-  //       toast("Gagal ❌", {
-  //         description: "gagal mendapatkan nama soal",
-  //       });
-  //     }
-  //     setDataNameExam(data);
-  //   }
-  //   getNameExam();
-  // }, []);
-
   async function handleCreateAddQuestion() {
     const { data, error }: any = await supabase
       .from("exams")
-      .select("*")
+      .select("nama_ujian")
       .eq("nama_ujian", nameExam);
 
     if (data?.length > 0) {
@@ -93,6 +77,7 @@ export default function CreateNewQuestions() {
                 correctAnswer: selectCorrectAnswer,
               },
             ],
+            idTeacher: idTeacher,
           },
         ]);
 

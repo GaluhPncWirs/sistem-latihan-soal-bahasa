@@ -1,3 +1,4 @@
+import { useConvertDate } from "@/app/hooks/getConvertDate";
 import { useManageExamsData } from "@/app/hooks/getDataManageExams";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -41,9 +43,14 @@ import { toast } from "sonner";
 export default function ViewQuestions() {
   const [chooseClass, setChooseClass] = useState<any>([]);
   const [dates, setDates] = useState<(Date | undefined)[]>([]);
-  const [times, setTimes] = useState<string[]>([]);
+  const [fromTimes, setFromTimes] = useState<string[]>([]);
+  const [toTimes, setToTimes] = useState<string[]>([]);
   const idTeacher = useGetIdTeacher();
   const viewQuestions = useManageExamsData(idTeacher);
+
+  const tenggatWaktu = fromTimes.map(
+    (time: any, i: any) => `${time} : ${toTimes[i]}`
+  );
 
   const manipulateDate = dates.map((localDate: any) =>
     localDate.toDateString()
@@ -56,7 +63,7 @@ export default function ViewQuestions() {
       kelola_nama_ujian: nama,
       kelas: chooseClass,
       dibuat_tgl: manipulateDate,
-      waktu_mulai: times,
+      waktu_mulai: tenggatWaktu,
     };
     const dataPayload = dataMapping.kelola_nama_ujian.map((_: any, i: any) => ({
       created_at: dataMapping.created_at,
@@ -138,7 +145,7 @@ export default function ViewQuestions() {
                   </Select>
                 </TableCell>
                 <TableCell>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-3 items-center">
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button variant="outline">
@@ -159,15 +166,25 @@ export default function ViewQuestions() {
                         />
                       </PopoverContent>
                     </Popover>
-                    <input
+                    <Input
                       type="time"
-                      step="1"
-                      value={times[i] || "00:00"}
+                      defaultValue={fromTimes[i] || "00:00"}
                       onChange={(e) => {
-                        const newTime = [...times];
+                        const newTime = [...fromTimes];
                         newTime[i] = e.currentTarget.value;
-                        setTimes(newTime);
+                        setFromTimes(newTime);
                       }}
+                      className="p-2"
+                    />
+                    <Input
+                      type="time"
+                      defaultValue={toTimes[i] || "00:00"}
+                      onChange={(e) => {
+                        const newTime = [...toTimes];
+                        newTime[i] = e.currentTarget.value;
+                        setToTimes(newTime);
+                      }}
+                      className="p-2"
                     />
                   </div>
                 </TableCell>

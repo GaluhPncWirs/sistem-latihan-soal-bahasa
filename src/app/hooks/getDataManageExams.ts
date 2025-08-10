@@ -6,6 +6,7 @@ export function useManageExamsData(id: any) {
   const [viewQuestions, setViewQuestions] = useState<any>([]);
 
   useEffect(() => {
+    if (!id) return;
     async function handleViewQuestions() {
       const { data: examsCollections, error: examsError } = await supabase
         .from("exams")
@@ -19,7 +20,7 @@ export function useManageExamsData(id: any) {
       setViewQuestions(examsCollections);
     }
     handleViewQuestions();
-  }, []);
+  }, [id]);
 
   return viewQuestions;
 }

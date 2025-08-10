@@ -31,7 +31,7 @@ export default function Student() {
     async function getDataExamResult() {
       const { data: examsData, error: examsError } = await supabase
         .from("exams")
-        .select("id,nama_ujian,created_at_exams");
+        .select("id,nama_ujian,created_at_exams,account_teacher(fullName)");
 
       const { data: historyData, error: historyError }: any = await supabase
         .from("history-exam-student")
@@ -57,6 +57,8 @@ export default function Student() {
     }
     getDataExamResult();
   }, [getIdStudent]);
+
+  // console.log()
 
   const isCompleteExam = resultExam
     .map((isDone: any) => isDone.status_exam === true)
@@ -84,8 +86,12 @@ export default function Student() {
               <h1 className="text-lg">Nilai Rata Rata</h1>
               <div className="text-xl">
                 {averageValue.length > 0
-                  ? averageValue.reduce((acc: any, cur: any) => acc + cur, 0) /
-                    resultExam.length
+                  ? Math.floor(
+                      averageValue.reduce(
+                        (acc: any, cur: any) => acc + cur,
+                        0
+                      ) / resultExam.length
+                    )
                   : 0}
               </div>
             </div>
@@ -99,24 +105,26 @@ export default function Student() {
               <h1 className="text-xl font-semibold bg-[#0F4C75] text-center rounded-md py-2 mb-5 text-slate-100">
                 Jadwal Ujian Yang Tersedia
               </h1>
-              {resultExam.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-[#3282B8]">
-                      <TableHead>No</TableHead>
-                      <TableHead>Nama Ujian</TableHead>
-                      <TableHead>Dibuat Tanggal</TableHead>
-                      <TableHead>Status Ujian</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {resultExam.map((data: any, i: number) => (
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-[#3282B8]">
+                    <TableHead>No</TableHead>
+                    <TableHead>Nama Ujian</TableHead>
+                    <TableHead>Waktu Tenggat</TableHead>
+                    <TableHead>Guru Pengampu</TableHead>
+                    <TableHead>Status Ujian</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {resultExam.length > 0 ? (
+                    resultExam.map((data: any, i: number) => (
                       <TableRow key={i}>
                         <TableCell>{i + 1}</TableCell>
                         <TableCell>{data.nama_ujian}</TableCell>
                         <TableCell>
                           {useConvertDate(data.created_at_exams)}
                         </TableCell>
+                        <TableCell>{data.account_teacher.fullName}</TableCell>
                         {data.status_exam === true ? (
                           <TableCell>Complete</TableCell>
                         ) : (
@@ -139,36 +147,36 @@ export default function Student() {
                           </TableCell>
                         )}
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                Array.from({ length: 2 }).map((_, i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="bg-stone-300 px-4 py-6 w-full flex gap-5">
-                      <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-                      <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
-                    </div>
-                  </div>
-                ))
-              )}
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        className="text-center text-lg font-bold"
+                        colSpan={5}
+                      >
+                        Belum Ada Ujian
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
             </div>
             <div>
               <h1 className="text-xl font-semibold bg-[#0F4C75] text-center rounded-md py-2 mb-5 text-slate-100">
                 Hasil Nilai Ujian
               </h1>
-              {resultExam.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-[#3282B8]">
-                      <TableHead>No</TableHead>
-                      <TableHead>Nama Ujian</TableHead>
-                      <TableHead>Tgl Pengerjaan</TableHead>
-                      <TableHead>Nilai Ujian</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {resultExam.map((item: any, i: number) =>
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-[#3282B8]">
+                    <TableHead>No</TableHead>
+                    <TableHead>Nama Ujian</TableHead>
+                    <TableHead>Tgl Pengerjaan</TableHead>
+                    <TableHead>Nilai Ujian</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {resultExam.length > 0 ? (
+                    resultExam.map((item: any, i: number) =>
                       item.status_exam === true ? (
                         <TableRow key={i}>
                           <TableCell>{i + 1}</TableCell>
@@ -204,9 +212,21 @@ export default function Student() {
                           </TableCell>
                         </TableRow>
                       )
-                    )}
-                  </TableBody>
-                </Table>
+                    )
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        className="text-center text-lg font-bold"
+                        colSpan={4}
+                      >
+                        Belum Ada Nilai
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+              {/* {resultExam.length > 0 ? (
+                
               ) : (
                 Array.from({ length: 2 }).map((_, i) => (
                   <div key={i} className="animate-pulse">
@@ -216,7 +236,7 @@ export default function Student() {
                     </div>
                   </div>
                 ))
-              )}
+              )} */}
             </div>
           </div>
         </div>

@@ -1,3 +1,11 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
 
@@ -18,43 +26,33 @@ export default function ManageStudent() {
   }, []);
 
   return (
-    <table className="border-collapse w-10/12 mx-auto">
-      <thead>
-        <tr className="bg-slate-500 border-2 border-black ">
-          <th className="text-slate-100 p-2 font-bold">No</th>
-          <th className="text-slate-100 p-2 font-bold">Nama Siswa</th>
-          <th className="text-slate-100 p-2 font-bold">Email</th>
-          <th className="text-slate-100 p-2 font-bold">Kelas</th>
-        </tr>
-      </thead>
-      <tbody>
-        {dataStudents.length > 0
-          ? dataStudents.map((data: any, i: number) => (
-              <tr className="border-2 border-black" key={data.idStudent}>
-                <td className="bg-slate-300 font-bold">{i + 1}</td>
-                <td className="bg-stone-200 w-1/2">
-                  <h1>{data.fullName}</h1>
-                </td>
-                <td className="bg-stone-100">{data.email}</td>
-                <td>{data.classes}</td>
-              </tr>
-            ))
-          : Array.from({ length: 5 }).map((_, i) => (
-              <tr key={i}>
-                <td className="bg-stone-300 px-4 py-6 animate-pulse w-1/12">
-                  <div className="h-4 bg-gray-500 rounded w-full mb-2"></div>
-                </td>
-                <td className="bg-stone-300 px-4 py-6 animate-pulse w-10/12">
-                  <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-                  <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
-                </td>
-                <td className="bg-stone-300 px-4 py-6 animate-pulse">
-                  <div className="h-4 bg-gray-500 rounded w-10/12 mb-2"></div>
-                  <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-                </td>
-              </tr>
-            ))}
-      </tbody>
-    </table>
+    <Table>
+      <TableHeader>
+        <TableRow className="bg-[#3282B8]">
+          <TableHead className="text-center text-base">No</TableHead>
+          <TableHead className="text-center text-base">Nama Siswa</TableHead>
+          <TableHead className="text-center text-base">Email</TableHead>
+          <TableHead className="text-center text-base">Kelas</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {dataStudents.length > 0 ? (
+          dataStudents.map((data: any, i: number) => (
+            <TableRow key={i}>
+              <TableCell>{i + 1}</TableCell>
+              <TableCell>{data.fullName}</TableCell>
+              <TableCell>{data.email}</TableCell>
+              <TableCell>{data.classes}</TableCell>
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell className="text-center text-lg font-bold" colSpan={4}>
+              Belum Ada Tugas Yang Dibuat
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 }
