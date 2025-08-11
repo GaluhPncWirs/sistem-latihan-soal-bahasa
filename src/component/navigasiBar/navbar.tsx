@@ -46,13 +46,17 @@ export default function NavigasiBar() {
               <li className="cursor-pointer text-xl font-semibold">
                 <Link href="/Teacher/dashboard">Dashboard</Link>
               </li>
-              <li className="cursor-pointer text-xl font-semibold">Profil</li>
+              <li className="cursor-pointer text-xl font-semibold">
+                <Link href="/Teacher/Profil">Profil</Link>
+              </li>
             </>
           ) : (
             <>
               <li className="cursor-pointer text-xl font-semibold">
                 <Link
-                  href={`${isUserThereStudent === true ? `/Profile` : `/`}`}
+                  href={`${
+                    isUserThereStudent === true ? `/Student/Profile` : `/`
+                  }`}
                 >
                   Profil
                 </Link>
@@ -62,7 +66,9 @@ export default function NavigasiBar() {
               </li>
               <li className="cursor-pointer text-xl font-semibold">
                 <Link
-                  href={`${isUserThereStudent === true ? `/Student` : `/`}`}
+                  href={`${
+                    isUserThereStudent === true ? `/Student/Dashboard` : `/`
+                  }`}
                 >
                   Dashboard
                 </Link>

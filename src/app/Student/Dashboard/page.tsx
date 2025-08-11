@@ -8,9 +8,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
 import { toast } from "sonner";
-import { useGetIdStudent } from "../hooks/getIdStudent";
+import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
-import { useGetDataStudent } from "../hooks/getDataStudent";
+import { useGetDataStudent } from "../../hooks/getDataStudent";
 import {
   Table,
   TableBody,
@@ -19,9 +19,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useConvertDate } from "../hooks/getConvertDate";
+import { useConvertDate } from "../../hooks/getConvertDate";
 
-export default function Student() {
+export default function DashboardStudent() {
   const [resultExam, setResultExam] = useState<any>([]);
   const getIdStudent = useGetIdStudent();
   const getNameStudent = useGetDataStudent(getIdStudent);
@@ -132,7 +132,7 @@ export default function Student() {
                             <HoverCard openDelay={200} closeDelay={200} key={i}>
                               <HoverCardTrigger asChild>
                                 <Link
-                                  href={`/Exams/?id=${data.id}`}
+                                  href={`/Student/Exams/?id=${data.id}`}
                                   className="hover:underline hover:text-blue-700"
                                 >
                                   Uncomplete
@@ -184,7 +184,7 @@ export default function Student() {
                             <HoverCard openDelay={200} closeDelay={200} key={i}>
                               <HoverCardTrigger asChild>
                                 <Link
-                                  href={`/Student/ResultExam/?id=${item.id}`}
+                                  href={`/Student//Dashboard/ResultExam/?id=${item.id}`}
                                   className="hover:underline hover:text-blue-700"
                                 >
                                   {item.nama_ujian}

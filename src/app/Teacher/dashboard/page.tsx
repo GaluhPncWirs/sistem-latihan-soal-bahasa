@@ -148,7 +148,7 @@ export default function Teacher() {
                     dataManageExams.map((item: any, i: number) => (
                       <TableRow key={i}>
                         <TableCell>{i + 1}</TableCell>
-                        <TableCell>{item.exams.nama_ujian}</TableCell>
+                        <TableCell>{item.exams?.nama_ujian}</TableCell>
                         <TableCell>{item.kelas}</TableCell>
                         <TableCell>{item.dibuat_tgl}</TableCell>
                         <TableCell>{item.tenggat_waktu}</TableCell>

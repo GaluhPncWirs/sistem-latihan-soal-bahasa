@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useGetDataStudent } from "../hooks/getDataStudent";
-import { useGetIdStudent } from "../hooks/getIdStudent";
+import { useGetDataStudent } from "../../hooks/getDataStudent";
+import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
-import { useConvertDate } from "../hooks/getConvertDate";
+import { useConvertDate } from "../../hooks/getConvertDate";
 
 export default function Profil() {
   const id = useGetIdStudent();

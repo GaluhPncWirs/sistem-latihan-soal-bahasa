@@ -55,27 +55,21 @@ export default function ViewQuestions() {
   const manipulateDate = dates.map((localDate: any) =>
     localDate?.toDateString()
   );
-
   async function managedExams() {
-    // const nama = viewQuestions.map((tes: any) => tes.nama_ujian);
-
-    const filteredData = chooseClass
-      .map((kelas: any, index: any) => ({
-        kelas: kelas,
-        tanggal: manipulateDate[index],
-        tenggatWaktu: tenggatWaktu[index],
+    const idExam = viewQuestions.map((item: any) => item.id);
+    const dataPayload = idExam
+      .map((item: any, i: number) => ({
+        created_at: new Date().toISOString(),
+        idExams: item,
+        kelas: chooseClass[i],
+        dibuat_tgl: manipulateDate[i],
+        id_Teacher: idTeacher,
+        tenggat_waktu: tenggatWaktu[i],
+        isManageExam: true,
       }))
-      .filter((item: any) => item.kelas && item.tanggal && item.tenggatWaktu);
-
-    const dataPayload = filteredData.map((item: any) => ({
-      created_at: new Date().toISOString(),
-      // idExams: nama,
-      kelas: item.kelas,
-      dibuat_tgl: item.tanggal,
-      id_Teacher: idTeacher,
-      tenggat_waktu: item.tenggatWaktu,
-      isManageExam: true,
-    }));
+      .filter(
+        (item: any) => item.kelas && item.dibuat_tgl && item.tenggat_waktu
+      );
 
     if (dataPayload.length > 0) {
       const { error }: any = await supabase

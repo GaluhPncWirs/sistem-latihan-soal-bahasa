@@ -29,7 +29,7 @@ export default function RegisterAccount() {
       toast("Error");
     } else {
       const { error }: any = await supabase
-        .from("data-account-student")
+        .from("account-student")
         .insert([dataRegister]);
       if (error) {
         toast("Gagal Membuat Akun");
