@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 
 export default function TeacherProfile() {
   const [getProfileTeacher, setGetProfileTeacher] = useState<any>([]);
+  const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const idTeacher = useGetIdTeacher();
   const options: any = { day: "numeric", month: "long", year: "numeric" };
   const formatedDate = new Date(
@@ -36,6 +37,30 @@ export default function TeacherProfile() {
     }
     dataProfileTeacher();
   }, [idTeacher]);
+
+  useEffect(() => {
+    async function historyExams() {
+      const { data, error }: any = await supabase
+        .from("history-exam-student")
+        .select("*, exams(nama_ujian)");
+
+      if (error) {
+        console.log("data error ditampilkan");
+      }
+
+      // const tes = data.map((a: any) => a.student_id);
+
+      // console.log(new Set(tes));
+
+      setGetHistoryExams(data);
+    }
+    historyExams();
+  }, []);
+
+  // const tes = getHistoryExams.map((t: any) => t.exams.nama_ujian);
+  const tes = getHistoryExams.map((t: any) => t.hasil_ujian);
+
+  console.log(tes);
 
   return (
     <LayoutBodyContent>
