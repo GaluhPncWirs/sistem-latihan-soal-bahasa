@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -40,27 +41,65 @@ export default function TeacherProfile() {
 
   useEffect(() => {
     async function historyExams() {
-      const { data, error }: any = await supabase
-        .from("history-exam-student")
-        .select("*, exams(nama_ujian)");
+      const { data: dataValueExams, error: errorDataValueExams }: any =
+        await supabase
+          .from("history-exam-student")
+          .select("exam_id, hasil_ujian,student_id,exams(nama_ujian)");
 
-      if (error) {
+      if (errorDataValueExams) {
         console.log("data error ditampilkan");
       }
 
-      // const tes = data.map((a: any) => a.student_id);
+      const dataValExam = dataValueExams.reduce((acc: any, cur: any) => {
+        acc[cur.exam_id] = (acc[cur.exam_id] || 0) + 1;
+        return acc;
+      });
 
-      // console.log(new Set(tes));
+      const filtered = dataValueExams
+        .filter((item: any) => dataValExam[item.exam_id] > 1)
+        .map((t: any) => {
+          const items = dataValueExams.filter(
+            (d: any) => d.exam_id === t.exam_id
+          );
+          const avg =
+            items.reduce((acc: any, cur: any) => acc + cur.hasil_ujian, 0) /
+            items.length;
+          return {
+            exam_id: Number(t.exam_id),
+            hasil_ujian: avg,
+            student_id: null,
+          };
+        });
 
-      setGetHistoryExams(data);
+      // const filtered = Object.entries(dataValueExams)
+      //   .filter(([_, count]: any) => count > 1)
+      //   .map(([exam_id]: any) => {
+      //     const idNum = Number(exam_id);
+      //     const items = dataValueExams.filter((d: any) => d.exam_id === idNum);
+      //     const avg =
+      //       items.reduce((acc: any, cur: any) => acc + cur.hasil_ujian, 0) /
+      //       items.length;
+      //     return {
+      //       exam_id: Number(exam_id),
+      //       hasil_ujian: avg,
+      //       student_id: null,
+      //     };
+      //   });
+
+      // const singles = dataValueExams.filter(
+      //   (item: any) => dataValExam[item.exam_id] === 1
+      // );
+
+      console.log(filtered);
+
+      // const finalResult = [...filtered, ...singles];
+
+      setGetHistoryExams(dataValueExams);
     }
     historyExams();
   }, []);
 
-  // const tes = getHistoryExams.map((t: any) => t.exams.nama_ujian);
-  const tes = getHistoryExams.map((t: any) => t.hasil_ujian);
-
-  console.log(tes);
+  // console.log(getHistoryExams);
 
   return (
     <LayoutBodyContent>
@@ -108,18 +147,14 @@ export default function TeacherProfile() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {/* {historyStudent.length > 0 ? (
-                  historyStudent.map((item: any, i: number) => (
+                {/* {getHistoryExams.length > 0 ? (
+                  getHistoryExams.map((item: any, i: number) => (
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{item.exams?.nama_ujian}</TableCell>
-                      <TableCell>{useConvertDate(item.created_at)}</TableCell>
-                      <TableCell>{item.hasil_ujian}</TableCell>
-                      <TableCell>
-                        {item.status_exam === true
-                          ? "Selesai"
-                          : "Belum Selesai"}
-                      </TableCell>
+                      <TableCell>{new Set(item.student_id)}</TableCell>
+                      <TableCell>log</TableCell>
+                      <TableCell>log2</TableCell>
                     </TableRow>
                   ))
                 ) : (
