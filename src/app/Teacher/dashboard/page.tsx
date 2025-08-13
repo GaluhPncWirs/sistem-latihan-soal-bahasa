@@ -74,24 +74,7 @@ export default function Teacher() {
         <h1 className="text-2xl font-bold my-5">
           Halo, Selamat Datang {dataManageExams[0]?.account_teacher.fullName}
         </h1>
-        <div className="flex justify-evenly items-center mt-10">
-          <div className="bg-amber-300 p-5 rounded-lg text-center">
-            <h1 className="font-semibold text-lg">Total Ujian Dibuat</h1>{" "}
-            <span className="font-bold">12</span>
-          </div>
-          <div className="bg-amber-300 p-5 rounded-lg text-center">
-            <h1 className="font-semibold text-lg">Siswa Terdaftar</h1>{" "}
-            <span className="font-bold">54</span>
-          </div>
-          <div className="bg-amber-300 p-5 rounded-lg text-center">
-            <h1 className="font-semibold text-lg">Ujian Hari Ini</h1>{" "}
-            <span className="font-bold">4</span>
-          </div>
-          <div className="bg-amber-300 p-5 rounded-lg text-center">
-            <h1 className="font-semibold text-lg">Total Ujian Dibuat</h1>{" "}
-            <span className="font-bold">128</span>
-          </div>
-        </div>
+
         <ul className="w-10/12 mx-auto mt-16 flex justify-around font-semibold text-lg">
           <li
             className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer"

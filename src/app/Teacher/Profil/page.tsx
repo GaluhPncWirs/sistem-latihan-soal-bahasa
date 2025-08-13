@@ -22,6 +22,9 @@ export default function TeacherProfile() {
   const formatedDate = new Date(
     getProfileTeacher?.created_at
   ).toLocaleDateString("id-ID", options);
+  const totalStudent = getHistoryExams.map((acc: any) => acc.student_id);
+  const merged = [...new Set(totalStudent.flat())];
+  const averageValueExam = getHistoryExams.map((item: any) => item.hasil_ujian);
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -41,11 +44,13 @@ export default function TeacherProfile() {
   }, [idTeacher]);
 
   useEffect(() => {
+    if (!idTeacher) return;
     async function historyExams() {
       const { data: dataManageExams, error: errorDataManageExams }: any =
         await supabase
           .from("managed_exams")
-          .select("idExams,statusExam,dibuat_tgl,exams(nama_ujian)");
+          .select("idExams,statusExam,dibuat_tgl,id_Teacher,exams(nama_ujian)")
+          .eq("id_Teacher", idTeacher);
       const { data: dataHistoryExams, error: errorDataHistoryExams }: any =
         await supabase
           .from("history-exam-student")
@@ -82,7 +87,7 @@ export default function TeacherProfile() {
       setGetHistoryExams(mergedData);
     }
     historyExams();
-  }, []);
+  }, [idTeacher]);
 
   return (
     <LayoutBodyContent>
@@ -104,15 +109,22 @@ export default function TeacherProfile() {
           <div className="flex justify-evenly items-center mb-10">
             <div className="bg-amber-300 p-5 rounded-lg text-center">
               <h1 className="font-semibold text-lg">Total Ujian Dibuat</h1>{" "}
-              <span className="font-bold">12</span>
+              <span className="font-bold">{getHistoryExams.length || "0"}</span>
             </div>
             <div className="bg-amber-300 p-5 rounded-lg text-center">
               <h1 className="font-semibold text-lg">Jumlah Siswa Dibimbing</h1>{" "}
-              <span className="font-bold">54</span>
+              <span className="font-bold">{merged.length || "0"}</span>
             </div>
             <div className="bg-amber-300 p-5 rounded-lg text-center">
               <h1 className="font-semibold text-lg">Nilai Rata-Rata Siswa</h1>{" "}
-              <span className="font-bold">4</span>
+              <span className="font-bold">
+                {Math.floor(
+                  averageValueExam.reduce(
+                    (acc: any, cur: any) => acc + cur,
+                    0
+                  ) / averageValueExam.length
+                ) || "0"}
+              </span>
             </div>
           </div>
           <div className="bg-[#71C9CE] rounded-lg p-7">

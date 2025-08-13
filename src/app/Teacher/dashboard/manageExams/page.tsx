@@ -1,4 +1,5 @@
 "use client";
+import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import NavigasiBar from "@/component/navigasiBar/navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Toaster } from "@/components/ui/sonner";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -38,48 +48,38 @@ export default function ViewQuestions() {
   const [selectCorrectNewAnswer, setSelectCorrectNewAnswer] = useState("");
   const [updateQuestion, setUpdateQuestion] = useState("");
   const searchParams = useSearchParams().get("id");
+  const idTeacher = useGetIdTeacher();
 
   useEffect(() => {
+    if (!idTeacher) return;
     async function handleViewQuestions() {
       const { data, error } = await supabase
         .from("exams")
         .select("*")
-        .eq("id", Number(searchParams));
-      setViewQuestions(data);
+        .eq("id", Number(searchParams))
+        .eq("idTeacher", idTeacher);
+
       if (error) {
         toast("Gagal ❌", {
           description: "Soal gagal ditampilkan.",
         });
       }
+      setViewQuestions(data);
     }
     handleViewQuestions();
-  }, []);
+  }, [idTeacher]);
 
   async function handleUpdateQuestions(idQuestion: string) {
     const { data: examData, error: fetchError }: any = await supabase
       .from("exams")
-      .select("questions_exam");
-
-    const inQuestionData = examData.flatMap((data: any) => data.questions_exam);
-    // const inQuestionData = examData.find((exam: any) =>
-    //   exam.questions_exam?.some((q: any) => q.id === idQuestion)
-    // );
+      .select("questions_exam")
+      .eq("id", Number(searchParams))
+      .single();
 
     if (fetchError) {
       toast("Gagal Ambil Data", { description: "Ujian tidak ditemukan" });
     } else {
-      // const updateData = inQuestionData.questions_exam.map((q: any) =>
-      //   q.id === idQuestion
-      //     ? {
-      //         ...q,
-      //         questions: updateQuestion,
-      //         answerPg: newAnswer,
-      //         correctAnswer: selectCorrectNewAnswer,
-      //       }
-      //     : q
-      // );
-
-      const updateData: any = (inQuestionData || []).map((q: any) =>
+      const updateData: any = (examData?.questions_exam || []).map((q: any) =>
         q.id === idQuestion
           ? {
               ...q,
@@ -157,307 +157,290 @@ export default function ViewQuestions() {
   }
 
   return (
-    <div>
-      <NavigasiBar />
-      <Toaster richColors />
+    <LayoutBodyContent>
       <div className="w-11/12 mx-auto pt-28">
         <h1 className="text-3xl font-bold mb-5 text-center">Edit Soal</h1>
         <h2 className="text-3xl font-bold mb-10">
           Nama Ujian :{" "}
           {viewQuestions.length > 0 ? viewQuestions[0].nama_ujian : ""}
         </h2>
-        <table className="border-collapse">
-          <thead>
-            <tr className="bg-slate-500 border-2 border-black ">
-              <th className="text-slate-100 p-2 font-bold">No</th>
-              <th className="text-slate-100 p-2 font-bold">Soal Ujian</th>
-              <th className="text-slate-100 p-2 font-bold">Kelola</th>
-            </tr>
-          </thead>
-          <tbody>
-            {viewQuestions.length > 0
-              ? viewQuestions
-                  .flatMap((questions: any) => questions.questions_exam)
-                  .map((data: any, i: number) => (
-                    <tr className="border-2 border-black" key={data.id}>
-                      <td className="px-3 bg-slate-300">{i + 1}</td>
-                      <td className="px-3 bg-stone-100 w-11/12">
-                        <h1>{data.questions}</h1>
-                        <ul className="flex justify-around flex-wrap items-center my-2">
-                          <li
-                            className={`${
-                              data.correctAnswer === data.answerPg.answer_a
-                                ? `bg-blue-400 px-3 py-1 rounded-lg`
-                                : `bg-stone-100 px-0 py-0 rounded-none`
-                            }`}
-                          >
-                            A. {data.answerPg.answer_a}
-                          </li>
-                          <li
-                            className={`${
-                              data.correctAnswer === data.answerPg.answer_b
-                                ? `bg-blue-400 px-3 py-1 rounded-lg`
-                                : `bg-stone-100 px-0 py-0 rounded-none`
-                            }`}
-                          >
-                            B. {data.answerPg.answer_b}
-                          </li>
-                          <li
-                            className={`${
-                              data.correctAnswer === data.answerPg.answer_c
-                                ? `bg-blue-400 px-3 py-1 rounded-lg`
-                                : `bg-stone-100 px-0 py-0 rounded-none`
-                            }`}
-                          >
-                            C. {data.answerPg.answer_c}
-                          </li>
-                          <li
-                            className={`${
-                              data.correctAnswer === data.answerPg.answer_d
-                                ? `bg-blue-400 px-3 py-1 rounded-lg`
-                                : `bg-stone-100 px-0 py-0 rounded-none`
-                            }`}
-                          >
-                            D. {data.answerPg.answer_d}
-                          </li>
-                          <li
-                            className={`${
-                              data.correctAnswer === data.answerPg.answer_e
-                                ? `bg-blue-400 px-3 py-1 rounded-lg`
-                                : `bg-stone-100 px-0 py-0 rounded-none`
-                            }`}
-                          >
-                            E. {data.answerPg.answer_e}
-                          </li>
-                        </ul>
-                      </td>
-                      <td className="flex justify-center gap-3 items-center">
-                        <Dialog>
-                          <form>
-                            <DialogTrigger asChild>
-                              <Button
-                                variant="outline"
-                                onClick={() =>
-                                  getDataBeforeUpdate(
-                                    data.questions,
-                                    data.answerPg
-                                  )
-                                }
-                                className="cursor-pointer"
-                              >
-                                Edit
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                              <DialogHeader>
-                                <DialogTitle>Edit Soal</DialogTitle>
-                                <DialogDescription>
-                                  Input Dibawah ini Untuk Mengedit Soal Pilihan
-                                  Ganda
-                                </DialogDescription>
-                              </DialogHeader>
-                              <div className="grid gap-2">
-                                <div>
-                                  <label htmlFor="questions">
-                                    Edit Pertanyaan
-                                  </label>
-                                  <Input
-                                    id="questions"
-                                    className="mt-2"
-                                    onChange={(e: any) =>
-                                      setUpdateQuestion(e.currentTarget.value)
-                                    }
-                                    defaultValue={updateQuestion}
-                                  />
-                                </div>
-
-                                <div className="mt-3">
-                                  <h1 className="mb-2">Edit Jawaban</h1>
-                                  <div className="flex flex-wrap justify-center gap-5">
-                                    <div>
-                                      <label htmlFor="answer_a">
-                                        Jawaban A
-                                      </label>
-                                      <Input
-                                        id="answer_a"
-                                        onChange={handleUpdateAnswer}
-                                        defaultValue={newAnswer.answer_a}
-                                      />
-                                    </div>
-                                    <div>
-                                      <label htmlFor="answer_b">
-                                        Jawaban B
-                                      </label>
-                                      <Input
-                                        id="answer_b"
-                                        onChange={handleUpdateAnswer}
-                                        defaultValue={newAnswer.answer_b}
-                                      />
-                                    </div>
-                                    <div>
-                                      <label htmlFor="answer_c">
-                                        Jawaban C
-                                      </label>
-                                      <Input
-                                        id="answer_c"
-                                        onChange={handleUpdateAnswer}
-                                        defaultValue={newAnswer.answer_c}
-                                      />
-                                    </div>
-                                    <div>
-                                      <label htmlFor="answer_d">
-                                        Jawaban D
-                                      </label>
-                                      <Input
-                                        id="answer_d"
-                                        onChange={handleUpdateAnswer}
-                                        defaultValue={newAnswer.answer_d}
-                                      />
-                                    </div>
-                                    <div>
-                                      <label htmlFor="answer_e">
-                                        Jawaban E
-                                      </label>
-                                      <Input
-                                        id="answer_e"
-                                        onChange={handleUpdateAnswer}
-                                        defaultValue={newAnswer.answer_e}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="mt-2">
-                                  <h1 className="mb-3">Pilih Jawaban</h1>
-                                  <Select
-                                    onValueChange={(val) =>
-                                      setSelectCorrectNewAnswer(val)
-                                    }
-                                    defaultValue={data.correctAnswer}
-                                  >
-                                    <SelectTrigger className="w-2/3">
-                                      <SelectValue placeholder="Pilih Jawaban Yang Benar" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem
-                                        value={
-                                          newAnswer.answer_a ||
-                                          data.answerPg.answer_a
-                                        }
-                                      >
-                                        {newAnswer.answer_a ||
-                                          data.answerPg.answer_a}
-                                      </SelectItem>
-                                      <SelectItem
-                                        value={
-                                          newAnswer.answer_b ||
-                                          data.answerPg.answer_b
-                                        }
-                                      >
-                                        {newAnswer.answer_b ||
-                                          data.answerPg.answer_b}
-                                      </SelectItem>
-                                      <SelectItem
-                                        value={
-                                          newAnswer.answer_c ||
-                                          data.answerPg.answer_c
-                                        }
-                                      >
-                                        {newAnswer.answer_c ||
-                                          data.answerPg.answer_c}
-                                      </SelectItem>
-                                      <SelectItem
-                                        value={
-                                          newAnswer.answer_d ||
-                                          data.answerPg.answer_d
-                                        }
-                                      >
-                                        {newAnswer.answer_d ||
-                                          data.answerPg.answer_d}
-                                      </SelectItem>
-                                      <SelectItem
-                                        value={
-                                          newAnswer.answer_e ||
-                                          data.answerPg.answer_e
-                                        }
-                                      >
-                                        {newAnswer.answer_e ||
-                                          data.answerPg.answer_e}
-                                      </SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                </div>
-                              </div>
-                              <DialogFooter>
-                                <DialogClose asChild>
-                                  <Button variant="outline">Cancel</Button>
-                                </DialogClose>
-                                <DialogClose asChild>
-                                  <Button
-                                    onClick={() =>
-                                      handleUpdateQuestions(data.id)
-                                    }
-                                  >
-                                    Save Changes
-                                  </Button>
-                                </DialogClose>
-                              </DialogFooter>
-                            </DialogContent>
-                          </form>
-                        </Dialog>
-
-                        <Dialog>
+        <Table>
+          <TableHeader className="bg-[#3282B8]">
+            <TableRow>
+              <TableHead className="text-base">No</TableHead>
+              <TableHead className="text-center text-base">
+                Soal Ujian
+              </TableHead>
+              <TableHead className="text-center text-base">Kelola</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {viewQuestions.length > 0 ? (
+              viewQuestions
+                .flatMap((item: any) => item.questions_exam)
+                .map((data: any, i: number) => (
+                  <TableRow key={i}>
+                    <TableCell>{i + 1}</TableCell>
+                    <TableCell>
+                      <h1>{data.questions}</h1>
+                      <ul className="flex justify-around flex-wrap items-center my-2">
+                        <li
+                          className={`${
+                            data.correctAnswer === data.answerPg.answer_a
+                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              : `px-0 py-0 rounded-none`
+                          }`}
+                        >
+                          A. {data.answerPg.answer_a}
+                        </li>
+                        <li
+                          className={`${
+                            data.correctAnswer === data.answerPg.answer_b
+                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              : `px-0 py-0 rounded-none`
+                          }`}
+                        >
+                          B. {data.answerPg.answer_b}
+                        </li>
+                        <li
+                          className={`${
+                            data.correctAnswer === data.answerPg.answer_c
+                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              : `px-0 py-0 rounded-none`
+                          }`}
+                        >
+                          C. {data.answerPg.answer_c}
+                        </li>
+                        <li
+                          className={`${
+                            data.correctAnswer === data.answerPg.answer_d
+                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              : `px-0 py-0 rounded-none`
+                          }`}
+                        >
+                          D. {data.answerPg.answer_d}
+                        </li>
+                        <li
+                          className={`${
+                            data.correctAnswer === data.answerPg.answer_e
+                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              : `px-0 py-0 rounded-none`
+                          }`}
+                        >
+                          E. {data.answerPg.answer_e}
+                        </li>
+                      </ul>
+                    </TableCell>
+                    <TableCell className="flex justify-center gap-3 items-center">
+                      <Dialog>
+                        <form>
                           <DialogTrigger asChild>
                             <Button
-                              variant="destructive"
-                              className="cursor-pointer"
+                              onClick={() =>
+                                getDataBeforeUpdate(
+                                  data.questions,
+                                  data.answerPg
+                                )
+                              }
+                              className="cursor-pointer hover:bg-blue-500 bg-blue-400"
                             >
-                              Hapus
+                              Edit
                             </Button>
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>Hapus Soal</DialogTitle>
+                              <DialogTitle>Edit Soal</DialogTitle>
                               <DialogDescription>
-                                {`Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?`}
+                                Input Dibawah ini Untuk Mengedit Soal Pilihan
+                                Ganda
                               </DialogDescription>
                             </DialogHeader>
+                            <div className="grid gap-2">
+                              <div>
+                                <label htmlFor="questions">
+                                  Edit Pertanyaan
+                                </label>
+                                <Input
+                                  id="questions"
+                                  className="mt-2"
+                                  onChange={(e: any) =>
+                                    setUpdateQuestion(e.currentTarget.value)
+                                  }
+                                  defaultValue={updateQuestion}
+                                />
+                              </div>
+
+                              <div className="mt-3">
+                                <h1 className="mb-2">Edit Jawaban</h1>
+                                <div className="flex flex-wrap justify-center gap-5">
+                                  <div>
+                                    <label htmlFor="answer_a">Jawaban A</label>
+                                    <Input
+                                      id="answer_a"
+                                      onChange={handleUpdateAnswer}
+                                      defaultValue={newAnswer.answer_a}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label htmlFor="answer_b">Jawaban B</label>
+                                    <Input
+                                      id="answer_b"
+                                      onChange={handleUpdateAnswer}
+                                      defaultValue={newAnswer.answer_b}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label htmlFor="answer_c">Jawaban C</label>
+                                    <Input
+                                      id="answer_c"
+                                      onChange={handleUpdateAnswer}
+                                      defaultValue={newAnswer.answer_c}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label htmlFor="answer_d">Jawaban D</label>
+                                    <Input
+                                      id="answer_d"
+                                      onChange={handleUpdateAnswer}
+                                      defaultValue={newAnswer.answer_d}
+                                    />
+                                  </div>
+                                  <div>
+                                    <label htmlFor="answer_e">Jawaban E</label>
+                                    <Input
+                                      id="answer_e"
+                                      onChange={handleUpdateAnswer}
+                                      defaultValue={newAnswer.answer_e}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="mt-2">
+                                <h1 className="mb-3">Pilih Jawaban</h1>
+                                <Select
+                                  onValueChange={(val) =>
+                                    setSelectCorrectNewAnswer(val)
+                                  }
+                                  defaultValue={data.correctAnswer}
+                                >
+                                  <SelectTrigger className="w-2/3">
+                                    <SelectValue placeholder="Pilih Jawaban Yang Benar" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem
+                                      value={
+                                        newAnswer.answer_a ||
+                                        data.answerPg.answer_a
+                                      }
+                                    >
+                                      {newAnswer.answer_a ||
+                                        data.answerPg.answer_a}
+                                    </SelectItem>
+                                    <SelectItem
+                                      value={
+                                        newAnswer.answer_b ||
+                                        data.answerPg.answer_b
+                                      }
+                                    >
+                                      {newAnswer.answer_b ||
+                                        data.answerPg.answer_b}
+                                    </SelectItem>
+                                    <SelectItem
+                                      value={
+                                        newAnswer.answer_c ||
+                                        data.answerPg.answer_c
+                                      }
+                                    >
+                                      {newAnswer.answer_c ||
+                                        data.answerPg.answer_c}
+                                    </SelectItem>
+                                    <SelectItem
+                                      value={
+                                        newAnswer.answer_d ||
+                                        data.answerPg.answer_d
+                                      }
+                                    >
+                                      {newAnswer.answer_d ||
+                                        data.answerPg.answer_d}
+                                    </SelectItem>
+                                    <SelectItem
+                                      value={
+                                        newAnswer.answer_e ||
+                                        data.answerPg.answer_e
+                                      }
+                                    >
+                                      {newAnswer.answer_e ||
+                                        data.answerPg.answer_e}
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </div>
                             <DialogFooter>
                               <DialogClose asChild>
                                 <Button variant="outline">Cancel</Button>
                               </DialogClose>
                               <DialogClose asChild>
                                 <Button
-                                  onClick={() => handleDeleteQuestions(data.id)}
-                                  variant="destructive"
+                                  onClick={() => handleUpdateQuestions(data.id)}
                                 >
-                                  Hapus
+                                  Save Changes
                                 </Button>
                               </DialogClose>
                             </DialogFooter>
                           </DialogContent>
-                        </Dialog>
-                      </td>
-                    </tr>
-                  ))
-              : Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i}>
-                    <td className="bg-stone-300 px-4 py-6 animate-pulse">
-                      <div className="h-4 bg-gray-500 rounded w-full mb-2"></div>
-                    </td>
-                    <td className="bg-stone-300 px-4 py-6 animate-pulse w-11/12">
-                      <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-                      <div className="h-4 bg-gray-500 rounded w-9/12 mb-2"></div>
-                    </td>
-                    <td className="bg-stone-300 px-4 py-6 animate-pulse w-1/3">
-                      <div className="h-4 bg-gray-500 rounded w-10/12 mb-2"></div>
-                      <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-                    </td>
-                  </tr>
-                ))}
-          </tbody>
-        </table>
-        <div className="mt-8 mb-10">
+                        </form>
+                      </Dialog>
+
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            className="cursor-pointer"
+                          >
+                            Hapus
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Hapus Soal</DialogTitle>
+                            <DialogDescription>
+                              {`Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?`}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <Button variant="outline">Cancel</Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <Button
+                                onClick={() => handleDeleteQuestions(data.id)}
+                                variant="destructive"
+                              >
+                                Hapus
+                              </Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  className="text-center text-lg font-bold"
+                  colSpan={3}
+                >
+                  Belum Ada Tugas Yang Dibuat
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+
+        <div className="mt-8 pb-7">
           <Link
             href="/Teacher/dashboard"
             className="text-md bg-amber-300 px-5 py-2 rounded-lg hover:bg-amber-400 font-semibold"
@@ -466,6 +449,6 @@ export default function ViewQuestions() {
           </Link>
         </div>
       </div>
-    </div>
+    </LayoutBodyContent>
   );
 }
