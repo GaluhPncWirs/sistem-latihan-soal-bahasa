@@ -1,4 +1,5 @@
 "use client";
+import { useConvertDate } from "@/app/hooks/getConvertDate";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,65 +42,47 @@ export default function TeacherProfile() {
 
   useEffect(() => {
     async function historyExams() {
-      const { data: dataValueExams, error: errorDataValueExams }: any =
+      const { data: dataManageExams, error: errorDataManageExams }: any =
+        await supabase
+          .from("managed_exams")
+          .select("idExams,statusExam,dibuat_tgl,exams(nama_ujian)");
+      const { data: dataHistoryExams, error: errorDataHistoryExams }: any =
         await supabase
           .from("history-exam-student")
-          .select("exam_id, hasil_ujian,student_id,exams(nama_ujian)");
+          .select("exam_id,hasil_ujian,student_id");
 
-      if (errorDataValueExams) {
+      if (errorDataManageExams || errorDataHistoryExams) {
         console.log("data error ditampilkan");
       }
 
-      const dataValExam = dataValueExams.reduce((acc: any, cur: any) => {
-        acc[cur.exam_id] = (acc[cur.exam_id] || 0) + 1;
+      const result = dataHistoryExams.reduce((acc: any, cur: any) => {
+        const found = acc.find((item: any) => item.exam_id === cur.exam_id);
+        if (!found) {
+          acc.push({
+            exam_id: cur.exam_id,
+            hasil_ujian: cur.hasil_ujian,
+            student_id: [cur.student_id],
+          });
+        } else {
+          found.hasil_ujian += cur.hasil_ujian;
+          found.student_id.push(cur.student_id);
+        }
         return acc;
+      }, []);
+
+      const mergedData = dataManageExams?.map((item: any) => {
+        const findIdSame = result.find((f: any) => f.exam_id === item.idExams);
+        return {
+          ...item,
+          hasil_ujian: findIdSame.hasil_ujian,
+          student_id: findIdSame.student_id,
+        };
       });
 
-      const filtered = dataValueExams
-        .filter((item: any) => dataValExam[item.exam_id] > 1)
-        .map((t: any) => {
-          const items = dataValueExams.filter(
-            (d: any) => d.exam_id === t.exam_id
-          );
-          const avg =
-            items.reduce((acc: any, cur: any) => acc + cur.hasil_ujian, 0) /
-            items.length;
-          return {
-            exam_id: Number(t.exam_id),
-            hasil_ujian: avg,
-            student_id: null,
-          };
-        });
-
-      // const filtered = Object.entries(dataValueExams)
-      //   .filter(([_, count]: any) => count > 1)
-      //   .map(([exam_id]: any) => {
-      //     const idNum = Number(exam_id);
-      //     const items = dataValueExams.filter((d: any) => d.exam_id === idNum);
-      //     const avg =
-      //       items.reduce((acc: any, cur: any) => acc + cur.hasil_ujian, 0) /
-      //       items.length;
-      //     return {
-      //       exam_id: Number(exam_id),
-      //       hasil_ujian: avg,
-      //       student_id: null,
-      //     };
-      //   });
-
-      // const singles = dataValueExams.filter(
-      //   (item: any) => dataValExam[item.exam_id] === 1
-      // );
-
-      console.log(filtered);
-
-      // const finalResult = [...filtered, ...singles];
-
-      setGetHistoryExams(dataValueExams);
+      setGetHistoryExams(mergedData);
     }
     historyExams();
   }, []);
-
-  // console.log(getHistoryExams);
 
   return (
     <LayoutBodyContent>
@@ -144,29 +127,42 @@ export default function TeacherProfile() {
                   <TableHead>Jumlah Siswa</TableHead>
                   <TableHead>Nilai Rata-Rata</TableHead>
                   <TableHead>Tanggal</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {/* {getHistoryExams.length > 0 ? (
+                {getHistoryExams.length > 0 ? (
                   getHistoryExams.map((item: any, i: number) => (
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{item.exams?.nama_ujian}</TableCell>
-                      <TableCell>{new Set(item.student_id)}</TableCell>
-                      <TableCell>log</TableCell>
-                      <TableCell>log2</TableCell>
+                      <TableCell>{item.student_id.length}</TableCell>
+                      <TableCell>
+                        {item.student_id.length > 1
+                          ? item.hasil_ujian / item.student_id.length
+                          : item.hasil_ujian}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(item.dibuat_tgl).toLocaleDateString(
+                          "id-ID",
+                          options
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {item.statusExam === true ? "Selesai" : "Belum Selesai"}
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={5}
+                      colSpan={6}
                       className="text-center text-lg font-semibold"
                     >
                       Belum Ada History
                     </TableCell>
                   </TableRow>
-                )} */}
+                )}
               </TableBody>
             </Table>
           </div>
