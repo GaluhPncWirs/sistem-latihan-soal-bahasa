@@ -13,13 +13,15 @@ export default function Home() {
           style={{ backgroundImage: "url(/img/beranda/heroSectionUjian.jpg)" }}
           className="min-h-screen bg-no-repeat bg-cover opacity-50"
         ></div>
-        <div className="absolute top-5/12 flex w-full px-16 flex-col gap-20">
+        <div className="absolute top-5/12 flex w-full px-16 flex-col gap-20 max-[640px]:px-5 max-[640px]:top-1/3">
           <div>
-            <h1 className="text-5xl font-bold mb-5">Platform Ujian Online</h1>
-            <p className="text-xl font-semibold ml-1">
+            <h1 className="text-5xl font-bold mb-4 max-[640px]:text-4xl">
+              Platform Ujian Online
+            </h1>
+            <p className="text-xl font-semibold ml-1 max-[640px]:text-lg">
               Ikuti Ujian Online Bisa Dikerjakan Dimana Saja, Mudah dan Cepat
             </p>
-            <div className="mt-10">
+            <div className="mt-10 max-[640px]:mt-5">
               <Link
                 href={isLogin ? "/Student" : "/Autentikasi/Login"}
                 className="text-center w-full bg-blue-300 rounded-md py-2 text-lg font-semibold cursor-pointer hover:bg-blue-400 px-7"
@@ -45,13 +47,16 @@ export default function Home() {
       </div>
 
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
-        <div className="w-3/4 mx-auto py-20" id="content">
+        <div
+          className="w-3/4 mx-auto py-20 max-[640px]:w-10/12 max-[640px]:py-16"
+          id="content"
+        >
           <div className="flex flex-col justify-center items-center">
             <h1 className="text-4xl font-bold text-center mb-16">
               Fitur Unggulan
             </h1>
-            <div className="flex justify-around items-center gap-3 w-full">
-              <div className="max-w-3/12">
+            <div className="flex justify-around items-center gap-3 w-full max-[640px]:flex-col max-[640px]:gap-y-10">
+              <div className="max-w-3/12 max-[640px]:max-w-2/3">
                 <div className="w-full flex justify-center mb-3">
                   <Image
                     src="/img/beranda/mudah.png"
@@ -68,7 +73,7 @@ export default function Home() {
                   Ujian dapat diikuti dimanapun Anda Berada
                 </p>
               </div>
-              <div className="max-w-3/12">
+              <div className="max-w-3/12 max-[640px]:max-w-2/3">
                 <div className="w-full flex justify-center mb-3">
                   <Image
                     src="/img/beranda/hasil.png"
@@ -85,7 +90,7 @@ export default function Home() {
                   Nilai langsung keluar setelah selesai ujian.
                 </p>
               </div>
-              <div className="max-w-3/12">
+              <div className="max-w-3/12 max-[640px]:max-w-2/3">
                 <div className="w-full flex justify-center mb-3">
                   <Image
                     src="/img/beranda/soal.png"
@@ -102,7 +107,7 @@ export default function Home() {
                   Mendukung pilihan ganda, isian singkat, dan essay.
                 </p>
               </div>
-              <div className="max-w-3/12">
+              <div className="max-w-3/12 max-[640px]:max-w-2/3">
                 <div className="w-full flex justify-center mb-3">
                   <Image
                     src="/img/beranda/keamanan.png"
@@ -136,9 +141,9 @@ export default function Home() {
         ></path>
       </svg>
 
-      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] pt-56">
-        <h1 className="text-4xl font-bold text-center pb-5">Alur Ujian </h1>
-        <div className="w-2/3 mx-auto py-10">
+      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] pt-56 max-[640px]:pt-36">
+        <h1 className="text-4xl font-bold text-center">Alur Ujian </h1>
+        <div className="w-2/3 mx-auto py-10 max-[640px]:py-0 max-[640px]:w-11/12">
           <div className="flex mx-10 max-[640px]:ml-5 max-[640px]:mx-0 max-[640px]:pr-5 max-[640px]:mt-24">
             <div className="basis-1/6 flex flex-col items-center">
               <Image
@@ -149,17 +154,17 @@ export default function Home() {
                 height={100}
               />
               <div className="w-1 h-full mt-5 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
-                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-10"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32"></div>
+                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-10 max-[640px]:mt-12"></div>
+                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32 max-[640px]:mt-36"></div>
+                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32 max-[640px]:mt-28"></div>
+                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32 max-[640px]:mt-32"></div>
               </div>
             </div>
 
             <div className="basis-5/6">
               <div className="mt-20">
                 <div className="flex gap-3 items-center text-[#0F4C75]">
-                  <h1 className="font-bold text-2xl ">Daftar / Login</h1>
+                  <h1 className="font-bold text-2xl">Daftar / Login</h1>
                   <Image
                     src="/img/beranda/login.png"
                     alt="login"
@@ -168,13 +173,13 @@ export default function Home() {
                     height={100}
                   />
                 </div>
-                <h2 className="font-semibold text-xl mt-3 text-[#393E46]">
+                <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
                   Buat akun baru atau masuk dengan akun yang sudah ada untuk
                   mengakses sistem ujian online
                 </h2>
               </div>
 
-              <div className="mt-10">
+              <div className="mt-10 max-[640px]:mt-5">
                 <div className="flex gap-3 items-center text-[#0F4C75]">
                   <h1 className="font-bold text-2xl">Pilih Ujian</h1>
                   <Image
@@ -185,13 +190,13 @@ export default function Home() {
                     height={100}
                   />
                 </div>
-                <h2 className="font-semibold text-xl mt-3 text-[#393E46]">
+                <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
                   Telusuri dan pilih ujian yang tersedia sesuai jadwal yang
                   ingin Anda ikuti
                 </h2>
               </div>
 
-              <div className="mt-10">
+              <div className="mt-10 max-[640px]:mt-5">
                 <div className="flex gap-3 items-center text-[#0F4C75]">
                   <h1 className="font-bold text-2xl">Kejakan Ujiannya</h1>
                   <Image
@@ -202,13 +207,13 @@ export default function Home() {
                     height={100}
                   />
                 </div>
-                <h2 className="font-semibold text-xl mt-3 text-[#393E46]">
+                <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
                   Kerjakan soal secara online melalui antarmuka yang sederhana,
                   didukung fitur timer dan navigasi soal
                 </h2>
               </div>
 
-              <div className="mt-10">
+              <div className="mt-10 max-[640px]:mt-5">
                 <div className="flex gap-3 items-center text-[#0F4C75]">
                   <h1 className="font-bold text-2xl">Lihat Nilai</h1>
                   <Image
@@ -219,7 +224,7 @@ export default function Home() {
                     height={100}
                   />
                 </div>
-                <h2 className="font-semibold text-xl mt-3 text-[#393E46]">
+                <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
                   Setelah selesai, langsung dapatkan hasil ujian dan nilai Anda
                   secara real time
                 </h2>

@@ -218,3 +218,30 @@ tbody > tr > td {
   .scrollBarDesign{
     @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-[#CBF1F5] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#3282B8]
   }
+
+  /* hamburger menu */
+.menu span:nth-child(2){
+    transform-origin: 0 0;
+}
+
+.menu span:nth-child(4){
+    transform-origin: 0 100%;
+}
+
+.menu input:checked ~ span:nth-child(2){
+    background-color: red;
+    transform: rotate(45deg);
+    translate: -2px 1px;
+}
+
+.menu input:checked ~ span:nth-child(4){
+    background-color: red;
+    transform: rotate(-45deg);
+    translate: -2px 1px;
+}
+
+.menu input:checked ~ span:nth-child(3){
+    transform: scale(0);
+    opacity: 0;
+}
+/* hamburger menu end */

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import HamburgerMenu from "./hamburgerMenu/hamburgerMenu";
 
 export default function NavigasiBar() {
   const [isUserThereStudent, setIsUserThereStudent] = useState<boolean>(false);
@@ -31,13 +32,18 @@ export default function NavigasiBar() {
   }
 
   return (
-    <div className="w-full h-16 bg-[#A6E3E9] fixed z-10 shadow-lg shadow-slate-500">
+    <div className="w-full h-16 bg-[#A6E3E9] fixed z-20 shadow-lg shadow-slate-500">
       <div className="flex items-center h-full gap-x-3">
         <div className="basis-1/5 h-full flex items-center justify-center">
           {/* <Image src="" alt="" width={500} height={500}/> */}
           <h1>Logo</h1>
         </div>
-        <ul className="basis-3/5 flex justify-around h-full items-center">
+        <HamburgerMenu
+          isUserThereTeacher={isUserThereTeacher}
+          isUserThereStudent={isUserThereStudent}
+          handleLogout={handleLogout}
+        />
+        <ul className="basis-3/5 flex justify-around h-full items-center max-[640px]:hidden">
           <li className="cursor-pointer text-xl font-semibold">
             <Link href="/">Beranda</Link>
           </li>
@@ -61,9 +67,7 @@ export default function NavigasiBar() {
                   Profil
                 </Link>
               </li>
-              <li className="cursor-pointer text-xl font-semibold">
-                <Link href="#">Panduan</Link>
-              </li>
+
               <li className="cursor-pointer text-xl font-semibold">
                 <Link
                   href={`${
@@ -76,7 +80,7 @@ export default function NavigasiBar() {
             </>
           )}
         </ul>
-        <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5">
+        <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5 max-[640px]:hidden">
           {isUserThereStudent === true || isUserThereTeacher === true ? (
             <button
               onClick={handleLogout}
