@@ -54,9 +54,9 @@ export default function LoginAccount() {
   }
 
   return (
-    <LayoutFormAccount formTitle={"Login Akun"}>
+    <LayoutFormAccount formTitle={"Login"}>
       <form
-        className="flex justify-center flex-col w-3/4 gap-3 mx-auto"
+        className="flex justify-center flex-col w-3/4 gap-3 mx-auto max-[640px]:gap-2"
         onSubmit={(e) => handleLogin(e)}
       >
         <label
@@ -66,10 +66,10 @@ export default function LoginAccount() {
           Jenis Akun
         </label>
         <Select onValueChange={(val) => setValueTypeAccount(val)}>
-          <SelectTrigger className="w-full bg-blue-200 cursor-pointer">
+          <SelectTrigger className="w-full bg-teal-100 cursor-pointer">
             <SelectValue placeholder="Pilih Jenis" />
           </SelectTrigger>
-          <SelectContent className="bg-blue-200 p-1">
+          <SelectContent className="bg-teal-100 p-1">
             <SelectItem value="guru">Guru</SelectItem>
             <SelectItem value="siswa">Siswa</SelectItem>
           </SelectContent>
@@ -81,7 +81,7 @@ export default function LoginAccount() {
           type="email"
           id="email"
           placeholder="adamJobs@gmail.com"
-          className="w-full rounded-md p-3 bg-blue-200"
+          className="w-full rounded-md p-3 bg-teal-100"
         />
         <label
           htmlFor="password"
@@ -93,23 +93,15 @@ export default function LoginAccount() {
           type="password"
           id="password"
           placeholder="**********"
-          className="w-full rounded-md p-3 bg-blue-200"
+          className="w-full rounded-md p-3 bg-teal-100"
         />
         <button
-          className="bg-blue-300 rounded-md w-full py-1.5 mt-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
+          className="bg-blue-300 font-semibold rounded-md w-full py-1.5 mt-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
           type="submit"
         >
           Login
         </button>
       </form>
-      <div className="ml-10 mt-7 text-slate-700">
-        <button>
-          Masuk Dengan Akun{" "}
-          <span className="font-semibold hover:underline text-blue-700 cursor-pointer">
-            Google
-          </span>
-        </button>
-      </div>
     </LayoutFormAccount>
   );
 }

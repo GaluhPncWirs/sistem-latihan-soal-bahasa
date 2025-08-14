@@ -49,7 +49,7 @@ export default function ResultExam() {
   return (
     <LayoutBodyContent>
       <div className="w-10/12 mx-auto pt-24">
-        <div className="mt-7">
+        <div className="mt-5">
           <h1 className="text-3xl font-semibold text-center mb-5">
             Hasil Ujian
           </h1>
@@ -66,7 +66,7 @@ export default function ResultExam() {
                   >
                     <span className="font-bold mr-1 text-lg">{i + 1}.</span>
                     <h1 className="inline-block text-lg">{item.questions}</h1>
-                    <ul className="flex justify-evenly items-center mt-5">
+                    <ul className="flex mt-5 max-[640px]:flex-col max-[640px]:items-baseline max-[640px]:gap-y-2 sm:flex-col sm:items-baseline sm:gap-y-2 md:flex-row md:items-center md:gap-y-0 md:justify-evenly">
                       {["a", "b", "c", "d", "e"].map((opt) => {
                         const answerKey = `answer_${opt}`;
                         const answerText = item.answerPg[answerKey];
@@ -98,7 +98,7 @@ export default function ResultExam() {
                 </div>
               ))}
           <Link
-            href="/Student"
+            href="/Student/Dashboard"
             className="mt-5 block px-8 bg-amber-300 w-fit py-2 rounded-lg font-semibold hover:bg-amber-400"
           >
             Kembali

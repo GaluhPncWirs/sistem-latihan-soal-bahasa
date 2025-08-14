@@ -68,7 +68,7 @@ export default function DashboardStudent() {
   return (
     <LayoutBodyContent>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
-        <div className="w-10/12 mx-auto pt-32">
+        <div className="w-10/12 mx-auto pt-32 max-[640px]:w-11/12 max-[640px]:pt-28">
           <div className="mb-7">
             <h1 className="text-2xl font-bold mb-3">
               Halo, Selamat Datang {getNameStudent?.fullName}
@@ -78,12 +78,12 @@ export default function DashboardStudent() {
             </p>
           </div>
           <div className="flex justify-evenly items-center mt-10">
-            <div className="bg-[#F38181] rounded-lg p-5 font-semibold text-center">
-              <h1 className="text-lg">Jumlah Ujian Yang Diikuti</h1>
+            <div className="bg-[#F38181] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
+              <h1 className="text-lg max-[640px]:text-base">Jumlah Ujian</h1>
               <div className="text-xl">{isCompleteExam}</div>
             </div>
-            <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center">
-              <h1 className="text-lg">Nilai Rata Rata</h1>
+            <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
+              <h1 className="text-lg max-[640px]:text-base">Nilai Rata Rata</h1>
               <div className="text-xl">
                 {averageValue.length > 0
                   ? Math.floor(
@@ -95,12 +95,12 @@ export default function DashboardStudent() {
                   : 0}
               </div>
             </div>
-            <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center">
-              <h1 className="text-lg">Ujian Yang Terjadwal</h1>
+            <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
+              <h1 className="text-lg max-[640px]:text-base">Ujian Terjadwal</h1>
               <div className="text-xl">{resultExam.length || "0"}</div>
             </div>
           </div>
-          <div className="w-3/4 mx-auto mt-8">
+          <div className="mx-auto mt-8 max-[640px]:w-11/12 sm:w-11/12 md:w-3/4">
             <div className="mb-7">
               <h1 className="text-xl font-semibold bg-[#0F4C75] text-center rounded-md py-2 mb-5 text-slate-100">
                 Jadwal Ujian Yang Tersedia

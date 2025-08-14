@@ -16,10 +16,12 @@ export default function FooterComponent() {
         ></path>
       </svg>
 
-      <div className="pt-64 bg-[#00ADB5] max-[640px]:pt-40">
+      <div className=" bg-[#00ADB5] max-[640px]:pt-36 sm:pt-44 md:pt-52 lg:pt-64">
         <div className="w-2/3 mx-auto max-[640px]:w-10/12">
-          <h1 className="text-2xl font-semibold">Ikuti Media Sosial Kami di</h1>
-          <ul className="flex justify-around items-center py-10 max-[640px]:flex-wrap max-[640px]:gap-5 max-[640px]:justify-center">
+          <h1 className="text-3xl font-semibold max-[640px]:text-2xl">
+            Ikuti Media Sosial Kami di
+          </h1>
+          <ul className="flex justify-around items-center py-10 max-[640px]:flex-wrap max-[640px]:gap-5 max-[640px]:justify-center sm:flex-wrap sm:gap-7">
             <Link
               href="#"
               className="flex items-center gap-3 grayscale-100 hover:grayscale-0 cursor-pointer transition-all"

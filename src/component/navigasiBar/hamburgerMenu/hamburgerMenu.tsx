@@ -56,7 +56,7 @@ export default function HamburgerMenu({
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
       </div>
       <ul
-        className={`flex justify-center gap-y-10 absolute right-0 h-screen flex-col items-center w-2/5 bg-[#549DBB] -z-10 transition-all duration-300 text-xl font-semibold rounded-bl-lg top-16
+        className={`flex justify-center gap-y-10 absolute right-0 h-screen flex-col items-center w-2/5 bg-[#A6E3E9] -z-10 transition-all duration-300 text-xl font-semibold rounded-bl-lg
       ${isCheked ? `translate-x-0` : `translate-x-full`}`}
         ref={clickOutsidePath}
         id="navbar"
@@ -97,31 +97,6 @@ export default function HamburgerMenu({
           </>
         )}
       </ul>
-      <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5 ">
-        {isUserThereStudent === true || isUserThereTeacher === true ? (
-          <button
-            onClick={handleLogout}
-            className="bg-[#71C9CE] py-1.5 px-5 rounded-lg hover:bg-teal-500 cursor-pointer font-semibold text-lg"
-          >
-            Logout
-          </button>
-        ) : (
-          <>
-            <Link
-              href="/Autentikasi/Daftar"
-              className="bg-[#71C9CE] py-1.5 px-5 rounded-lg hover:bg-teal-500 cursor-pointer font-semibold text-lg"
-            >
-              Daftar
-            </Link>
-            <Link
-              href="/Autentikasi/Login"
-              className="border border-black py-1.5 px-5 rounded-lg hover:bg-teal-400 cursor-pointer font-semibold text-lg"
-            >
-              Login
-            </Link>
-          </>
-        )}
-      </div>
     </div>
   );
 }

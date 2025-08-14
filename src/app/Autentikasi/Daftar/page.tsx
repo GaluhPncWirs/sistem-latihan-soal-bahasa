@@ -42,20 +42,20 @@ export default function RegisterAccount() {
   return (
     <LayoutFormAccount formTitle={"Buat Akun"}>
       <form
-        className="flex justify-center flex-col w-3/4 gap-3 mx-auto"
+        className="flex justify-center flex-col w-3/4 gap-3 mx-auto max-[640px]:gap-2"
         onSubmit={(e) => handleRegister(e)}
       >
         <label
           htmlFor="fullname"
           className="text-xl font-semibold text-blue-500"
         >
-          Fullname
+          Nama
         </label>
         <input
           type="text"
           id="fullname"
           placeholder="adam jobs"
-          className="w-full rounded-md p-3 bg-blue-200"
+          className="w-full rounded-md p-3 bg-teal-100"
         />
         <label htmlFor="kelas" className="text-xl font-semibold text-blue-500">
           Kelas
@@ -64,7 +64,7 @@ export default function RegisterAccount() {
           type="text"
           id="kelas"
           placeholder="Tp 5"
-          className="w-full rounded-md p-3 bg-blue-200"
+          className="w-full rounded-md p-3 bg-teal-100"
         />
         <label htmlFor="email" className="text-xl font-semibold text-blue-500">
           Email
@@ -73,7 +73,7 @@ export default function RegisterAccount() {
           type="email"
           id="email"
           placeholder="adamJobs@gmail.com"
-          className="w-full rounded-md p-3 bg-blue-200"
+          className="w-full rounded-md p-3 bg-teal-100"
         />
         <label
           htmlFor="password"
@@ -85,11 +85,11 @@ export default function RegisterAccount() {
           type="password"
           id="password"
           placeholder="**********"
-          className="w-full rounded-md p-3 bg-blue-200"
+          className="w-full rounded-md p-3 bg-teal-100"
         />
 
         <button
-          className="bg-blue-300 rounded-md w-full py-1.5 my-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
+          className="bg-blue-300 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
           type="submit"
         >
           Register

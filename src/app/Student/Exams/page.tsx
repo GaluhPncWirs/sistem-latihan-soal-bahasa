@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { useGetIdStudent } from "../hooks/getIdStudent";
+import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
 import Link from "next/link";
 
