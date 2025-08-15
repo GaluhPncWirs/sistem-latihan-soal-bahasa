@@ -124,17 +124,17 @@ export default function Soal() {
 
   return (
     <LayoutBodyContent>
-      <div className="w-10/12 mx-auto pt-24">
+      <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-10/12">
         <h1 className="text-3xl font-semibold mb-7 text-center mt-5">
           {/* Ujian {questions[0]?.nama_ujian} */}
         </h1>
-        <div className="flex flex-row-reverse gap-7 items-center justify-center">
-          <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg">
-            <div className="flex justify-between items-center">
+        <div className="flex flex-row-reverse gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
+          <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg max-[640px]:fixed max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-10 sm:fixed sm:top-20 sm:w-10/12 sm:z-10 md:basis-1/3 md:static md:top-0 md:z-0">
+            <div className="flex justify-between items-center max-[640px]:justify-evenly sm:justify-evenly md:justify-between">
               <h1 className="text-xl font-semibold">
                 Pertanyaaan Pilihan Ganda
               </h1>
-              <div className="text-2xl font-semibold bg-[#F38181] px-5 py-1.5 rounded-lg">
+              <div className="text-2xl font-semibold bg-[#F38181] px-4 py-1.5 rounded-lg">
                 {/* {formatedTime} */}00:00
               </div>
             </div>
@@ -159,20 +159,20 @@ export default function Soal() {
                 : null}
             </div>
           </div>
-          <div className="basis-2/3 overflow-y-auto h-[28rem] scrollBarDesign">
+          <div className="basis-2/3 lg:overflow-y-auto h-[28rem] lg:scrollBarDesign max-[640px]:mt-32 max-[640px]:w-11/12 sm:mt-32 sm:w-10/12 md:mt-0 md:basis-2/3">
             {questions.length > 0
               ? questions
                   .flatMap((getQuestions: any) => getQuestions.questions_exam)
                   .map((item: any, i: number) => (
                     <div
-                      className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3"
+                      className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
                       key={item.id}
                     >
                       <span className="font-bold mr-1 text-lg">{i + 1}.</span>
                       <h1 className="inline-block text-lg font-semibold">
                         {item.questions}
                       </h1>
-                      <ul className="flex justify-evenly items-center mt-5">
+                      <ul className="flex justify-evenly items-center mt-5 max-[640px]:flex-wrap max-[640px]:gap-1.5 sm:flex-wrap sm:gap-2">
                         {["a", "b", "c", "d", "e"].map((opt) => {
                           const answerKey = `answer_${opt}`;
                           const answerText = item.answerPg[answerKey];
