@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
+import ResultExam from "@/app/Student/Dashboard/ResultExam/page";
 import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/component/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/component/khususGuru/kelolaSiswa/manageStudent";
@@ -52,15 +53,45 @@ export default function Teacher() {
   useEffect(() => {
     if (!idTeacher) return;
     async function getDataManageExams() {
-      const { data, error }: any = await supabase
-        .from("managed_exams")
-        .select("*, account_teacher(fullName), exams(nama_ujian)")
-        .eq("id_Teacher", idTeacher);
+      const { data: datasManageExams, error: errorDatasManageExams }: any =
+        await supabase
+          .from("managed_exams")
+          .select("*, account_teacher(fullName), exams(nama_ujian)")
+          .eq("id_Teacher", idTeacher);
 
-      if (error) {
+      const { data: isCompleteExam, error: errorIsCompleteExam }: any =
+        await supabase
+          .from("history-exam-student")
+          .select("exam_id,student_id");
+      const { data: lengthStudent, error: errorLengthStudent }: any =
+        await supabase.from("account-student").select("fullName");
+
+      if (errorDatasManageExams || errorIsCompleteExam || errorLengthStudent) {
         console.log("data error ditampilkan");
       } else {
-        setDataManageExams(data);
+        const result = isCompleteExam.reduce((acc: any, cur: any) => {
+          const found = acc.find((item: any) => item.exam_id === cur.exam_id);
+          if (!found) {
+            acc.push({
+              exam_id: cur.exam_id,
+              student_id: [cur.student_id],
+            });
+          } else {
+            found.student_id.push(cur.student_id);
+          }
+          return acc;
+        }, []);
+
+        const mergedData = datasManageExams?.map((item: any) => {
+          const finds = result.find((f: any) => f.exam_id === item.idExams);
+          return {
+            ...item,
+            lengthStudentCompleteExams: finds.student_id,
+            lengthStudent: lengthStudent,
+          };
+        });
+
+        setDataManageExams(mergedData);
       }
     }
 
@@ -69,35 +100,35 @@ export default function Teacher() {
 
   return (
     <LayoutBodyContent>
-      <div className="pt-28 w-3/4 mx-auto">
+      <div className="pt-28 mx-auto max-[640px]:w-11/12 sm:w-10/12 md:w-3/4">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
-        <h1 className="text-2xl font-bold my-5">
+        <h1 className="text-2xl font-bold my-5 max-[640px]:text-center">
           Halo, Selamat Datang {dataManageExams[0]?.account_teacher.fullName}
         </h1>
 
-        <ul className="w-10/12 mx-auto mt-16 flex justify-around font-semibold text-lg">
+        <ul className="mx-auto mt-10 flex justify-around font-semibold text-lg max-[640px]:text-base max-[640px]:w-full max-[640px]:gap-x-3 sm:w-full md:w-11/12">
           <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer"
+            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
             id="createQusetions"
             onClick={(e) => handleClickItem(e.currentTarget.id)}
           >
             Buat Soal
           </li>
           <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer"
+            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
             id="viewResult"
             onClick={(e) => handleClickItem(e.currentTarget.id)}
           >
             Kelola Soal
           </li>
           <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer"
+            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
             id="manageStudent"
             onClick={(e) => handleClickItem(e.currentTarget.id)}
           >
             Kelola Siswa
           </li>
-          <li className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer">
+          <li className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center">
             <button onClick={() => window.location.reload()}>Kembali</button>
           </li>
         </ul>
@@ -136,7 +167,8 @@ export default function Teacher() {
                         <TableCell>{item.dibuat_tgl}</TableCell>
                         <TableCell>{item.tenggat_waktu}</TableCell>
                         <TableCell>
-                          {item.statusExam === true
+                          {item.lengthStudent.length ===
+                          item.lengthStudentCompleteExams.length
                             ? "Selesai"
                             : "Belum Selesai"}
                         </TableCell>

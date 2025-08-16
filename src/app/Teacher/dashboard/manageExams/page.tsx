@@ -158,9 +158,9 @@ export default function ViewQuestions() {
 
   return (
     <LayoutBodyContent>
-      <div className="w-11/12 mx-auto pt-28">
-        <h1 className="text-3xl font-bold mb-5 text-center">Edit Soal</h1>
-        <h2 className="text-3xl font-bold mb-10">
+      <div className="w-11/12 mx-auto pt-24">
+        <h1 className="text-4xl font-bold mb-5 text-center">Edit Soal</h1>
+        <h2 className="text-2xl font-bold mb-10">
           Nama Ujian :{" "}
           {viewQuestions.length > 0 ? viewQuestions[0].nama_ujian : ""}
         </h2>
@@ -182,8 +182,8 @@ export default function ViewQuestions() {
                   <TableRow key={i}>
                     <TableCell>{i + 1}</TableCell>
                     <TableCell>
-                      <h1>{data.questions}</h1>
-                      <ul className="flex justify-around flex-wrap items-center my-2">
+                      <h1 className="mb-2 font-semibold">{data.questions}</h1>
+                      <ul className="flex justify-around flex-wrap items-center my-2 max-[640px]:gap-3 sm:gap-3 md:gap-1">
                         <li
                           className={`${
                             data.correctAnswer === data.answerPg.answer_a
@@ -255,7 +255,7 @@ export default function ViewQuestions() {
                                 Ganda
                               </DialogDescription>
                             </DialogHeader>
-                            <div className="grid gap-2">
+                            <div className="grid gap-2 max-[640px]:gap-1">
                               <div>
                                 <label htmlFor="questions">
                                   Edit Pertanyaan
@@ -270,9 +270,9 @@ export default function ViewQuestions() {
                                 />
                               </div>
 
-                              <div className="mt-3">
+                              <div className="mt-2">
                                 <h1 className="mb-2">Edit Jawaban</h1>
-                                <div className="flex flex-wrap justify-center gap-5">
+                                <div className="grid grid-cols-2 gap-3 max-[640px]:gap-5 max-[640px]:grid-cols-3">
                                   <div>
                                     <label htmlFor="answer_a">Jawaban A</label>
                                     <Input
@@ -317,7 +317,7 @@ export default function ViewQuestions() {
                               </div>
 
                               <div className="mt-2">
-                                <h1 className="mb-3">Pilih Jawaban</h1>
+                                <h1 className="mb-2">Pilih Jawaban</h1>
                                 <Select
                                   onValueChange={(val) =>
                                     setSelectCorrectNewAnswer(val)

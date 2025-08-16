@@ -101,7 +101,7 @@ export default function ViewQuestions() {
   }
 
   return (
-    <div className="w-11/12 mx-auto">
+    <div className="mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
       <h1 className="mb-7 text-2xl text-center font-semibold">
         Kelola Soal Ujian
       </h1>
@@ -111,7 +111,7 @@ export default function ViewQuestions() {
             <TableHead className="text-center text-base">No</TableHead>
             <TableHead className="text-center text-base">Nama Ujian</TableHead>
             <TableHead className="text-center text-base">
-              Kirimkan Ke Kelas
+              Kirim Ke Kelas
             </TableHead>
             <TableHead className="text-center text-base">Waktu Ujian</TableHead>
             <TableHead className="text-center text-base">Kelola</TableHead>
