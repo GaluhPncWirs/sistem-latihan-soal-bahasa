@@ -46,7 +46,7 @@ export default function Profil() {
   return (
     <LayoutBodyContent>
       <div className="pt-16 flex max-[640px]:flex-col max-[640px]:gap-0 sm:flex-col sm:gap-0 md:gap-6 lg:gap-14 md:flex-row">
-        <div className="bg-[#71C9CE] bg-gradient-to-t to-[#08D9D6] px-7 pt-10 basis-1/4 pb-7 shadow-lg md:basis-[28%] lg:basis-1/4">
+        <div className="bg-[#71C9CE] bg-gradient-to-t to-[#08D9D6] px-7 pt-10 pb-7 shadow-lg md:basis-[28%] lg:basis-1/4">
           {/* <Image src="" alt="Profile User" width={300} height={300} /> */}
           <h1 className="text-center my-5">ini buat gambar</h1>
           <ul className="my-7 flex flex-col justify-center gap-3">
@@ -59,14 +59,14 @@ export default function Profil() {
           </ul>
           <Button className="px-5 cursor-pointer">Edit Profile</Button>
         </div>
-        <div className="max-[640px]:mt-0 sm:mt-0 md:mt-16 md:basis-2/3 lg:basis-2/3">
+        <div className="max-[640px]:mt-0 sm:mt-0 md:mt-16 md:basis-2/3">
           <div className="bg-[#71C9CE] rounded-lg p-7">
             <h1 className="mb-10 text-center text-2xl font-semibold">
               Riwayat Ujian
             </h1>
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="bg-[#3282B8]">
                   <TableHead>No</TableHead>
                   <TableHead>Nama Ujian</TableHead>
                   <TableHead>Tanggal</TableHead>

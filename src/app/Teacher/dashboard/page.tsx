@@ -28,6 +28,8 @@ export default function Teacher() {
   });
   const idTeacher = useGetIdTeacher();
   const [dataManageExams, setDataManageExams] = useState<any>([]);
+  const options: any = { day: "numeric", month: "long", year: "numeric" };
+
   function handleClickItem(event: any) {
     if (event === "viewResult") {
       setDashboardButton({
@@ -164,7 +166,12 @@ export default function Teacher() {
                         <TableCell>{i + 1}</TableCell>
                         <TableCell>{item.exams?.nama_ujian}</TableCell>
                         <TableCell>{item.kelas}</TableCell>
-                        <TableCell>{item.dibuat_tgl}</TableCell>
+                        <TableCell>
+                          {new Date(item.dibuat_tgl).toLocaleDateString(
+                            "id-ID",
+                            options
+                          )}
+                        </TableCell>
                         <TableCell>{item.tenggat_waktu}</TableCell>
                         <TableCell>
                           {item.lengthStudent.length ===

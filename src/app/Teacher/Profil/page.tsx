@@ -22,9 +22,11 @@ export default function TeacherProfile() {
   const formatedDate = new Date(
     getProfileTeacher?.created_at
   ).toLocaleDateString("id-ID", options);
-  const totalStudent = getHistoryExams.map((acc: any) => acc.student_id);
-  const merged = [...new Set(totalStudent.flat())];
-  const averageValueExam = getHistoryExams.map((item: any) => item.hasil_ujian);
+  const totalStudent = getHistoryExams?.map((acc: any) => acc.student_id);
+  const merged = [...new Set(totalStudent?.flat())];
+  const averageValueExam = getHistoryExams?.map(
+    (item: any) => item.hasil_ujian
+  );
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -49,7 +51,7 @@ export default function TeacherProfile() {
       const { data: dataManageExams, error: errorDataManageExams }: any =
         await supabase
           .from("managed_exams")
-          .select("idExams,statusExam,dibuat_tgl,id_Teacher,exams(nama_ujian)")
+          .select("idExams,dibuat_tgl,id_Teacher,exams(nama_ujian)")
           .eq("id_Teacher", idTeacher);
       const { data: dataHistoryExams, error: errorDataHistoryExams }: any =
         await supabase
@@ -91,8 +93,8 @@ export default function TeacherProfile() {
 
   return (
     <LayoutBodyContent>
-      <div className="pt-16 flex gap-14">
-        <div className="bg-[#71C9CE] bg-gradient-to-t to-[#08D9D6] px-7 pt-10 basis-1/4 pb-5 shadow-lg">
+      <div className="pt-16 flex max-[640px]:flex-col max-[640px]:gap-0 sm:flex-col sm:gap-0 lg:gap-10 md:flex-row">
+        <div className="bg-[#71C9CE] bg-gradient-to-t to-[#08D9D6] px-7 pt-10 pb-7 shadow-lg md:w-[33%] lg:basis-1/4">
           {/* <Image src="" alt="Profile User" width={300} height={300} /> */}
           <h1 className="text-center my-5">ini buat gambar</h1>
           <ul className="my-7 flex flex-col justify-center gap-3">
@@ -105,46 +107,47 @@ export default function TeacherProfile() {
           </ul>
           <Button className="px-5 cursor-pointer">Edit Profile</Button>
         </div>
-        <div className="mt-16 basis-2/3">
-          <div className="flex justify-evenly items-center mb-10">
-            <div className="bg-amber-300 p-5 rounded-lg text-center">
-              <h1 className="font-semibold text-lg">Total Ujian Dibuat</h1>{" "}
-              <span className="font-bold">{getHistoryExams.length || "0"}</span>
+        <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:w-2/3">
+          <div className="flex justify-evenly items-center mb-8 max-[640px]:flex-wrap max-[640px]:gap-5">
+            <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
+              <h1 className="font-semibold text-lg">Ujian Dibuat</h1>{" "}
+              <span className="font-bold">
+                {getHistoryExams?.length || "0"}
+              </span>
             </div>
-            <div className="bg-amber-300 p-5 rounded-lg text-center">
-              <h1 className="font-semibold text-lg">Jumlah Siswa Dibimbing</h1>{" "}
+            <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
+              <h1 className="font-semibold text-lg">Jumlah Siswa</h1>{" "}
               <span className="font-bold">{merged.length || "0"}</span>
             </div>
-            <div className="bg-amber-300 p-5 rounded-lg text-center">
-              <h1 className="font-semibold text-lg">Nilai Rata-Rata Siswa</h1>{" "}
+            <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
+              <h1 className="font-semibold text-lg">Nilai Rata-Rata</h1>{" "}
               <span className="font-bold">
                 {Math.floor(
-                  averageValueExam.reduce(
+                  averageValueExam?.reduce(
                     (acc: any, cur: any) => acc + cur,
                     0
-                  ) / averageValueExam.length
+                  ) / averageValueExam?.length
                 ) || "0"}
               </span>
             </div>
           </div>
-          <div className="bg-[#71C9CE] rounded-lg p-7">
+          <div className="px-5">
             <h1 className="mb-10 text-center text-2xl font-semibold">
               Riwayat Ujian Yang Dibuat
             </h1>
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="bg-[#3282B8]">
                   <TableHead>No</TableHead>
                   <TableHead>Nama Ujian</TableHead>
                   <TableHead>Jumlah Siswa</TableHead>
                   <TableHead>Nilai Rata-Rata</TableHead>
                   <TableHead>Tanggal</TableHead>
-                  <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {getHistoryExams.length > 0 ? (
-                  getHistoryExams.map((item: any, i: number) => (
+                {getHistoryExams?.length > 0 ? (
+                  getHistoryExams?.map((item: any, i: number) => (
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{item.exams?.nama_ujian}</TableCell>
@@ -160,15 +163,12 @@ export default function TeacherProfile() {
                           options
                         )}
                       </TableCell>
-                      <TableCell>
-                        {item.statusExam === true ? "Selesai" : "Belum Selesai"}
-                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={6}
+                      colSpan={5}
                       className="text-center text-lg font-semibold"
                     >
                       Belum Ada History
@@ -178,7 +178,9 @@ export default function TeacherProfile() {
               </TableBody>
             </Table>
           </div>
-          <Button className="mt-10 px-5 cursor-pointer">Logout</Button>
+          <Button className="mt-7 px-5 cursor-pointer max-[640px]:mx-7 sm:mx-5">
+            Logout
+          </Button>
         </div>
       </div>
     </LayoutBodyContent>
