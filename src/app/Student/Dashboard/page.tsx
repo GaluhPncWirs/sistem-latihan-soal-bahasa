@@ -22,48 +22,56 @@ import {
 import { useConvertDate } from "../../hooks/getConvertDate";
 
 export default function DashboardStudent() {
-  const [resultExam, setResultExam] = useState<any>([]);
+  const [scheduleExams, setScheduleExams] = useState<any>([]);
   const getIdStudent = useGetIdStudent();
-  const getNameStudent = useGetDataStudent(getIdStudent);
+  const getDataStudent = useGetDataStudent(getIdStudent);
+  const options: any = { day: "numeric", month: "long" };
 
   useEffect(() => {
-    if (!getIdStudent) return;
+    if (!getDataStudent?.classes || !getIdStudent) return;
     async function getDataExamResult() {
       const { data: examsData, error: examsError } = await supabase
-        .from("exams")
-        .select(
-          "id,nama_ujian,created_at_exams,questions_exam,account_teacher(fullName)"
-        );
+        .from("managed_exams")
+        .select("*,account_teacher(fullName),exams(nama_ujian,questions_exam)")
+        .eq("kelas", getDataStudent?.classes);
 
-      const { data: historyData, error: historyError }: any = await supabase
-        .from("history-exam-student")
-        .select("*")
-        .eq("student_id", getIdStudent);
+      const { data: historyDataExams, error: historyDataError }: any =
+        await supabase
+          .from("history-exam-student")
+          .select("student_id,exam_id,status_exam,created_at,hasil_ujian")
+          .eq("student_id", getIdStudent);
 
-      if (examsError || historyError) {
+      if (examsError || historyDataError) {
         toast("data tidak bisa ditampilkan, error");
         return;
       }
 
-      const mergeDatas = examsData?.map((exam: any) => {
-        const histori = historyData.find((h: any) => h.exam_id === exam.id);
+      const mergedDataScheduleExams = examsData.map((item: any) => {
+        const finds = historyDataExams.find(
+          (f: any) => f.exam_id === item.idExams
+        );
         return {
-          ...exam,
-          hasil_ujian: histori?.hasil_ujian ?? null,
-          status_exam: histori?.status_exam ?? false,
-          created_at: histori?.created_at ?? null,
+          ...item,
+          status_exam: finds?.status_exam ?? null,
+          student_id: finds?.student_id ?? null,
+          created_at_historyExams: finds?.created_at ?? null,
+          hasil_ujian: finds?.hasil_ujian ?? null,
         };
       });
 
-      setResultExam(mergeDatas);
+      setScheduleExams(mergedDataScheduleExams);
     }
     getDataExamResult();
-  }, [getIdStudent]);
+  }, [getDataStudent?.classes, getIdStudent]);
 
-  const isCompleteExam = resultExam
+  const averageValue = Math.floor(
+    scheduleExams
+      .map((avg: any) => avg.hasil_ujian)
+      .reduce((acc: any, cur: any) => acc + cur, 0)
+  );
+  const isCompleteExam = scheduleExams
     .map((isDone: any) => isDone.status_exam === true)
     .filter((complete: any) => complete).length;
-  const averageValue = resultExam.map((avg: any) => avg.hasil_ujian);
 
   return (
     <LayoutBodyContent>
@@ -71,33 +79,22 @@ export default function DashboardStudent() {
         <div className="w-10/12 mx-auto pt-32 max-[640px]:w-11/12 max-[640px]:pt-28">
           <div className="mb-7">
             <h1 className="text-2xl font-bold mb-3">
-              Halo, Selamat Datang {getNameStudent?.fullName}
+              Halo, Selamat Datang {getDataStudent?.fullName}
             </h1>
             <p className="text-lg">
               Berikut ringkasan aktivitas dan ujian Anda.
             </p>
           </div>
           <div className="flex justify-evenly items-center mt-10">
-            <div className="bg-[#F38181] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
-              <h1 className="text-lg max-[640px]:text-base">Jumlah Ujian</h1>
-              <div className="text-xl">{isCompleteExam}</div>
+            <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
+              <h1 className="text-lg max-[640px]:text-base">Ujian Terjadwal</h1>
+              <div className="text-xl">{scheduleExams.length || "0"}</div>
             </div>
             <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
               <h1 className="text-lg max-[640px]:text-base">Nilai Rata Rata</h1>
               <div className="text-xl">
-                {averageValue.length > 0
-                  ? Math.floor(
-                      averageValue.reduce(
-                        (acc: any, cur: any) => acc + cur,
-                        0
-                      ) / resultExam.length
-                    )
-                  : 0}
+                {averageValue / isCompleteExam || "0"}
               </div>
-            </div>
-            <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
-              <h1 className="text-lg max-[640px]:text-base">Ujian Terjadwal</h1>
-              <div className="text-xl">{resultExam.length || "0"}</div>
             </div>
           </div>
           <div className="mx-auto mt-8 max-[640px]:w-11/12 sm:w-11/12 md:w-3/4">
@@ -116,13 +113,17 @@ export default function DashboardStudent() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {resultExam.length > 0 ? (
-                    resultExam.map((data: any, i: number) => (
+                  {scheduleExams.length > 0 ? (
+                    scheduleExams.map((data: any, i: number) => (
                       <TableRow key={i}>
                         <TableCell>{i + 1}</TableCell>
-                        <TableCell>{data.nama_ujian}</TableCell>
+                        <TableCell>{data.exams.nama_ujian}</TableCell>
                         <TableCell>
-                          {useConvertDate(data.created_at_exams)}
+                          {new Date(data.dibuat_tgl).toLocaleDateString(
+                            "id-ID",
+                            options
+                          )}{" "}
+                          {data.tenggat_waktu}
                         </TableCell>
                         <TableCell>{data.account_teacher.fullName}</TableCell>
                         {data.status_exam === true ? (
@@ -132,7 +133,7 @@ export default function DashboardStudent() {
                             <HoverCard openDelay={200} closeDelay={200} key={i}>
                               <HoverCardTrigger asChild>
                                 <Link
-                                  href={`/Student/Exams/?id=${data.id}`}
+                                  href={`/Student/Exams/?id=${data.idExams}`}
                                   className="hover:underline hover:text-blue-700"
                                 >
                                   Uncomplete
@@ -163,7 +164,7 @@ export default function DashboardStudent() {
             </div>
             <div>
               <h1 className="text-xl font-semibold bg-[#0F4C75] text-center rounded-md py-2 mb-5 text-slate-100">
-                Hasil Nilai Ujian
+                Hasil Ujian
               </h1>
               <Table>
                 <TableHeader>
@@ -175,8 +176,8 @@ export default function DashboardStudent() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {resultExam.length > 0 ? (
-                    resultExam.map((item: any, i: number) =>
+                  {scheduleExams.length > 0 ? (
+                    scheduleExams.map((item: any, i: number) =>
                       item.status_exam === true ? (
                         <TableRow key={i}>
                           <TableCell>{i + 1}</TableCell>
@@ -184,10 +185,10 @@ export default function DashboardStudent() {
                             <HoverCard openDelay={200} closeDelay={200} key={i}>
                               <HoverCardTrigger asChild>
                                 <Link
-                                  href={`/Student//Dashboard/ResultExam/?id=${item.id}`}
+                                  href={`/Student/Dashboard/ResultExam/?id=${item.idExams}`}
                                   className="hover:underline hover:text-blue-700"
                                 >
-                                  {item.nama_ujian}
+                                  {item.exams.nama_ujian}
                                 </Link>
                               </HoverCardTrigger>
                               <HoverCardContent className="w-fit p-2">
@@ -198,11 +199,11 @@ export default function DashboardStudent() {
                             </HoverCard>
                           </TableCell>
                           <TableCell>
-                            {useConvertDate(item.created_at)}
+                            {useConvertDate(item.created_at_historyExams)}
                           </TableCell>
                           <TableCell>
                             {item.hasil_ujian} Dari{" "}
-                            {item.questions_exam.length * 10}
+                            {item.exams.questions_exam.length * 10}
                           </TableCell>
                         </TableRow>
                       ) : (

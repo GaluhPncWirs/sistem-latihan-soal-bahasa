@@ -53,8 +53,6 @@ export default function Soal() {
     handleViewQuestionsUseParam();
   }, []);
 
-  console.log(questions);
-
   function handleSelectedAnswer(questionsId: string, answer: string) {
     setClickedAnswer((prev) => ({
       ...prev,

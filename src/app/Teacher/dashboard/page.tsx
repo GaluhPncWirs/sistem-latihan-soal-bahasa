@@ -66,7 +66,7 @@ export default function Teacher() {
           .from("history-exam-student")
           .select("exam_id,student_id");
       const { data: lengthStudent, error: errorLengthStudent }: any =
-        await supabase.from("account-student").select("fullName");
+        await supabase.from("account-student").select("fullName,classes");
 
       if (errorDatasManageExams || errorIsCompleteExam || errorLengthStudent) {
         console.log("data error ditampilkan");
