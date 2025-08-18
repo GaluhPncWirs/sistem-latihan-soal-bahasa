@@ -64,17 +64,19 @@ export default function Teacher() {
       const { data: isCompleteExam, error: errorIsCompleteExam }: any =
         await supabase
           .from("history-exam-student")
-          .select("exam_id,student_id");
+          .select("exam_id,student_id,kelas,status_exam");
       const { data: lengthStudent, error: errorLengthStudent }: any =
-        await supabase.from("account-student").select("fullName,classes");
+        await supabase.from("account-student").select("classes,idStudent");
 
       if (errorDatasManageExams || errorIsCompleteExam || errorLengthStudent) {
         console.log("data error ditampilkan");
       } else {
-        const result = isCompleteExam.reduce((acc: any, cur: any) => {
-          const found = acc.find((item: any) => item.exam_id === cur.exam_id);
+        const completeExams = isCompleteExam.reduce((acc: any, cur: any) => {
+          if (!cur.status_exam) return acc;
+          const found = acc.find((item: any) => item.kelas === cur.kelas);
           if (!found) {
             acc.push({
+              kelas: cur.kelas,
               exam_id: cur.exam_id,
               student_id: [cur.student_id],
             });
@@ -84,19 +86,39 @@ export default function Teacher() {
           return acc;
         }, []);
 
+        console.log(completeExams);
+
+        const totalStudent = lengthStudent.reduce((acc: any, cur: any) => {
+          const foundClass = acc.find(
+            (item: any) => item.classes === cur.classes
+          );
+          if (!foundClass) {
+            acc.push({
+              classes: cur.classes,
+              idStudent: [cur.idStudent],
+            });
+          } else {
+            foundClass.idStudent.push(cur.idStudent);
+          }
+          return acc;
+        }, []);
+
         const mergedData = datasManageExams?.map((item: any) => {
-          const finds = result.find((f: any) => f.exam_id === item.idExams);
+          const findsExams = completeExams.find(
+            (f: any) => f.kelas === item.kelas && f.exam_id === item.idExams
+          );
+          const findStudent = totalStudent.find(
+            (f: any) => f.classes === item.kelas
+          );
           return {
             ...item,
-            lengthStudentCompleteExams: finds.student_id,
-            lengthStudent: lengthStudent,
+            lengthStudent: findStudent?.idStudent ?? [],
+            lengthStudentCompleteExams: findsExams?.student_id ?? [],
           };
         });
-
         setDataManageExams(mergedData);
       }
     }
-
     getDataManageExams();
   }, [idTeacher]);
 

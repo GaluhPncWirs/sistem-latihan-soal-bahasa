@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
 import Link from "next/link";
+import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -15,6 +16,7 @@ export default function Soal() {
   }>({});
   const idExams = useSearchParams().get("id");
   const idStudent = useGetIdStudent();
+  const dataStudent = useGetDataStudent(idStudent);
   const [time, setTime] = useState<number>(3600);
   const [timeOut, setTimeOut] = useState<boolean>(false);
 
@@ -85,6 +87,7 @@ export default function Soal() {
         answer_student: clickedAnswer,
         hasil_ujian: resultExam,
         status_exam: true,
+        kelas: dataStudent?.classes,
       };
 
       const { data: sudahAda } = await supabase
