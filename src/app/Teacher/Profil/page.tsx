@@ -22,8 +22,7 @@ export default function TeacherProfile() {
   const formatedDate = new Date(
     getProfileTeacher?.created_at
   ).toLocaleDateString("id-ID", options);
-  const totalStudent = getHistoryExams?.map((acc: any) => acc.student_id);
-  const merged = [...new Set(totalStudent?.flat())];
+  const totalStudent = getHistoryExams?.flatMap((acc: any) => acc.student_id);
   const averageValueExam = getHistoryExams?.map(
     (item: any) => item.hasil_ujian
   );
@@ -51,21 +50,22 @@ export default function TeacherProfile() {
       const { data: dataManageExams, error: errorDataManageExams }: any =
         await supabase
           .from("managed_exams")
-          .select("idExams,dibuat_tgl,id_Teacher,exams(nama_ujian)")
+          .select("kelas,dibuat_tgl,id_Teacher,idExams,exams(nama_ujian)")
           .eq("id_Teacher", idTeacher);
       const { data: dataHistoryExams, error: errorDataHistoryExams }: any =
         await supabase
           .from("history-exam-student")
-          .select("exam_id,hasil_ujian,student_id");
+          .select("exam_id,hasil_ujian,student_id,kelas");
 
       if (errorDataManageExams || errorDataHistoryExams) {
         console.log("data error ditampilkan");
       }
 
-      const result = dataHistoryExams.reduce((acc: any, cur: any) => {
-        const found = acc.find((item: any) => item.exam_id === cur.exam_id);
+      const result = dataHistoryExams?.reduce((acc: any, cur: any) => {
+        const found = acc.find((item: any) => item.kelas === cur.kelas);
         if (!found) {
           acc.push({
+            kelas: cur.kelas,
             exam_id: cur.exam_id,
             hasil_ujian: cur.hasil_ujian,
             student_id: [cur.student_id],
@@ -77,12 +77,13 @@ export default function TeacherProfile() {
         return acc;
       }, []);
 
-      const mergedData = dataManageExams?.map((item: any) => {
-        const findIdSame = result.find((f: any) => f.exam_id === item.idExams);
+      const mergedData = result?.map((item: any) => {
+        const findDetail = dataManageExams.find(
+          (f: any) => f.kelas === item.kelas && f.idExams === item.exam_id
+        );
         return {
+          ...findDetail,
           ...item,
-          hasil_ujian: findIdSame.hasil_ujian,
-          student_id: findIdSame.student_id,
         };
       });
 
@@ -110,14 +111,14 @@ export default function TeacherProfile() {
         <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:w-2/3">
           <div className="flex justify-evenly items-center mb-8 max-[640px]:flex-wrap max-[640px]:gap-5">
             <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
-              <h1 className="font-semibold text-lg">Ujian Dibuat</h1>{" "}
+              <h1 className="font-semibold text-lg">Ujian Selesai</h1>{" "}
               <span className="font-bold">
                 {getHistoryExams?.length || "0"}
               </span>
             </div>
             <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
               <h1 className="font-semibold text-lg">Jumlah Siswa</h1>{" "}
-              <span className="font-bold">{merged.length || "0"}</span>
+              <span className="font-bold">{totalStudent.length || "0"}</span>
             </div>
             <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
               <h1 className="font-semibold text-lg">Nilai Rata-Rata</h1>{" "}
@@ -126,7 +127,7 @@ export default function TeacherProfile() {
                   averageValueExam?.reduce(
                     (acc: any, cur: any) => acc + cur,
                     0
-                  ) / averageValueExam?.length
+                  ) / totalStudent?.length
                 ) || "0"}
               </span>
             </div>
@@ -142,6 +143,7 @@ export default function TeacherProfile() {
                   <TableHead>Nama Ujian</TableHead>
                   <TableHead>Jumlah Siswa</TableHead>
                   <TableHead>Nilai Rata-Rata</TableHead>
+                  <TableHead>Kelas</TableHead>
                   <TableHead>Tanggal</TableHead>
                 </TableRow>
               </TableHeader>
@@ -150,13 +152,14 @@ export default function TeacherProfile() {
                   getHistoryExams?.map((item: any, i: number) => (
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
-                      <TableCell>{item.exams?.nama_ujian}</TableCell>
+                      <TableCell>{item.exams.nama_ujian}</TableCell>
                       <TableCell>{item.student_id.length}</TableCell>
                       <TableCell>
                         {item.student_id.length > 1
                           ? item.hasil_ujian / item.student_id.length
                           : item.hasil_ujian}
                       </TableCell>
+                      <TableCell>{item.kelas}</TableCell>
                       <TableCell>
                         {new Date(item.dibuat_tgl).toLocaleDateString(
                           "id-ID",

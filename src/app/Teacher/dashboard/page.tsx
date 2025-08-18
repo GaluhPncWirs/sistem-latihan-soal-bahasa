@@ -72,7 +72,6 @@ export default function Teacher() {
         console.log("data error ditampilkan");
       } else {
         const completeExams = isCompleteExam.reduce((acc: any, cur: any) => {
-          if (!cur.status_exam) return acc;
           const found = acc.find((item: any) => item.kelas === cur.kelas);
           if (!found) {
             acc.push({
@@ -85,8 +84,6 @@ export default function Teacher() {
           }
           return acc;
         }, []);
-
-        console.log(completeExams);
 
         const totalStudent = lengthStudent.reduce((acc: any, cur: any) => {
           const foundClass = acc.find(
@@ -126,7 +123,7 @@ export default function Teacher() {
     <LayoutBodyContent>
       <div className="pt-28 mx-auto max-[640px]:w-11/12 sm:w-10/12 md:w-3/4">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
-        <h1 className="text-2xl font-bold my-5 max-[640px]:text-center">
+        <h1 className="text-2xl font-bold my-7 max-[640px]:text-center">
           Halo, Selamat Datang {dataManageExams[0]?.account_teacher.fullName}
         </h1>
 
