@@ -8,6 +8,16 @@ import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
 import Link from "next/link";
 import { useGetDataStudent } from "@/app/hooks/getDataStudent";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -136,7 +146,7 @@ export default function Soal() {
                 Pertanyaaan Pilihan Ganda
               </h1>
               <div className="text-2xl font-semibold bg-[#F38181] px-4 py-1.5 rounded-lg">
-                {/* {formatedTime} */}00:00
+                {formatedTime}
               </div>
             </div>
             <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
@@ -212,14 +222,32 @@ export default function Soal() {
           </div>
         </div>
         <div className="mt-10 flex justify-between">
-          <Button
-            className="cursor-pointer px-7 py-5 text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]"
-            onClick={handleSendExam}
-          >
-            Selesai
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Selesai</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Konfirmasi Ujian</DialogTitle>
+                <DialogDescription>
+                  Apakah Anda Yakin Ingin Menyelesaikan Ujian ini?
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Batal</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button className="cursor-pointer" onClick={handleSendExam}>
+                    Oke
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
           <Link
-            href="/Student"
+            href="/Student/Dashboard"
             className="cursor-pointer px-7 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]"
           >
             Kembali
