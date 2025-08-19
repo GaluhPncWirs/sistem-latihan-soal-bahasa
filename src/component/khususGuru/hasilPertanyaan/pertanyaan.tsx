@@ -42,19 +42,22 @@ import { toast } from "sonner";
 
 export default function ViewQuestions() {
   const [chooseClass, setChooseClass] = useState<any>([]);
+  const [chooseTimeExam, setChooseTimeExam] = useState<any>([]);
   const [dates, setDates] = useState<(Date | undefined)[]>([]);
   const [fromTimes, setFromTimes] = useState<string[]>([]);
   const [toTimes, setToTimes] = useState<string[]>([]);
   const idTeacher = useGetIdTeacher();
   const viewQuestions = useManageExamsData(idTeacher);
+  const options: any = { day: "numeric", month: "long", year: "numeric" };
 
   const tenggatWaktu = fromTimes.map(
     (time: any, i: any) => `${time} - ${toTimes[i]}`
   );
 
   const manipulateDate = dates.map((localDate: any) =>
-    localDate?.toDateString()
+    new Date(localDate).toLocaleDateString("id-ID", options)
   );
+
   async function managedExams() {
     const idExam = viewQuestions.map((item: any) => item.id);
     const dataPayload = idExam
@@ -65,10 +68,15 @@ export default function ViewQuestions() {
         dibuat_tgl: manipulateDate[i],
         id_Teacher: idTeacher,
         tenggat_waktu: tenggatWaktu[i],
+        exam_duration: Number(chooseTimeExam[i]),
         isManageExam: true,
       }))
       .filter(
-        (item: any) => item.kelas && item.dibuat_tgl && item.tenggat_waktu
+        (item: any) =>
+          item.kelas &&
+          item.dibuat_tgl &&
+          item.tenggat_waktu &&
+          item.exam_duration
       );
 
     if (dataPayload.length > 0) {
@@ -101,7 +109,7 @@ export default function ViewQuestions() {
   }
 
   return (
-    <div className="mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
+    <div className="w-full">
       <h1 className="mb-7 text-2xl text-center font-semibold">
         Kelola Soal Ujian
       </h1>
@@ -113,6 +121,7 @@ export default function ViewQuestions() {
             <TableHead className="text-center text-base">
               Kirim Ke Kelas
             </TableHead>
+            <TableHead className="text-center text-base">Batas Ujian</TableHead>
             <TableHead className="text-center text-base">Waktu Ujian</TableHead>
             <TableHead className="text-center text-base">Kelola</TableHead>
           </TableRow>
@@ -127,13 +136,13 @@ export default function ViewQuestions() {
                   <Select
                     onValueChange={(val) =>
                       setChooseClass((prev: any) => {
-                        const update = [...prev];
-                        update[i] = val;
-                        return update;
+                        const updateClass = [...prev];
+                        updateClass[i] = val;
+                        return updateClass;
                       })
                     }
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger>
                       <SelectValue placeholder="Pilih kelas" />
                     </SelectTrigger>
                     <SelectContent>
@@ -176,7 +185,6 @@ export default function ViewQuestions() {
                         newTime[i] = e.currentTarget.value;
                         setFromTimes(newTime);
                       }}
-                      className="p-2"
                     />
                     <Input
                       type="time"
@@ -186,9 +194,34 @@ export default function ViewQuestions() {
                         newTime[i] = e.currentTarget.value;
                         setToTimes(newTime);
                       }}
-                      className="p-2"
                     />
                   </div>
+                </TableCell>
+                <TableCell>
+                  <Select
+                    onValueChange={(val) =>
+                      setChooseTimeExam((prev: any) => {
+                        const updateTime = [...prev];
+                        updateTime[i] = val;
+                        return updateTime;
+                      })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tentukan" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="600">10 Menit</SelectItem>
+                      <SelectItem value="900">15 Menit</SelectItem>
+                      <SelectItem value="1200">20 Menit</SelectItem>
+                      <SelectItem value="1500">25 Menit</SelectItem>
+                      <SelectItem value="1800">30 Menit</SelectItem>
+                      <SelectItem value="2400">40 Menit</SelectItem>
+                      <SelectItem value="2700">45 Menit</SelectItem>
+                      <SelectItem value="3000">50 Menit</SelectItem>
+                      <SelectItem value="3600">60 Menit</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </TableCell>
                 <TableCell className="flex gap-3 justify-center">
                   <Link
@@ -231,7 +264,7 @@ export default function ViewQuestions() {
             ))
           ) : (
             <TableRow>
-              <TableCell className="text-center text-lg font-bold" colSpan={5}>
+              <TableCell className="text-center text-lg font-bold" colSpan={6}>
                 Belum Ada Tugas Yang Dibuat
               </TableCell>
             </TableRow>

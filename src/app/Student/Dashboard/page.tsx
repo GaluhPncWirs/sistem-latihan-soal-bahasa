@@ -25,7 +25,6 @@ export default function DashboardStudent() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
   const getIdStudent = useGetIdStudent();
   const getDataStudent = useGetDataStudent(getIdStudent);
-  const options: any = { day: "numeric", month: "long" };
 
   useEffect(() => {
     if (!getDataStudent?.classes || !getIdStudent) return;
@@ -119,11 +118,7 @@ export default function DashboardStudent() {
                         <TableCell>{i + 1}</TableCell>
                         <TableCell>{data.exams.nama_ujian}</TableCell>
                         <TableCell>
-                          {new Date(data.dibuat_tgl).toLocaleDateString(
-                            "id-ID",
-                            options
-                          )}{" "}
-                          {data.tenggat_waktu}
+                          {data.dibuat_tgl} {data.tenggat_waktu}
                         </TableCell>
                         <TableCell>{data.account_teacher.fullName}</TableCell>
                         {data.status_exam === true ? (

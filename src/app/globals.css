@@ -245,3 +245,22 @@ tbody > tr > td {
     opacity: 0;
 }
 /* hamburger menu end */
+
+/* Hilangkan icon di Chrome, Safari, Edge */
+input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Hilangkan spinner (panah atas bawah) di Chrome, Safari, Edge */
+input[type="time"]::-webkit-inner-spin-button,
+input[type="time"]::-webkit-clear-button {
+  display: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Untuk Firefox */
+input[type="time"] {
+  -moz-appearance: textfield; /* Supaya tidak muncul arrow */
+}

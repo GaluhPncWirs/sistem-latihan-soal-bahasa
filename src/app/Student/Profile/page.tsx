@@ -20,11 +20,11 @@ import { useConvertDate } from "../../hooks/getConvertDate";
 export default function Profil() {
   const id = useGetIdStudent();
   const dataStudent = useGetDataStudent(id);
-  const options: any = { day: "numeric", month: "long", year: "numeric" };
-  const formatedDate = new Date(dataStudent?.created_at).toLocaleDateString(
-    "id-ID",
-    options
-  );
+  // const options: any = { day: "numeric", month: "long", year: "numeric" };
+  // const formatedDate = new Date(dataStudent?.created_at).toLocaleDateString(
+  //   "id-ID",
+  //   options
+  // );
   const [historyStudent, setHistoryStudent] = useState([]);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function Profil() {
             <li>Kelas {dataStudent?.classes}</li>
             <li>Email {dataStudent?.email}</li>
             <li>Peran {dataStudent?.role}</li>
-            <li>Tgl Bergabung {formatedDate}</li>
+            <li>Tgl Bergabung {useConvertDate(dataStudent?.created_at)}</li>
             <li>Status Akun Aktif</li>
           </ul>
           <Button className="px-5 cursor-pointer">Edit Profile</Button>

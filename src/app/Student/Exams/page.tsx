@@ -27,42 +27,45 @@ export default function Soal() {
   const idExams = useSearchParams().get("id");
   const idStudent = useGetIdStudent();
   const dataStudent = useGetDataStudent(idStudent);
-  const [time, setTime] = useState<number>(3600);
+  const [time, setTime] = useState<number>(questions[0]?.exam_duration);
   const [timeOut, setTimeOut] = useState<boolean>(false);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime((prev) => {
-        if (prev <= 0) {
-          clearInterval(timer);
-          setTimeOut(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+    if (questions[0]?.exam_duration) {
+      setTime(questions[0]?.exam_duration);
+      const timer = setInterval(() => {
+        setTime((prev) => {
+          if (prev <= 0) {
+            clearInterval(timer);
+            setTimeOut(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [questions[0]?.exam_duration]);
 
   const minute = Math.floor(time / 60);
   const second = time % 60;
   const formatedTime = `${minute}:${String(second).padStart(2, "0")}`;
 
   useEffect(() => {
-    async function handleViewQuestionsUseParam() {
+    async function handleViewQuestionsUseParam2() {
       const { data, error }: any = await supabase
-        .from("exams")
-        .select("*")
-        .eq("id", Number(idExams));
-      setQuestions(data);
+        .from("managed_exams")
+        .select("*,exams(questions_exam,nama_ujian)")
+        .eq("idExams", Number(idExams));
+
       if (error) {
         toast("Gagal ❌", {
           description: "data gagal ditampilkan:",
         });
       }
+      setQuestions(data);
     }
-    handleViewQuestionsUseParam();
+    handleViewQuestionsUseParam2();
   }, []);
 
   function handleSelectedAnswer(questionsId: string, answer: string) {
@@ -136,8 +139,8 @@ export default function Soal() {
   return (
     <LayoutBodyContent>
       <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-10/12">
-        <h1 className="text-3xl font-semibold mb-7 text-center mt-5">
-          {/* Ujian {questions[0]?.nama_ujian} */}
+        <h1 className="text-3xl font-semibold mb-7 mt-5">
+          Ujian {questions[0]?.exams.nama_ujian}
         </h1>
         <div className="flex flex-row-reverse gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
           <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg max-[640px]:fixed max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-10 sm:fixed sm:top-20 sm:w-10/12 sm:z-10 md:basis-1/3 md:static md:top-0 md:z-0">
@@ -152,10 +155,10 @@ export default function Soal() {
             <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
               {questions.length > 0
                 ? questions
+                    .map((take: any) => take.exams)
                     .flatMap((getQuestions: any) => getQuestions.questions_exam)
                     .map((item: any, i: number) => {
                       const isAnswer = clickedAnswer[item.id];
-
                       return (
                         <div
                           className={`h-10 w-10  rounded-md flex items-center justify-center font-bold text-lg ${
@@ -173,6 +176,7 @@ export default function Soal() {
           <div className="basis-2/3 lg:overflow-y-auto h-[28rem] lg:scrollBarDesign max-[640px]:mt-32 max-[640px]:w-11/12 sm:mt-32 sm:w-10/12 md:mt-0 md:basis-2/3">
             {questions.length > 0
               ? questions
+                  .map((take: any) => take.exams)
                   .flatMap((getQuestions: any) => getQuestions.questions_exam)
                   .map((item: any, i: number) => (
                     <div

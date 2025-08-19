@@ -18,10 +18,6 @@ export default function TeacherProfile() {
   const [getProfileTeacher, setGetProfileTeacher] = useState<any>([]);
   const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const idTeacher = useGetIdTeacher();
-  const options: any = { day: "numeric", month: "long", year: "numeric" };
-  const formatedDate = new Date(
-    getProfileTeacher?.created_at
-  ).toLocaleDateString("id-ID", options);
   const totalStudent = getHistoryExams?.flatMap((acc: any) => acc.student_id);
   const averageValueExam = getHistoryExams?.map(
     (item: any) => item.hasil_ujian
@@ -103,7 +99,9 @@ export default function TeacherProfile() {
             <li>Email {getProfileTeacher?.email}</li>
             <li>Peran {getProfileTeacher?.role}</li>
             <li>Mapel yang Diajar </li>
-            <li>Tgl Bergabung {formatedDate}</li>
+            <li>
+              Tgl Bergabung {useConvertDate(getProfileTeacher?.created_at)}
+            </li>
             <li>Status Akun Aktif</li>
           </ul>
           <Button className="px-5 cursor-pointer">Edit Profile</Button>
@@ -160,12 +158,7 @@ export default function TeacherProfile() {
                           : item.hasil_ujian}
                       </TableCell>
                       <TableCell>{item.kelas}</TableCell>
-                      <TableCell>
-                        {new Date(item.dibuat_tgl).toLocaleDateString(
-                          "id-ID",
-                          options
-                        )}
-                      </TableCell>
+                      <TableCell>{item.dibuat_tgl}</TableCell>
                     </TableRow>
                   ))
                 ) : (
