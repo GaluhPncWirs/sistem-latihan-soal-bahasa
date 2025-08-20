@@ -148,8 +148,11 @@ export default function Teacher() {
           >
             Kelola Siswa
           </li>
-          <li className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center">
-            <button onClick={() => window.location.reload()}>Kembali</button>
+          <li
+            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
+            onClick={() => window.location.reload()}
+          >
+            Kembali
           </li>
         </ul>
         <div className="border border-slate-800 mt-10 mb-7 rounded-xl" />
