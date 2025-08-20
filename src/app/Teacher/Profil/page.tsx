@@ -153,9 +153,11 @@ export default function TeacherProfile() {
                       <TableCell>{item.exams.nama_ujian}</TableCell>
                       <TableCell>{item.student_id.length}</TableCell>
                       <TableCell>
-                        {item.student_id.length > 1
-                          ? item.hasil_ujian / item.student_id.length
-                          : item.hasil_ujian}
+                        {Math.floor(
+                          item.student_id.length > 1
+                            ? item.hasil_ujian / item.student_id.length
+                            : item.hasil_ujian
+                        )}
                       </TableCell>
                       <TableCell>{item.kelas}</TableCell>
                       <TableCell>{item.dibuat_tgl}</TableCell>

@@ -72,6 +72,16 @@ export default function DashboardStudent() {
     .map((isDone: any) => isDone.status_exam === true)
     .filter((complete: any) => complete).length;
 
+  // function deadline(deadlineExams: any) {
+  //   const dateNow = new Date();
+
+  // console.log("unutk bulan", new Date().getMonth());
+  // console.log("unutk hari", new Date().getDate());
+  // console.log("unutk jam", new Date().getHours());
+  // console.log("unutk menit", new Date().getMinutes());
+  //   // if(dateNow deadlineExams)
+  // }
+
   return (
     <LayoutBodyContent>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
