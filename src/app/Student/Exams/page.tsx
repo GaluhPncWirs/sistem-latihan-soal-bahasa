@@ -81,6 +81,8 @@ export default function Soal() {
       .select("*")
       .eq("id", Number(idExams));
 
+    console.log(data);
+
     if (error) {
       toast("Gagal ❌", {
         description: "data gagal ditambahkan",
@@ -228,7 +230,9 @@ export default function Soal() {
         <div className="mt-10 flex justify-between">
           <Dialog>
             <DialogTrigger asChild>
-              <Button>Selesai</Button>
+              <Button className="cursor-pointer px-7 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
+                Selesai
+              </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

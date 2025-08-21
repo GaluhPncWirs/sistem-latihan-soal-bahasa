@@ -35,10 +35,12 @@ export default function CreateNewQuestions() {
   const [question, setQuestion] = useState("");
   const [selectCorrectAnswer, setSelectCorrectAnswer] = useState("");
   const [nameExam, setNameExams] = useState("");
+  const [chooseTypeExams, setChooseTypeExams] = useState("");
   const [selectedValueNameExam, setSelectedValueNameExam] = useState("");
   const [clearInput, setClearInput] = useState(false);
   const idTeacher = useGetIdTeacher();
   const dataNameExam = useManageExamsData(idTeacher);
+  const [dataQuestionsEssay, setDataQuestionsEssay] = useState<any>([]);
 
   function handleAddAnswer(event: any) {
     const { id, value } = event.target;
@@ -130,6 +132,21 @@ export default function CreateNewQuestions() {
     }
   }
 
+  async function handleCreateEssay() {
+    const { data, error } = await supabase
+      .from("exams_essay")
+      .select("*")
+      .eq("idGuru", idTeacher);
+
+    if (error) {
+      console.log("data tidak bisa ditampilkan");
+    } else {
+      setDataQuestionsEssay(data);
+    }
+  }
+
+  handleCreateEssay();
+
   useEffect(() => {
     if (clearInput) {
       setAnswer({
@@ -152,6 +169,17 @@ export default function CreateNewQuestions() {
       </h1>
       <form className="flex flex-col gap-5">
         <div className="bg-slate-100 p-5 rounded-lg">
+          <Select onValueChange={(val) => setChooseTypeExams(val)}>
+            <SelectTrigger className="w-2/3">
+              <SelectValue placeholder="Pilih Tipe Ujian (PG / Essay)" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="pg">Pilihan Ganda</SelectItem>
+              <SelectItem value="essay">Pilihan Essay</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="bg-slate-100 p-5 rounded-lg">
           <Select onValueChange={(val) => setSelectedValueNameExam(val)}>
             <SelectTrigger className="w-2/3">
               <SelectValue placeholder="Pilih Nama Ujiannya" />
@@ -163,11 +191,23 @@ export default function CreateNewQuestions() {
               >
                 Buat Ujian Baru
               </SelectItem>
-              {dataNameExam.map((nameExam: any, i: number) => (
-                <SelectItem value={nameExam.nama_ujian || "Nama ujian"} key={i}>
-                  {nameExam.nama_ujian || "Nama Ujian"}
-                </SelectItem>
-              ))}
+              {chooseTypeExams === "pg"
+                ? dataNameExam.map((nameExam: any, i: number) => (
+                    <SelectItem
+                      value={nameExam.nama_ujian || "Nama ujian"}
+                      key={i}
+                    >
+                      {nameExam.nama_ujian || "Nama Ujian"}
+                    </SelectItem>
+                  ))
+                : dataQuestionsEssay.map((nameExam: any, i: number) => (
+                    <SelectItem
+                      value={nameExam.nama_essay || "Nama ujian"}
+                      key={i}
+                    >
+                      {nameExam.nama_essay || "Nama Ujian"}
+                    </SelectItem>
+                  ))}
             </SelectContent>
           </Select>
         </div>
@@ -199,111 +239,115 @@ export default function CreateNewQuestions() {
             onChange={(e: any) => setQuestion(e.currentTarget.value)}
           />
         </div>
-        <div className="bg-slate-100 p-5 rounded-lg">
-          <h1 className="text-lg font-semibold">Isi Jawaban</h1>
-          <div className="flex gap-5 mt-3 items-center justify-center flex-wrap">
-            <div className="text-center">
-              <label
-                htmlFor="answer_a"
-                className="text-base font-semibold mr-3"
-              >
-                Jawaban A
-              </label>
-              <Input
-                id="answer_a"
-                type="text"
-                className="border border-black rounded-sm p-1 px-2"
-                value={answer.answer_a}
-                onChange={handleAddAnswer}
-              />
+        {chooseTypeExams === "pg" && (
+          <>
+            <div className="bg-slate-100 p-5 rounded-lg">
+              <h1 className="text-lg font-semibold">Isi Jawaban</h1>
+              <div className="flex gap-5 mt-3 items-center justify-center flex-wrap">
+                <div className="text-center">
+                  <label
+                    htmlFor="answer_a"
+                    className="text-base font-semibold mr-3"
+                  >
+                    Jawaban A
+                  </label>
+                  <Input
+                    id="answer_a"
+                    type="text"
+                    className="border border-black rounded-sm p-1 px-2"
+                    value={answer.answer_a}
+                    onChange={handleAddAnswer}
+                  />
+                </div>
+                <div className="text-center ">
+                  <label
+                    htmlFor="answer_b"
+                    className="text-base font-semibold mr-3"
+                  >
+                    Jawaban B
+                  </label>
+                  <Input
+                    id="answer_b"
+                    type="text"
+                    className="border border-black rounded-sm p-1 px-2"
+                    value={answer.answer_b}
+                    onChange={handleAddAnswer}
+                  />
+                </div>
+                <div className="text-center ">
+                  <label
+                    htmlFor="answer_c"
+                    className="text-base font-semibold mr-3"
+                  >
+                    Jawaban C
+                  </label>
+                  <Input
+                    id="answer_c"
+                    type="text"
+                    className="border border-black rounded-sm p-1 px-2"
+                    value={answer.answer_c}
+                    onChange={handleAddAnswer}
+                  />
+                </div>
+                <div className="text-center ">
+                  <label
+                    htmlFor="answer_d"
+                    className="text-base font-semibold mr-3"
+                  >
+                    Jawaban D
+                  </label>
+                  <Input
+                    id="answer_d"
+                    type="text"
+                    className="border border-black rounded-sm p-1 px-2"
+                    value={answer.answer_d}
+                    onChange={handleAddAnswer}
+                  />
+                </div>
+                <div className="text-center ">
+                  <label
+                    htmlFor="answer_e"
+                    className="text-base font-semibold mr-3"
+                  >
+                    Jawaban E
+                  </label>
+                  <Input
+                    id="answer_e"
+                    type="text"
+                    className="border border-black rounded-sm p-1 px-2"
+                    value={answer.answer_e}
+                    onChange={handleAddAnswer}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="text-center ">
-              <label
-                htmlFor="answer_b"
-                className="text-base font-semibold mr-3"
-              >
-                Jawaban B
-              </label>
-              <Input
-                id="answer_b"
-                type="text"
-                className="border border-black rounded-sm p-1 px-2"
-                value={answer.answer_b}
-                onChange={handleAddAnswer}
-              />
+            <div className="bg-slate-100 p-5 rounded-lg">
+              <h1 className="text-lg font-semibold mb-3">Jawaban Yang Benar</h1>
+              <Select onValueChange={(val) => setSelectCorrectAnswer(val)}>
+                <SelectTrigger className="w-2/3">
+                  <SelectValue placeholder="Pilih Jawaban Yang Benar" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={answer.answer_a || "Jawaban A"}>
+                    {answer.answer_a || "Jawaban A"}
+                  </SelectItem>
+                  <SelectItem value={answer.answer_b || "Jawaban B"}>
+                    {answer.answer_b || "Jawaban B"}
+                  </SelectItem>
+                  <SelectItem value={answer.answer_c || "Jawaban C"}>
+                    {answer.answer_c || "Jawaban C"}
+                  </SelectItem>
+                  <SelectItem value={answer.answer_d || "Jawaban D"}>
+                    {answer.answer_d || "Jawaban D"}
+                  </SelectItem>
+                  <SelectItem value={answer.answer_e || "Jawaban E"}>
+                    {answer.answer_e || "Jawaban E"}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <div className="text-center ">
-              <label
-                htmlFor="answer_c"
-                className="text-base font-semibold mr-3"
-              >
-                Jawaban C
-              </label>
-              <Input
-                id="answer_c"
-                type="text"
-                className="border border-black rounded-sm p-1 px-2"
-                value={answer.answer_c}
-                onChange={handleAddAnswer}
-              />
-            </div>
-            <div className="text-center ">
-              <label
-                htmlFor="answer_d"
-                className="text-base font-semibold mr-3"
-              >
-                Jawaban D
-              </label>
-              <Input
-                id="answer_d"
-                type="text"
-                className="border border-black rounded-sm p-1 px-2"
-                value={answer.answer_d}
-                onChange={handleAddAnswer}
-              />
-            </div>
-            <div className="text-center ">
-              <label
-                htmlFor="answer_e"
-                className="text-base font-semibold mr-3"
-              >
-                Jawaban E
-              </label>
-              <Input
-                id="answer_e"
-                type="text"
-                className="border border-black rounded-sm p-1 px-2"
-                value={answer.answer_e}
-                onChange={handleAddAnswer}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="bg-slate-100 p-5 rounded-lg">
-          <h1 className="text-lg font-semibold mb-3">Jawaban Yang Benar</h1>
-          <Select onValueChange={(val) => setSelectCorrectAnswer(val)}>
-            <SelectTrigger className="w-2/3">
-              <SelectValue placeholder="Pilih Jawaban Yang Benar" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={answer.answer_a || "Jawaban A"}>
-                {answer.answer_a || "Jawaban A"}
-              </SelectItem>
-              <SelectItem value={answer.answer_b || "Jawaban B"}>
-                {answer.answer_b || "Jawaban B"}
-              </SelectItem>
-              <SelectItem value={answer.answer_c || "Jawaban C"}>
-                {answer.answer_c || "Jawaban C"}
-              </SelectItem>
-              <SelectItem value={answer.answer_d || "Jawaban D"}>
-                {answer.answer_d || "Jawaban D"}
-              </SelectItem>
-              <SelectItem value={answer.answer_e || "Jawaban E"}>
-                {answer.answer_e || "Jawaban E"}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+          </>
+        )}
       </form>
       <Dialog>
         <DialogTrigger asChild>
@@ -347,7 +391,14 @@ export default function CreateNewQuestions() {
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <DialogClose asChild>
-              <Button variant="default" onClick={handleCreateAddQuestion}>
+              <Button
+                variant="default"
+                onClick={
+                  chooseTypeExams === "essay"
+                    ? handleCreateEssay
+                    : handleCreateAddQuestion
+                }
+              >
                 Buat
               </Button>
             </DialogClose>

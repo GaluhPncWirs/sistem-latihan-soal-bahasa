@@ -82,6 +82,8 @@ export default function DashboardStudent() {
   //   // if(dateNow deadlineExams)
   // }
 
+  // console.log(new Date().toUTCString());
+
   return (
     <LayoutBodyContent>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
