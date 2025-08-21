@@ -65,7 +65,6 @@ export default function CreateNewQuestions() {
         description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
       });
     } else {
-      setClearInput(true);
       if (selectedValueNameExam === "buatUjianBaru") {
         const { error }: any = await supabase.from("exams").insert([
           {
@@ -89,8 +88,9 @@ export default function CreateNewQuestions() {
           });
         } else {
           toast("Berhasil ✅", {
-            description: "Soal Berhasil Ditambahkan",
+            description: "Soal Pilihan Ganda Berhasil Ditambahkan",
           });
+          setClearInput(true);
         }
       } else {
         const { data, error } = await supabase
@@ -126,6 +126,7 @@ export default function CreateNewQuestions() {
             toast("Berhasil ✅", {
               description: "Soal Berhasil Ditambahkan",
             });
+            setClearInput(true);
           }
         }
       }
@@ -133,34 +134,123 @@ export default function CreateNewQuestions() {
   }
 
   async function handleCreateEssay() {
-    const { data, error } = await supabase
+    const { data: nameDatasEssay, error: errorNameDatasEssay } = await supabase
       .from("exams_essay")
-      .select("*")
-      .eq("idGuru", idTeacher);
+      .select("nama_essay")
+      .eq("nama_essay", nameExam);
 
-    if (error) {
-      console.log("data tidak bisa ditampilkan");
+    if (errorNameDatasEssay) {
+      toast("Gagal ❌", {
+        description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+      });
+    } else if (nameDatasEssay.length > 0) {
+      toast("Gagal ❌", {
+        description: "Soalnya Sama Seperti Yang Sebelumnya Telah Dibuat",
+      });
     } else {
-      setDataQuestionsEssay(data);
+      if (selectedValueNameExam === "buatUjianBaru") {
+        const { error: errorAddQuestionsExam } = await supabase
+          .from("exams_essay")
+          .insert([
+            {
+              created_at_examsEssay: new Date().toISOString(),
+              nama_essay: nameExam,
+              soal_essay: [
+                {
+                  idExamEssay: useRandomId(7, "EX"),
+                  questionEssay: question,
+                },
+              ],
+              idGuru: idTeacher,
+            },
+          ]);
+        if (errorAddQuestionsExam) {
+          toast("Gagal ❌", {
+            description: "Soal Gagal Ditambahkan Periksa Kembali Soalnya",
+          });
+        } else {
+          toast("Berhasil ✅", {
+            description: "Soal Essay Berhasil Ditambahkan",
+          });
+          setClearInput(true);
+        }
+      } else {
+        const { data: dataEssay, error: errorDataEssay } = await supabase
+          .from("exams_essay")
+          .select("soal_essay")
+          .eq("nama_essay", selectedValueNameExam)
+          .single();
+
+        if (errorDataEssay) {
+          toast("Gagal ❌", {
+            description: "Ujian tidak ditemukan.",
+          });
+        } else {
+          const addEssay = [
+            ...(dataEssay.soal_essay || []),
+            {
+              idExamEssay: useRandomId(7, "EX"),
+              questionEssay: question,
+            },
+          ];
+          const { error: errorAddDataEssay } = await supabase
+            .from("exams_essay")
+            .update({ soal_essay: addEssay })
+            .eq("nama_essay", selectedValueNameExam);
+
+          if (errorAddDataEssay) {
+            toast("Gagal ❌", {
+              description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+            });
+          } else {
+            toast("Berhasil ✅", {
+              description: "Soal Berhasil Ditambahkan",
+            });
+            setClearInput(true);
+          }
+        }
+      }
     }
   }
 
-  handleCreateEssay();
+  useEffect(() => {
+    if (!idTeacher) return;
+    async function viewExamEssay() {
+      const { data, error } = await supabase
+        .from("exams_essay")
+        .select("*")
+        .eq("idGuru", idTeacher);
+
+      if (error) {
+        toast("Gagal ❌", {
+          description: "Soal Gagal ditampilkan",
+        });
+      } else {
+        setDataQuestionsEssay(data);
+      }
+    }
+    viewExamEssay();
+  }, [idTeacher]);
 
   useEffect(() => {
     if (clearInput) {
-      setAnswer({
-        answer_a: "",
-        answer_b: "",
-        answer_c: "",
-        answer_d: "",
-        answer_e: "",
-      });
-      setSelectCorrectAnswer("");
-      setQuestion("");
-      setNameExams("");
+      if (chooseTypeExams === "pg") {
+        setAnswer({
+          answer_a: "",
+          answer_b: "",
+          answer_c: "",
+          answer_d: "",
+          answer_e: "",
+        });
+        setSelectCorrectAnswer("");
+        setQuestion("");
+        setNameExams("");
+      } else if (chooseTypeExams === "essay") {
+        setQuestion("");
+        setNameExams("");
+      }
     }
-  }, [clearInput]);
+  }, [clearInput, chooseTypeExams]);
 
   return (
     <div className="bg-[#3674B5] p-5 rounded-lg mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
@@ -175,7 +265,7 @@ export default function CreateNewQuestions() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="pg">Pilihan Ganda</SelectItem>
-              <SelectItem value="essay">Pilihan Essay</SelectItem>
+              <SelectItem value="essay">Essay</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -224,6 +314,7 @@ export default function CreateNewQuestions() {
                 id="nama_ujian"
                 className="border border-black rounded-sm p-1 px-2 w-10/12"
                 onChange={(e: any) => setNameExams(e.currentTarget.value)}
+                value={nameExam}
               />
             </>
           )}
@@ -237,6 +328,7 @@ export default function CreateNewQuestions() {
             id="questions"
             className="border border-black rounded-sm p-1 px-2 w-10/12"
             onChange={(e: any) => setQuestion(e.currentTarget.value)}
+            value={question}
           />
         </div>
         {chooseTypeExams === "pg" && (
@@ -364,27 +456,36 @@ export default function CreateNewQuestions() {
             <DialogDescription>
               Pertanyaan = <span className="font-bold">"{question}"</span>
             </DialogDescription>
-            <div className="flex justify-around items-center my-3">
-              <DialogDescription>
-                Jawaban A <span className="font-bold">{answer.answer_a}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban B <span className="font-bold">{answer.answer_b}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban C <span className="font-bold">{answer.answer_c}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban D <span className="font-bold">{answer.answer_d}</span>
-              </DialogDescription>
-              <DialogDescription>
-                Jawaban E <span className="font-bold">{answer.answer_e}</span>
-              </DialogDescription>
-            </div>
-            <DialogDescription>
-              Jawaban Yang Benar ={" "}
-              <span className="font-bold">{selectCorrectAnswer}</span>
-            </DialogDescription>
+            {chooseTypeExams === "pg" && (
+              <>
+                <div className="flex justify-around items-center my-3">
+                  <DialogDescription>
+                    Jawaban A{" "}
+                    <span className="font-bold">{answer.answer_a}</span>
+                  </DialogDescription>
+                  <DialogDescription>
+                    Jawaban B{" "}
+                    <span className="font-bold">{answer.answer_b}</span>
+                  </DialogDescription>
+                  <DialogDescription>
+                    Jawaban C{" "}
+                    <span className="font-bold">{answer.answer_c}</span>
+                  </DialogDescription>
+                  <DialogDescription>
+                    Jawaban D{" "}
+                    <span className="font-bold">{answer.answer_d}</span>
+                  </DialogDescription>
+                  <DialogDescription>
+                    Jawaban E{" "}
+                    <span className="font-bold">{answer.answer_e}</span>
+                  </DialogDescription>
+                </div>
+                <DialogDescription>
+                  Jawaban Yang Benar ={" "}
+                  <span className="font-bold">{selectCorrectAnswer}</span>
+                </DialogDescription>
+              </>
+            )}
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
