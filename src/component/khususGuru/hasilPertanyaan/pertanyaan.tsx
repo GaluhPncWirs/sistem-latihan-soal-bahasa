@@ -47,19 +47,17 @@ export default function ViewQuestions() {
   const [fromTimes, setFromTimes] = useState<string[]>([]);
   const [toTimes, setToTimes] = useState<string[]>([]);
   const idTeacher = useGetIdTeacher();
-  const viewQuestions = useManageExamsData(idTeacher);
-  const options: any = { day: "numeric", month: "long", year: "numeric" };
-
+  const viewManageQuestionsExam = useManageExamsData(idTeacher);
   const tenggatWaktu = fromTimes.map(
     (time: any, i: any) => `${time} - ${toTimes[i]}`
   );
 
   const manipulateDate = dates.map((localDate: any) =>
-    new Date(localDate).toLocaleDateString("id-ID", options)
+    useConvertDate(localDate)
   );
 
   async function managedExams() {
-    const idExam = viewQuestions.map((item: any) => item.id);
+    const idExam = viewManageQuestionsExam.map((item: any) => item.id);
     const dataPayload = idExam
       .map((item: any, i: number) => ({
         created_at: new Date().toISOString(),
@@ -70,6 +68,7 @@ export default function ViewQuestions() {
         tenggat_waktu: tenggatWaktu[i],
         exam_duration: Number(chooseTimeExam[i]),
         isManageExam: true,
+        tipe_ujian: item.tipeUjian === "pg" ? "pg" : "essay",
       }))
       .filter(
         (item: any) =>
@@ -127,8 +126,8 @@ export default function ViewQuestions() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {viewQuestions.length > 0 ? (
-            viewQuestions.map((data: any, i: number) => (
+          {viewManageQuestionsExam.length > 0 ? (
+            viewManageQuestionsExam.map((data: any, i: number) => (
               <TableRow key={i}>
                 <TableCell>{i + 1}</TableCell>
                 <TableCell>{data.nama_ujian}</TableCell>
