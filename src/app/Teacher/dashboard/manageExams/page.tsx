@@ -57,7 +57,8 @@ export default function ViewQuestions() {
         .from("exams")
         .select("*")
         .eq("id", Number(searchParams))
-        .eq("idTeacher", idTeacher);
+        .eq("idTeacher", idTeacher)
+        .single();
 
       if (error) {
         toast("Gagal ❌", {
@@ -72,27 +73,35 @@ export default function ViewQuestions() {
   async function handleUpdateQuestions(idQuestion: string) {
     const { data: examData, error: fetchError }: any = await supabase
       .from("exams")
-      .select("questions_exam")
+      .select("questions_exam,tipeUjian")
       .eq("id", Number(searchParams))
       .single();
 
     if (fetchError) {
       toast("Gagal Ambil Data", { description: "Ujian tidak ditemukan" });
     } else {
-      const updateData: any = (examData?.questions_exam || []).map((q: any) =>
-        q.id === idQuestion
-          ? {
+      const updateDataExams: any = (examData?.questions_exam || []).map(
+        (q: any) => {
+          if (q.id === idQuestion && examData.tipeUjian === "pg") {
+            return {
               ...q,
               questions: updateQuestion,
               answerPg: newAnswer,
               correctAnswer: selectCorrectNewAnswer,
-            }
-          : q
+            };
+          } else if (q.id === idQuestion && examData.tipeUjian === "essay") {
+            return {
+              ...q,
+              questions: updateQuestion,
+            };
+          } else {
+            return q;
+          }
+        }
       );
-
       const { error } = await supabase
         .from("exams")
-        .update({ questions_exam: updateData })
+        .update({ questions_exam: updateDataExams })
         .eq("id", Number(searchParams));
 
       if (error) {
@@ -161,8 +170,7 @@ export default function ViewQuestions() {
       <div className="w-11/12 mx-auto pt-24">
         <h1 className="text-4xl font-bold mb-5 text-center">Edit Soal</h1>
         <h2 className="text-2xl font-bold mb-10">
-          Nama Ujian :{" "}
-          {viewQuestions.length > 0 ? viewQuestions[0].nama_ujian : ""}
+          Nama Ujian : {viewQuestions.nama_ujian || ""}
         </h2>
         <Table>
           <TableHeader className="bg-[#3282B8]">
@@ -175,10 +183,8 @@ export default function ViewQuestions() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {viewQuestions.length > 0 ? (
-              viewQuestions
-                .flatMap((item: any) => item.questions_exam)
-                .map((data: any, i: number) => (
+            {viewQuestions.tipeUjian === "pg"
+              ? viewQuestions.questions_exam?.map((data: any, i: number) => (
                   <TableRow key={i}>
                     <TableCell>{i + 1}</TableCell>
                     <TableCell>
@@ -427,16 +433,92 @@ export default function ViewQuestions() {
                     </TableCell>
                   </TableRow>
                 ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  className="text-center text-lg font-bold"
-                  colSpan={3}
-                >
-                  Belum Ada Tugas Yang Dibuat
-                </TableCell>
-              </TableRow>
-            )}
+              : viewQuestions.questions_exam?.map((data: any, i: number) => (
+                  <TableRow key={i}>
+                    <TableCell>{i + 1}</TableCell>
+                    <TableCell>
+                      <h1 className="mb-2 font-semibold">{data.questions}</h1>
+                    </TableCell>
+                    <TableCell className="flex justify-center gap-3 items-center">
+                      <Dialog>
+                        <form>
+                          <DialogTrigger asChild>
+                            <Button className="cursor-pointer hover:bg-blue-500 bg-blue-400">
+                              Edit
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Edit Soal</DialogTitle>
+                              <DialogDescription>
+                                Input Dibawah ini Untuk Mengedit Soal Essay
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-2 max-[640px]:gap-1">
+                              <div>
+                                <label htmlFor="questions">
+                                  Edit Pertanyaan
+                                </label>
+                                <Input
+                                  id="questions"
+                                  className="mt-2"
+                                  onChange={(e: any) =>
+                                    setUpdateQuestion(e.currentTarget.value)
+                                  }
+                                  defaultValue={data.questions}
+                                />
+                              </div>
+                            </div>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button variant="outline">Cancel</Button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <Button
+                                  onClick={() => handleUpdateQuestions(data.id)}
+                                >
+                                  Save Changes
+                                </Button>
+                              </DialogClose>
+                            </DialogFooter>
+                          </DialogContent>
+                        </form>
+                      </Dialog>
+
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            className="cursor-pointer"
+                          >
+                            Hapus
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Hapus Soal</DialogTitle>
+                            <DialogDescription>
+                              {`Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?`}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <Button variant="outline">Cancel</Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <Button
+                                onClick={() => handleDeleteQuestions(data.id)}
+                                variant="destructive"
+                              >
+                                Hapus
+                              </Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
 

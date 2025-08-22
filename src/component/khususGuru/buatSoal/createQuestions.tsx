@@ -79,6 +79,7 @@ export default function CreateNewQuestions() {
                 },
               ],
               idTeacher: idTeacher,
+              tipeUjian: chooseTypeExams,
             },
           ]);
 
@@ -141,10 +142,11 @@ export default function CreateNewQuestions() {
                 questions_exam: [
                   {
                     id: useRandomId(7, "EX"),
-                    questionEssay: question,
+                    questions: question,
                   },
                 ],
                 idTeacher: idTeacher,
+                tipeUjian: chooseTypeExams,
               },
             ]);
           if (errorAddQuestionsExam) {
@@ -172,8 +174,8 @@ export default function CreateNewQuestions() {
             const addEssay = [
               ...(dataEssay.questions_exam || []),
               {
-                idTeacher: useRandomId(7, "EX"),
-                questions_exam: question,
+                id: useRandomId(7, "EX"),
+                questions: question,
               },
             ];
             const { error: errorAddDataEssay } = await supabase
@@ -196,105 +198,6 @@ export default function CreateNewQuestions() {
       }
     }
   }
-
-  // async function handleCreateEssay() {
-  //   const { data: nameDatasEssay, error: errorNameDatasEssay } = await supabase
-  //     .from("exams_essay")
-  //     .select("nama_essay")
-  //     .eq("nama_essay", nameExam);
-
-  //   if (errorNameDatasEssay) {
-  //     toast("Gagal ❌", {
-  //       description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
-  //     });
-  //   } else if (nameDatasEssay.length > 0) {
-  //     toast("Gagal ❌", {
-  //       description: "Soalnya Sama Seperti Yang Sebelumnya Telah Dibuat",
-  //     });
-  //   } else {
-  //     if (selectedValueNameExam === "buatUjianBaru") {
-  //       const { error: errorAddQuestionsExam } = await supabase
-  //         .from("exams_essay")
-  //         .insert([
-  //           {
-  //             created_at_examsEssay: new Date().toISOString(),
-  //             nama_essay: nameExam,
-  //             soal_essay: [
-  //               {
-  //                 idExamEssay: useRandomId(7, "EX"),
-  //                 questionEssay: question,
-  //               },
-  //             ],
-  //             idGuru: idTeacher,
-  //           },
-  //         ]);
-  //       if (errorAddQuestionsExam) {
-  //         toast("Gagal ❌", {
-  //           description: "Soal Gagal Ditambahkan Periksa Kembali Soalnya",
-  //         });
-  //       } else {
-  //         toast("Berhasil ✅", {
-  //           description: "Soal Essay Berhasil Ditambahkan",
-  //         });
-  //         setClearInput(true);
-  //       }
-  //     } else {
-  //       const { data: dataEssay, error: errorDataEssay } = await supabase
-  //         .from("exams_essay")
-  //         .select("soal_essay")
-  //         .eq("nama_essay", selectedValueNameExam)
-  //         .single();
-
-  //       if (errorDataEssay) {
-  //         toast("Gagal ❌", {
-  //           description: "Ujian tidak ditemukan.",
-  //         });
-  //       } else {
-  //         const addEssay = [
-  //           ...(dataEssay.soal_essay || []),
-  //           {
-  //             idExamEssay: useRandomId(7, "EX"),
-  //             questionEssay: question,
-  //           },
-  //         ];
-  //         const { error: errorAddDataEssay } = await supabase
-  //           .from("exams_essay")
-  //           .update({ soal_essay: addEssay })
-  //           .eq("nama_essay", selectedValueNameExam);
-
-  //         if (errorAddDataEssay) {
-  //           toast("Gagal ❌", {
-  //             description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
-  //           });
-  //         } else {
-  //           toast("Berhasil ✅", {
-  //             description: "Soal Berhasil Ditambahkan",
-  //           });
-  //           setClearInput(true);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (!idTeacher) return;
-  //   async function viewExamEssay() {
-  //     const { data, error } = await supabase
-  //       .from("exams_essay")
-  //       .select("*")
-  //       .eq("idGuru", idTeacher);
-
-  //     if (error) {
-  //       toast("Gagal ❌", {
-  //         description: "Soal Gagal ditampilkan",
-  //       });
-  //     } else {
-  //       setDataQuestionsEssay(data);
-  //     }
-  //   }
-  //   viewExamEssay();
-  // }, [idTeacher]);
 
   useEffect(() => {
     if (clearInput) {
