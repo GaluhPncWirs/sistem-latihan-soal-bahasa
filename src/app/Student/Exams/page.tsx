@@ -18,18 +18,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
-  const [clickedAnswer, setClickedAnswer] = useState<{
+  const [clickedAnswerPg, setClickedAnswerPg] = useState<{
     [questions: string]: string;
   }>({});
   const idExams = useSearchParams().get("id");
   const idStudent = useGetIdStudent();
   const dataStudent = useGetDataStudent(idStudent);
   const [time, setTime] = useState<number>(questions.exam_duration);
+  const [answerEssayExams, setAnswerEssayExams] = useState<{
+    [questions: string]: string;
+  }>({});
   const [timeOut, setTimeOut] = useState<boolean>(false);
 
   useEffect(() => {
@@ -54,104 +56,103 @@ export default function Soal() {
   const formatedTime = `${minute}:${String(second).padStart(2, "0")}`;
 
   useEffect(() => {
+    if (!dataStudent?.classes) return;
     async function handleViewQuestions() {
       const { data, error }: any = await supabase
         .from("managed_exams")
         .select("*,exams(questions_exam,nama_ujian)")
         .eq("idExams", Number(idExams))
+        .eq("kelas", dataStudent?.classes)
         .single();
 
       if (error) {
         toast("Gagal ❌", {
-          description: "data gagal ditampilkan:",
+          description: "data gagal ditampilkan",
         });
       }
       setQuestions(data);
     }
     handleViewQuestions();
-  }, []);
+  }, [dataStudent?.classes]);
 
   function handleSelectedAnswer(questionsId: string, answer: string) {
-    setClickedAnswer((prev) => ({
+    setClickedAnswerPg((prev) => ({
       ...prev,
       [questionsId]: answer,
     }));
   }
 
   async function handleSendExam() {
-    const { data, error }: any = await supabase
-      .from("exams")
-      .select("*")
-      .eq("id", Number(idExams));
+    const pilihanSiswa = Object.values(clickedAnswerPg);
+    const jawabanYangBenar = questions.exams?.questions_exam
+      .flatMap((item: any) => item.correctAnswer)
+      .filter((jawabanBenar: any) => pilihanSiswa.includes(jawabanBenar));
+    const resultExam = jawabanYangBenar.length * 10;
 
-    console.log(data);
+    const payload = {
+      created_at: new Date().toISOString(),
+      student_id: idStudent,
+      exam_id: Number(idExams),
+      answer_student:
+        questions.tipe_ujian === "pg" ? clickedAnswerPg : answerEssayExams,
+      hasil_ujian: questions.tipe_ujian === "pg" ? resultExam : "pending",
+      status_exam: true,
+      kelas: dataStudent?.classes,
+    };
 
-    if (error) {
-      toast("Gagal ❌", {
-        description: "data gagal ditambahkan",
-      });
+    const { error: insertErr } = await supabase
+      .from("history-exam-student")
+      .insert(payload);
+
+    if (insertErr) {
+      toast("Gagal ❌", { description: "Gagal menyimpan data" });
     } else {
-      const pilihanSiswa = Object.values(clickedAnswer);
-      const jawabanYangBenar = data
-        .flatMap((getQuestions: any) => getQuestions.questions_exam)
-        .map((item: any) => item.correctAnswer)
-        .filter((jawabanBenar: any) => pilihanSiswa.includes(jawabanBenar));
-      const resultExam = jawabanYangBenar.length * 10;
-
-      const payload = {
-        created_at: new Date().toISOString(),
-        student_id: idStudent,
-        exam_id: Number(idExams),
-        answer_student: clickedAnswer,
-        hasil_ujian: resultExam,
-        status_exam: true,
-        kelas: dataStudent?.classes,
-      };
-
-      const { data: sudahAda } = await supabase
-        .from("history-exam-student")
-        .select("*")
-        .eq("exam_id", Number(idExams))
-        .eq("student_id", idStudent)
-        .single();
-
-      if (sudahAda) {
-        const { error: updateErr } = await supabase
-          .from("history-exam-student")
-          .update(payload)
-          .eq("exam_id", Number(idExams))
-          .eq("student_id", idStudent);
-
-        if (updateErr) {
-          toast("Gagal ❌", { description: "Gagal memperbarui data" });
-        } else {
-          toast("Berhasil ✅", { description: "Ujian Selesai" });
-        }
-      } else {
-        const { error: insertErr } = await supabase
-          .from("history-exam-student")
-          .insert(payload);
-
-        if (insertErr) {
-          toast("Gagal ❌", { description: "Gagal menyimpan data" });
-        } else {
-          toast("Berhasil ✅", { description: "Ujian Selesai" });
-        }
-      }
+      toast("Berhasil ✅", { description: "Ujian Selesai" });
     }
+
+    // const { data: sudahAda } = await supabase
+    //   .from("history-exam-student")
+    //   .select("*")
+    //   .eq("exam_id", Number(idExams))
+    //   .eq("student_id", idStudent)
+    //   .single();
+
+    // if (sudahAda) {
+    //   const { error: updateErr } = await supabase
+    //     .from("history-exam-student")
+    //     .update(payload)
+    //     .eq("exam_id", Number(idExams))
+    //     .eq("student_id", idStudent);
+
+    //   if (updateErr) {
+    //     toast("Gagal ❌", { description: "Gagal memperbarui data" });
+    //   } else {
+    //     toast("Berhasil ✅", { description: "Ujian Selesai" });
+    //   }
+    // } else {
+    //    const { error: insertErr } = await supabase
+    //   .from("history-exam-student")
+    //   .insert(payload);
+
+    // if (insertErr) {
+    //   toast("Gagal ❌", { description: "Gagal menyimpan data" });
+    // } else {
+    //   toast("Berhasil ✅", { description: "Ujian Selesai" });
+    // }
+    // }
   }
 
   return (
     <LayoutBodyContent>
       <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-10/12">
         <h1 className="text-3xl font-semibold mb-7 mt-5">
-          Ujian {questions.exams?.nama_ujian}
+          Ujian {questions?.exams?.nama_ujian}
         </h1>
         <div className="flex flex-row-reverse gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
           <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg max-[640px]:fixed max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-10 sm:fixed sm:top-20 sm:w-10/12 sm:z-10 md:basis-1/3 md:static md:top-0 md:z-0">
             <div className="flex justify-between items-center max-[640px]:justify-evenly sm:justify-evenly md:justify-between">
               <h1 className="text-xl font-semibold">
-                {questions.tipe_ujian === "pg"
+                {questions?.tipe_ujian === "pg"
                   ? "Pertanyaaan Pilihan Ganda"
                   : "Pertanyaaan Essay"}
               </h1>
@@ -160,12 +161,15 @@ export default function Soal() {
               </div>
             </div>
             <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
-              {questions.exams?.questions_exam.map((item: any, i: number) => {
-                const isAnswer = clickedAnswer[item.id];
+              {questions?.exams?.questions_exam.map((item: any, i: number) => {
+                const isAnswerPg = clickedAnswerPg[item.id];
+                const isAnswerEssay = answerEssayExams[item.id];
                 return (
                   <div
                     className={`h-10 w-10  rounded-md flex items-center justify-center font-bold text-lg ${
-                      isAnswer ? "bg-green-400" : "bg-[#E3FDFD]"
+                      isAnswerPg || isAnswerEssay
+                        ? "bg-green-400"
+                        : "bg-[#E3FDFD]"
                     }`}
                     key={i}
                   >
@@ -176,7 +180,7 @@ export default function Soal() {
             </div>
           </div>
           <div className="basis-2/3 lg:overflow-y-auto h-[28rem] lg:scrollBarDesign max-[640px]:mt-32 max-[640px]:w-11/12 sm:mt-32 sm:w-10/12 md:mt-0 md:basis-2/3">
-            {questions.exams?.questions_exam.map((item: any, i: number) => (
+            {questions?.exams?.questions_exam.map((item: any, i: number) => (
               <div
                 className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
                 key={item.id}
@@ -185,12 +189,13 @@ export default function Soal() {
                 <h1 className="inline-block text-lg font-semibold">
                   {item.questions}
                 </h1>
-                {questions.tipe_ujian === "pg" ? (
+                {questions?.tipe_ujian === "pg" ? (
                   <ul className="flex justify-evenly items-center mt-5 max-[640px]:flex-wrap max-[640px]:gap-1.5 sm:flex-wrap sm:gap-2">
                     {["a", "b", "c", "d", "e"].map((opt) => {
                       const answerKey = `answer_${opt}`;
                       const answerText = item.answerPg[answerKey];
-                      const isSelected = clickedAnswer[item.id] === answerText;
+                      const isSelected =
+                        clickedAnswerPg[item.id] === answerText;
                       return (
                         <Button
                           key={opt}
@@ -219,6 +224,12 @@ export default function Soal() {
                       placeholder="Jawab Pertannyaan Kamu Disini"
                       className="border-slate-600 border-2"
                       id={item.id}
+                      onChange={(e) =>
+                        setAnswerEssayExams((prev: any) => ({
+                          ...prev,
+                          [item.id]: e.target?.value,
+                        }))
+                      }
                     />
                   </div>
                 )}

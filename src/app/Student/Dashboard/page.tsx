@@ -209,8 +209,11 @@ export default function DashboardStudent() {
                             {useConvertDate(item.created_at_historyExams)}
                           </TableCell>
                           <TableCell>
-                            {item.hasil_ujian} Dari{" "}
-                            {item.exams.questions_exam.length * 10}
+                            {item.tipe_ujian === "pg"
+                              ? `${item.hasil_ujian} dari ${
+                                  item.exams.questions_exam.length * 10
+                                }`
+                              : item.hasil_ujian}
                           </TableCell>
                         </TableRow>
                       ) : (
