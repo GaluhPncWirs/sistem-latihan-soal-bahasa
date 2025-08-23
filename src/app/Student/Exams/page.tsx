@@ -18,6 +18,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -27,12 +29,12 @@ export default function Soal() {
   const idExams = useSearchParams().get("id");
   const idStudent = useGetIdStudent();
   const dataStudent = useGetDataStudent(idStudent);
-  const [time, setTime] = useState<number>(questions[0]?.exam_duration);
+  const [time, setTime] = useState<number>(questions.exam_duration);
   const [timeOut, setTimeOut] = useState<boolean>(false);
 
   useEffect(() => {
-    if (questions[0]?.exam_duration) {
-      setTime(questions[0]?.exam_duration);
+    if (questions.exam_duration) {
+      setTime(questions.exam_duration);
       const timer = setInterval(() => {
         setTime((prev) => {
           if (prev <= 0) {
@@ -45,18 +47,19 @@ export default function Soal() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [questions[0]?.exam_duration]);
+  }, [questions.exam_duration]);
 
   const minute = Math.floor(time / 60);
   const second = time % 60;
   const formatedTime = `${minute}:${String(second).padStart(2, "0")}`;
 
   useEffect(() => {
-    async function handleViewQuestionsUseParam2() {
+    async function handleViewQuestions() {
       const { data, error }: any = await supabase
         .from("managed_exams")
         .select("*,exams(questions_exam,nama_ujian)")
-        .eq("idExams", Number(idExams));
+        .eq("idExams", Number(idExams))
+        .single();
 
       if (error) {
         toast("Gagal ❌", {
@@ -65,7 +68,7 @@ export default function Soal() {
       }
       setQuestions(data);
     }
-    handleViewQuestionsUseParam2();
+    handleViewQuestions();
   }, []);
 
   function handleSelectedAnswer(questionsId: string, answer: string) {
@@ -142,77 +145,119 @@ export default function Soal() {
     <LayoutBodyContent>
       <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-10/12">
         <h1 className="text-3xl font-semibold mb-7 mt-5">
-          Ujian {questions[0]?.exams.nama_ujian}
+          Ujian {questions.exams?.nama_ujian}
         </h1>
         <div className="flex flex-row-reverse gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
           <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg max-[640px]:fixed max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-10 sm:fixed sm:top-20 sm:w-10/12 sm:z-10 md:basis-1/3 md:static md:top-0 md:z-0">
             <div className="flex justify-between items-center max-[640px]:justify-evenly sm:justify-evenly md:justify-between">
               <h1 className="text-xl font-semibold">
-                Pertanyaaan Pilihan Ganda
+                {questions.tipe_ujian === "pg"
+                  ? "Pertanyaaan Pilihan Ganda"
+                  : "Pertanyaaan Essay"}
               </h1>
               <div className="text-2xl font-semibold bg-[#F38181] px-4 py-1.5 rounded-lg">
                 {formatedTime}
               </div>
             </div>
             <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
-              {questions.length > 0
-                ? questions
-                    .map((take: any) => take.exams)
-                    .flatMap((getQuestions: any) => getQuestions.questions_exam)
-                    .map((item: any, i: number) => {
-                      const isAnswer = clickedAnswer[item.id];
-                      return (
-                        <div
-                          className={`h-10 w-10  rounded-md flex items-center justify-center font-bold text-lg ${
-                            isAnswer ? "bg-green-400" : "bg-[#E3FDFD]"
-                          }`}
-                          key={i}
-                        >
-                          {i + 1}
-                        </div>
-                      );
-                    })
-                : null}
+              {questions.exams?.questions_exam.map((item: any, i: number) => {
+                const isAnswer = clickedAnswer[item.id];
+                return (
+                  <div
+                    className={`h-10 w-10  rounded-md flex items-center justify-center font-bold text-lg ${
+                      isAnswer ? "bg-green-400" : "bg-[#E3FDFD]"
+                    }`}
+                    key={i}
+                  >
+                    {i + 1}
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="basis-2/3 lg:overflow-y-auto h-[28rem] lg:scrollBarDesign max-[640px]:mt-32 max-[640px]:w-11/12 sm:mt-32 sm:w-10/12 md:mt-0 md:basis-2/3">
-            {questions.length > 0
-              ? questions
-                  .map((take: any) => take.exams)
-                  .flatMap((getQuestions: any) => getQuestions.questions_exam)
-                  .map((item: any, i: number) => (
-                    <div
-                      className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
-                      key={item.id}
+            {questions.exams?.questions_exam.map((item: any, i: number) => (
+              <div
+                className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
+                key={item.id}
+              >
+                <span className="font-bold mr-1 text-lg">{i + 1}.</span>
+                <h1 className="inline-block text-lg font-semibold">
+                  {item.questions}
+                </h1>
+                {questions.tipe_ujian === "pg" ? (
+                  <ul className="flex justify-evenly items-center mt-5 max-[640px]:flex-wrap max-[640px]:gap-1.5 sm:flex-wrap sm:gap-2">
+                    {["a", "b", "c", "d", "e"].map((opt) => {
+                      const answerKey = `answer_${opt}`;
+                      const answerText = item.answerPg[answerKey];
+                      const isSelected = clickedAnswer[item.id] === answerText;
+                      return (
+                        <Button
+                          key={opt}
+                          variant="outline"
+                          className={`cursor-pointer w-fit px-3 ${
+                            isSelected ? "line-through" : ""
+                          }`}
+                          onClick={() =>
+                            handleSelectedAnswer(item.id, answerText)
+                          }
+                        >
+                          {opt.toUpperCase()}. {answerText}
+                        </Button>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <div className="mt-3">
+                    <label
+                      className="mb-1 font-semibold ml-1.5 inline-block"
+                      htmlFor={item.id}
                     >
-                      <span className="font-bold mr-1 text-lg">{i + 1}.</span>
-                      <h1 className="inline-block text-lg font-semibold">
-                        {item.questions}
-                      </h1>
-                      <ul className="flex justify-evenly items-center mt-5 max-[640px]:flex-wrap max-[640px]:gap-1.5 sm:flex-wrap sm:gap-2">
-                        {["a", "b", "c", "d", "e"].map((opt) => {
-                          const answerKey = `answer_${opt}`;
-                          const answerText = item.answerPg[answerKey];
-                          const isSelected =
-                            clickedAnswer[item.id] === answerText;
-                          return (
-                            <Button
-                              key={opt}
-                              variant="outline"
-                              className={`cursor-pointer w-fit px-3 ${
-                                isSelected ? "line-through" : ""
-                              }`}
-                              onClick={() =>
-                                handleSelectedAnswer(item.id, answerText)
-                              }
-                            >
-                              {opt.toUpperCase()}. {answerText}
-                            </Button>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  ))
+                      Jawab :
+                    </label>
+                    <Textarea
+                      placeholder="Jawab Pertannyaan Kamu Disini"
+                      className="border-slate-600 border-2"
+                      id={item.id}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+            {/* {questions.length > 0
+              ? questions.exams.questions_exam.map((item: any, i: number) => (
+                  <div
+                    className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
+                    key={item.id}
+                  >
+                    <span className="font-bold mr-1 text-lg">{i + 1}.</span>
+                    <h1 className="inline-block text-lg font-semibold">
+                      {item.questions}
+                    </h1>
+                    <ul className="flex justify-evenly items-center mt-5 max-[640px]:flex-wrap max-[640px]:gap-1.5 sm:flex-wrap sm:gap-2">
+                      {["a", "b", "c", "d", "e"].map((opt) => {
+                        const answerKey = `answer_${opt}`;
+                        const answerText = item.answerPg[answerKey];
+                        const isSelected =
+                          clickedAnswer[item.id] === answerText;
+                        return (
+                          <Button
+                            key={opt}
+                            variant="outline"
+                            className={`cursor-pointer w-fit px-3 ${
+                              isSelected ? "line-through" : ""
+                            }`}
+                            onClick={() =>
+                              handleSelectedAnswer(item.id, answerText)
+                            }
+                          >
+                            {opt.toUpperCase()}. {answerText}
+                          </Button>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))
               : Array.from({ length: 5 }).map((_, i) => (
                   <div className="mt-5 animate-pulse" key={i}>
                     <div className="bg-slate-400 w-full h-8 rounded-md"></div>
@@ -224,7 +269,7 @@ export default function Soal() {
                       <div className="bg-slate-400 w-3/5 h-5 rounded-md"></div>
                     </div>
                   </div>
-                ))}
+                ))} */}
           </div>
         </div>
         <div className="mt-10 flex justify-between">
