@@ -125,7 +125,6 @@ export default function Teacher() {
         <h1 className="text-2xl font-bold my-7 max-[640px]:text-center">
           Halo, Selamat Datang {dataManageExams[0]?.account_teacher.fullName}
         </h1>
-
         <ul className="mx-auto mt-10 flex justify-around font-semibold text-lg max-[640px]:text-base max-[640px]:w-full max-[640px]:gap-x-3 sm:w-full md:w-11/12">
           <li
             className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
