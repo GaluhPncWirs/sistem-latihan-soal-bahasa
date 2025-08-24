@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -33,6 +34,7 @@ export default function Soal() {
     [questions: string]: string;
   }>({});
   const [timeOut, setTimeOut] = useState<boolean>(false);
+  const { push } = useRouter();
 
   useEffect(() => {
     if (questions.exam_duration) {
@@ -108,6 +110,9 @@ export default function Soal() {
       toast("Gagal ❌", { description: "Gagal menyimpan data" });
     } else {
       toast("Berhasil ✅", { description: "Ujian Selesai" });
+      setTimeout(() => {
+        push("/Student/Dashboard");
+      }, 3000);
     }
 
     // const { data: sudahAda } = await supabase
@@ -146,13 +151,13 @@ export default function Soal() {
     <LayoutBodyContent>
       <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-10/12">
         <h1 className="text-3xl font-semibold mb-7 mt-5">
-          Ujian {questions?.exams?.nama_ujian}
+          Ujian {questions.exams?.nama_ujian}
         </h1>
         <div className="flex flex-row-reverse gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
           <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg max-[640px]:fixed max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-10 sm:fixed sm:top-20 sm:w-10/12 sm:z-10 md:basis-1/3 md:static md:top-0 md:z-0">
             <div className="flex justify-between items-center max-[640px]:justify-evenly sm:justify-evenly md:justify-between">
               <h1 className="text-xl font-semibold">
-                {questions?.tipe_ujian === "pg"
+                {questions.tipe_ujian === "pg"
                   ? "Pertanyaaan Pilihan Ganda"
                   : "Pertanyaaan Essay"}
               </h1>
@@ -161,7 +166,7 @@ export default function Soal() {
               </div>
             </div>
             <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
-              {questions?.exams?.questions_exam.map((item: any, i: number) => {
+              {questions.exams?.questions_exam.map((item: any, i: number) => {
                 const isAnswerPg = clickedAnswerPg[item.id];
                 const isAnswerEssay = answerEssayExams[item.id];
                 return (
@@ -180,7 +185,7 @@ export default function Soal() {
             </div>
           </div>
           <div className="basis-2/3 lg:overflow-y-auto h-[28rem] lg:scrollBarDesign max-[640px]:mt-32 max-[640px]:w-11/12 sm:mt-32 sm:w-10/12 md:mt-0 md:basis-2/3">
-            {questions?.exams?.questions_exam.map((item: any, i: number) => (
+            {questions.exams?.questions_exam.map((item: any, i: number) => (
               <div
                 className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
                 key={item.id}
@@ -189,7 +194,7 @@ export default function Soal() {
                 <h1 className="inline-block text-lg font-semibold">
                   {item.questions}
                 </h1>
-                {questions?.tipe_ujian === "pg" ? (
+                {questions.tipe_ujian === "pg" ? (
                   <ul className="flex justify-evenly items-center mt-5 max-[640px]:flex-wrap max-[640px]:gap-1.5 sm:flex-wrap sm:gap-2">
                     {["a", "b", "c", "d", "e"].map((opt) => {
                       const answerKey = `answer_${opt}`;

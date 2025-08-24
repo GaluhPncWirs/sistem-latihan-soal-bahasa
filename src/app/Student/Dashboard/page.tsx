@@ -20,11 +20,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useConvertDate } from "../../hooks/getConvertDate";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function DashboardStudent() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
   const getIdStudent = useGetIdStudent();
   const getDataStudent = useGetDataStudent(getIdStudent);
+  const { push } = useRouter();
 
   useEffect(() => {
     if (!getDataStudent?.classes || !getIdStudent) return;
@@ -63,11 +76,13 @@ export default function DashboardStudent() {
     getDataExamResult();
   }, [getDataStudent?.classes, getIdStudent]);
 
-  const averageValue = Math.floor(
-    scheduleExams
-      .map((avg: any) => avg.hasil_ujian)
-      .reduce((acc: any, cur: any) => acc + cur, 0)
-  );
+  const averageValue = scheduleExams
+    .filter(
+      (avg: any) => avg.status_exam === true && avg.hasil_ujian !== "pending"
+    )
+    .map((values: any) => Number(values.hasil_ujian))
+    .reduce((acc: any, cur: any) => acc + cur, 0);
+
   const isCompleteExam = scheduleExams
     .map((isDone: any) => isDone.status_exam === true)
     .filter((complete: any) => complete).length;
@@ -104,7 +119,7 @@ export default function DashboardStudent() {
             <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
               <h1 className="text-lg max-[640px]:text-base">Nilai Rata Rata</h1>
               <div className="text-xl">
-                {averageValue / isCompleteExam || "0"}
+                {Math.floor(averageValue / isCompleteExam) || "0"}
               </div>
             </div>
           </div>
@@ -137,21 +152,44 @@ export default function DashboardStudent() {
                           <TableCell>Complete</TableCell>
                         ) : (
                           <TableCell>
-                            <HoverCard openDelay={200} closeDelay={200} key={i}>
-                              <HoverCardTrigger asChild>
-                                <Link
-                                  href={`/Student/Exams/?id=${data.idExams}`}
-                                  className="hover:underline hover:text-blue-700"
-                                >
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <button className="hover:underline hover:text-blue-700 cursor-pointer">
                                   Uncomplete
-                                </Link>
-                              </HoverCardTrigger>
-                              <HoverCardContent className="w-fit p-2">
-                                <h1 className="font-semibold text-xs">
-                                  Kerjakan Ujian
-                                </h1>
-                              </HoverCardContent>
-                            </HoverCard>
+                                </button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle className="mb-2">
+                                    Konfirmasi Masuk Ujian
+                                  </DialogTitle>
+                                  <DialogDescription>
+                                    Apakah Anda Yakin ingin Mengerjakan Soal{" "}
+                                    <span className="font-bold">
+                                      "{data.exams.nama_ujian}"
+                                    </span>{" "}
+                                    Ini ?
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter>
+                                  <DialogClose asChild>
+                                    <Button variant="outline">Batal</Button>
+                                  </DialogClose>
+                                  <DialogClose asChild>
+                                    <Button
+                                      onClick={() =>
+                                        push(
+                                          `/Student/Exams/?id=${data.idExams}`
+                                        )
+                                      }
+                                      className="cursor-pointer"
+                                    >
+                                      Oke
+                                    </Button>
+                                  </DialogClose>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
                           </TableCell>
                         )}
                       </TableRow>
@@ -210,7 +248,7 @@ export default function DashboardStudent() {
                           </TableCell>
                           <TableCell>
                             {item.tipe_ujian === "pg"
-                              ? `${item.hasil_ujian} dari ${
+                              ? `${item.hasil_ujian} Dari ${
                                   item.exams.questions_exam.length * 10
                                 }`
                               : item.hasil_ujian}
