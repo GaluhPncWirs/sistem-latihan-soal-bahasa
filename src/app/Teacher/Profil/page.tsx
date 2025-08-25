@@ -69,33 +69,15 @@ export default function TeacherProfile() {
         if (!found) {
           acc.push({
             kelas: cur.kelas,
-            // historyStudent: [
-            //   {
-            //     exam_id: cur.exam_id,
-            // nama_ujian: cur.exams.nama_ujian,
-            // hasil_ujian: cur.hasil_ujian,
-            // tipeUjian: cur.exams.tipeUjian,
-            // student_id: cur.student_id,
-            //   }
-            // ]
             exam_id: cur.exam_id,
             nama_ujian: cur.exams.nama_ujian,
-            hasil_ujian: [cur.hasil_ujian],
             tipeUjian: cur.exams.tipeUjian,
+            hasil_ujian: [cur.hasil_ujian],
             student_id: [cur.student_id],
           });
         } else {
-          // found.hasil_ujian += cur.hasil_ujian;
           found.hasil_ujian.push(cur.hasil_ujian);
-          // found.tipeUjian.push(cur.exams.tipeUjian);
           found.student_id.push(cur.student_id);
-          // found.historyStudent.push({
-          //   nama_ujian: cur.exams.nama_ujian,
-          //   exam_id: cur.exam_id,
-          //   hasil_ujian: cur.hasil_ujian,
-          //   tipeUjian: cur.exams.tipeUjian,
-          //   student_id: cur.student_id,
-          // });
         }
         return acc;
       }, []);
@@ -114,8 +96,6 @@ export default function TeacherProfile() {
     }
     historyExams();
   }, [idTeacher]);
-
-  console.log(getHistoryExams);
 
   return (
     <LayoutBodyContent>
@@ -145,12 +125,15 @@ export default function TeacherProfile() {
             </div>
             <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
               <h1 className="font-semibold text-lg">Jumlah Siswa</h1>{" "}
-              <span className="font-bold">{totalStudent.length || "0"}</span>
+              <span className="font-bold">
+                {new Set(totalStudent).size || "0"}
+              </span>
             </div>
             <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
               <h1 className="font-semibold text-lg">Nilai Rata-Rata</h1>{" "}
               <span className="font-bold">
-                {Math.floor(averageValueExam / totalStudent?.length) || "0"}
+                {Math.floor(averageValueExam / new Set(totalStudent).size) ||
+                  "0"}
               </span>
             </div>
           </div>
@@ -176,7 +159,16 @@ export default function TeacherProfile() {
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{item.nama_ujian}</TableCell>
                       <TableCell>{item.student_id.length}</TableCell>
-                      <TableCell>Undefined</TableCell>
+                      <TableCell>
+                        {item.tipeUjian !== "essay"
+                          ? Math.floor(
+                              item.hasil_ujian
+                                .map((toNum: any) => Number(toNum))
+                                .reduce((acc: any, cur: any) => acc + cur, 0) /
+                                item.student_id.length
+                            )
+                          : "Pending"}
+                      </TableCell>
                       <TableCell>{item.kelas}</TableCell>
                       <TableCell>{item.dibuat_tgl}</TableCell>
                     </TableRow>

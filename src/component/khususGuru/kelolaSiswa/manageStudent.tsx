@@ -125,7 +125,7 @@ export default function ManageStudent() {
                           </HoverCardTrigger>
                           <HoverCardContent className="w-fit p-2">
                             <h1 className="font-semibold text-sm">
-                              Lihat Jawaban Essay Siswa
+                              Beri Nilai Essay Siswa
                             </h1>
                           </HoverCardContent>
                         </HoverCard>
