@@ -3,6 +3,7 @@ import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { Textarea } from "@/components/ui/textarea";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -55,6 +56,7 @@ export default function CorrectionEssay() {
                   placeholder="Jawab Pertannyaan Kamu Disini"
                   className="border-slate-600 border-2"
                   id={item.id}
+                  disabled
                   defaultValue={
                     viewQuestionsExams.answer_student?.[item.id] || ""
                   }
@@ -63,6 +65,14 @@ export default function CorrectionEssay() {
             </div>
           )
         )}
+        <div className="mt-5 py-1.5">
+          <Link
+            href="/Teacher/dashboard"
+            className="bg-blue-400 py-1.5 px-7 rounded-md text-lg font-semibold hover:bg-blue-500"
+          >
+            Kembali
+          </Link>
+        </div>
       </div>
     </LayoutBodyContent>
   );

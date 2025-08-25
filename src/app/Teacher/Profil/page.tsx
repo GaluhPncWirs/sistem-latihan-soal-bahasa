@@ -19,9 +19,11 @@ export default function TeacherProfile() {
   const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const idTeacher = useGetIdTeacher();
   const totalStudent = getHistoryExams?.flatMap((acc: any) => acc.student_id);
-  const averageValueExam = getHistoryExams?.map(
-    (item: any) => item.hasil_ujian
-  );
+  const averageValueExam = getHistoryExams
+    ?.flatMap((item: any) => item.hasil_ujian)
+    .filter((a: any) => a !== "pending")
+    .map((toNum: any) => Number(toNum))
+    .reduce((acc: any, cur: any) => acc + cur, 0);
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -46,29 +48,54 @@ export default function TeacherProfile() {
       const { data: dataManageExams, error: errorDataManageExams }: any =
         await supabase
           .from("managed_exams")
-          .select("kelas,dibuat_tgl,id_Teacher,idExams,exams(nama_ujian)")
+          .select("kelas,dibuat_tgl,id_Teacher,idExams")
           .eq("id_Teacher", idTeacher);
       const { data: dataHistoryExams, error: errorDataHistoryExams }: any =
         await supabase
           .from("history-exam-student")
-          .select("exam_id,hasil_ujian,student_id,kelas");
+          .select(
+            "exam_id,hasil_ujian,student_id,kelas,exams(nama_ujian,tipeUjian)"
+          );
 
       if (errorDataManageExams || errorDataHistoryExams) {
         console.log("data error ditampilkan");
       }
 
       const result = dataHistoryExams?.reduce((acc: any, cur: any) => {
-        const found = acc.find((item: any) => item.kelas === cur.kelas);
+        const found = acc.find(
+          (item: any) =>
+            item.kelas === cur.kelas && item.exam_id === cur.exam_id
+        );
         if (!found) {
           acc.push({
             kelas: cur.kelas,
+            // historyStudent: [
+            //   {
+            //     exam_id: cur.exam_id,
+            // nama_ujian: cur.exams.nama_ujian,
+            // hasil_ujian: cur.hasil_ujian,
+            // tipeUjian: cur.exams.tipeUjian,
+            // student_id: cur.student_id,
+            //   }
+            // ]
             exam_id: cur.exam_id,
-            hasil_ujian: cur.hasil_ujian,
+            nama_ujian: cur.exams.nama_ujian,
+            hasil_ujian: [cur.hasil_ujian],
+            tipeUjian: cur.exams.tipeUjian,
             student_id: [cur.student_id],
           });
         } else {
-          found.hasil_ujian += cur.hasil_ujian;
+          // found.hasil_ujian += cur.hasil_ujian;
+          found.hasil_ujian.push(cur.hasil_ujian);
+          // found.tipeUjian.push(cur.exams.tipeUjian);
           found.student_id.push(cur.student_id);
+          // found.historyStudent.push({
+          //   nama_ujian: cur.exams.nama_ujian,
+          //   exam_id: cur.exam_id,
+          //   hasil_ujian: cur.hasil_ujian,
+          //   tipeUjian: cur.exams.tipeUjian,
+          //   student_id: cur.student_id,
+          // });
         }
         return acc;
       }, []);
@@ -78,8 +105,8 @@ export default function TeacherProfile() {
           (f: any) => f.kelas === item.kelas && f.idExams === item.exam_id
         );
         return {
-          ...findDetail,
           ...item,
+          dibuat_tgl: findDetail?.dibuat_tgl ?? null,
         };
       });
 
@@ -87,6 +114,8 @@ export default function TeacherProfile() {
     }
     historyExams();
   }, [idTeacher]);
+
+  console.log(getHistoryExams);
 
   return (
     <LayoutBodyContent>
@@ -121,12 +150,7 @@ export default function TeacherProfile() {
             <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
               <h1 className="font-semibold text-lg">Nilai Rata-Rata</h1>{" "}
               <span className="font-bold">
-                {Math.floor(
-                  averageValueExam?.reduce(
-                    (acc: any, cur: any) => acc + cur,
-                    0
-                  ) / totalStudent?.length
-                ) || "0"}
+                {Math.floor(averageValueExam / totalStudent?.length) || "0"}
               </span>
             </div>
           </div>
@@ -150,15 +174,9 @@ export default function TeacherProfile() {
                   getHistoryExams?.map((item: any, i: number) => (
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
-                      <TableCell>{item.exams.nama_ujian}</TableCell>
+                      <TableCell>{item.nama_ujian}</TableCell>
                       <TableCell>{item.student_id.length}</TableCell>
-                      <TableCell>
-                        {Math.floor(
-                          item.student_id.length > 1
-                            ? item.hasil_ujian / item.student_id.length
-                            : item.hasil_ujian
-                        )}
-                      </TableCell>
+                      <TableCell>Undefined</TableCell>
                       <TableCell>{item.kelas}</TableCell>
                       <TableCell>{item.dibuat_tgl}</TableCell>
                     </TableRow>

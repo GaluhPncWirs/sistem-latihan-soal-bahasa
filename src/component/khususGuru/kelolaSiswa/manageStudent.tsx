@@ -81,8 +81,6 @@ export default function ManageStudent() {
     getDataStudent();
   }, []);
 
-  // console.log(dataStudents);
-
   return (
     <Table>
       <TableHeader>

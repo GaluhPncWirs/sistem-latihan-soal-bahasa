@@ -73,7 +73,7 @@ export default function ViewQuestions() {
   async function handleUpdateQuestions(idQuestion: string) {
     const { data: examData, error: fetchError }: any = await supabase
       .from("exams")
-      .select("questions_exam,tipeUjian")
+      .select("id,questions_exam,tipeUjian")
       .eq("id", Number(searchParams))
       .single();
 
@@ -412,7 +412,7 @@ export default function ViewQuestions() {
                           <DialogHeader>
                             <DialogTitle>Hapus Soal</DialogTitle>
                             <DialogDescription>
-                              {`Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?`}
+                              {`Apakah Anda Benar - Benar Ingin Menghapus Soal "${data.questions}" ini ?`}
                             </DialogDescription>
                           </DialogHeader>
                           <DialogFooter>
@@ -498,7 +498,7 @@ export default function ViewQuestions() {
                           <DialogHeader>
                             <DialogTitle>Hapus Soal</DialogTitle>
                             <DialogDescription>
-                              {`Apakah Anda Benar - Benar Ingin Menghapus Soal ini ?`}
+                              {`Apakah Anda Benar - Benar Ingin Menghapus Soal "${data.questions}" ini ?`}
                             </DialogDescription>
                           </DialogHeader>
                           <DialogFooter>
