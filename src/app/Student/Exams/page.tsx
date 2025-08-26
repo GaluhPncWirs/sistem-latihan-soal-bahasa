@@ -229,6 +229,9 @@ export default function Soal() {
                       placeholder="Jawab Pertannyaan Kamu Disini"
                       className="border-slate-600 border-2"
                       id={item.id}
+                      onCopy={(e) => e.preventDefault()}
+                      onPaste={(e) => e.preventDefault()}
+                      onCut={(e) => e.preventDefault()}
                       onChange={(e) =>
                         setAnswerEssayExams((prev: any) => ({
                           ...prev,

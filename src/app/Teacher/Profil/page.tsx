@@ -1,5 +1,6 @@
 "use client";
 import { useConvertDate } from "@/app/hooks/getConvertDate";
+import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,32 +16,15 @@ import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
 
 export default function TeacherProfile() {
-  const [getProfileTeacher, setGetProfileTeacher] = useState<any>([]);
-  const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const idTeacher = useGetIdTeacher();
+  const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
+  const getProfileTeacher = useGetDataTeacher(idTeacher);
   const totalStudent = getHistoryExams?.flatMap((acc: any) => acc.student_id);
   const averageValueExam = getHistoryExams
     ?.flatMap((item: any) => item.hasil_ujian)
     .filter((a: any) => a !== "pending")
     .map((toNum: any) => Number(toNum))
     .reduce((acc: any, cur: any) => acc + cur, 0);
-
-  useEffect(() => {
-    if (!idTeacher) return;
-    async function dataProfileTeacher() {
-      const { data, error }: any = await supabase
-        .from("account_teacher")
-        .select("*")
-        .eq("id_teacher", idTeacher)
-        .single();
-
-      if (error) {
-        console.log("data error ditampilkan");
-      }
-      setGetProfileTeacher(data);
-    }
-    dataProfileTeacher();
-  }, [idTeacher]);
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -82,13 +66,13 @@ export default function TeacherProfile() {
         return acc;
       }, []);
 
-      const mergedData = result?.map((item: any) => {
-        const findDetail = dataManageExams.find(
-          (f: any) => f.kelas === item.kelas && f.idExams === item.exam_id
+      const mergedData = dataManageExams?.map((item: any) => {
+        const findDetail = result.find(
+          (f: any) => f.kelas === item.kelas && f.exam_id === item.idExams
         );
         return {
           ...item,
-          dibuat_tgl: findDetail?.dibuat_tgl ?? null,
+          ...findDetail,
         };
       });
 

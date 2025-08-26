@@ -34,9 +34,7 @@ export default function LoginAccount() {
         localStorage.setItem("idLoginSiswa", data.idStudent);
         push("/");
       }
-    }
-
-    if (valueTypeAccount === "guru") {
+    } else if (valueTypeAccount === "guru") {
       const { data, error }: any = await supabase
         .from("account_teacher")
         .select("*")
@@ -52,6 +50,8 @@ export default function LoginAccount() {
       }
     }
   }
+
+  console.log(valueTypeAccount);
 
   return (
     <LayoutFormAccount formTitle={"Login"}>

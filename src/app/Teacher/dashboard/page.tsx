@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import ResultExam from "@/app/Student/Dashboard/ResultExam/page";
 import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions";
@@ -28,6 +29,7 @@ export default function Teacher() {
   });
   const idTeacher = useGetIdTeacher();
   const [dataManageExams, setDataManageExams] = useState<any>([]);
+  const getProfileTeacher = useGetDataTeacher(idTeacher);
 
   function handleClickItem(event: any) {
     if (event === "viewResult") {
@@ -57,7 +59,7 @@ export default function Teacher() {
       const { data: datasManageExams, error: errorDatasManageExams }: any =
         await supabase
           .from("managed_exams")
-          .select("*, account_teacher(fullName), exams(nama_ujian)")
+          .select("*, exams(nama_ujian)")
           .eq("id_Teacher", idTeacher);
 
       const { data: isCompleteExam, error: errorIsCompleteExam }: any =
@@ -123,7 +125,7 @@ export default function Teacher() {
       <div className="pt-28 mx-auto max-[640px]:w-11/12 sm:w-10/12 md:w-3/4">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
         <h1 className="text-2xl font-bold my-7 max-[640px]:text-center">
-          Halo, Selamat Datang {dataManageExams[0]?.account_teacher.fullName}
+          Halo, Selamat Datang {getProfileTeacher?.fullName}
         </h1>
         <ul className="mx-auto mt-10 flex justify-around font-semibold text-lg max-[640px]:text-base max-[640px]:w-full max-[640px]:gap-x-3 sm:w-full md:w-11/12">
           <li

@@ -251,7 +251,11 @@ export default function DashboardStudent() {
                               ? `${item.hasil_ujian} Dari ${
                                   item.exams.questions_exam.length * 10
                                 }`
-                              : item.hasil_ujian}
+                              : `${item.hasil_ujian} ${
+                                  item.hasil_ujian !== "pending"
+                                    ? "Dari 100"
+                                    : ""
+                                }`}
                           </TableCell>
                         </TableRow>
                       ) : (
