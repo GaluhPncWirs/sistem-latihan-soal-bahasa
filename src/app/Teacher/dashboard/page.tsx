@@ -65,23 +65,29 @@ export default function Teacher() {
       const { data: isCompleteExam, error: errorIsCompleteExam }: any =
         await supabase
           .from("history-exam-student")
-          .select("exam_id,student_id,kelas,status_exam");
+          .select("exam_id,student_id,kelas,status_exam,exams(idTeacher)")
+          .eq("exams.idTeacher", idTeacher);
       const { data: lengthStudent, error: errorLengthStudent }: any =
         await supabase.from("account-student").select("classes,idStudent");
 
       if (errorDatasManageExams || errorIsCompleteExam || errorLengthStudent) {
         console.log("data error ditampilkan");
       } else {
-        const completeExams = isCompleteExam.reduce((acc: any, cur: any) => {
+        const filterNull = isCompleteExam?.filter(
+          (isNull: any) => isNull.exams !== null
+        );
+        const completeExams = filterNull.reduce((acc: any, cur: any) => {
           const found = acc.find((item: any) => item.kelas === cur.kelas);
           if (!found) {
             acc.push({
               kelas: cur.kelas,
               exam_id: cur.exam_id,
+              // exam_id: [cur.exam_id],
               student_id: [cur.student_id],
             });
           } else {
             found.student_id.push(cur.student_id);
+            // found.exam_id.push(cur.exam_id);
           }
           return acc;
         }, []);

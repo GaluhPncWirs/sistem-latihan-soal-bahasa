@@ -51,8 +51,6 @@ export default function LoginAccount() {
     }
   }
 
-  console.log(valueTypeAccount);
-
   return (
     <LayoutFormAccount formTitle={"Login"}>
       <form

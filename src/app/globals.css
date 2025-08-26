@@ -248,16 +248,19 @@ tbody > tr > td {
 
 /* Hilangkan icon di Chrome, Safari, Edge */
 input[type="time"]::-webkit-calendar-picker-indicator {
-  display: none;
-  -webkit-appearance: none;
+  /* display: none;
+  -webkit-appearance: none; */
+  margin-left: 3px;
+  padding: 0px;
 }
 
 /* Hilangkan spinner (panah atas bawah) di Chrome, Safari, Edge */
 input[type="time"]::-webkit-inner-spin-button,
 input[type="time"]::-webkit-clear-button {
-  display: none;
-  -webkit-appearance: none;
-  margin: 0;
+  /* display: none;
+  -webkit-appearance: none; */
+  margin: 0px;
+  padding: 0px;
 }
 
 /* Untuk Firefox */

@@ -85,7 +85,9 @@ export default function ViewQuestions() {
       if (error) {
         console.log("tidak bisa ditambahkan");
       } else {
-        console.log("data berhasil di tambahkan");
+        toast("Berhasil ✅", {
+          description: "Soal Berhasil Dikirimkan",
+        });
       }
     }
   }
@@ -184,6 +186,7 @@ export default function ViewQuestions() {
                         newTime[i] = e.currentTarget.value;
                         setFromTimes(newTime);
                       }}
+                      className="p-2 w-1/3 flex justify-center"
                     />
                     <Input
                       type="time"
@@ -193,6 +196,7 @@ export default function ViewQuestions() {
                         newTime[i] = e.currentTarget.value;
                         setToTimes(newTime);
                       }}
+                      className="p-2 w-1/3 flex justify-center"
                     />
                   </div>
                 </TableCell>
@@ -238,7 +242,7 @@ export default function ViewQuestions() {
                         <DialogTitle>Hapus Soal</DialogTitle>
                         <DialogDescription>
                           Apakah Anda Benar - Benar Ingin Menghapus Soal{" "}
-                          <span className="font-bold">{`${data.nama_ujian}`}</span>{" "}
+                          <span className="font-bold">{data.nama_ujian}</span>{" "}
                           ini ?
                         </DialogDescription>
                       </DialogHeader>
@@ -302,7 +306,7 @@ export default function ViewQuestions() {
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Konfirmasi Soal</DialogTitle>
-            <DialogDescription className="my-2 text-base max-w-10/12 mx-auto">
+            <DialogDescription className="my-2 text-base max-w-11/12 mx-auto">
               Apakah Anda Sudah Benar - Benar Ingin Mengirimkan Soalnya Ke Siswa
               ?
             </DialogDescription>

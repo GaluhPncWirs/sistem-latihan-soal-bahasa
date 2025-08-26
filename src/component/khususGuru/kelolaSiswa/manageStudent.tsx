@@ -1,3 +1,4 @@
+import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import {
   HoverCard,
   HoverCardContent,
@@ -17,8 +18,10 @@ import { useEffect, useState } from "react";
 
 export default function ManageStudent() {
   const [dataStudents, setDataStudents] = useState<any>([]);
+  const idTeacher = useGetIdTeacher();
 
   useEffect(() => {
+    if (!idTeacher) return;
     async function getDataStudent() {
       const { data: student, error: errorStudent } = await supabase
         .from("account-student")
@@ -27,13 +30,18 @@ export default function ManageStudent() {
         await supabase
           .from("history-exam-student")
           .select(
-            "student_id,exam_id,hasil_ujian,kelas,created_at,status_exam,exams(id,nama_ujian,tipeUjian)"
-          );
+            "student_id,exam_id,hasil_ujian,kelas,created_at,status_exam,exams(id,nama_ujian,tipeUjian,idTeacher)"
+          )
+          .eq("exams.idTeacher", idTeacher);
 
       if (errorStudent || errorHistoryStudent) {
         console.log("data gagal diambil");
       } else {
-        const idSiswa = historyStudent?.reduce((acc: any, cur: any) => {
+        const dataIsNotNull = historyStudent?.filter(
+          (a: any) => a.exams !== null
+        );
+
+        const idSiswa = dataIsNotNull.reduce((acc: any, cur: any) => {
           const findId = acc.find((f: any) => f.student_id === cur.student_id);
           if (!findId) {
             acc.push({
@@ -74,12 +82,13 @@ export default function ManageStudent() {
             classes: historyExam?.classes ?? null,
           };
         });
+
         setDataStudents(mergedDatas);
       }
     }
 
     getDataStudent();
-  }, []);
+  }, [idTeacher]);
 
   return (
     <Table>
@@ -155,7 +164,7 @@ export default function ManageStudent() {
         ) : (
           <TableRow>
             <TableCell className="text-center text-lg font-bold" colSpan={6}>
-              Belum Ada Tugas Yang Dibuat
+              Belum Ada Siswa
             </TableCell>
           </TableRow>
         )}
