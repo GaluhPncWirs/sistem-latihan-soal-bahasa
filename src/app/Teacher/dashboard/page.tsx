@@ -81,13 +81,12 @@ export default function Teacher() {
           if (!found) {
             acc.push({
               kelas: cur.kelas,
-              exam_id: cur.exam_id,
-              // exam_id: [cur.exam_id],
+              exam_id: [cur.exam_id],
               student_id: [cur.student_id],
             });
           } else {
             found.student_id.push(cur.student_id);
-            // found.exam_id.push(cur.exam_id);
+            found.exam_id.push(cur.exam_id);
           }
           return acc;
         }, []);
@@ -109,8 +108,15 @@ export default function Teacher() {
 
         const mergedData = datasManageExams?.map((item: any) => {
           const findsExams = completeExams.find(
-            (f: any) => f.kelas === item.kelas && f.exam_id === item.idExams
+            (f: any) =>
+              f.kelas === item.kelas && f.exam_id.includes(item.idExams)
           );
+
+          // console.log(item.idExams);
+
+          // console.log(
+          //   completeExams.map((s: any) => s.exam_id.includes(item.idExams))
+          // );
           const findStudent = totalStudent.find(
             (f: any) => f.classes === item.kelas
           );
@@ -118,6 +124,7 @@ export default function Teacher() {
             ...item,
             lengthStudent: findStudent?.idStudent ?? [],
             lengthStudentCompleteExams: findsExams?.student_id ?? [],
+            // statusUjian: lengthStudent.length === lengthStudentCompleteExams.length ? "Selesai" : "Belum Selesai"
           };
         });
         setDataManageExams(mergedData);
@@ -125,6 +132,8 @@ export default function Teacher() {
     }
     getDataManageExams();
   }, [idTeacher]);
+
+  console.log(dataManageExams);
 
   return (
     <LayoutBodyContent>
