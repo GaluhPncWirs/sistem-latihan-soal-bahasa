@@ -112,19 +112,17 @@ export default function Teacher() {
               f.kelas === item.kelas && f.exam_id.includes(item.idExams)
           );
 
-          // console.log(item.idExams);
+          const studentCompleteExams = findsExams?.student_id.filter(
+            (_: any, i: number) => findsExams.exam_id[i] === item.idExams
+          );
 
-          // console.log(
-          //   completeExams.map((s: any) => s.exam_id.includes(item.idExams))
-          // );
           const findStudent = totalStudent.find(
             (f: any) => f.classes === item.kelas
           );
           return {
             ...item,
             lengthStudent: findStudent?.idStudent ?? [],
-            lengthStudentCompleteExams: findsExams?.student_id ?? [],
-            // statusUjian: lengthStudent.length === lengthStudentCompleteExams.length ? "Selesai" : "Belum Selesai"
+            lengthStudentCompleteExams: studentCompleteExams,
           };
         });
         setDataManageExams(mergedData);
@@ -132,8 +130,6 @@ export default function Teacher() {
     }
     getDataManageExams();
   }, [idTeacher]);
-
-  console.log(dataManageExams);
 
   return (
     <LayoutBodyContent>
