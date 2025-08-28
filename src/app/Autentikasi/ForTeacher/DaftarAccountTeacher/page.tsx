@@ -1,11 +1,21 @@
 "use client";
 import { useRandomId } from "@/app/hooks/getRandomId";
+import { useHandleInput } from "@/app/hooks/handleInput";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/data";
+import { ChevronLeftIcon } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function RegisterAccountTeacher() {
   const [clearForm, setClearForm] = useState<boolean>(false);
+  const { formMustFilled, setFormMustFilled, handleValueInput, isFormFilled } =
+    useHandleInput({
+      fullname: "",
+      email: "",
+      password: "",
+    });
 
   async function handleCreateAccountTeacher(e: any) {
     e.preventDefault();
@@ -22,27 +32,53 @@ export default function RegisterAccountTeacher() {
       .select("email")
       .eq("email", e.target.email.value);
     if (error) {
-      console.log("Data Gagal Diload");
+      toast("Gagal ❌", {
+        description: "Data Gagal Diload",
+      });
     } else if (data.length > 0) {
       setClearForm(true);
-      console.log(
-        "Nama Email Sudah Dibuat Sebelumnya. Buat kembali Yang Berbeda"
-      );
+      toast("Gagal ❌", {
+        description: "Nama Email Sudah Ada. Buat kembali Yang Berbeda",
+      });
     } else {
       const { error } = await supabase
         .from("account_teacher")
-        .insert([payloadDataRegiterAccountTeacher]);
+        .insert(payloadDataRegiterAccountTeacher);
       if (error) {
-        toast("Gagal Membuat Akun");
+        toast("Gagal ❌", {
+          description: "Gagal Membuat Akun",
+        });
       } else {
-        toast("Berhasil Membuat Akun, Silahkan Kembali Ke Form Login");
+        toast("Berhasil ✅", {
+          description: "Berhasil Membuat Akun, Silahkan Kembali Ke Form Login",
+        });
+
         setClearForm(true);
       }
     }
   }
 
+  useEffect(() => {
+    if (clearForm) {
+      setFormMustFilled({
+        fullname: "",
+        email: "",
+        password: "",
+      });
+    }
+  }, [clearForm]);
+
   return (
-    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] h-screen flex justify-center items-center flex-col">
+    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] h-screen flex justify-center items-center relative">
+      <div className="absolute top-5 left-5">
+        <Link
+          href="/Autentikasi/Login"
+          className="cursor-pointer bg-blue-300 py-2 pl-3 pr-5 flex justify-center items-center rounded-lg hover:bg-blue-400"
+        >
+          <ChevronLeftIcon />
+          <span className="text-base">Kembali</span>
+        </Link>
+      </div>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] rounded-xl shadow-xl shadow-slate-500 max-[640px]:w-10/12 sm:w-2/3 sm:py-5 md:w-1/2 lg:w-2/5 max-[640px]:py-5">
         <h1 className="text-3xl font-bold text-blue-500 text-center mb-5">
           Daftar Akun Guru
@@ -62,6 +98,8 @@ export default function RegisterAccountTeacher() {
             id="fullname"
             placeholder="adam jobs"
             className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.fullname}
           />
 
           <label
@@ -75,6 +113,8 @@ export default function RegisterAccountTeacher() {
             id="email"
             placeholder="adamJobs@gmail.com"
             className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.email}
           />
           <label
             htmlFor="password"
@@ -87,11 +127,14 @@ export default function RegisterAccountTeacher() {
             id="password"
             placeholder="**********"
             className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.password}
           />
 
           <button
             className="bg-blue-300 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
             type="submit"
+            disabled={!isFormFilled()}
           >
             Register
           </button>

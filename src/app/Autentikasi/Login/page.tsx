@@ -1,4 +1,5 @@
 "use client";
+import { useHandleInput } from "@/app/hooks/handleInput";
 import {
   Select,
   SelectContent,
@@ -15,39 +16,58 @@ import { toast } from "sonner";
 export default function LoginAccount() {
   const { push } = useRouter();
   const [valueTypeAccount, setValueTypeAccount] = useState<string>("");
-  const [validate, setValidate] = useState<boolean>(false);
+  const { formMustFilled, handleValueInput, isFormFilled } = useHandleInput({
+    email: "",
+    password: "",
+  });
 
   async function handleLogin(e: any) {
     e.preventDefault();
     const valueEmail = e.currentTarget.email.value;
     const valuePassword = e.currentTarget.password.value;
-    if (valueTypeAccount === "siswa") {
-      const { data, error }: any = await supabase
-        .from("account-student")
-        .select("idStudent")
-        .eq("email", valueEmail)
-        .eq("password", valuePassword)
-        .single();
-      if (error) {
-        toast("Email dan Password Salah Input Kembali");
-      } else {
-        localStorage.setItem("idLoginSiswa", data.idStudent);
-        push("/");
+    if (valueTypeAccount !== "") {
+      if (valueTypeAccount === "siswa") {
+        const { data, error }: any = await supabase
+          .from("account-student")
+          .select("idStudent")
+          .eq("email", valueEmail)
+          .eq("password", valuePassword)
+          .single();
+        if (error) {
+          toast("Gagal ❌", {
+            description: "Email dan Password Salah Input Kembali",
+          });
+        } else {
+          toast("Berhasil ✅", {
+            description: "Masuk Akun Berhasil",
+          });
+          localStorage.setItem("idLoginSiswa", data.idStudent);
+          push("/");
+        }
+      } else if (valueTypeAccount === "guru") {
+        const { data, error }: any = await supabase
+          .from("account_teacher")
+          .select("id_teacher")
+          .eq("email", valueEmail)
+          .eq("password", valuePassword)
+          .single();
+        if (error) {
+          toast("Gagal ❌", {
+            description: "Email dan Password Salah Input Kembali",
+          });
+        } else {
+          toast("Berhasil ✅", {
+            description: "Masuk Akun Berhasil",
+          });
+          localStorage.setItem("idLoginGuru", data.id_teacher);
+          document.cookie = "role=pengajar";
+          push("/Teacher/dashboard");
+        }
       }
-    } else if (valueTypeAccount === "guru") {
-      const { data, error }: any = await supabase
-        .from("account_teacher")
-        .select("id_teacher")
-        .eq("email", valueEmail)
-        .eq("password", valuePassword)
-        .single();
-      if (error) {
-        toast("Email dan Password Salah Input Kembali");
-      } else {
-        localStorage.setItem("idLoginGuru", data.id_teacher);
-        document.cookie = "role=pengajar";
-        push("/Teacher/dashboard");
-      }
+    } else {
+      toast("Gagal ❌", {
+        description: "Jenis Akun Belum Dipilih",
+      });
     }
   }
 
@@ -79,7 +99,9 @@ export default function LoginAccount() {
           type="email"
           id="email"
           placeholder="adamJobs@gmail.com"
-          className="w-full rounded-md p-3 bg-teal-100"
+          className="w-full rounded-md p-2.5 bg-teal-100"
+          onChange={handleValueInput}
+          value={formMustFilled.email}
         />
         <label
           htmlFor="password"
@@ -91,11 +113,14 @@ export default function LoginAccount() {
           type="password"
           id="password"
           placeholder="**********"
-          className="w-full rounded-md p-3 bg-teal-100"
+          className="w-full rounded-md p-2.5 bg-teal-100"
+          onChange={handleValueInput}
+          value={formMustFilled.password}
         />
         <button
           className="bg-blue-300 font-semibold rounded-md w-full py-1.5 mt-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
           type="submit"
+          disabled={!isFormFilled()}
         >
           Login
         </button>

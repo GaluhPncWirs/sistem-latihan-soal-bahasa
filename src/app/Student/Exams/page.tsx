@@ -109,10 +109,8 @@ export default function Soal() {
     if (insertErr) {
       toast("Gagal ❌", { description: "Gagal menyimpan data" });
     } else {
-      toast("Berhasil ✅", { description: "Ujian Selesai" });
-      setTimeout(() => {
-        push("/Student/Dashboard");
-      }, 3000);
+      toast("Berhasil ✅", { description: "Ujian Telah Selesai" });
+      push("/Student/Dashboard");
     }
 
     // const { data: sudahAda } = await supabase

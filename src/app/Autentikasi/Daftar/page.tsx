@@ -1,6 +1,7 @@
 "use client";
 
 import { useRandomId } from "@/app/hooks/getRandomId";
+import { useHandleInput } from "@/app/hooks/handleInput";
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
@@ -8,6 +9,13 @@ import { toast } from "sonner";
 
 export default function RegisterAccount() {
   const [clearForm, setClearForm] = useState(false);
+  const { formMustFilled, setFormMustFilled, handleValueInput, isFormFilled } =
+    useHandleInput({
+      fullname: "",
+      kelas: "",
+      email: "",
+      password: "",
+    });
 
   async function handleRegister(e: any) {
     e.preventDefault();
@@ -24,21 +32,39 @@ export default function RegisterAccount() {
       .select("email")
       .eq("email", e.target.email.value);
     if (data.length > 0) {
-      toast("Nama Email Sudah Dibuat Sebelumnya. Buat kembali Yang Berbeda");
+      toast("Gagal ❌", {
+        description: "Nama Email Sudah Ada. Buat kembali Yang Berbeda",
+      });
+
       setClearForm(true);
     } else if (error) {
       toast("Data Gagal Diload");
     } else {
       const { error }: any = await supabase
         .from("account-student")
-        .insert([dataRegister]);
+        .insert(dataRegister);
       if (error) {
-        toast("Gagal Membuat Akun");
+        toast("Gagal ❌", {
+          description: "Gagal Membuat Akun",
+        });
       } else {
-        toast("Berhasil Membuat Akun Silahkan Kembali Ke Form Login");
+        toast("Berhasil ✅", {
+          description: "Berhasil Membuat Akun Silahkan Kembali Ke Form Login",
+        });
       }
     }
   }
+
+  useEffect(() => {
+    if (clearForm) {
+      setFormMustFilled({
+        fullname: "",
+        kelas: "",
+        email: "",
+        password: "",
+      });
+    }
+  }, [clearForm]);
 
   return (
     <LayoutFormAccount formTitle={"Buat Akun"}>
@@ -56,7 +82,9 @@ export default function RegisterAccount() {
           type="text"
           id="fullname"
           placeholder="adam jobs"
-          className="w-full rounded-md p-3 bg-teal-100"
+          className="w-full rounded-md p-2.5 bg-teal-100"
+          onChange={handleValueInput}
+          value={formMustFilled.fullname}
         />
         <label htmlFor="kelas" className="text-xl font-semibold text-blue-500">
           Kelas
@@ -65,7 +93,9 @@ export default function RegisterAccount() {
           type="text"
           id="kelas"
           placeholder="Tp 5"
-          className="w-full rounded-md p-3 bg-teal-100"
+          className="w-full rounded-md p-2.5 bg-teal-100"
+          onChange={handleValueInput}
+          value={formMustFilled.kelas}
         />
         <label htmlFor="email" className="text-xl font-semibold text-blue-500">
           Email
@@ -74,7 +104,9 @@ export default function RegisterAccount() {
           type="email"
           id="email"
           placeholder="adamJobs@gmail.com"
-          className="w-full rounded-md p-3 bg-teal-100"
+          className="w-full rounded-md p-2.5 bg-teal-100"
+          onChange={handleValueInput}
+          value={formMustFilled.email}
         />
         <label
           htmlFor="password"
@@ -86,12 +118,14 @@ export default function RegisterAccount() {
           type="password"
           id="password"
           placeholder="**********"
-          className="w-full rounded-md p-3 bg-teal-100"
+          className="w-full rounded-md p-2.5 bg-teal-100"
+          onChange={handleValueInput}
+          value={formMustFilled.password}
         />
-
         <button
           className="bg-blue-300 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
           type="submit"
+          disabled={!isFormFilled()}
         >
           Register
         </button>

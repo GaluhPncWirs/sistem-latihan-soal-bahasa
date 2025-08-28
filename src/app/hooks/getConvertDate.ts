@@ -1,5 +1,7 @@
 export function useConvertDate(created_at: string) {
   const optionsTime: any = {
+    minute: "numeric",
+    hour: "numeric",
     day: "numeric",
     month: "long",
     year: "numeric",
