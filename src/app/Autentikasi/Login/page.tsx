@@ -24,7 +24,7 @@ export default function LoginAccount() {
     if (valueTypeAccount === "siswa") {
       const { data, error }: any = await supabase
         .from("account-student")
-        .select("*")
+        .select("idStudent")
         .eq("email", valueEmail)
         .eq("password", valuePassword)
         .single();
@@ -37,7 +37,7 @@ export default function LoginAccount() {
     } else if (valueTypeAccount === "guru") {
       const { data, error }: any = await supabase
         .from("account_teacher")
-        .select("*")
+        .select("id_teacher")
         .eq("email", valueEmail)
         .eq("password", valuePassword)
         .single();

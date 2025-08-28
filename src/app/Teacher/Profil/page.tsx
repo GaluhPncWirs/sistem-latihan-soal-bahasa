@@ -160,7 +160,7 @@ export default function TeacherProfile() {
                 ) : (
                   <TableRow>
                     <TableCell
-                      colSpan={5}
+                      colSpan={6}
                       className="text-center text-lg font-semibold"
                     >
                       Belum Ada History

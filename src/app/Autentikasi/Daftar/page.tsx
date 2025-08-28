@@ -12,21 +12,22 @@ export default function RegisterAccount() {
   async function handleRegister(e: any) {
     e.preventDefault();
     const dataRegister = {
-      fullName: e.currentTarget.fullname.value,
-      classes: e.currentTarget.kelas.value,
-      email: e.currentTarget.email.value,
-      password: e.currentTarget.password.value,
+      fullName: e.target.fullname.value,
+      classes: e.target.kelas.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+      role: "pelajar",
       idStudent: useRandomId(7, "STD"),
     };
     const { data, error }: any = await supabase
       .from("account-student")
-      .select("*")
-      .eq("email", dataRegister.email);
+      .select("email")
+      .eq("email", e.target.email.value);
     if (data.length > 0) {
-      toast("Akun Telah Ada, Buat Akun Yang berbeda");
+      toast("Nama Email Sudah Dibuat Sebelumnya. Buat kembali Yang Berbeda");
       setClearForm(true);
     } else if (error) {
-      toast("Error");
+      toast("Data Gagal Diload");
     } else {
       const { error }: any = await supabase
         .from("account-student")
@@ -34,7 +35,7 @@ export default function RegisterAccount() {
       if (error) {
         toast("Gagal Membuat Akun");
       } else {
-        toast("Berhasil Membuat Akun");
+        toast("Berhasil Membuat Akun Silahkan Kembali Ke Form Login");
       }
     }
   }

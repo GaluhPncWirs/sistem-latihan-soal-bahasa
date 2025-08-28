@@ -267,33 +267,13 @@ export default function ViewQuestions() {
             ))
           ) : (
             <TableRow>
-              <TableCell className="text-center text-lg font-bold" colSpan={6}>
-                Belum Ada Tugas Yang Dibuat
+              <TableCell
+                colSpan={6}
+                className="text-center text-lg font-semibold"
+              >
+                Belum Ada Soal Ujian Yang Dibuat
               </TableCell>
             </TableRow>
-            // Array.from({ length: 5 }).map((_, i) => (
-            //   <tr key={i}>
-            //     <td className="bg-stone-300 px-4 py-6 animate-pulse w-1/12">
-            //       <div className="h-4 bg-gray-500 rounded w-full mb-2"></div>
-            //     </td>
-            //     <td className="bg-stone-300 px-4 py-6 animate-pulse w-10/12">
-            //       <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-            //       <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
-            //     </td>
-            //     <td className="bg-stone-300 px-4 py-6 animate-pulse w-10/12">
-            //       <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-            //       <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
-            //     </td>
-            //     <td className="bg-stone-300 px-4 py-6 animate-pulse">
-            //       <div className="h-4 bg-gray-500 rounded w-10/12 mb-2"></div>
-            //       <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-            //     </td>
-            //     <td className="bg-stone-300 px-4 py-6 animate-pulse">
-            //       <div className="h-4 bg-gray-500 rounded w-10/12 mb-2"></div>
-            //       <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-            //     </td>
-            //   </tr>
-            // ))
           )}
         </TableBody>
       </Table>

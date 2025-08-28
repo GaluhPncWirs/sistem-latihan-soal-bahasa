@@ -34,10 +34,6 @@ export default function ManageStudent() {
           )
           .eq("exams.idTeacher", idTeacher);
 
-      // const { data: dataManageExams, error: errorDataManageExams }: any =
-      //   await supabase.from("managed_exams").select("*");
-      // // .eq("id_Teacher", idTeacher);
-
       if (errorStudent || errorHistoryStudent) {
         console.log("data gagal diambil");
       } else {
@@ -72,7 +68,6 @@ export default function ManageStudent() {
               status_exam: cur.status_exam,
             });
             findId.created_at.push(cur.created_at);
-            findId.arrIdExams.push(cur.exam_id);
           }
           return acc;
         }, []);
@@ -168,7 +163,10 @@ export default function ManageStudent() {
           ))
         ) : (
           <TableRow>
-            <TableCell className="text-center text-lg font-bold" colSpan={6}>
+            <TableCell
+              colSpan={6}
+              className="text-center text-lg font-semibold"
+            >
               Belum Ada Siswa
             </TableCell>
           </TableRow>

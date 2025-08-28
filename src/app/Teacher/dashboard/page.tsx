@@ -184,24 +184,40 @@ export default function Teacher() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#3282B8]">
-                    <TableHead className="text-base">No</TableHead>
-                    <TableHead className="text-base">Nama Ujian</TableHead>
-                    <TableHead className="text-base">Kelas</TableHead>
-                    <TableHead className="text-base">Dibuat Tanggal</TableHead>
-                    <TableHead className="text-base">Tenggat Waktu</TableHead>
-                    <TableHead className="text-base">Status</TableHead>
+                    <TableHead className="text-base text-center">No</TableHead>
+                    <TableHead className="text-base text-center">
+                      Nama Ujian
+                    </TableHead>
+                    <TableHead className="text-base text-center">
+                      Kelas
+                    </TableHead>
+                    <TableHead className="text-base text-center">
+                      Dibuat Tanggal
+                    </TableHead>
+                    <TableHead className="text-base text-center">
+                      Tenggat Waktu
+                    </TableHead>
+                    <TableHead className="text-base text-center">
+                      Status
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {dataManageExams.length > 0 ? (
                     dataManageExams.map((item: any, i: number) => (
                       <TableRow key={i}>
-                        <TableCell>{i + 1}</TableCell>
+                        <TableCell className="text-center">{i + 1}</TableCell>
                         <TableCell>{item.exams?.nama_ujian}</TableCell>
-                        <TableCell>{item.kelas}</TableCell>
-                        <TableCell>{item.dibuat_tgl}</TableCell>
-                        <TableCell>{item.tenggat_waktu}</TableCell>
-                        <TableCell>
+                        <TableCell className="text-center">
+                          {item.kelas}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {item.dibuat_tgl}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {item.tenggat_waktu}
+                        </TableCell>
+                        <TableCell className="text-center">
                           {item.lengthStudent.length ===
                           item.lengthStudentCompleteExams.length
                             ? "Selesai"
@@ -212,10 +228,10 @@ export default function Teacher() {
                   ) : (
                     <TableRow>
                       <TableCell
-                        className="text-center text-lg font-bold"
                         colSpan={6}
+                        className="text-center text-lg font-semibold"
                       >
-                        Belum Ada Tugas Yang Dibuat
+                        Belum Ada Soal Ujian Yang Dikelola
                       </TableCell>
                     </TableRow>
                   )}

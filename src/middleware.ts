@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export function middleware(req: NextRequest) {
+  const role = req.cookies.get("role")?.value;
 
-export function middleware(req: NextRequest){
-    const role = req.cookies.get('role')?.value
+  if (role !== "pengajar") {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
-    if(role !== "pengajar"){
-        return NextResponse.redirect(new URL('/', req.url))
-    }
-    return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/Teacher/:path*"]
-}
+  matcher: ["/Teacher/:path*"],
+};
