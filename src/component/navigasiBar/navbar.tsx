@@ -28,6 +28,8 @@ export default function NavigasiBar() {
     localStorage.removeItem("idLoginSiswa");
     localStorage.removeItem("idLoginGuru");
     document.cookie = "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    // document.cookie =
+    //   "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; max-age=0; path=/; SameSite=Lax";
     push("/Autentikasi/Login");
   }
 

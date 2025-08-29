@@ -88,41 +88,48 @@ export default function DashboardStudent() {
     .filter((complete: any) => complete).length;
 
   // untuk fitur deadline
-  const waktuHariUjian = scheduleExams.map(
-    (dayExams: any) => dayExams.dibuat_tgl
-  );
 
   const waktuHariIni = useConvertDate(new Date().toISOString())
     .split(" ")
     .slice(0, 3)
     .join(" ");
 
-  const waktuIni = useConvertDate(new Date().toISOString())
-    .split(" ")
-    .slice(3, 5)
-    .join(" ");
-
-  const waktuMulaiUjian = scheduleExams.map((startDurations: any) =>
-    Number(
-      startDurations.tenggat_waktu
-        .split("-")
-        .slice(0, 1)[0]
-        .trim()
-        .replace(/:/g, ".")
-    )
+  const waktuDurasiIni = Number(
+    useConvertDate(new Date().toISOString()).split(" ").slice(4, 5).join(" ")
   );
 
-  const waktuTenggatUjian = scheduleExams.map((deadlineDurations: any) =>
-    Number(
-      deadlineDurations.tenggat_waktu
-        .split("-")
-        .slice(1, 2)[0]
-        .trim()
-        .replace(/:/g, ".")
-    )
-  );
+  // const [startTimeDuration, endTimeDuration] = scheduleExams
+  //   .map((s: any) => s.tenggat_waktu.split("-"))
+  //   .map((t: any) => Number(t.trim().replace(/:/g, ".")));
 
-  // console.log(useConvertDate(new Date().toISOString()));
+  // console.log(startTimeDuration);
+
+  // const waktuHariUjian = scheduleExams
+  //   .map((dayExams: any) => dayExams.dibuat_tgl)
+  //   .filter((dateDay: any) => dateDay === waktuHariIni);
+
+  // const waktuMulaiUjian = scheduleExams.map(
+  //   (startDurations: any) =>
+  //     Number(
+  //       startDurations.tenggat_waktu
+  //         .split("-")
+  //         .slice(0, 1)[0]
+  //         .trim()
+  //         .replace(/:/g, ".")
+  //     ) <= waktuDurasiIni
+  // );
+
+  // const waktuTenggatUjian = scheduleExams.map((deadlineDurations: any) =>
+  //   Number(
+  //     deadlineDurations.tenggat_waktu
+  //       .split("-")
+  //       .slice(1, 2)[0]
+  //       .trim()
+  //       .replace(/:/g, ".")
+  //   )
+  // );
+
+  // // console.log(useConvertDate(new Date().toISOString()));
 
   return (
     <LayoutBodyContent>
@@ -215,6 +222,69 @@ export default function DashboardStudent() {
                                 </DialogFooter>
                               </DialogContent>
                             </Dialog>
+                          </TableCell>
+                        )}
+
+                        {data.status_exam === true ? (
+                          <TableCell>Complete</TableCell>
+                        ) : (
+                          <TableCell>
+                            {(data.dibuat_tgl !== waktuHariIni &&
+                              Number(
+                                data.tenggat_waktu
+                                  .split("-")
+                                  .slice(0, 1)[0]
+                                  .trim()
+                                  .replace(/:/g, ".")
+                              ) <= waktuDurasiIni) ||
+                            Number(
+                              data.tenggat_waktu
+                                .split("-")
+                                .slice(1, 2)[0]
+                                .trim()
+                                .replace(/:/g, ".")
+                            ) >= waktuDurasiIni ? (
+                              "Ujian Telah Melewati Batas Waktu"
+                            ) : (
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button className="hover:underline hover:text-blue-700 cursor-pointer">
+                                    Uncomplete
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                  <DialogHeader>
+                                    <DialogTitle className="mb-2">
+                                      Konfirmasi Masuk Ujian
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                      Apakah Anda Yakin ingin Mengerjakan Soal{" "}
+                                      <span className="font-bold">
+                                        "{data.exams.nama_ujian}"
+                                      </span>{" "}
+                                      Ini ?
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <DialogFooter>
+                                    <DialogClose asChild>
+                                      <Button variant="outline">Batal</Button>
+                                    </DialogClose>
+                                    <DialogClose asChild>
+                                      <Button
+                                        onClick={() =>
+                                          push(
+                                            `/Student/Exams/?id=${data.idExams}`
+                                          )
+                                        }
+                                        className="cursor-pointer"
+                                      >
+                                        Oke
+                                      </Button>
+                                    </DialogClose>
+                                  </DialogFooter>
+                                </DialogContent>
+                              </Dialog>
+                            )}
                           </TableCell>
                         )}
                       </TableRow>

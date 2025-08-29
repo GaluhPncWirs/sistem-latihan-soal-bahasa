@@ -41,6 +41,7 @@ export default function LoginAccount() {
           toast("Berhasil ✅", {
             description: "Masuk Akun Berhasil",
           });
+          document.cookie = "role=pelajar";
           localStorage.setItem("idLoginSiswa", data.idStudent);
           push("/");
         }
@@ -61,6 +62,7 @@ export default function LoginAccount() {
           });
           localStorage.setItem("idLoginGuru", data.id_teacher);
           document.cookie = "role=pengajar";
+          // document.cookie = "role=pengajar path=/; max-age=86400; SameSite=Lax";
           push("/Teacher/dashboard");
         }
       }
