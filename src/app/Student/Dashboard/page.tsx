@@ -87,17 +87,42 @@ export default function DashboardStudent() {
     .map((isDone: any) => isDone.status_exam === true)
     .filter((complete: any) => complete).length;
 
-  // function deadline(deadlineExams: any) {
-  //   const dateNow = new Date();
+  // untuk fitur deadline
+  const waktuHariUjian = scheduleExams.map(
+    (dayExams: any) => dayExams.dibuat_tgl
+  );
 
-  // console.log("unutk bulan", new Date().getMonth());
-  // console.log("unutk hari", new Date().getDate());
-  // console.log("unutk jam", new Date().getHours());
-  // console.log("unutk menit", new Date().getMinutes());
-  //   // if(dateNow deadlineExams)
-  // }
+  const waktuHariIni = useConvertDate(new Date().toISOString())
+    .split(" ")
+    .slice(0, 3)
+    .join(" ");
 
-  // console.log(new Date().toUTCString());
+  const waktuIni = useConvertDate(new Date().toISOString())
+    .split(" ")
+    .slice(3, 5)
+    .join(" ");
+
+  const waktuMulaiUjian = scheduleExams.map((startDurations: any) =>
+    Number(
+      startDurations.tenggat_waktu
+        .split("-")
+        .slice(0, 1)[0]
+        .trim()
+        .replace(/:/g, ".")
+    )
+  );
+
+  const waktuTenggatUjian = scheduleExams.map((deadlineDurations: any) =>
+    Number(
+      deadlineDurations.tenggat_waktu
+        .split("-")
+        .slice(1, 2)[0]
+        .trim()
+        .replace(/:/g, ".")
+    )
+  );
+
+  // console.log(useConvertDate(new Date().toISOString()));
 
   return (
     <LayoutBodyContent>
