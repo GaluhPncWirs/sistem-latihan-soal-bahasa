@@ -10,6 +10,7 @@ import {
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
 import { useRouter } from "next/navigation";
+import { NextResponse } from "next/server";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -23,54 +24,98 @@ export default function LoginAccount() {
 
   async function handleLogin(e: any) {
     e.preventDefault();
-    const valueEmail = e.currentTarget.email.value;
-    const valuePassword = e.currentTarget.password.value;
+    // const valueEmail = e.currentTarget.email.value;
+    // const valuePassword = e.currentTarget.password.value;
+
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        valueEmail: e.currentTarget.email.value,
+        valuePassword: e.currentTarget.password.value,
+        valueTypeAccount: valueTypeAccount,
+      }),
+    });
+
+    const dataLogin = await response.json();
+
     if (valueTypeAccount !== "") {
-      if (valueTypeAccount === "siswa") {
-        const { data, error }: any = await supabase
-          .from("account-student")
-          .select("idStudent")
-          .eq("email", valueEmail)
-          .eq("password", valuePassword)
-          .single();
-        if (error) {
-          toast("Gagal ❌", {
-            description: "Email dan Password Salah Input Kembali",
-          });
-        } else {
-          toast("Berhasil ✅", {
-            description: "Masuk Akun Berhasil",
-          });
-          document.cookie = "role=pelajar";
-          localStorage.setItem("idLoginSiswa", data.idStudent);
+      if (response.ok) {
+        if (dataLogin.tipe === "siswa") {
+          localStorage.setItem("idLoginSiswa", dataLogin.id);
           push("/");
-        }
-      } else if (valueTypeAccount === "guru") {
-        const { data, error }: any = await supabase
-          .from("account_teacher")
-          .select("id_teacher")
-          .eq("email", valueEmail)
-          .eq("password", valuePassword)
-          .single();
-        if (error) {
-          toast("Gagal ❌", {
-            description: "Email dan Password Salah Input Kembali",
-          });
-        } else {
           toast("Berhasil ✅", {
             description: "Masuk Akun Berhasil",
           });
-          localStorage.setItem("idLoginGuru", data.id_teacher);
-          document.cookie = "role=pengajar";
-          // document.cookie = "role=pengajar path=/; max-age=86400; SameSite=Lax";
+        } else {
+          localStorage.setItem("idLoginGuru", dataLogin.id);
           push("/Teacher/dashboard");
+          toast("Berhasil ✅", {
+            description: "Masuk Akun Berhasil",
+          });
         }
+      } else {
+        toast("Gagal ❌", {
+          description: "Email dan Password Salah Input Kembali",
+        });
       }
     } else {
       toast("Gagal ❌", {
         description: "Jenis Akun Belum Dipilih",
       });
     }
+
+    // if (valueTypeAccount !== "") {
+    //   if (valueTypeAccount === "siswa") {
+    //     const { data, error }: any = await supabase
+    //       .from("account-student")
+    //       .select("idStudent")
+    //       .eq("email", valueEmail)
+    //       .eq("password", valuePassword)
+    //       .single();
+    //     if (error) {
+    //       toast("Gagal ❌", {
+    //         description: "Email dan Password Salah Input Kembali",
+    //       });
+    //     } else {
+    //       toast("Berhasil ✅", {
+    //         description: "Masuk Akun Berhasil",
+    //       });
+    //       localStorage.setItem("idLoginSiswa", data.idStudent);
+    //       push("/");
+    //     }
+    //   } else if (valueTypeAccount === "guru") {
+    //     const { data, error }: any = await supabase
+    //       .from("account_teacher")
+    //       .select("id_teacher")
+    //       .eq("email", valueEmail)
+    //       .eq("password", valuePassword)
+    //       .single();
+    //     if (error) {
+    //       toast("Gagal ❌", {
+    //         description: "Email dan Password Salah Input Kembali",
+    //       });
+    //     } else {
+    //       const res = NextResponse.json({ success: true });
+    //       console.log(res);
+    //       res.cookies.set("role", "pengajar", {
+    //         path: "/",
+    //         httpOnly: true,
+    //         sameSite: "lax",
+    //       });
+    //       toast("Berhasil ✅", {
+    //         description: "Masuk Akun Berhasil",
+    //       });
+    //       localStorage.setItem("idLoginGuru", data.id_teacher);
+    //       // document.cookie = "role=pengajar";
+    //       push("/Teacher/dashboard");
+    //     }
+    //   }
+    // } else {
+    //   toast("Gagal ❌", {
+    //     description: "Jenis Akun Belum Dipilih",
+    //   });
+    // }
   }
 
   return (

@@ -219,7 +219,7 @@ export default function Teacher() {
                         </TableCell>
                         <TableCell className="text-center">
                           {item.lengthStudent.length ===
-                          item.lengthStudentCompleteExams.length
+                          item.lengthStudentCompleteExams?.length
                             ? "Selesai"
                             : "Belum Selesai"}
                         </TableCell>

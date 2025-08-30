@@ -229,21 +229,23 @@ export default function DashboardStudent() {
                           <TableCell>Complete</TableCell>
                         ) : (
                           <TableCell>
-                            {(data.dibuat_tgl !== waktuHariIni &&
-                              Number(
-                                data.tenggat_waktu
-                                  .split("-")
-                                  .slice(0, 1)[0]
-                                  .trim()
-                                  .replace(/:/g, ".")
-                              ) <= waktuDurasiIni) ||
+                            {data.dibuat_tgl !== waktuHariIni &&
                             Number(
                               data.tenggat_waktu
                                 .split("-")
-                                .slice(1, 2)[0]
+                                .slice(0, 1)[0]
                                 .trim()
                                 .replace(/:/g, ".")
-                            ) >= waktuDurasiIni ? (
+                            ) <= waktuDurasiIni ? (
+                              "Ujian Belum Dimulai"
+                            ) : data.dibuat_tgl !== waktuHariIni &&
+                              Number(
+                                data.tenggat_waktu
+                                  .split("-")
+                                  .slice(1, 2)[0]
+                                  .trim()
+                                  .replace(/:/g, ".")
+                              ) >= waktuDurasiIni ? (
                               "Ujian Telah Melewati Batas Waktu"
                             ) : (
                               <Dialog>
