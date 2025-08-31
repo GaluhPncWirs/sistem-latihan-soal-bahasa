@@ -24,14 +24,16 @@ export default function NavigasiBar() {
     }
   }, []);
 
-  function handleLogout() {
+  async function handleLogout() {
+    const responseDelCookies = await fetch("/api/delCookies", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+    const messageRespons = await responseDelCookies.json();
     localStorage.removeItem("idLoginSiswa");
     localStorage.removeItem("idLoginGuru");
-    document.cookie =
-      "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax";
-    // document.cookie =
-    //   "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; max-age=0; path=/; SameSite=Lax";
     push("/Autentikasi/Login");
+    toast("Berhasil ✅", { description: messageRespons.message });
   }
 
   return (

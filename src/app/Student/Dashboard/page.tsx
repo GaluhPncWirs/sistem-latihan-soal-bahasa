@@ -93,23 +93,15 @@ export default function DashboardStudent() {
     .slice(0, 3)
     .join(" ");
 
-  const waktuDurasiIni = Number(
-    useConvertDate(new Date().toISOString()).split(" ").slice(4, 5).join(" ")
-  );
+  const waktuDurasiIni = useConvertDate(new Date().toISOString())
+    .split(" ")
+    .slice(4, 5)
+    .join(" ");
 
   function toMinute(val: any) {
-    if (typeof val === "number") {
-      const h = Math.floor(val);
-      const m = Math.round((val - h) * 100);
-      return h * 60 + m;
-    }
-    if (typeof val === "string" && val.includes(":")) {
-      const [h, m] = val.trim().split(":").map(Number);
-      return h * 60 + m;
-    }
-
-    const [hoursStr, minuteStr = "0"] = String(val).split(".");
-    return Number(hoursStr) * 60 + Number(minuteStr);
+    const deleteDot = val.replace(/[:.]/g, "-");
+    const [hoursStr, minuteStr = "0"] = deleteDot.split("-").map(Number);
+    return hoursStr * 60 + minuteStr;
   }
 
   return (
@@ -174,15 +166,19 @@ export default function DashboardStudent() {
                                 const endMin = toMinute(endTime);
                                 const nowMin = toMinute(waktuDurasiIni);
 
-                                if (data.dibuat_tgl !== waktuHariIni) {
+                                if (
+                                  (nowMin < startMin &&
+                                    data.dibuat_tgl === waktuHariIni) ||
+                                  data.dibuat_tgl !== waktuHariIni
+                                ) {
                                   return "Ujian Belum Dimulai";
                                 }
 
-                                if (nowMin < startMin) {
-                                  return "Ujian Belum Dimulai";
-                                }
-
-                                if (nowMin >= endMin) {
+                                if (
+                                  (nowMin >= endMin &&
+                                    data.dibuat_tgl === waktuHariIni) ||
+                                  data.dibuat_tgl !== waktuHariIni
+                                ) {
                                   return "Ujian Telah Lewat Batas Waktu";
                                 }
 
