@@ -52,9 +52,13 @@ export default function ViewQuestions() {
     (time: any, i: any) => `${time} - ${toTimes[i]}`
   );
 
-  const manipulateDate = dates.map((localDate: any) =>
-    useConvertDate(localDate)
-  );
+  const manipulateDate = dates.map((localDate: any) => {
+    return new Date(localDate).toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  });
 
   async function managedExams() {
     const idExam = viewManageQuestionsExam.map((item: any) => item.id);

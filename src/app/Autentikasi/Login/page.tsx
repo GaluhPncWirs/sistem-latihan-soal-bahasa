@@ -40,7 +40,7 @@ export default function LoginAccount() {
     const dataLogin = await response.json();
 
     if (valueTypeAccount !== "") {
-      if (response.ok) {
+      if (dataLogin.success) {
         if (dataLogin.tipe === "siswa") {
           localStorage.setItem("idLoginSiswa", dataLogin.id);
           push("/");
