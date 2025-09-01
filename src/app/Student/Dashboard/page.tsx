@@ -88,12 +88,24 @@ export default function DashboardStudent() {
     .filter((complete: any) => complete).length;
 
   // untuk fitur deadline
-  const waktuHariIni = useConvertDate(new Date().toISOString())
+  const waktuHariIni = useConvertDate(new Date().toISOString(), {
+    minute: "numeric",
+    hour: "numeric",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })
     .split(" ")
     .slice(0, 3)
     .join(" ");
 
-  const waktuDurasiIni = useConvertDate(new Date().toISOString())
+  const waktuDurasiIni = useConvertDate(new Date().toISOString(), {
+    minute: "numeric",
+    hour: "numeric",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })
     .split(" ")
     .slice(4, 5)
     .join(" ");
@@ -279,7 +291,13 @@ export default function DashboardStudent() {
                             </HoverCard>
                           </TableCell>
                           <TableCell>
-                            {useConvertDate(item.created_at_historyExams)}
+                            {useConvertDate(item.created_at_historyExams, {
+                              minute: "numeric",
+                              hour: "numeric",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })}
                           </TableCell>
                           <TableCell>
                             {item.tipe_ujian === "pg"

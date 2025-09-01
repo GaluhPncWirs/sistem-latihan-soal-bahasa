@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function TeacherProfile() {
@@ -38,14 +39,19 @@ export default function TeacherProfile() {
         await supabase
           .from("history-exam-student")
           .select(
-            "exam_id,hasil_ujian,student_id,kelas,exams(nama_ujian,tipeUjian)"
-          );
+            "exam_id,hasil_ujian,student_id,kelas,exams(nama_ujian,tipeUjian,idTeacher)"
+          )
+          .eq("exams.idTeacher", idTeacher);
 
       if (errorDataManageExams || errorDataHistoryExams) {
         console.log("data error ditampilkan");
       }
 
-      const result = dataHistoryExams?.reduce((acc: any, cur: any) => {
+      const fillterNotNull = dataHistoryExams.filter(
+        (data: any) => data.exams !== null
+      );
+
+      const result = fillterNotNull?.reduce((acc: any, cur: any) => {
         const found = acc.find(
           (item: any) =>
             item.kelas === cur.kelas && item.exam_id === cur.exam_id
@@ -66,17 +72,19 @@ export default function TeacherProfile() {
         return acc;
       }, []);
 
-      const mergedData = dataManageExams?.map((item: any) => {
-        const findDetail = result.find(
-          (f: any) => f.kelas === item.kelas && f.exam_id === item.idExams
-        );
-        return {
-          ...item,
-          ...findDetail,
-        };
-      });
+      console.log(result);
 
-      setGetHistoryExams(mergedData);
+      // const mergedData = dataManageExams?.map((item: any) => {
+      //   const findDetail = result.find(
+      //     (f: any) => f.kelas === item.kelas && f.exam_id === item.idExams
+      //   );
+      //   return {
+      //     ...item,
+      //     ...findDetail,
+      //   };
+      // });
+
+      // setGetHistoryExams(mergedData);
     }
     historyExams();
   }, [idTeacher]);
@@ -84,20 +92,29 @@ export default function TeacherProfile() {
   return (
     <LayoutBodyContent>
       <div className="pt-16 flex max-[640px]:flex-col max-[640px]:gap-0 sm:flex-col sm:gap-0 lg:gap-10 md:flex-row">
-        <div className="bg-[#71C9CE] bg-gradient-to-t to-[#08D9D6] px-7 pt-10 pb-7 shadow-lg md:w-[33%] lg:basis-1/4">
-          {/* <Image src="" alt="Profile User" width={300} height={300} /> */}
-          <h1 className="text-center my-5">ini buat gambar</h1>
+        <div className="bg-[#71C9CE] bg-gradient-to-t to-[#08D9D6] px-7 pt-10 pb-7 shadow-lg md:w-[33%] lg:basis-1/4 flex flex-col items-center">
+          <Image
+            src="/img/profile/userProfile.png"
+            alt="Profile User"
+            width={300}
+            height={300}
+            className="rounded-full w-1/2"
+          />
           <ul className="my-7 flex flex-col justify-center gap-3">
             <li>Nama {getProfileTeacher?.fullName}</li>
             <li>Email {getProfileTeacher?.email}</li>
             <li>Peran {getProfileTeacher?.role}</li>
-            <li>Mapel yang Diajar </li>
+            <li>Mapel yang Diajar</li>
             <li>
-              Tgl Bergabung {useConvertDate(getProfileTeacher?.created_at)}
+              Tgl Bergabung{" "}
+              {useConvertDate(getProfileTeacher?.created_at, {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
             </li>
             <li>Status Akun Aktif</li>
           </ul>
-          <Button className="px-5 cursor-pointer">Edit Profile</Button>
         </div>
         <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:w-2/3">
           <div className="flex justify-evenly items-center mb-8 max-[640px]:flex-wrap max-[640px]:gap-5">
@@ -142,16 +159,16 @@ export default function TeacherProfile() {
                     <TableRow key={i}>
                       <TableCell>{i + 1}</TableCell>
                       <TableCell>{item.nama_ujian}</TableCell>
-                      <TableCell>{item.student_id.length}</TableCell>
+                      <TableCell>{item.student_id?.length}</TableCell>
                       <TableCell>
-                        {item.tipeUjian !== "essay"
+                        {item.tipeUjian === "pg"
                           ? Math.floor(
                               item.hasil_ujian
                                 .map((toNum: any) => Number(toNum))
                                 .reduce((acc: any, cur: any) => acc + cur, 0) /
                                 item.student_id.length
                             )
-                          : "Pending"}
+                          : averageValueExam / item.student_id?.length}
                       </TableCell>
                       <TableCell>{item.kelas}</TableCell>
                       <TableCell>{item.dibuat_tgl}</TableCell>
@@ -170,9 +187,6 @@ export default function TeacherProfile() {
               </TableBody>
             </Table>
           </div>
-          <Button className="mt-7 px-5 cursor-pointer max-[640px]:mx-7 sm:mx-5">
-            Logout
-          </Button>
         </div>
       </div>
     </LayoutBodyContent>
