@@ -86,7 +86,6 @@ export default function ManageStudent() {
         setDataStudents(mergedDatas);
       }
     }
-
     getDataStudent();
   }, [idTeacher]);
 
@@ -123,21 +122,25 @@ export default function ManageStudent() {
                   <ul key={i}>
                     {nilaiUjian.tipe_ujian === "essay" ? (
                       <li className="border-y mb-1.5 border-slate-600">
-                        <HoverCard>
-                          <HoverCardTrigger asChild>
-                            <Link
-                              href={`/Teacher/dashboard/correctionEssay?idExam=${nilaiUjian.idUjian}&idStudent=${data.student_id}`}
-                              className="hover:underline hover:text-blue-700"
-                            >
-                              {nilaiUjian.hasil_ujian}
-                            </Link>
-                          </HoverCardTrigger>
-                          <HoverCardContent className="w-fit p-2">
-                            <h1 className="font-semibold text-sm">
-                              Beri Nilai Essay Siswa
-                            </h1>
-                          </HoverCardContent>
-                        </HoverCard>
+                        {nilaiUjian.hasil_ujian === "pending" ? (
+                          <HoverCard>
+                            <HoverCardTrigger asChild>
+                              <Link
+                                href={`/Teacher/dashboard/correctionEssay?idExam=${nilaiUjian.idUjian}&idStudent=${data.student_id}`}
+                                className="hover:underline hover:text-blue-700"
+                              >
+                                {nilaiUjian.hasil_ujian}
+                              </Link>
+                            </HoverCardTrigger>
+                            <HoverCardContent className="w-fit p-2">
+                              <h1 className="font-semibold text-sm">
+                                Beri Nilai Essay Siswa
+                              </h1>
+                            </HoverCardContent>
+                          </HoverCard>
+                        ) : (
+                          nilaiUjian.hasil_ujian
+                        )}
                       </li>
                     ) : (
                       <li className="border-y mb-1.5 border-slate-600">

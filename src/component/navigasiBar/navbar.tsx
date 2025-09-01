@@ -85,7 +85,7 @@ export default function NavigasiBar() {
             </>
           )}
         </ul>
-        <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5 max-[640px]:basis-full max-[640px]:mr-0">
+        <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5 max-[640px]:hidden">
           {isUserThereStudent === true || isUserThereTeacher === true ? (
             <button
               onClick={handleLogout}

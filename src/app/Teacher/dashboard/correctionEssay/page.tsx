@@ -47,13 +47,18 @@ export default function CorrectionEssay() {
   }, []);
 
   async function giveAssesment(idExamQuestions: any, idStudent: any) {
-    const resultAssesment = Object.values(giveAssesmentExams)
-      .map((toNum: any) => Number(toNum))
-      .reduce((acc: any, cur: any) => acc + cur, 0);
+    const toNumberValue = Object.values(giveAssesmentExams).map(Number);
+    const totalMaxNilai = toNumberValue.reduce((sum: any) => sum + 100, 0);
+    const resultAssesment = toNumberValue.reduce(
+      (sum: any, q: any) => sum + q,
+      0
+    );
 
     const { error: errorAssesment } = await supabase
       .from("history-exam-student")
-      .update({ hasil_ujian: resultAssesment })
+      .update({
+        hasil_ujian: Math.round((resultAssesment / totalMaxNilai) * 100),
+      })
       .eq("exam_id", idExamQuestions)
       .eq("student_id", idStudent);
 

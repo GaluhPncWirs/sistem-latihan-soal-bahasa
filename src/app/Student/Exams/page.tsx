@@ -89,7 +89,9 @@ export default function Soal() {
     const jawabanYangBenar = questions.exams?.questions_exam
       .flatMap((item: any) => item.correctAnswer)
       .filter((jawabanBenar: any) => pilihanSiswa.includes(jawabanBenar));
-    const resultExam = jawabanYangBenar.length * 10;
+    const resultExam = Math.round(
+      (jawabanYangBenar.length / questions.exams.questions_exam.length) * 100
+    );
 
     const payload = {
       created_at: new Date().toISOString(),

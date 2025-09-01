@@ -72,19 +72,17 @@ export default function TeacherProfile() {
         return acc;
       }, []);
 
-      console.log(result);
+      const mergedData = result?.map((item: any) => {
+        const findDetail = dataManageExams.find(
+          (f: any) => f.kelas === item.kelas && f.idExams === item.exam_id
+        );
+        return {
+          ...item,
+          ...findDetail,
+        };
+      });
 
-      // const mergedData = dataManageExams?.map((item: any) => {
-      //   const findDetail = result.find(
-      //     (f: any) => f.kelas === item.kelas && f.exam_id === item.idExams
-      //   );
-      //   return {
-      //     ...item,
-      //     ...findDetail,
-      //   };
-      // });
-
-      // setGetHistoryExams(mergedData);
+      setGetHistoryExams(mergedData);
     }
     historyExams();
   }, [idTeacher]);
@@ -164,11 +162,16 @@ export default function TeacherProfile() {
                         {item.tipeUjian === "pg"
                           ? Math.floor(
                               item.hasil_ujian
-                                .map((toNum: any) => Number(toNum))
+                                .map(Number)
                                 .reduce((acc: any, cur: any) => acc + cur, 0) /
                                 item.student_id.length
                             )
-                          : averageValueExam / item.student_id?.length}
+                          : item.hasil_ujian
+                              .filter((f: any) => f !== "pending")
+                              .map(Number)
+                              .reduce((acc: any, cur: any) => acc + cur, 0) /
+                            item.hasil_ujian.filter((f: any) => f !== "pending")
+                              .length}
                       </TableCell>
                       <TableCell>{item.kelas}</TableCell>
                       <TableCell>{item.dibuat_tgl}</TableCell>
