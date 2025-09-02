@@ -8,10 +8,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import LayoutFormAccount from "@/layout/formAccount";
-import { supabase } from "@/lib/supabase/data";
 import { useRouter } from "next/navigation";
-import { NextResponse } from "next/server";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export default function LoginAccount() {
@@ -24,8 +22,6 @@ export default function LoginAccount() {
 
   async function handleLogin(e: any) {
     e.preventDefault();
-    // const valueEmail = e.currentTarget.email.value;
-    // const valuePassword = e.currentTarget.password.value;
 
     const response = await fetch("/api/login", {
       method: "POST",
@@ -64,58 +60,6 @@ export default function LoginAccount() {
         description: "Jenis Akun Belum Dipilih",
       });
     }
-
-    // if (valueTypeAccount !== "") {
-    //   if (valueTypeAccount === "siswa") {
-    //     const { data, error }: any = await supabase
-    //       .from("account-student")
-    //       .select("idStudent")
-    //       .eq("email", valueEmail)
-    //       .eq("password", valuePassword)
-    //       .single();
-    //     if (error) {
-    //       toast("Gagal ❌", {
-    //         description: "Email dan Password Salah Input Kembali",
-    //       });
-    //     } else {
-    //       toast("Berhasil ✅", {
-    //         description: "Masuk Akun Berhasil",
-    //       });
-    //       localStorage.setItem("idLoginSiswa", data.idStudent);
-    //       push("/");
-    //     }
-    //   } else if (valueTypeAccount === "guru") {
-    //     const { data, error }: any = await supabase
-    //       .from("account_teacher")
-    //       .select("id_teacher")
-    //       .eq("email", valueEmail)
-    //       .eq("password", valuePassword)
-    //       .single();
-    //     if (error) {
-    //       toast("Gagal ❌", {
-    //         description: "Email dan Password Salah Input Kembali",
-    //       });
-    //     } else {
-    //       const res = NextResponse.json({ success: true });
-    //       console.log(res);
-    //       res.cookies.set("role", "pengajar", {
-    //         path: "/",
-    //         httpOnly: true,
-    //         sameSite: "lax",
-    //       });
-    //       toast("Berhasil ✅", {
-    //         description: "Masuk Akun Berhasil",
-    //       });
-    //       localStorage.setItem("idLoginGuru", data.id_teacher);
-    //       // document.cookie = "role=pengajar";
-    //       push("/Teacher/dashboard");
-    //     }
-    //   }
-    // } else {
-    //   toast("Gagal ❌", {
-    //     description: "Jenis Akun Belum Dipilih",
-    //   });
-    // }
   }
 
   return (
