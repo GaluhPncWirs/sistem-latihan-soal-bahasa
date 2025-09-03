@@ -116,6 +116,11 @@ export default function DashboardStudent() {
     return hoursStr * 60 + minuteStr;
   }
 
+  function goToExams(idUjian: number) {
+    // document.cookie = `idExam=${String(idUjian)}`;
+    push(`/Student/Exams/?id=${idUjian}`);
+  }
+
   function resultDeadlineExam(
     tenggat_waktu: string,
     nama_ujian: string,
@@ -130,13 +135,8 @@ export default function DashboardStudent() {
     const akhirUjian = toMinute(endTimeExams);
     const hariIni = toMinute(waktuDurasiIni);
 
-    // console.log("mulai ujian =", mulaiUjian);
-    // console.log("hari ini =", hariIni);
-    // console.log("tenggat waktu hari =", tgl_ujian === waktuHariIni);
-    // console.log("waktu hari ini =", waktuHariIni);
-
     if (tgl_ujian === waktuHariIni) {
-      if (mulaiUjian < hariIni) {
+      if (hariIni < mulaiUjian) {
         return "Ujian Belum Dimulai";
       } else if (hariIni > akhirUjian) {
         return "Ujian Telah Lewat Batas Waktu";
@@ -164,7 +164,7 @@ export default function DashboardStudent() {
                 </DialogClose>
                 <DialogClose asChild>
                   <Button
-                    onClick={() => push(`/Student/Exams/?id=${idUjian}`)}
+                    onClick={() => goToExams(idUjian)}
                     className="cursor-pointer"
                   >
                     Oke
@@ -178,49 +178,6 @@ export default function DashboardStudent() {
     } else {
       return "Ujian Telah Lewat Batas Waktu";
     }
-
-    // if (
-    //   (mulaiUjian < hariIni && dibuat_tgl === waktuHariIni) ||
-    //   dibuat_tgl !== waktuHariIni
-    // ) {
-    //   return "Ujian Belum Dimulai";
-    // } else if (
-    //   (mulaiUjian >= akhirUjian && dibuat_tgl === waktuHariIni) ||
-    //   dibuat_tgl !== waktuHariIni
-    // ) {
-    //   return "Ujian Telah Lewat Batas Waktu";
-    // } else {
-    //   return (
-    //     <Dialog>
-    //       <DialogTrigger asChild>
-    //         <button className="hover:underline hover:text-blue-700 cursor-pointer">
-    //           Uncomplete
-    //         </button>
-    //       </DialogTrigger>
-    //       <DialogContent>
-    //         <DialogHeader>
-    //           <DialogTitle className="mb-2">Konfirmasi Masuk Ujian</DialogTitle>
-    //           <DialogDescription>
-    //             Apakah Anda Yakin ingin Mengerjakan Soal{" "}
-    //             <span className="font-bold">"{nama_ujian}"</span> Ini ?
-    //           </DialogDescription>
-    //         </DialogHeader>
-    //         <DialogFooter>
-    //           <DialogClose asChild>
-    //             <Button variant="outline">Batal</Button>
-    //           </DialogClose>
-    //           <DialogClose asChild>
-    //             <Button
-    //               onClick={() => push(`/Student/Exams/?id=${idUjian}`)}
-    //               className="cursor-pointer"
-    //             >
-    //               Oke
-    //             </Button>
-    //           </DialogClose>
-    //         </DialogFooter>
-    //       </DialogContent>
-    //     </Dialog>
-    //   );
   }
 
   return (
@@ -378,18 +335,6 @@ export default function DashboardStudent() {
                   )}
                 </TableBody>
               </Table>
-              {/* {resultExam.length > 0 ? (
-                
-              ) : (
-                Array.from({ length: 2 }).map((_, i) => (
-                  <div key={i} className="animate-pulse">
-                    <div className="bg-stone-300 px-4 py-6 w-full flex gap-5">
-                      <div className="h-4 bg-gray-500 rounded w-11/12 mb-2"></div>
-                      <div className="h-4 bg-gray-500 rounded w-1/2 mb-2"></div>
-                    </div>
-                  </div>
-                ))
-              )} */}
             </div>
           </div>
         </div>
