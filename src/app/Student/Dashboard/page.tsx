@@ -116,6 +116,113 @@ export default function DashboardStudent() {
     return hoursStr * 60 + minuteStr;
   }
 
+  function resultDeadlineExam(
+    tenggat_waktu: string,
+    nama_ujian: string,
+    idUjian: number,
+    tgl_ujian: string
+  ) {
+    const [startTimeExam, endTimeExams] = tenggat_waktu
+      .split("-")
+      .map((item: any) => item.trim());
+
+    const mulaiUjian = toMinute(startTimeExam);
+    const akhirUjian = toMinute(endTimeExams);
+    const hariIni = toMinute(waktuDurasiIni);
+
+    // console.log("mulai ujian =", mulaiUjian);
+    // console.log("hari ini =", hariIni);
+    // console.log("tenggat waktu hari =", tgl_ujian === waktuHariIni);
+    // console.log("waktu hari ini =", waktuHariIni);
+
+    if (tgl_ujian === waktuHariIni) {
+      if (mulaiUjian < hariIni) {
+        return "Ujian Belum Dimulai";
+      } else if (hariIni > akhirUjian) {
+        return "Ujian Telah Lewat Batas Waktu";
+      } else {
+        return (
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="hover:underline hover:text-blue-700 cursor-pointer">
+                Uncomplete
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="mb-2">
+                  Konfirmasi Masuk Ujian
+                </DialogTitle>
+                <DialogDescription>
+                  Apakah Anda Yakin ingin Mengerjakan Soal{" "}
+                  <span className="font-bold">"{nama_ujian}"</span> Ini ?
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Batal</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button
+                    onClick={() => push(`/Student/Exams/?id=${idUjian}`)}
+                    className="cursor-pointer"
+                  >
+                    Oke
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        );
+      }
+    } else {
+      return "Ujian Telah Lewat Batas Waktu";
+    }
+
+    // if (
+    //   (mulaiUjian < hariIni && dibuat_tgl === waktuHariIni) ||
+    //   dibuat_tgl !== waktuHariIni
+    // ) {
+    //   return "Ujian Belum Dimulai";
+    // } else if (
+    //   (mulaiUjian >= akhirUjian && dibuat_tgl === waktuHariIni) ||
+    //   dibuat_tgl !== waktuHariIni
+    // ) {
+    //   return "Ujian Telah Lewat Batas Waktu";
+    // } else {
+    //   return (
+    //     <Dialog>
+    //       <DialogTrigger asChild>
+    //         <button className="hover:underline hover:text-blue-700 cursor-pointer">
+    //           Uncomplete
+    //         </button>
+    //       </DialogTrigger>
+    //       <DialogContent>
+    //         <DialogHeader>
+    //           <DialogTitle className="mb-2">Konfirmasi Masuk Ujian</DialogTitle>
+    //           <DialogDescription>
+    //             Apakah Anda Yakin ingin Mengerjakan Soal{" "}
+    //             <span className="font-bold">"{nama_ujian}"</span> Ini ?
+    //           </DialogDescription>
+    //         </DialogHeader>
+    //         <DialogFooter>
+    //           <DialogClose asChild>
+    //             <Button variant="outline">Batal</Button>
+    //           </DialogClose>
+    //           <DialogClose asChild>
+    //             <Button
+    //               onClick={() => push(`/Student/Exams/?id=${idUjian}`)}
+    //               className="cursor-pointer"
+    //             >
+    //               Oke
+    //             </Button>
+    //           </DialogClose>
+    //         </DialogFooter>
+    //       </DialogContent>
+    //     </Dialog>
+    //   );
+  }
+
   return (
     <LayoutBodyContent>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
@@ -169,75 +276,12 @@ export default function DashboardStudent() {
                         <TableCell>
                           {data.status_exam === true
                             ? "Complete"
-                            : (() => {
-                                const [startTime, endTime] = data.tenggat_waktu
-                                  .split("-")
-                                  .map((time: string) => time.trim());
-
-                                const startMin = toMinute(startTime);
-                                const endMin = toMinute(endTime);
-                                const nowMin = toMinute(waktuDurasiIni);
-
-                                if (
-                                  (nowMin < startMin &&
-                                    data.dibuat_tgl === waktuHariIni) ||
-                                  data.dibuat_tgl !== waktuHariIni
-                                ) {
-                                  return "Ujian Belum Dimulai";
-                                }
-
-                                if (
-                                  (nowMin >= endMin &&
-                                    data.dibuat_tgl === waktuHariIni) ||
-                                  data.dibuat_tgl !== waktuHariIni
-                                ) {
-                                  return "Ujian Telah Lewat Batas Waktu";
-                                }
-
-                                return (
-                                  <Dialog>
-                                    <DialogTrigger asChild>
-                                      <button className="hover:underline hover:text-blue-700 cursor-pointer">
-                                        Uncomplete
-                                      </button>
-                                    </DialogTrigger>
-                                    <DialogContent>
-                                      <DialogHeader>
-                                        <DialogTitle className="mb-2">
-                                          Konfirmasi Masuk Ujian
-                                        </DialogTitle>
-                                        <DialogDescription>
-                                          Apakah Anda Yakin ingin Mengerjakan
-                                          Soal{" "}
-                                          <span className="font-bold">
-                                            "{data.exams.nama_ujian}"
-                                          </span>{" "}
-                                          Ini ?
-                                        </DialogDescription>
-                                      </DialogHeader>
-                                      <DialogFooter>
-                                        <DialogClose asChild>
-                                          <Button variant="outline">
-                                            Batal
-                                          </Button>
-                                        </DialogClose>
-                                        <DialogClose asChild>
-                                          <Button
-                                            onClick={() =>
-                                              push(
-                                                `/Student/Exams/?id=${data.idExams}`
-                                              )
-                                            }
-                                            className="cursor-pointer"
-                                          >
-                                            Oke
-                                          </Button>
-                                        </DialogClose>
-                                      </DialogFooter>
-                                    </DialogContent>
-                                  </Dialog>
-                                );
-                              })()}
+                            : resultDeadlineExam(
+                                data.tenggat_waktu,
+                                data.exams.nama_ujian,
+                                data.idExams,
+                                data.dibuat_tgl
+                              )}
                         </TableCell>
                       </TableRow>
                     ))
