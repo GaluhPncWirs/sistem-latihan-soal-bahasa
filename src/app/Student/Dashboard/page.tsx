@@ -116,11 +116,6 @@ export default function DashboardStudent() {
     return hoursStr * 60 + minuteStr;
   }
 
-  function goToExams(idUjian: number) {
-    // document.cookie = `idExam=${String(idUjian)}`;
-    push(`/Student/Exams/?id=${idUjian}`);
-  }
-
   function resultDeadlineExam(
     tenggat_waktu: string,
     nama_ujian: string,
@@ -135,11 +130,13 @@ export default function DashboardStudent() {
     const akhirUjian = toMinute(endTimeExams);
     const hariIni = toMinute(waktuDurasiIni);
 
+    let messageExams = "";
+
     if (tgl_ujian === waktuHariIni) {
       if (hariIni < mulaiUjian) {
-        return "Ujian Belum Dimulai";
+        messageExams += "Ujian Belum Dimulai";
       } else if (hariIni > akhirUjian) {
-        return "Ujian Telah Lewat Batas Waktu";
+        messageExams += "Ujian Telah Lewat Batas Waktu";
       } else {
         return (
           <Dialog>
@@ -164,7 +161,7 @@ export default function DashboardStudent() {
                 </DialogClose>
                 <DialogClose asChild>
                   <Button
-                    onClick={() => goToExams(idUjian)}
+                    onClick={() => push(`/Student/Exams/?id=${idUjian}`)}
                     className="cursor-pointer"
                   >
                     Oke
@@ -176,9 +173,12 @@ export default function DashboardStudent() {
         );
       }
     } else {
-      return "Ujian Telah Lewat Batas Waktu";
+      messageExams += "Ujian Telah Lewat Batas Waktu";
     }
+    return messageExams;
   }
+
+  // console.log(isMessage);
 
   return (
     <LayoutBodyContent>
@@ -310,6 +310,20 @@ export default function DashboardStudent() {
                                     ? "Dari 100"
                                     : ""
                                 }`}
+                          </TableCell>
+                        </TableRow>
+                      ) : resultDeadlineExam(
+                          item.tenggat_waktu,
+                          item.exams.nama_ujian,
+                          item.idExams,
+                          item.dibuat_tgl
+                        ) === "Ujian Telah Lewat Batas Waktu" ? (
+                        <TableRow key={i}>
+                          <TableCell
+                            colSpan={4}
+                            className="text-center text-lg font-semibold"
+                          >
+                            Tidak Ada Nilai (Ujian Telat)
                           </TableCell>
                         </TableRow>
                       ) : (
