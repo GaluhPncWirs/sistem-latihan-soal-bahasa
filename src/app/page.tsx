@@ -24,7 +24,7 @@ export default function Home() {
             <div className="mt-10">
               <Link
                 href={isLogin ? "/Student/Dashboard" : "/Autentikasi/Login"}
-                className="text-center w-full bg-blue-300 rounded-md py-2 text-lg font-semibold cursor-pointer hover:bg-blue-400 px-7"
+                className="text-center w-full bg-blue-400 rounded-md py-2 text-lg font-semibold cursor-pointer hover:text-blue-700 px-7"
               >
                 Mulai Ujian
               </Link>
@@ -32,7 +32,7 @@ export default function Home() {
           </div>
           <Link
             href="#content"
-            className="text-center text-lg cursor-pointer mt-5 max-[640px]:mt-10"
+            className="text-center text-lg cursor-pointer mt-5 max-[640px]:mt-0"
           >
             Pelajari Lebih Lanjut Dibawah ini{" "}
             <Image
@@ -40,7 +40,7 @@ export default function Home() {
               alt="arrow down"
               height={20}
               width={20}
-              className="inline animate-bounce"
+              className="inline animate-bounce ml-1"
             />
           </Link>
         </div>

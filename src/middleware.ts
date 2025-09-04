@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "./lib/supabase/data";
-import { useGetIdStudent } from "./app/hooks/getIdStudent";
 
 export async function middleware(req: NextRequest) {
   const role = req.cookies.get("role")?.value;

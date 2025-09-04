@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import ListClickContent from "../listContent/listClick";
 
 export default function HamburgerMenu({
   isUserThereTeacher,
@@ -61,41 +62,7 @@ export default function HamburgerMenu({
         ref={clickOutsidePath}
         id="navbar"
       >
-        <li className="cursor-pointer text-xl font-semibold">
-          <Link href="/">Beranda</Link>
-        </li>
-        {isUserThereTeacher === true ? (
-          <>
-            <li className="cursor-pointer text-xl font-semibold">
-              <Link href="/Teacher/dashboard">Dashboard</Link>
-            </li>
-            <li className="cursor-pointer text-xl font-semibold">
-              <Link href="/Teacher/Profil">Profil</Link>
-            </li>
-          </>
-        ) : (
-          <>
-            <li className="cursor-pointer text-xl font-semibold">
-              <Link
-                href={`${
-                  isUserThereStudent === true ? `/Student/Profile` : `/`
-                }`}
-              >
-                Profil
-              </Link>
-            </li>
-
-            <li className="cursor-pointer text-xl font-semibold">
-              <Link
-                href={`${
-                  isUserThereStudent === true ? `/Student/Dashboard` : `/`
-                }`}
-              >
-                Dashboard
-              </Link>
-            </li>
-          </>
-        )}
+        <ListClickContent />
         <li>
           {isUserThereStudent === true || isUserThereTeacher === true ? (
             <button

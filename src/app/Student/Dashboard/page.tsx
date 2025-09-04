@@ -32,6 +32,7 @@ import {
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function DashboardStudent() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
@@ -142,7 +143,7 @@ export default function DashboardStudent() {
           <Dialog>
             <DialogTrigger asChild>
               <button className="hover:underline hover:text-blue-700 cursor-pointer">
-                Uncomplete
+                Sedang Berlangsung
               </button>
             </DialogTrigger>
             <DialogContent>
@@ -178,36 +179,65 @@ export default function DashboardStudent() {
     return messageExams;
   }
 
-  // console.log(isMessage);
-
   return (
     <LayoutBodyContent>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
         <div className="w-10/12 mx-auto pt-32 max-[640px]:w-11/12 max-[640px]:pt-28">
           <div className="mb-7">
-            <h1 className="text-2xl font-bold mb-3">
+            <h1 className="text-3xl max-[640px]:text-2xl font-bold mb-3">
               Halo, Selamat Datang {getDataStudent?.fullName}
             </h1>
-            <p className="text-lg">
+            <p className="max-[640px]:text-lg text-xl">
               Berikut ringkasan aktivitas dan ujian Anda.
             </p>
           </div>
           <div className="flex justify-evenly items-center mt-10">
-            <div className="bg-[#FCE38A] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
+            <div className="bg-[#3D74B6] text-slate-100 rounded-lg p-4 font-semibold max-[640px]:p-3 flex flex-col justify-center items-center gap-y-1">
+              <Image
+                src="/img/dashboardStudent/schedule.png"
+                alt="Jadwal"
+                width={300}
+                height={300}
+                className="w-1/4"
+              />
               <h1 className="text-lg max-[640px]:text-base">Ujian Terjadwal</h1>
-              <div className="text-xl">{scheduleExams.length || "0"}</div>
+              <span className="text-xl">
+                {scheduleExams.filter((done: any) => done.status_exam !== true)
+                  .length || "0"}
+              </span>
             </div>
-            <div className="bg-[#6096B4] rounded-lg p-5 font-semibold text-center max-[640px]:p-3">
+            <div className="bg-[#3D74B6] text-slate-100 rounded-lg p-4 font-semibold max-[640px]:p-3 flex flex-col justify-center items-center gap-y-1">
+              <Image
+                src="/img/dashboardStudent/average.png"
+                alt="Average"
+                width={300}
+                height={300}
+                className="w-1/4"
+              />
               <h1 className="text-lg max-[640px]:text-base">Nilai Rata Rata</h1>
-              <div className="text-xl">
+              <span className="text-xl">
                 {Math.floor(averageValue / isCompleteExam) || "0"}
-              </div>
+              </span>
             </div>
           </div>
           <div className="mx-auto mt-8 max-[640px]:w-11/12 sm:w-11/12 md:w-3/4">
             <div className="mb-7">
-              <h1 className="text-xl font-semibold bg-[#0F4C75] text-center rounded-md py-2 mb-5 text-slate-100">
-                Jadwal Ujian Yang Tersedia
+              <h1 className="font-semibold bg-[#0F4C75] pl-14 rounded-md py-3 mb-5 text-slate-200 flex gap-x-5 items-center max-[640px]:pl-5 max-[640px]:py-2">
+                <span className="max-[640px]:basis-[51%] max-[640px]:text-base sm:text-xl">
+                  Jadwal Ujian Yang Tersedia
+                </span>
+                <div className="max-[640px]:basis-1/3 flex">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <Image
+                      src="/img/dashboardStudent/right.png"
+                      alt="Arrow Right"
+                      width={500}
+                      height={500}
+                      className="max-[640px]:w-1/5 sm:w-1/12"
+                      key={i}
+                    />
+                  ))}
+                </div>
               </h1>
               <Table>
                 <TableHeader>
@@ -256,8 +286,22 @@ export default function DashboardStudent() {
               </Table>
             </div>
             <div>
-              <h1 className="text-xl font-semibold bg-[#0F4C75] text-center rounded-md py-2 mb-5 text-slate-100">
-                Hasil Ujian
+              <h1 className="font-semibold bg-[#0F4C75] pr-14 rounded-md py-3 mb-5 text-slate-200 flex flex-row-reverse gap-x-5 items-center max-[640px]:pr-5 max-[640px]:py-2">
+                <span className="max-[640px]:basis-[51%] max-[640px]:text-base sm:text-xl">
+                  Hasil Ujian Kamu
+                </span>
+                <div className="max-[640px]:basis-1/3 flex">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <Image
+                      src="/img/dashboardStudent/left.png"
+                      alt="Arrow Right"
+                      width={500}
+                      height={500}
+                      className="max-[640px]:w-1/5 sm:w-1/12"
+                      key={i}
+                    />
+                  ))}
+                </div>
               </h1>
               <Table>
                 <TableHeader>

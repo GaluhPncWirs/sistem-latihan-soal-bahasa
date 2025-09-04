@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import HamburgerMenu from "./hamburgerMenu/hamburgerMenu";
+import ListClickContent from "./listContent/listClick";
 
 export default function NavigasiBar() {
   const [isUserThereStudent, setIsUserThereStudent] = useState<boolean>(false);
   const [isUserThereTeacher, setIsUserThereTeacher] = useState<boolean>(false);
 
-  const { push } = useRouter();
   useEffect(() => {
     const isUserDataSiswa = localStorage.getItem("idLoginSiswa");
     const isUserDataGuru = localStorage.getItem("idLoginGuru");
@@ -24,6 +24,7 @@ export default function NavigasiBar() {
     }
   }, []);
 
+  const { push } = useRouter();
   async function handleLogout() {
     const responseDelCookies = await fetch("/api/delCookies", {
       method: "POST",
@@ -39,7 +40,7 @@ export default function NavigasiBar() {
   return (
     <div className="w-full h-16 bg-[#A6E3E9] fixed shadow-lg shadow-slate-500 z-10">
       <div className="flex items-center h-full gap-x-3">
-        <div className="basis-1/5 h-full flex items-center justify-center">
+        <div className="basis-1/5 h-full flex items-center justify-center max-[640px]:basis-2/3 bg-[#A6E3E9] bg-gradient-to-l to-sky-300">
           {/* <Image src="" alt="" width={500} height={500}/> */}
           <h1>Logo</h1>
         </div>
@@ -48,44 +49,10 @@ export default function NavigasiBar() {
           isUserThereStudent={isUserThereStudent}
           handleLogout={handleLogout}
         />
-        <ul className="basis-3/5 flex justify-around h-full items-center max-[640px]:hidden">
-          <li className="cursor-pointer text-xl font-semibold">
-            <Link href="/">Beranda</Link>
-          </li>
-          {isUserThereTeacher === true ? (
-            <>
-              <li className="cursor-pointer text-xl font-semibold">
-                <Link href="/Teacher/dashboard">Dashboard</Link>
-              </li>
-              <li className="cursor-pointer text-xl font-semibold">
-                <Link href="/Teacher/Profil">Profil</Link>
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="cursor-pointer text-xl font-semibold">
-                <Link
-                  href={`${
-                    isUserThereStudent === true ? `/Student/Profile` : `/`
-                  }`}
-                >
-                  Profil
-                </Link>
-              </li>
-
-              <li className="cursor-pointer text-xl font-semibold">
-                <Link
-                  href={`${
-                    isUserThereStudent === true ? `/Student/Dashboard` : `/`
-                  }`}
-                >
-                  Dashboard
-                </Link>
-              </li>
-            </>
-          )}
+        <ul className="basis-3/5 flex justify-evenly h-full items-center max-[640px]:hidden">
+          <ListClickContent />
         </ul>
-        <div className="basis-1/5 h-full flex items-center justify-center gap-5 mr-5 max-[640px]:hidden">
+        <div className="basis-1/4 pr-5 h-full flex items-center justify-center gap-5 max-[640px]:hidden bg-[#A6E3E9] bg-gradient-to-r to-sky-300">
           {isUserThereStudent === true || isUserThereTeacher === true ? (
             <button
               onClick={handleLogout}
