@@ -220,25 +220,25 @@ export default function DashboardStudent() {
               </span>
             </div>
           </div>
-          <div className="mx-auto mt-8 max-[640px]:w-11/12 sm:w-11/12 md:w-3/4">
+          <div className="mx-auto mt-8 max-[640px]:w-11/12 sm:w-11/12 md:w-10/12 lg:w-3/4">
             <div className="mb-7">
-              <h1 className="font-semibold bg-[#0F4C75] pl-14 rounded-md py-3 mb-5 text-slate-200 flex gap-x-5 items-center max-[640px]:pl-5 max-[640px]:py-2">
-                <span className="max-[640px]:basis-[51%] max-[640px]:text-base sm:text-xl">
-                  Jadwal Ujian Yang Tersedia
+              <div className="font-semibold bg-[#0F4C75] rounded-md py-3 mb-5 text-slate-200 flex items-center max-[640px]:pl-0 max-[640px]:py-2 justify-center">
+                <span className="max-[640px]:basis-1/2 max-[640px]:text-base sm:text-xl sm:basis-2/5">
+                  Jadwal Ujian Tersedia
                 </span>
-                <div className="max-[640px]:basis-1/3 flex">
-                  {Array.from({ length: 9 }).map((_, i) => (
+                <div className="max-[640px]:basis-1/3 flex sm:basis-1/2 justify-end">
+                  {Array.from({ length: 6 }).map((_, i) => (
                     <Image
                       src="/img/dashboardStudent/right.png"
                       alt="Arrow Right"
                       width={500}
                       height={500}
-                      className="max-[640px]:w-1/5 sm:w-1/12"
+                      className="max-[640px]:w-1/6 sm:w-[13%] lg:w-1/12"
                       key={i}
                     />
                   ))}
                 </div>
-              </h1>
+              </div>
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#3282B8]">
@@ -286,23 +286,23 @@ export default function DashboardStudent() {
               </Table>
             </div>
             <div>
-              <h1 className="font-semibold bg-[#0F4C75] pr-14 rounded-md py-3 mb-5 text-slate-200 flex flex-row-reverse gap-x-5 items-center max-[640px]:pr-5 max-[640px]:py-2">
-                <span className="max-[640px]:basis-[51%] max-[640px]:text-base sm:text-xl">
+              <div className="font-semibold bg-[#0F4C75] rounded-md py-3 mb-5 text-slate-200 flex flex-row-reverse max-[640px]:gap-x-3 sm:gap-x-0 items-center max-[640px]:py-2 justify-center">
+                <span className="max-[640px]:basis-1/2 max-[640px]:text-base sm:text-xl text-end sm:basis-2/5">
                   Hasil Ujian Kamu
                 </span>
-                <div className="max-[640px]:basis-1/3 flex">
-                  {Array.from({ length: 9 }).map((_, i) => (
+                <div className="max-[640px]:basis-1/3 flex sm:basis-1/2">
+                  {Array.from({ length: 6 }).map((_, i) => (
                     <Image
                       src="/img/dashboardStudent/left.png"
                       alt="Arrow Right"
                       width={500}
                       height={500}
-                      className="max-[640px]:w-1/5 sm:w-1/12"
+                      className="max-[640px]:w-1/6 sm:w-[13%] lg:w-1/12"
                       key={i}
                     />
                   ))}
                 </div>
-              </h1>
+              </div>
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#3282B8]">
