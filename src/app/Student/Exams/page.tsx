@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -153,17 +154,29 @@ export default function Soal() {
         <h1 className="text-3xl font-semibold mb-7 mt-5">
           Ujian {questions.exams?.nama_ujian}
         </h1>
-        <div className="flex flex-row-reverse gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
-          <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg max-[640px]:fixed max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-10 sm:fixed sm:top-20 sm:w-10/12 sm:z-10 md:basis-1/3 md:static md:top-0 md:z-0">
+        <div className="flex gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
+          <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg max-[640px]:fixed max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-[5] sm:fixed sm:top-20 sm:w-10/12 sm:z-[5] md:basis-1/3 md:static md:top-0 md:z-0">
             <div className="flex justify-between items-center max-[640px]:justify-evenly sm:justify-evenly md:justify-between">
               <h1 className="text-xl font-semibold">
+                <span className="block mb-1">
+                  Ujian {questions.exams?.nama_ujian}
+                </span>
                 {questions.tipe_ujian === "pg"
                   ? "Pertanyaaan Pilihan Ganda"
                   : "Pertanyaaan Essay"}
               </h1>
-              <div className="text-2xl font-semibold bg-[#F38181] px-4 py-1.5 rounded-lg">
-                {formatedTime}
-              </div>
+              {formatedTime !== "NaN:NaN" && (
+                <div className=" bg-[#F38181] px-4 py-1.5 rounded-lg flex flex-col items-center">
+                  <Image
+                    src="/img/examsStudent/stopwatch.png"
+                    alt="Timer"
+                    width={200}
+                    height={200}
+                    className="w-1/2"
+                  />
+                  <span className="text-xl font-semibold">{formatedTime}</span>
+                </div>
+              )}
             </div>
             <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
               {questions.exams?.questions_exam.map((item: any, i: number) => {

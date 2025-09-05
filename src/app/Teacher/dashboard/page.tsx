@@ -2,11 +2,9 @@
 
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
-import ResultExam from "@/app/Student/Dashboard/ResultExam/page";
 import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/component/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/component/khususGuru/kelolaSiswa/manageStudent";
-import NavigasiBar from "@/component/navigasiBar/navbar";
 import { Button } from "@/components/ui/button";
 import {
   Table,

@@ -21,7 +21,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
     const isDone = await isDoneExams(Number(examId));
-    if (isDone?.status_exam === true || isDone === null) {
+    if (isDone?.status_exam === true) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     } else {
       return NextResponse.next();

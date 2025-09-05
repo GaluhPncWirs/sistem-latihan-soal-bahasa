@@ -339,7 +339,7 @@ export default function CreateNewQuestions() {
                     onChange={handleAddAnswer}
                   />
                 </div>
-                <div className="text-center ">
+                <div className="text-center">
                   <label
                     htmlFor="answer_c"
                     className="text-base font-semibold mr-3"

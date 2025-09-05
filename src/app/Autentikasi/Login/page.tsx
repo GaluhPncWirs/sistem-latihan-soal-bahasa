@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import LayoutFormAccount from "@/layout/formAccount";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -19,6 +20,7 @@ export default function LoginAccount() {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function handleLogin(e: any) {
     e.preventDefault();
@@ -50,6 +52,7 @@ export default function LoginAccount() {
             description: "Masuk Akun Berhasil",
           });
         }
+        setIsLoading(true);
       } else {
         toast("Gagal ❌", {
           description: "Email dan Password Salah Input Kembali",
@@ -109,11 +112,21 @@ export default function LoginAccount() {
           value={formMustFilled.password}
         />
         <button
-          className="bg-blue-300 font-semibold rounded-md w-full py-1.5 mt-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
+          className="bg-blue-300 font-semibold rounded-md w-full py-2 mt-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer flex justify-center"
           type="submit"
           disabled={!isFormFilled()}
         >
-          Login
+          {isLoading ? (
+            <Image
+              src="/img/autentikasi/icon_loading.png"
+              alt="Loading"
+              width={200}
+              height={200}
+              className="w-1/12 animate-spin"
+            />
+          ) : (
+            "Login"
+          )}
         </button>
       </form>
     </LayoutFormAccount>

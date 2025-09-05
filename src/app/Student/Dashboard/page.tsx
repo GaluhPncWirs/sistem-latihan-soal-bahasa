@@ -173,6 +173,8 @@ export default function DashboardStudent() {
           </Dialog>
         );
       }
+    } else if (tgl_ujian !== waktuHariIni && hariIni < mulaiUjian) {
+      messageExams += "Ujian Belum Dimulai";
     } else {
       messageExams += "Ujian Telah Lewat Batas Waktu";
     }

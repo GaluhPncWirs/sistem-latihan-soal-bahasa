@@ -116,21 +116,42 @@ export default function TeacherProfile() {
         </div>
         <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:w-2/3">
           <div className="flex justify-evenly items-center mb-8 max-[640px]:flex-wrap max-[640px]:gap-5">
-            <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
+            <div className="bg-[#3D74B6] text-slate-200 max-[640px]:p-2 xl:p-5 rounded-lg sm:p-3 flex flex-col items-center gap-y-1">
+              <Image
+                src="/img/profileTeacher/done.png"
+                alt="Selesai"
+                width={200}
+                height={200}
+                className="w-1/3"
+              />
               <h1 className="font-semibold text-lg">Ujian Selesai</h1>{" "}
-              <span className="font-bold">
+              <span className="font-bold text-xl">
                 {getHistoryExams?.length || "0"}
               </span>
             </div>
-            <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
+            <div className="bg-[#3D74B6] text-slate-200 max-[640px]:p-2 xl:p-5 rounded-lg sm:p-3 flex flex-col items-center gap-y-1">
+              <Image
+                src="/img/profileTeacher/count.png"
+                alt="Jumlah"
+                width={200}
+                height={200}
+                className="w-1/3"
+              />
               <h1 className="font-semibold text-lg">Jumlah Siswa</h1>{" "}
-              <span className="font-bold">
+              <span className="font-bold text-xl">
                 {new Set(totalStudent).size || "0"}
               </span>
             </div>
-            <div className="bg-amber-300 max-[640px]:p-2 xl:p-5 rounded-lg text-center sm:p-3">
+            <div className="bg-[#3D74B6] text-slate-200 max-[640px]:p-2 xl:p-5 rounded-lg sm:p-3 flex flex-col items-center gap-y-1">
+              <Image
+                src="/img/profileTeacher/average.png"
+                alt="Rata-Rata"
+                width={200}
+                height={200}
+                className="w-1/4"
+              />
               <h1 className="font-semibold text-lg">Nilai Rata-Rata</h1>{" "}
-              <span className="font-bold">
+              <span className="font-bold text-xl">
                 {Math.floor(averageValueExam / new Set(totalStudent).size) ||
                   "0"}
               </span>
