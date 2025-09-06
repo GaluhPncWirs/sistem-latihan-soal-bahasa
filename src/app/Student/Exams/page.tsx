@@ -21,6 +21,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -115,55 +116,19 @@ export default function Soal() {
       toast("Berhasil ✅", { description: "Ujian Telah Selesai" });
       push("/Student/Dashboard");
     }
-
-    // const { data: sudahAda } = await supabase
-    //   .from("history-exam-student")
-    //   .select("*")
-    //   .eq("exam_id", Number(idExams))
-    //   .eq("student_id", idStudent)
-    //   .single();
-
-    // if (sudahAda) {
-    //   const { error: updateErr } = await supabase
-    //     .from("history-exam-student")
-    //     .update(payload)
-    //     .eq("exam_id", Number(idExams))
-    //     .eq("student_id", idStudent);
-
-    //   if (updateErr) {
-    //     toast("Gagal ❌", { description: "Gagal memperbarui data" });
-    //   } else {
-    //     toast("Berhasil ✅", { description: "Ujian Selesai" });
-    //   }
-    // } else {
-    //    const { error: insertErr } = await supabase
-    //   .from("history-exam-student")
-    //   .insert(payload);
-
-    // if (insertErr) {
-    //   toast("Gagal ❌", { description: "Gagal menyimpan data" });
-    // } else {
-    //   toast("Berhasil ✅", { description: "Ujian Selesai" });
-    // }
-    // }
   }
 
   return (
     <LayoutBodyContent>
-      <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-10/12">
-        <h1 className="text-3xl font-semibold mb-7 mt-5">
+      <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-11/12 lg:w-10/12">
+        <h1 className="text-3xl font-semibold mb-10 max-[640px]:text-center sm:text-center md:text-start">
           Ujian {questions.exams?.nama_ujian}
         </h1>
-        <div className="flex gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
-          <div className="bg-[#71C9CE] basis-1/3 p-5 rounded-lg max-[640px]:fixed max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-[5] sm:fixed sm:top-20 sm:w-10/12 sm:z-[5] md:basis-1/3 md:static md:top-0 md:z-0">
+        <div className="flex max-[640px]:gap-5 sm:gap-5 md:gap-x-10 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
+          <div className="bg-[#71C9CE] p-5 rounded-lg max-[640px]:sticky max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-[5] sm:sticky sm:top-20 sm:w-10/12 sm:z-[5] md:basis-2/5 lg:basis-1/3 md:static md:top-0 md:z-0">
             <div className="flex justify-between items-center max-[640px]:justify-evenly sm:justify-evenly md:justify-between">
               <h1 className="text-xl font-semibold">
-                <span className="block mb-1">
-                  Ujian {questions.exams?.nama_ujian}
-                </span>
-                {questions.tipe_ujian === "pg"
-                  ? "Pertanyaaan Pilihan Ganda"
-                  : "Pertanyaaan Essay"}
+                {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
               </h1>
               {formatedTime !== "NaN:NaN" && (
                 <div className=" bg-[#F38181] px-4 py-1.5 rounded-lg flex flex-col items-center">
@@ -174,7 +139,7 @@ export default function Soal() {
                     height={200}
                     className="w-1/2"
                   />
-                  <span className="text-xl font-semibold">{formatedTime}</span>
+                  {/* <span className="text-xl font-semibold">{formatedTime}</span> */}
                 </div>
               )}
             </div>
@@ -197,7 +162,7 @@ export default function Soal() {
               })}
             </div>
           </div>
-          <div className="basis-2/3 lg:overflow-y-auto h-[28rem] lg:scrollBarDesign max-[640px]:mt-32 max-[640px]:w-11/12 sm:mt-32 sm:w-10/12 md:mt-0 md:basis-2/3">
+          <div className="basis-2/3 md:overflow-y-auto md:h-[28rem] md:scrollBarDesign max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-2/3">
             {questions.exams?.questions_exam.map((item: any, i: number) => (
               <div
                 className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
@@ -208,25 +173,27 @@ export default function Soal() {
                   {item.questions}
                 </h1>
                 {questions.tipe_ujian === "pg" ? (
-                  <ul className="flex justify-evenly items-center mt-5 max-[640px]:flex-wrap max-[640px]:gap-1.5 sm:flex-wrap sm:gap-2">
+                  <ul className="mt-3">
                     {["a", "b", "c", "d", "e"].map((opt) => {
                       const answerKey = `answer_${opt}`;
                       const answerText = item.answerPg[answerKey];
                       const isSelected =
                         clickedAnswerPg[item.id] === answerText;
                       return (
-                        <Button
-                          key={opt}
-                          variant="outline"
-                          className={`cursor-pointer w-fit px-3 ${
-                            isSelected ? "line-through" : ""
-                          }`}
-                          onClick={() =>
-                            handleSelectedAnswer(item.id, answerText)
-                          }
-                        >
-                          {opt.toUpperCase()}. {answerText}
-                        </Button>
+                        <li key={opt} className="flex items-center gap-3">
+                          <Input
+                            type="radio"
+                            name={item.id}
+                            className="cursor-pointer w-5"
+                            defaultChecked={isSelected}
+                            onClick={() =>
+                              handleSelectedAnswer(item.id, answerText)
+                            }
+                          />
+                          <label>
+                            {opt.toLocaleUpperCase()}. {answerText}
+                          </label>
+                        </li>
                       );
                     })}
                   </ul>
@@ -256,52 +223,6 @@ export default function Soal() {
                 )}
               </div>
             ))}
-            {/* {questions.length > 0
-              ? questions.exams.questions_exam.map((item: any, i: number) => (
-                  <div
-                    className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
-                    key={item.id}
-                  >
-                    <span className="font-bold mr-1 text-lg">{i + 1}.</span>
-                    <h1 className="inline-block text-lg font-semibold">
-                      {item.questions}
-                    </h1>
-                    <ul className="flex justify-evenly items-center mt-5 max-[640px]:flex-wrap max-[640px]:gap-1.5 sm:flex-wrap sm:gap-2">
-                      {["a", "b", "c", "d", "e"].map((opt) => {
-                        const answerKey = `answer_${opt}`;
-                        const answerText = item.answerPg[answerKey];
-                        const isSelected =
-                          clickedAnswer[item.id] === answerText;
-                        return (
-                          <Button
-                            key={opt}
-                            variant="outline"
-                            className={`cursor-pointer w-fit px-3 ${
-                              isSelected ? "line-through" : ""
-                            }`}
-                            onClick={() =>
-                              handleSelectedAnswer(item.id, answerText)
-                            }
-                          >
-                            {opt.toUpperCase()}. {answerText}
-                          </Button>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                ))
-              : Array.from({ length: 5 }).map((_, i) => (
-                  <div className="mt-5 animate-pulse" key={i}>
-                    <div className="bg-slate-400 w-full h-8 rounded-md"></div>
-                    <div className="flex flex-col gap-5 mt-5">
-                      <div className="bg-slate-400 w-11/12 h-5 rounded-md"></div>
-                      <div className="bg-slate-400 w-4/5 h-5 rounded-md"></div>
-                      <div className="bg-slate-400 w-full h-5 rounded-md"></div>
-                      <div className="bg-slate-400 w-1/2 h-5 rounded-md"></div>
-                      <div className="bg-slate-400 w-3/5 h-5 rounded-md"></div>
-                    </div>
-                  </div>
-                ))} */}
           </div>
         </div>
         <div className="mt-10 flex justify-between">
