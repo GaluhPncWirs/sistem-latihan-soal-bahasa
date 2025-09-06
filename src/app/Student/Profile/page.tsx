@@ -16,11 +16,25 @@ import {
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
 import { useConvertDate } from "../../hooks/getConvertDate";
+import { Dialog } from "@radix-ui/react-dialog";
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function Profil() {
   const id = useGetIdStudent();
   const dataStudent = useGetDataStudent(id);
   const [historyStudent, setHistoryStudent] = useState([]);
+  const { push } = useRouter();
 
   useEffect(() => {
     if (!id) return;
@@ -37,6 +51,17 @@ export default function Profil() {
 
     getHistoryStudent();
   }, [id]);
+
+  function handleEditProfileStudent(event: any) {
+    event.preventDefault();
+    const payload = {
+      nama: event.target.nama.value,
+      kelas: event.target.kelas.value,
+      email: event.target.email.value,
+    };
+
+    console.log(payload);
+  }
 
   return (
     <LayoutBodyContent>
@@ -64,6 +89,50 @@ export default function Profil() {
             </li>
             <li>Status Akun Aktif</li>
           </ul>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="cursor-pointer">Edit Profile</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <form
+                className="grid gap-2"
+                onSubmit={(event) => handleEditProfileStudent(event)}
+              >
+                <DialogHeader>
+                  <DialogTitle>Edit Profile</DialogTitle>
+                  <DialogDescription className="mt-1">
+                    Edit Profil Kamu Disini
+                  </DialogDescription>
+                  <div>
+                    <label htmlFor="nama" className="mb-1 block">
+                      Nama
+                    </label>
+                    <Input id="nama" />
+                  </div>
+                  <div>
+                    <label htmlFor="kelas" className="mb-1 block">
+                      Kelas
+                    </label>
+                    <Input id="kelas" />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="mb-1 block">
+                      Email
+                    </label>
+                    <Input type="email" id="email" />
+                  </div>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button>Cancel</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button type="submit">Confirm</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
         <div className="max-[640px]:mt-0 sm:mt-0 md:mt-16 md:basis-2/3">
           <div className="bg-[#71C9CE] rounded-lg p-7">
