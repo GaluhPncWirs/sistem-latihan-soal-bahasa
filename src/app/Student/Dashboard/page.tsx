@@ -51,7 +51,7 @@ export default function DashboardStudent() {
       const { data: historyDataExams, error: historyDataError }: any =
         await supabase
           .from("history-exam-student")
-          .select("student_id,exam_id,status_exam,created_at,hasil_ujian")
+          .select("exam_id,status_exam,created_at,hasil_ujian")
           .eq("student_id", getIdStudent);
 
       if (examsError || historyDataError) {
@@ -66,7 +66,6 @@ export default function DashboardStudent() {
         return {
           ...item,
           status_exam: finds?.status_exam ?? null,
-          student_id: finds?.student_id ?? getIdStudent,
           created_at_historyExams: finds?.created_at ?? null,
           hasil_ujian: finds?.hasil_ujian ?? null,
         };
@@ -121,8 +120,7 @@ export default function DashboardStudent() {
     tenggat_waktu: string,
     nama_ujian: string,
     idUjian: number,
-    tgl_ujian: string,
-    student_id: string
+    tgl_ujian: string
   ) {
     const [startTimeExam, endTimeExams] = tenggat_waktu
       .split("-")
@@ -165,7 +163,7 @@ export default function DashboardStudent() {
                   <Button
                     onClick={() =>
                       push(
-                        `/Student/Exams/?idExams=${idUjian}&idStudent=${student_id}`
+                        `/Student/Exams?idExams=${idUjian}&idStudent=${getIdStudent}`
                       )
                     }
                     className="cursor-pointer"
@@ -274,8 +272,7 @@ export default function DashboardStudent() {
                                 data.tenggat_waktu,
                                 data.exams.nama_ujian,
                                 data.idExams,
-                                data.dibuat_tgl,
-                                data.student_id
+                                data.dibuat_tgl
                               )}
                         </TableCell>
                       </TableRow>
@@ -368,8 +365,7 @@ export default function DashboardStudent() {
                           item.tenggat_waktu,
                           item.exams.nama_ujian,
                           item.idExams,
-                          item.dibuat_tgl,
-                          item.student_id
+                          item.dibuat_tgl
                         ) === "Ujian Telah Lewat Batas Waktu" ? (
                         <TableRow key={i}>
                           <TableCell

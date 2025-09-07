@@ -39,9 +39,9 @@ export default function Soal() {
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{
     [questions: string]: string;
   }>({});
-  const idExams = useSearchParams().get("id");
-  const idStudent = useGetIdStudent();
-  const dataStudent = useGetDataStudent(idStudent);
+  const idExams = useSearchParams().get("idExams");
+  const idStudent = useSearchParams().get("idStudent");
+  const dataStudent = useGetDataStudent(idStudent!);
   const [time, setTime] = useState<number>(0);
   const [answerEssayExams, setAnswerEssayExams] = useState<{
     [questions: string]: string;
