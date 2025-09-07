@@ -22,6 +22,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -31,11 +42,11 @@ export default function Soal() {
   const idExams = useSearchParams().get("id");
   const idStudent = useGetIdStudent();
   const dataStudent = useGetDataStudent(idStudent);
-  const [time, setTime] = useState<number>(questions.exam_duration);
+  const [time, setTime] = useState<number>(0);
   const [answerEssayExams, setAnswerEssayExams] = useState<{
     [questions: string]: string;
   }>({});
-  const [timeOut, setTimeOut] = useState<boolean>(false);
+  const [timeOutDone, setTimeOutDone] = useState<boolean>(false);
   const { push } = useRouter();
 
   useEffect(() => {
@@ -45,7 +56,7 @@ export default function Soal() {
         setTime((prev) => {
           if (prev <= 0) {
             clearInterval(timer);
-            setTimeOut(true);
+            setTimeOutDone(true);
             return 0;
           }
           return prev - 1;
@@ -118,6 +129,12 @@ export default function Soal() {
     }
   }
 
+  useEffect(() => {
+    if (timeOutDone === true) {
+      handleSendExam();
+    }
+  }, [timeOutDone]);
+
   return (
     <LayoutBodyContent>
       <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-11/12 lg:w-10/12">
@@ -139,7 +156,7 @@ export default function Soal() {
                     height={200}
                     className="w-1/2"
                   />
-                  {/* <span className="text-xl font-semibold">{formatedTime}</span> */}
+                  <span className="text-xl font-semibold">{formatedTime}</span>
                 </div>
               )}
             </div>
@@ -225,6 +242,22 @@ export default function Soal() {
             ))}
           </div>
         </div>
+        <AlertDialog open={timeOutDone} onOpenChange={setTimeOutDone}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
+              <AlertDialogDescription>
+                Ujian telah mencapai batas waktu yang telah ditentukan. Jawaban
+                Anda akan disimpan secara otomatis.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction className="cursor-pointer">
+                Oke
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         <div className="mt-10 flex justify-between">
           <Dialog>
             <DialogTrigger asChild>

@@ -66,7 +66,7 @@ export default function DashboardStudent() {
         return {
           ...item,
           status_exam: finds?.status_exam ?? null,
-          student_id: finds?.student_id ?? null,
+          student_id: finds?.student_id ?? getIdStudent,
           created_at_historyExams: finds?.created_at ?? null,
           hasil_ujian: finds?.hasil_ujian ?? null,
         };
@@ -121,7 +121,8 @@ export default function DashboardStudent() {
     tenggat_waktu: string,
     nama_ujian: string,
     idUjian: number,
-    tgl_ujian: string
+    tgl_ujian: string,
+    student_id: string
   ) {
     const [startTimeExam, endTimeExams] = tenggat_waktu
       .split("-")
@@ -162,7 +163,11 @@ export default function DashboardStudent() {
                 </DialogClose>
                 <DialogClose asChild>
                   <Button
-                    onClick={() => push(`/Student/Exams/?id=${idUjian}`)}
+                    onClick={() =>
+                      push(
+                        `/Student/Exams/?idExams=${idUjian}&idStudent=${student_id}`
+                      )
+                    }
                     className="cursor-pointer"
                   >
                     Oke
@@ -269,7 +274,8 @@ export default function DashboardStudent() {
                                 data.tenggat_waktu,
                                 data.exams.nama_ujian,
                                 data.idExams,
-                                data.dibuat_tgl
+                                data.dibuat_tgl,
+                                data.student_id
                               )}
                         </TableCell>
                       </TableRow>
@@ -362,7 +368,8 @@ export default function DashboardStudent() {
                           item.tenggat_waktu,
                           item.exams.nama_ujian,
                           item.idExams,
-                          item.dibuat_tgl
+                          item.dibuat_tgl,
+                          item.student_id
                         ) === "Ujian Telah Lewat Batas Waktu" ? (
                         <TableRow key={i}>
                           <TableCell
