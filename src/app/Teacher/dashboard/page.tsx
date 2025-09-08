@@ -131,112 +131,110 @@ export default function Teacher() {
 
   return (
     <LayoutBodyContent>
-      <div className="pt-28 mx-auto max-[640px]:w-11/12 sm:w-10/12 md:w-3/4">
+      <div className="pt-24 mx-auto max-[640px]:w-11/12 sm:w-10/12 md:w-3/4">
         <h1 className="text-4xl font-bold text-center">Dashboard Pengajar</h1>
-        <h1 className="text-2xl font-bold my-7 max-[640px]:text-center">
-          Halo, Selamat Datang {getProfileTeacher?.fullName}
-        </h1>
-        <ul className="mx-auto mt-10 flex justify-around font-semibold text-lg max-[640px]:text-base max-[640px]:w-full max-[640px]:gap-x-3 sm:w-full md:w-11/12">
-          <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
-            id="createQusetions"
-            onClick={(e) => handleClickItem(e.currentTarget.id)}
-          >
-            Buat Soal
-          </li>
-          <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
-            id="viewResult"
-            onClick={(e) => handleClickItem(e.currentTarget.id)}
-          >
-            Kelola Soal
-          </li>
-          <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
-            id="manageStudent"
-            onClick={(e) => handleClickItem(e.currentTarget.id)}
-          >
-            Kelola Siswa
-          </li>
-          <li
-            className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
-            onClick={() => window.location.reload()}
-          >
-            Kembali
-          </li>
-        </ul>
-        <div className="border border-slate-800 mt-10 mb-7 rounded-xl" />
+        <div>
+          <h1 className="text-2xl font-bold mb-7 mt-10 max-[640px]:text-center">
+            Halo, Selamat Datang {getProfileTeacher?.fullName}
+          </h1>
+          <ul className="mx-auto mt-10 flex justify-around font-semibold text-lg max-[640px]:text-base max-[640px]:w-full max-[640px]:gap-x-3 sm:w-full md:w-11/12">
+            <li
+              className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
+              id="createQusetions"
+              onClick={(e) => handleClickItem(e.currentTarget.id)}
+            >
+              Buat Soal
+            </li>
+            <li
+              className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
+              id="viewResult"
+              onClick={(e) => handleClickItem(e.currentTarget.id)}
+            >
+              Kelola Soal
+            </li>
+            <li
+              className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
+              id="manageStudent"
+              onClick={(e) => handleClickItem(e.currentTarget.id)}
+            >
+              Kelola Siswa
+            </li>
+            <li
+              className="bg-blue-400 px-5 py-2 rounded-lg hover:bg-blue-500 cursor-pointer text-center"
+              onClick={() => window.location.reload()}
+            >
+              Kembali
+            </li>
+          </ul>
+          <div className="border border-slate-800 mt-10 mb-7 rounded-xl" />
+          <div className="mt-5">
+            {dashboardButton.viewResult === true ? (
+              <ViewQuestions />
+            ) : dashboardButton.manageStudent === true ? (
+              <ManageStudent />
+            ) : dashboardButton.createQusetions === true ? (
+              <CreateNewQuestions />
+            ) : (
+              <div>
+                <h1 className="mb-7 text-2xl text-center font-semibold">
+                  Jadwal Ujian Hari ini
+                </h1>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-[#3282B8]">
+                      <TableHead className="text-base text-center">
+                        No
+                      </TableHead>
+                      <TableHead className="text-base text-center">
+                        Nama Ujian
+                      </TableHead>
+                      <TableHead className="text-base text-center">
+                        Kelas
+                      </TableHead>
+                      <TableHead className="text-base text-center">
+                        Tenggat Waktu
+                      </TableHead>
+                      <TableHead className="text-base text-center">
+                        Status
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {dataManageExams.length > 0 ? (
+                      dataManageExams.map((item: any, i: number) => (
+                        <TableRow key={i}>
+                          <TableCell className="text-center">{i + 1}</TableCell>
+                          <TableCell>{item.exams?.nama_ujian}</TableCell>
+                          <TableCell className="text-center">
+                            {item.kelas}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {item.dibuat_tgl} {item.tenggat_waktu}
+                          </TableCell>
 
-        <div className="mt-5">
-          {dashboardButton.viewResult === true ? (
-            <ViewQuestions />
-          ) : dashboardButton.manageStudent === true ? (
-            <ManageStudent />
-          ) : dashboardButton.createQusetions === true ? (
-            <CreateNewQuestions />
-          ) : (
-            <div>
-              <h1 className="mb-7 text-2xl text-center font-semibold">
-                Jadwal Ujian Hari ini
-              </h1>
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-[#3282B8]">
-                    <TableHead className="text-base text-center">No</TableHead>
-                    <TableHead className="text-base text-center">
-                      Nama Ujian
-                    </TableHead>
-                    <TableHead className="text-base text-center">
-                      Kelas
-                    </TableHead>
-                    <TableHead className="text-base text-center">
-                      Dibuat Tanggal
-                    </TableHead>
-                    <TableHead className="text-base text-center">
-                      Tenggat Waktu
-                    </TableHead>
-                    <TableHead className="text-base text-center">
-                      Status
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dataManageExams.length > 0 ? (
-                    dataManageExams.map((item: any, i: number) => (
-                      <TableRow key={i}>
-                        <TableCell className="text-center">{i + 1}</TableCell>
-                        <TableCell>{item.exams?.nama_ujian}</TableCell>
-                        <TableCell className="text-center">
-                          {item.kelas}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {item.dibuat_tgl}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {item.tenggat_waktu}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {item.lengthStudent.length ===
-                          item.lengthStudentCompleteExams?.length
-                            ? "Selesai"
-                            : "Belum Selesai"}
+                          <TableCell className="text-center">
+                            {item.lengthStudent.length ===
+                            item.lengthStudentCompleteExams?.length
+                              ? "Selesai"
+                              : "Belum Selesai"}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={6}
+                          className="text-center text-lg font-semibold"
+                        >
+                          Belum Ada Soal Ujian Yang Dikelola
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={6}
-                        className="text-center text-lg font-semibold"
-                      >
-                        Belum Ada Soal Ujian Yang Dikelola
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          )}
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </LayoutBodyContent>

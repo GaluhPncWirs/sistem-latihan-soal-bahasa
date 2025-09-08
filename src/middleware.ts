@@ -10,6 +10,7 @@ export async function middleware(req: NextRequest) {
       .eq("exam_id", idExam)
       .eq("student_id", idStudent)
       .single();
+
     return statExam;
   }
 
@@ -20,7 +21,6 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
     const isDone = await isDoneExams(Number(examId), idStudent!);
-    console.log(isDone);
 
     if (isDone?.status_exam === undefined && isDone?.student_id === undefined) {
       return NextResponse.next();
