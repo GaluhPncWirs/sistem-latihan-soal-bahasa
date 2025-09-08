@@ -116,6 +116,33 @@ export default function DashboardStudent() {
     return hoursStr * 60 + minuteStr;
   }
 
+  async function lateExams(idUjian: any) {
+    const payload = {
+      created_at: new Date().toISOString(),
+      student_id: getIdStudent,
+      exam_id: Number(idUjian),
+      answer_student: null,
+      hasil_ujian: "Telat",
+      status_exam: true,
+      kelas: getDataStudent?.classes,
+    };
+    const { error } = await supabase
+      .from("history-exam-student")
+      .insert(payload);
+    if (error) {
+      console.log("gagal simpan data");
+    }
+  }
+
+  function convertDateToISO(dateStr: string) {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const resultConvert = `${year}-${month}-${day}`;
+    return new Date(resultConvert + "T00:00:00").getTime();
+  }
+
   function resultDeadlineExam(
     tenggat_waktu: string,
     nama_ujian: string,
@@ -136,6 +163,7 @@ export default function DashboardStudent() {
       if (hariIni < mulaiUjian) {
         messageExams += "Ujian Belum Dimulai";
       } else if (hariIni > akhirUjian) {
+        lateExams(idUjian);
         messageExams += "Ujian Telah Lewat Batas Waktu";
       } else {
         return (
@@ -176,9 +204,10 @@ export default function DashboardStudent() {
           </Dialog>
         );
       }
-    } else if (tgl_ujian !== waktuHariIni && hariIni > mulaiUjian) {
+    } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
       messageExams += "Ujian Belum Dimulai";
     } else {
+      lateExams(idUjian);
       messageExams += "Ujian Telah Lewat Batas Waktu";
     }
     return messageExams;
