@@ -6,7 +6,7 @@ export async function middleware(req: NextRequest) {
   async function isDoneExams(idExam: number, idStudent: string) {
     const { data: statExam } = await supabase
       .from("history-exam-student")
-      .select("status_exam,student_id")
+      .select("status_exam,student_id,hasil_ujian")
       .eq("exam_id", idExam)
       .eq("student_id", idStudent)
       .single();
@@ -22,12 +22,17 @@ export async function middleware(req: NextRequest) {
     }
     const isDone = await isDoneExams(Number(examId), idStudent!);
 
+    console.log(isDone);
+
     if (isDone?.status_exam === undefined && isDone?.student_id === undefined) {
       return NextResponse.next();
-    } else if (isDone === null) {
-      return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     } else {
-      if (isDone.status_exam === true && isDone.student_id === idStudent) {
+      if (
+        (isDone.status_exam === true && isDone.student_id === idStudent) ||
+        (isDone.status_exam === true &&
+          isDone.student_id === idStudent &&
+          isDone.hasil_ujian === "telat")
+      ) {
         return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
       } else {
         return NextResponse.next();
