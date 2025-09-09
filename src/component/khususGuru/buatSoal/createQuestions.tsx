@@ -220,7 +220,7 @@ export default function CreateNewQuestions() {
   }, [clearInput, chooseTypeExams]);
 
   return (
-    <div className="bg-[#3674B5] p-5 rounded-lg mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
+    <div className="bg-[#3396D3] p-5 rounded-lg mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
       <h1 className="text-2xl font-semibold text-center mb-7 text-slate-100">
         Buat Soal Ujian
       </h1>
@@ -416,7 +416,7 @@ export default function CreateNewQuestions() {
       </form>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="text-center mt-5 px-8 text-black rounded-md py-1.5 font-semibold cursor-pointer bg-blue-400 hover:bg-blue-500">
+          <Button className="text-center text-lg mt-5 px-8 text-black rounded-md py-1.5 font-semibold cursor-pointer bg-slate-300 hover:bg-slate-200">
             Buat
           </Button>
         </DialogTrigger>

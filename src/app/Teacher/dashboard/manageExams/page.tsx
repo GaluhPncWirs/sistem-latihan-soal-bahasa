@@ -168,14 +168,14 @@ export default function ViewQuestions() {
   return (
     <LayoutBodyContent>
       <div className="w-11/12 mx-auto pt-24">
-        <h1 className="text-4xl font-bold mb-5 text-center">Edit Soal</h1>
-        <h2 className="text-2xl font-bold mb-10">
+        <h1 className="text-4xl font-bold mb-10 text-center">Edit Soal</h1>
+        <h2 className="text-2xl font-bold mb-7">
           Nama Ujian : {viewQuestions.nama_ujian || ""}
         </h2>
         <Table>
           <TableHeader className="bg-[#3282B8]">
             <TableRow>
-              <TableHead className="text-base">No</TableHead>
+              <TableHead className="text-base text-center">No</TableHead>
               <TableHead className="text-center text-base">
                 Soal Ujian
               </TableHead>
@@ -186,14 +186,16 @@ export default function ViewQuestions() {
             {viewQuestions.tipeUjian === "pg"
               ? viewQuestions.questions_exam?.map((data: any, i: number) => (
                   <TableRow key={i}>
-                    <TableCell>{i + 1}</TableCell>
+                    <TableCell className="text-center">{i + 1}</TableCell>
                     <TableCell>
-                      <h1 className="mb-2 font-semibold">{data.questions}</h1>
-                      <ul className="flex justify-around flex-wrap items-center my-2 max-[640px]:gap-3 sm:gap-3 md:gap-1">
+                      <h1 className="mb-2 font-semibold lg:text-lg">
+                        {data.questions}
+                      </h1>
+                      <ul className="flex flex-col justify-center my-2 gap-2">
                         <li
                           className={`${
                             data.correctAnswer === data.answerPg.answer_a
-                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              ? `bg-blue-400 px-3 py-1 rounded-lg w-fit`
                               : `px-0 py-0 rounded-none`
                           }`}
                         >
@@ -202,7 +204,7 @@ export default function ViewQuestions() {
                         <li
                           className={`${
                             data.correctAnswer === data.answerPg.answer_b
-                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              ? `bg-blue-400 px-3 py-1 rounded-md w-fit`
                               : `px-0 py-0 rounded-none`
                           }`}
                         >
@@ -211,7 +213,7 @@ export default function ViewQuestions() {
                         <li
                           className={`${
                             data.correctAnswer === data.answerPg.answer_c
-                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              ? `bg-blue-400 px-3 py-1 rounded-md w-fit`
                               : `px-0 py-0 rounded-none`
                           }`}
                         >
@@ -220,7 +222,7 @@ export default function ViewQuestions() {
                         <li
                           className={`${
                             data.correctAnswer === data.answerPg.answer_d
-                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              ? `bg-blue-400 px-3 py-1 rounded-md w-fit`
                               : `px-0 py-0 rounded-none`
                           }`}
                         >
@@ -229,7 +231,7 @@ export default function ViewQuestions() {
                         <li
                           className={`${
                             data.correctAnswer === data.answerPg.answer_e
-                              ? `bg-blue-400 px-3 py-1 rounded-lg`
+                              ? `bg-blue-400 px-3 py-1 rounded-md w-fit`
                               : `px-0 py-0 rounded-none`
                           }`}
                         >
@@ -237,7 +239,7 @@ export default function ViewQuestions() {
                         </li>
                       </ul>
                     </TableCell>
-                    <TableCell className="flex justify-center gap-3 items-center">
+                    <TableCell className="flex justify-center gap-3">
                       <Dialog>
                         <form>
                           <DialogTrigger asChild>
@@ -521,11 +523,13 @@ export default function ViewQuestions() {
                 ))}
           </TableBody>
         </Table>
-
+        <p className="text-end text-sm text-red-500 font-semibold mt-1">
+          * Pilihan Ganda Yang di Warnai Biru Adalah Jawabannya
+        </p>
         <div className="mt-8 pb-7">
           <Link
             href="/Teacher/dashboard"
-            className="text-md bg-amber-300 px-5 py-2 rounded-lg hover:bg-amber-400 font-semibold"
+            className="text-md bg-[#3396D3] px-5 py-2 rounded-lg font-semibold hover:text-slate-200"
           >
             Kembali
           </Link>

@@ -23,7 +23,7 @@ export default function TeacherProfile() {
   const totalStudent = getHistoryExams?.flatMap((acc: any) => acc.student_id);
   const averageValueExam = getHistoryExams
     ?.flatMap((item: any) => item.hasil_ujian)
-    .filter((a: any) => a !== "pending")
+    .filter((a: any) => a !== "pending" && a !== "telat")
     .map((toNum: any) => Number(toNum))
     .reduce((acc: any, cur: any) => acc + cur, 0);
 
@@ -188,7 +188,9 @@ export default function TeacherProfile() {
                                 item.student_id.length
                             )
                           : item.hasil_ujian
-                              .filter((f: any) => f !== "pending")
+                              .filter(
+                                (f: any) => f !== "pending" && f !== "telat"
+                              )
                               .map(Number)
                               .reduce((acc: any, cur: any) => acc + cur, 0) /
                             item.hasil_ujian.filter((f: any) => f !== "pending")

@@ -115,9 +115,7 @@ export default function ViewQuestions() {
 
   return (
     <div className="w-full">
-      <h1 className="mb-7 text-2xl text-center font-semibold">
-        Kelola Soal Ujian
-      </h1>
+      <h1 className="mb-7 text-2xl font-semibold">Kelola Soal Ujian</h1>
       <Table>
         <TableHeader>
           <TableRow className="bg-[#3282B8]">

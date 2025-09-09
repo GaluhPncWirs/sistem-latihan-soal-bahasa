@@ -59,8 +59,6 @@ export default function Profil() {
       kelas: event.target.kelas.value,
       email: event.target.email.value,
     };
-
-    console.log(payload);
   }
 
   return (
@@ -89,7 +87,7 @@ export default function Profil() {
             </li>
             <li>Status Akun Aktif</li>
           </ul>
-          <Dialog>
+          {/* <Dialog>
             <DialogTrigger asChild>
               <Button className="cursor-pointer">Edit Profile</Button>
             </DialogTrigger>
@@ -132,7 +130,7 @@ export default function Profil() {
                 </DialogFooter>
               </form>
             </DialogContent>
-          </Dialog>
+          </Dialog> */}
         </div>
         <div className="max-[640px]:mt-0 sm:mt-0 md:mt-16 md:basis-2/3">
           <div className="bg-[#71C9CE] rounded-lg p-7">

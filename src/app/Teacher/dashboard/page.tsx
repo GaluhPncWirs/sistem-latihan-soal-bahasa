@@ -176,7 +176,7 @@ export default function Teacher() {
               <CreateNewQuestions />
             ) : (
               <div>
-                <h1 className="mb-7 text-2xl text-center font-semibold">
+                <h1 className="mb-7 text-2xl font-semibold">
                   Jadwal Ujian Hari ini
                 </h1>
                 <Table>
