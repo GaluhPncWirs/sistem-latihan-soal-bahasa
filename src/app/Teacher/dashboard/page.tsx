@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -27,7 +28,10 @@ export default function Teacher() {
   });
   const idTeacher = useGetIdTeacher();
   const [dataManageExams, setDataManageExams] = useState<any>([]);
-  const getProfileTeacher = useGetDataTeacher(idTeacher);
+  // const getProfileTeacher = useGetDataTeacher(idTeacher);
+  const jumlahSiswa = new Set(
+    dataManageExams.flatMap((a: any) => a.lengthStudent)
+  );
 
   function handleClickItem(event: any) {
     if (event === "viewResult") {
@@ -132,34 +136,62 @@ export default function Teacher() {
   return (
     <LayoutBodyContent>
       <div className="flex relative">
-        <div className="bg-[#476EAE] w-1/5 sticky top-16 h-[37rem] rounded-br-lg">
-          <ul className="flex flex-col items-center pt-20 gap-y-10 h-full text-slate-200 font-medium text-xl">
+        <div className="bg-[#476EAE] w-1/5 h-screen rounded-br-lg mt-16">
+          <ul className="flex flex-col items-center h-2/3 gap-y-14 justify-center text-slate-200 font-medium text-xl">
             <li
-              className="cursor-pointer hover:text-slate-300"
+              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
               onClick={() => window.location.reload()}
             >
-              Dashboard
+              <Image
+                src="/img/dashboardTeacher/dashboard.png"
+                alt="Dashboard"
+                width={200}
+                height={200}
+                className="w-1/6 opacity-60"
+              />
+              <span>Dashboard</span>
             </li>
             <li
-              className="cursor-pointer hover:text-slate-300"
+              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
               id="createQusetions"
               onClick={(e) => handleClickItem(e.currentTarget.id)}
             >
-              Buat Soal
+              <Image
+                src="/img/dashboardTeacher/create.png"
+                alt="Create"
+                width={200}
+                height={200}
+                className="w-1/6"
+              />
+              <span>Buat Soal</span>
             </li>
             <li
-              className="cursor-pointer hover:text-slate-300"
+              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
               id="viewResult"
               onClick={(e) => handleClickItem(e.currentTarget.id)}
             >
-              Kelola Ujian
+              <Image
+                src="/img/dashboardTeacher/request-service.png"
+                alt="Manage"
+                width={200}
+                height={200}
+                className="w-1/6"
+              />
+              <span>Kelola Ujian</span>
             </li>
             <li
-              className="cursor-pointer hover:text-slate-300"
+              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
               id="manageStudent"
               onClick={(e) => handleClickItem(e.currentTarget.id)}
             >
-              Nilai Siswa
+              <Image
+                src="/img/dashboardTeacher/report-card.png"
+                alt="Score"
+                width={200}
+                height={200}
+                className="w-1/6"
+              />
+              <span>Nilai Siswa</span>
             </li>
           </ul>
         </div>
@@ -167,16 +199,20 @@ export default function Teacher() {
           <h1 className="text-4xl font-bold">Dashboard Pengajar</h1>
           <div>
             <h1 className="text-3xl font-semibold mt-10">Ringkasan</h1>
-            <div className="flex justify-evenly items-center mt-7 text-slate-800">
-              <div className="bg-[#48B3AF] basis-1/4 rounded-md p-5">
-                <span className="text-4xl font-bold">12</span>
+            <div className="flex justify-evenly items-center mt-8 text-slate-800">
+              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-5">
+                <span className="text-4xl font-bold">
+                  {dataManageExams.length || "0"}
+                </span>
                 <h1 className="font-medium">Ujian Dibuat</h1>
               </div>
-              <div className="bg-[#48B3AF] basis-1/4 rounded-md p-5">
-                <span className="text-4xl font-bold">54</span>
+              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-5">
+                <span className="text-4xl font-bold">
+                  {jumlahSiswa.size || "0"}
+                </span>
                 <h1 className="font-medium">Jumlah Siswa</h1>
               </div>
-              <div className="bg-[#48B3AF] basis-1/4 rounded-md p-5">
+              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-5">
                 <span className="text-4xl font-bold">12</span>
                 <h1 className="font-medium">Nilai Rata-Rata</h1>
               </div>
@@ -191,7 +227,7 @@ export default function Teacher() {
               ) : (
                 <div>
                   <h1 className="mb-7 text-2xl font-semibold">
-                    Jadwal Ujian Hari ini
+                    Jadwal Ujian Aktif Hari ini
                   </h1>
                   <Table>
                     <TableHeader>

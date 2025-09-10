@@ -91,7 +91,7 @@ export default function ManageStudent() {
 
   return (
     <div>
-      <h1 className="mb-7 text-2xl font-semibold">Kelola Ujian Siswa</h1>
+      <h1 className="mb-7 text-2xl font-semibold">Hasil Ujian Siswa</h1>
       <Table>
         <TableHeader>
           <TableRow className="bg-[#3282B8]">

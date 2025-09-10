@@ -220,12 +220,12 @@ export default function CreateNewQuestions() {
   }, [clearInput, chooseTypeExams]);
 
   return (
-    <div className="bg-[#3396D3] p-5 rounded-lg mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
-      <h1 className="text-2xl font-semibold text-center mb-7 text-slate-100">
+    <div className="bg-[#476EAE] p-5 rounded-lg mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
+      <h1 className="text-2xl font-semibold mb-7 text-slate-100">
         Buat Soal Ujian
       </h1>
       <form className="flex flex-col gap-5">
-        <div className="bg-slate-100 p-5 rounded-lg">
+        <div className="bg-[#EBEBEB] p-5 rounded-lg">
           <Select onValueChange={(val) => setChooseTypeExams(val)}>
             <SelectTrigger className="w-2/3">
               <SelectValue placeholder="Pilih Tipe Ujian (PG / Essay)" />
@@ -236,7 +236,7 @@ export default function CreateNewQuestions() {
             </SelectContent>
           </Select>
         </div>
-        <div className="bg-slate-100 p-5 rounded-lg">
+        <div className="bg-[#EBEBEB] p-5 rounded-lg">
           <Select onValueChange={(val) => setSelectedValueNameExam(val)}>
             <SelectTrigger className="w-2/3">
               <SelectValue placeholder="Pilih Nama Ujiannya" />
@@ -274,7 +274,7 @@ export default function CreateNewQuestions() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex bg-slate-100 p-5 rounded-lg flex-col justify-center items-center gap-3">
+        <div className="flex bg-[#EBEBEB] p-5 rounded-lg flex-col items-center gap-3">
           {selectedValueNameExam === "buatUjianBaru" && (
             <>
               <label
@@ -306,7 +306,7 @@ export default function CreateNewQuestions() {
         </div>
         {chooseTypeExams === "pg" && (
           <>
-            <div className="bg-slate-100 p-5 rounded-lg">
+            <div className="bg-[#EBEBEB] p-5 rounded-lg">
               <h1 className="text-lg font-semibold">Isi Jawaban</h1>
               <div className="flex gap-5 mt-3 items-center justify-center flex-wrap">
                 <div className="text-center">
@@ -386,7 +386,7 @@ export default function CreateNewQuestions() {
                 </div>
               </div>
             </div>
-            <div className="bg-slate-100 p-5 rounded-lg">
+            <div className="bg-[#EBEBEB] p-5 rounded-lg">
               <h1 className="text-lg font-semibold mb-3">Jawaban Yang Benar</h1>
               <Select onValueChange={(val) => setSelectCorrectAnswer(val)}>
                 <SelectTrigger className="w-2/3">
@@ -416,7 +416,7 @@ export default function CreateNewQuestions() {
       </form>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="text-center text-lg mt-5 px-8 text-black rounded-md py-1.5 font-semibold cursor-pointer bg-slate-300 hover:bg-slate-200">
+          <Button className="text-center text-lg mt-5 text-black px-8 rounded-md py-1.5 font-semibold cursor-pointer bg-slate-300 hover:bg-slate-400">
             Buat
           </Button>
         </DialogTrigger>
