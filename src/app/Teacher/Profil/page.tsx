@@ -4,6 +4,16 @@ import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
   Table,
   TableBody,
   TableCell,
@@ -13,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
+import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -87,27 +98,108 @@ export default function TeacherProfile() {
     historyExams();
   }, [idTeacher]);
 
+  function handleEditProfileStudent(event: any) {
+    event.preventDefault();
+    const payload = {
+      nama: event.target.nama.value,
+      kelas: event.target.kelas.value,
+      email: event.target.email.value,
+    };
+  }
+
   return (
     <LayoutBodyContent>
       <div className="pt-24 w-3/4 mx-auto">
         <h1 className="text-4xl font-bold mb-8 mt-7">Profil Guru</h1>
         <div className="flex justify-center items-center gap-7 mb-5">
-          <Image
-            src="/img/profile/userProfile.png"
-            alt="Profile User"
-            width={300}
-            height={300}
-            className="rounded-full w-1/5"
-          />
-          <div className="basis-1/2">
+          <Dialog>
+            <DialogTrigger asChild className="cursor-pointer">
+              <Image
+                src="/img/profile/userProfile.png"
+                alt="Profile User"
+                width={300}
+                height={300}
+                className="rounded-full w-1/5"
+              />
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Ubah Foto Profil</DialogTitle>
+                <div className="mt-3">
+                  <Input type="file" accept="image/*" id="imgProfil" />
+                </div>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+          <div className="basis-3/4">
             <h1 className="text-5xl capitalize mb-2 font-semibold">
               {getProfileTeacher?.fullName}
             </h1>
             <p className="font-medium">Matematika - Bahasa Indonesia</p>
           </div>
-          <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-lg p-5">
-            Edit Profil
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-lg p-5">
+                Edit Profil
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <form
+                className="grid gap-2"
+                // onSubmit={(event) => handleEditProfileStudent(event)}
+              >
+                <DialogHeader>
+                  <DialogTitle>Edit Profile</DialogTitle>
+                  <DialogDescription className="mt-1">
+                    <span className="text-base">
+                      Edit Seluruh Informasi Profil Kamu Disini
+                    </span>
+                  </DialogDescription>
+                  <div>
+                    <label htmlFor="nama" className="mb-2 block">
+                      Nama
+                    </label>
+                    <Input id="nama" placeholder="Jhon Doe" />
+                  </div>
+                  <div>
+                    <label htmlFor="kelas" className="mb-2 block">
+                      Ubah Pengajar Mata Pelajaran
+                    </label>
+                    <Input
+                      id="kelas"
+                      placeholder="Matematika - Bahasa Indonesia - dst"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="mb-2 block">
+                      Email
+                    </label>
+                    <Input
+                      type="email"
+                      id="email"
+                      placeholder="jhondoe56@gmail.com"
+                    />
+                  </div>
+                  <span className="font-semibold block text-xs text-red-500 text-end">
+                    * Jika Ingin Diubah Hanya Salah Satu Maka Sisanya
+                    Dikosongkan Saja
+                  </span>
+                </DialogHeader>
+                <DialogFooter className="mt-3">
+                  <DialogClose asChild>
+                    <Button className="cursor-pointer" variant="outline">
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button type="submit" className="cursor-pointer">
+                      Confirm
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
         <div className="mb-5">
           <div className="flex items-center mb-5 gap-3">
