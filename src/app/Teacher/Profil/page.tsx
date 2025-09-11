@@ -89,130 +89,163 @@ export default function TeacherProfile() {
 
   return (
     <LayoutBodyContent>
-      <div className="pt-16 flex max-[640px]:flex-col max-[640px]:gap-0 sm:flex-col sm:gap-0 lg:gap-10 md:flex-row">
-        <div className="bg-[#71C9CE] bg-gradient-to-t to-[#08D9D6] px-7 pt-10 pb-7 shadow-lg md:w-[33%] lg:basis-1/4 flex flex-col items-center">
+      <div className="pt-24 w-3/4 mx-auto">
+        <h1 className="text-4xl font-bold mb-8 mt-7">Profil Guru</h1>
+        <div className="flex justify-center items-center gap-7 mb-5">
           <Image
             src="/img/profile/userProfile.png"
             alt="Profile User"
             width={300}
             height={300}
-            className="rounded-full w-1/2"
+            className="rounded-full w-1/5"
           />
-          <ul className="my-7 flex flex-col justify-center gap-3">
-            <li>Nama {getProfileTeacher?.fullName}</li>
-            <li>Email {getProfileTeacher?.email}</li>
-            <li>Peran {getProfileTeacher?.role}</li>
-            <li>Mapel yang Diajar</li>
-            <li>
-              Tgl Bergabung{" "}
-              {useConvertDate(getProfileTeacher?.created_at, {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </li>
-            <li>Status Akun Aktif</li>
-          </ul>
-        </div>
-        <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:w-2/3">
-          <div className="flex justify-evenly items-center mb-8 max-[640px]:flex-wrap max-[640px]:gap-5">
-            <div className="bg-[#3D74B6] text-slate-200 max-[640px]:p-2 xl:p-5 rounded-lg sm:p-3 flex flex-col items-center gap-y-1">
-              <Image
-                src="/img/profileTeacher/done.png"
-                alt="Selesai"
-                width={200}
-                height={200}
-                className="w-1/3"
-              />
-              <h1 className="font-semibold text-lg">Ujian Selesai</h1>{" "}
-              <span className="font-bold text-xl">
-                {getHistoryExams?.length || "0"}
-              </span>
-            </div>
-            <div className="bg-[#3D74B6] text-slate-200 max-[640px]:p-2 xl:p-5 rounded-lg sm:p-3 flex flex-col items-center gap-y-1">
-              <Image
-                src="/img/profileTeacher/count.png"
-                alt="Jumlah"
-                width={200}
-                height={200}
-                className="w-1/3"
-              />
-              <h1 className="font-semibold text-lg">Jumlah Siswa</h1>{" "}
-              <span className="font-bold text-xl">
-                {new Set(totalStudent).size || "0"}
-              </span>
-            </div>
-            <div className="bg-[#3D74B6] text-slate-200 max-[640px]:p-2 xl:p-5 rounded-lg sm:p-3 flex flex-col items-center gap-y-1">
-              <Image
-                src="/img/profileTeacher/average.png"
-                alt="Rata-Rata"
-                width={200}
-                height={200}
-                className="w-1/4"
-              />
-              <h1 className="font-semibold text-lg">Nilai Rata-Rata</h1>{" "}
-              <span className="font-bold text-xl">
-                {Math.floor(averageValueExam / new Set(totalStudent).size) ||
-                  "0"}
-              </span>
-            </div>
+          <div className="basis-1/2">
+            <h1 className="text-5xl capitalize mb-2 font-semibold">
+              {getProfileTeacher?.fullName}
+            </h1>
+            <p className="font-medium">Matematika - Bahasa Indonesia</p>
           </div>
-          <div className="px-5">
-            <h1 className="mb-10 text-center text-2xl font-semibold">
+          <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-lg p-5">
+            Edit Profil
+          </Button>
+        </div>
+        <div className="mb-5">
+          <div className="flex items-center mb-5 gap-3">
+            <Image
+              src="/img/profileTeacher/account.png"
+              alt="Informasi Akun"
+              width={200}
+              height={200}
+              className="w-[4%]"
+            />
+            <h1 className="text-2xl font-semibold">Informasi Akun</h1>
+          </div>
+          <Table>
+            <TableBody>
+              <TableRow className="border-black">
+                <TableCell className="text-base font-medium">Email</TableCell>
+                <TableCell className="text-base font-medium">
+                  {getProfileTeacher?.email || ""}
+                </TableCell>
+              </TableRow>
+              <TableRow className="border-black">
+                <TableCell className="text-base font-medium">
+                  Tanggal Bergabung
+                </TableCell>
+                <TableCell className="text-base font-medium">
+                  {useConvertDate(getProfileTeacher?.created_at, {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  }) || ""}
+                </TableCell>
+              </TableRow>
+              <TableRow className="border-black">
+                <TableCell className="text-base font-medium">
+                  No Telepon
+                </TableCell>
+                <TableCell className="text-base font-medium">
+                  0898-2346-1232
+                </TableCell>
+              </TableRow>
+              <TableRow className="border-black">
+                <TableCell className="text-base font-medium">Peran</TableCell>
+                <TableCell className="text-base font-medium">
+                  {getProfileTeacher?.role}
+                </TableCell>
+              </TableRow>
+              <TableRow className="border-black">
+                <TableCell className="text-base font-medium">
+                  Status Akun
+                </TableCell>
+                <TableCell className="text-base font-medium">Aktif</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+        <div>
+          <div className="mb-5 flex items-center gap-3">
+            <Image
+              src="/img/profileTeacher/history.png"
+              alt="History"
+              width={200}
+              height={200}
+              className="w-[4%]"
+            />
+            <h1 className="text-2xl font-semibold">
               Riwayat Ujian Yang Dibuat
             </h1>
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-[#3282B8]">
-                  <TableHead>No</TableHead>
-                  <TableHead>Nama Ujian</TableHead>
-                  <TableHead>Jumlah Siswa</TableHead>
-                  <TableHead>Nilai Rata-Rata</TableHead>
-                  <TableHead>Kelas</TableHead>
-                  <TableHead>Tanggal</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {getHistoryExams?.length > 0 ? (
-                  getHistoryExams?.map((item: any, i: number) => (
-                    <TableRow key={i}>
-                      <TableCell>{i + 1}</TableCell>
-                      <TableCell>{item.nama_ujian}</TableCell>
-                      <TableCell>{item.student_id?.length}</TableCell>
-                      <TableCell>
-                        {item.tipeUjian === "pg"
-                          ? Math.floor(
-                              item.hasil_ujian
-                                .map(Number)
-                                .reduce((acc: any, cur: any) => acc + cur, 0) /
-                                item.student_id.length
-                            )
-                          : item.hasil_ujian
-                              .filter(
-                                (f: any) => f !== "pending" && f !== "telat"
-                              )
+          </div>
+
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-[#3282B8]">
+                <TableHead className="text-center text-base font-semibold">
+                  No
+                </TableHead>
+                <TableHead className="text-center text-base font-semibold">
+                  Nama Ujian
+                </TableHead>
+                <TableHead className="text-center text-base font-semibold">
+                  Jumlah Siswa
+                </TableHead>
+                <TableHead className="text-center text-base font-semibold">
+                  Nilai Rata-Rata
+                </TableHead>
+                <TableHead className="text-center text-base font-semibold">
+                  Kelas
+                </TableHead>
+                <TableHead className="text-center text-base font-semibold">
+                  Tanggal
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {getHistoryExams?.length > 0 ? (
+                getHistoryExams?.map((item: any, i: number) => (
+                  <TableRow key={i}>
+                    <TableCell className="text-center font-semibold">
+                      {i + 1}
+                    </TableCell>
+                    <TableCell>{item.nama_ujian}</TableCell>
+                    <TableCell className="text-center">
+                      {item.student_id?.length}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {item.tipeUjian === "pg"
+                        ? Math.floor(
+                            item.hasil_ujian
                               .map(Number)
                               .reduce((acc: any, cur: any) => acc + cur, 0) /
-                            item.hasil_ujian.filter((f: any) => f !== "pending")
-                              .length}
-                      </TableCell>
-                      <TableCell>{item.kelas}</TableCell>
-                      <TableCell>{item.dibuat_tgl}</TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={6}
-                      className="text-center text-lg font-semibold"
-                    >
-                      Belum Ada History
+                              item.student_id.length
+                          )
+                        : item.hasil_ujian
+                            .filter(
+                              (f: any) => f !== "pending" && f !== "telat"
+                            )
+                            .map(Number)
+                            .reduce((acc: any, cur: any) => acc + cur, 0) /
+                          item.hasil_ujian.filter((f: any) => f !== "pending")
+                            .length}
+                    </TableCell>
+                    <TableCell className="text-center">{item.kelas}</TableCell>
+                    <TableCell className="text-center">
+                      {item.dibuat_tgl}
                     </TableCell>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={6}
+                    className="text-center text-lg font-semibold"
+                  >
+                    Belum Ada History
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
       </div>
     </LayoutBodyContent>

@@ -136,8 +136,8 @@ export default function Teacher() {
   return (
     <LayoutBodyContent>
       <div className="flex relative">
-        <div className="bg-[#476EAE] w-1/5 h-screen rounded-br-lg mt-16">
-          <ul className="flex flex-col items-center h-2/3 gap-y-14 justify-center text-slate-200 font-medium text-xl">
+        <div className="bg-[#476EAE] w-1/5 sticky top-16 h-screen rounded-br-lg mt-16">
+          <ul className="flex flex-col items-center h-3/4 gap-y-14 justify-center text-slate-200 font-medium text-xl">
             <li
               className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
               onClick={() => window.location.reload()}
@@ -201,19 +201,40 @@ export default function Teacher() {
             <h1 className="text-3xl font-semibold mt-10">Ringkasan</h1>
             <div className="flex justify-evenly items-center mt-8 text-slate-800">
               <div className="bg-[#48B3AF] basis-1/5 rounded-md p-5">
-                <span className="text-4xl font-bold">
+                <Image
+                  src="/img/dashboardTeacher/complete.png"
+                  alt="Complete"
+                  width={200}
+                  height={200}
+                  className="w-1/4 mx-auto"
+                />
+                <span className="text-4xl font-bold block py-2">
                   {dataManageExams.length || "0"}
                 </span>
                 <h1 className="font-medium">Ujian Dibuat</h1>
               </div>
-              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-5">
-                <span className="text-4xl font-bold">
+              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-3.5">
+                <Image
+                  src="/img/dashboardTeacher/count.png"
+                  alt="Jumlah"
+                  width={200}
+                  height={200}
+                  className="w-[30%] mx-auto"
+                />
+                <span className="text-4xl font-bold block my-1.5">
                   {jumlahSiswa.size || "0"}
                 </span>
                 <h1 className="font-medium">Jumlah Siswa</h1>
               </div>
-              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-5">
-                <span className="text-4xl font-bold">12</span>
+              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-4">
+                <Image
+                  src="/img/dashboardTeacher/average.png"
+                  alt="Rata-Rata"
+                  width={200}
+                  height={200}
+                  className="w-1/4 mx-auto"
+                />
+                <span className="text-4xl font-bold block my-2">12</span>
                 <h1 className="font-medium">Nilai Rata-Rata</h1>
               </div>
             </div>
