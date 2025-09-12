@@ -57,7 +57,7 @@ export default function HamburgerMenu({
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
       </div>
       <ul
-        className={`flex justify-center gap-y-10 absolute right-0 h-screen flex-col bg-[#A6E3E9] bg-gradient-to-b to-sky-300 items-center w-1/2 -z-10 transition-all duration-300 text-xl font-semibold rounded-bl-lg
+        className={`flex pt-24 gap-y-12 absolute right-0 top-16 h-screen flex-col bg-[#A6E3E9] bg-gradient-to-b to-sky-300 items-center w-1/2 transition-all duration-300 text-xl font-semibold rounded-bl-lg
       ${isCheked ? `translate-x-0` : `translate-x-full`}`}
         ref={clickOutsidePath}
         id="navbar"

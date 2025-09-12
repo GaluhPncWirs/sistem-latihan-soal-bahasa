@@ -24,6 +24,7 @@ import {
 import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { Value } from "@radix-ui/react-select";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -98,32 +99,64 @@ export default function TeacherProfile() {
     historyExams();
   }, [idTeacher]);
 
-  // function handleEditProfileStudent(event: any) {
-  //   event.preventDefault();
-  //   const payloadString = [
-  //     event.target.fullName.value || "",
-  //     event.target.pengajarMapel.value || "",
-  //     event.target.email.value || "",
-  //     event.target.noTlp.value || "",
-  //   ];
-  //   const filterEmptyInput = payloadString.filter(
-  //     (values: any) => values !== ""
-  //   );
-  //   const payload = {
-  //     fullName: event.target.fullName.value || "",
-  //     pengajarMapel: event.target.pengajarMapel.value || "",
-  //     email: event.target.email.value || "",
-  //     noTlp: event.target.noTlp.value || "",
-  //     filterEmptyInput,
-  //   };
-  //   console.log(payload);
-  // }
+  async function handleEditProfileStudent(event: any) {
+    event.preventDefault();
+    const fieldNames = ["fullName", "pengajarMapel", "email", "noTlp"];
+    const payloadString = [
+      event.target.fullName.value || "",
+      event.target.pengajarMapel.value || "",
+      event.target.email.value || "",
+      event.target.noTlp.value || "",
+    ];
+    // const payload = {
+    //   fullName: event.target.fullName.value || "",
+    //   pengajarMapel: event.target.pengajarMapel.value || "",
+    //   email: event.target.email.value || "",
+    //   noTlp: event.target.noTlp.value || "",
+    // };
+
+    const filterEmptyInput = payloadString.filter(
+      (values: any) => values !== ""
+    );
+
+    const payload = filterEmptyInput.reduce(
+      (acc: any, value: any, i: number) => {
+        acc[fieldNames[i]] = value;
+        return acc;
+      },
+      {}
+    );
+
+    // const { data } = await supabase
+    //   .from("account_teacher")
+    //   .select("*")
+    //   .eq("id_teacher", idTeacher)
+    //   .single();
+
+    const { data, error } = await supabase
+      .from("account_teacher")
+      .update(payload)
+      .eq("id_teacher", idTeacher);
+
+    console.log(data);
+
+    // if(Object.keys(payload) !== Object.keys(data)){
+    //   console.log()
+    // }
+
+    // const dataTeacher = Object.keys(data).filter(
+    //   (fil: any) => fil === Object.keys(payload)
+    // );
+    // console.log(dataTeacher);
+
+    // console.log(data);
+  }
 
   return (
     <LayoutBodyContent>
-      <div className="pt-24 w-3/4 mx-auto">
+      <div className="pt-24 mx-auto max-[640px]:w-10/12 sm:w-10/12 md:w-10/12 lg:w-3/4">
         <h1 className="text-4xl font-bold mb-8 mt-5">Profil Guru</h1>
-        <div className="flex justify-center items-center gap-7 mb-5">
+        <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
           <Dialog>
             <DialogTrigger asChild className="cursor-pointer">
               <Image
@@ -131,7 +164,7 @@ export default function TeacherProfile() {
                 alt="Profile User"
                 width={300}
                 height={300}
-                className="rounded-full w-1/5"
+                className="rounded-full w-1/6 max-[640px]:w-1/3"
               />
             </DialogTrigger>
             <DialogContent>
@@ -144,7 +177,7 @@ export default function TeacherProfile() {
             </DialogContent>
           </Dialog>
           <div className="basis-3/4">
-            <h1 className="text-5xl capitalize mb-2 font-semibold">
+            <h1 className="capitalize mb-2 font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
               {getProfileTeacher?.fullName}
             </h1>
             <p className="font-medium">Matematika - Bahasa Indonesia</p>
@@ -158,7 +191,7 @@ export default function TeacherProfile() {
             <DialogContent>
               <form
                 className="grid gap-2"
-                // onSubmit={(event) => handleEditProfileStudent(event)}
+                onSubmit={(event) => handleEditProfileStudent(event)}
               >
                 <DialogHeader>
                   <DialogTitle>Edit Profile</DialogTitle>
@@ -197,8 +230,8 @@ export default function TeacherProfile() {
                     <Input type="text" id="noTlp" placeholder="089735283264" />
                   </div>
                   <span className="font-semibold block text-xs text-red-500 text-end">
-                    * Jika Ingin Diubah Hanya Salah Satu Maka Sisanya
-                    Dikosongkan Saja
+                    *Jika Ingin Diubah Hanya Salah Satu Maka Sisanya Dikosongkan
+                    Saja
                   </span>
                 </DialogHeader>
                 <DialogFooter className="mt-3">
@@ -224,7 +257,7 @@ export default function TeacherProfile() {
               alt="Informasi Akun"
               width={200}
               height={200}
-              className="w-[4%]"
+              className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
             />
             <h1 className="text-2xl font-semibold">Informasi Akun</h1>
           </div>
@@ -278,7 +311,7 @@ export default function TeacherProfile() {
               alt="History"
               width={200}
               height={200}
-              className="w-[4%]"
+              className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
             />
             <h1 className="text-2xl font-semibold">
               Riwayat Ujian Yang Dibuat
