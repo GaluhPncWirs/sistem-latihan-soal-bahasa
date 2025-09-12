@@ -5,6 +5,7 @@ import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/component/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/component/khususGuru/kelolaSiswa/manageStudent";
+import SideBarDashboardTeacher from "@/component/khususGuru/navigasi/sideBar";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -135,72 +136,14 @@ export default function Teacher() {
 
   return (
     <LayoutBodyContent>
-      <div className="flex relative">
-        <div className="bg-[#476EAE] w-1/5 sticky top-16 h-screen rounded-br-lg mt-16">
-          <ul className="flex flex-col items-center h-3/4 gap-y-14 justify-center text-slate-200 font-medium text-xl">
-            <li
-              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
-              onClick={() => window.location.reload()}
-            >
-              <Image
-                src="/img/dashboardTeacher/dashboard.png"
-                alt="Dashboard"
-                width={200}
-                height={200}
-                className="w-1/6 opacity-60"
-              />
-              <span>Dashboard</span>
-            </li>
-            <li
-              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
-              id="createQusetions"
-              onClick={(e) => handleClickItem(e.currentTarget.id)}
-            >
-              <Image
-                src="/img/dashboardTeacher/create.png"
-                alt="Create"
-                width={200}
-                height={200}
-                className="w-1/6"
-              />
-              <span>Buat Soal</span>
-            </li>
-            <li
-              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
-              id="viewResult"
-              onClick={(e) => handleClickItem(e.currentTarget.id)}
-            >
-              <Image
-                src="/img/dashboardTeacher/request-service.png"
-                alt="Manage"
-                width={200}
-                height={200}
-                className="w-1/6"
-              />
-              <span>Kelola Ujian</span>
-            </li>
-            <li
-              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
-              id="manageStudent"
-              onClick={(e) => handleClickItem(e.currentTarget.id)}
-            >
-              <Image
-                src="/img/dashboardTeacher/report-card.png"
-                alt="Score"
-                width={200}
-                height={200}
-                className="w-1/6"
-              />
-              <span>Nilai Siswa</span>
-            </li>
-          </ul>
-        </div>
+      <div className="flex relative max-[640px]:flex-none">
+        <SideBarDashboardTeacher handleClickItem={handleClickItem} />
         <div className="pt-24 mx-auto max-[640px]:w-11/12 sm:w-10/12 md:w-3/4">
           <h1 className="text-4xl font-bold">Dashboard Pengajar</h1>
           <div>
             <h1 className="text-3xl font-semibold mt-10">Ringkasan</h1>
             <div className="flex justify-evenly items-center mt-8 text-slate-800">
-              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-5">
+              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-5 max-[640px]:basis-[30%] max-[640px]:p-4">
                 <Image
                   src="/img/dashboardTeacher/complete.png"
                   alt="Complete"
@@ -208,12 +151,12 @@ export default function Teacher() {
                   height={200}
                   className="w-1/4 mx-auto"
                 />
-                <span className="text-4xl font-bold block py-2">
+                <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
                   {dataManageExams.length || "0"}
                 </span>
                 <h1 className="font-medium">Ujian Dibuat</h1>
               </div>
-              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-3.5">
+              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-3.5 max-[640px]:basis-[30%] max-[640px]:p-4">
                 <Image
                   src="/img/dashboardTeacher/count.png"
                   alt="Jumlah"
@@ -221,12 +164,12 @@ export default function Teacher() {
                   height={200}
                   className="w-[30%] mx-auto"
                 />
-                <span className="text-4xl font-bold block my-1.5">
+                <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
                   {jumlahSiswa.size || "0"}
                 </span>
                 <h1 className="font-medium">Jumlah Siswa</h1>
               </div>
-              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-4">
+              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-4 max-[640px]:basis-[30%]">
                 <Image
                   src="/img/dashboardTeacher/average.png"
                   alt="Rata-Rata"
@@ -234,9 +177,70 @@ export default function Teacher() {
                   height={200}
                   className="w-1/4 mx-auto"
                 />
-                <span className="text-4xl font-bold block my-2">12</span>
-                <h1 className="font-medium">Nilai Rata-Rata</h1>
+                <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
+                  12
+                </span>
+                <h1 className="font-medium">Nilai Rata</h1>
               </div>
+            </div>
+            <div className="w-full sticky top-20 mt-10 max-[640px]:z-10">
+              <ul className="bg-[#476EAE] flex items-center justify-center text-slate-200 font-medium max-[640px]:text-lg text-xl rounded-md max-[640px]:p-4 max-[640px]:gap-x-4">
+                <li
+                  className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-x-3 max-[640px]:flex-col"
+                  onClick={() => window.location.reload()}
+                >
+                  <Image
+                    src="/img/dashboardTeacher/dashboard.png"
+                    alt="Dashboard"
+                    width={200}
+                    height={200}
+                    className="w-1/6 opacity-60 max-[640px]:w-1/4"
+                  />
+                  <span>Dashboard</span>
+                </li>
+                <li
+                  className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-x-3 max-[640px]:flex-col"
+                  id="createQusetions"
+                  onClick={(e) => handleClickItem(e.currentTarget.id)}
+                >
+                  <Image
+                    src="/img/dashboardTeacher/create.png"
+                    alt="Create"
+                    width={200}
+                    height={200}
+                    className="w-1/6 max-[640px]:w-1/4"
+                  />
+                  <span>Buat Soal</span>
+                </li>
+                <li
+                  className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-x-3 max-[640px]:flex-col"
+                  id="viewResult"
+                  onClick={(e) => handleClickItem(e.currentTarget.id)}
+                >
+                  <Image
+                    src="/img/dashboardTeacher/request-service.png"
+                    alt="Manage"
+                    width={200}
+                    height={200}
+                    className="w-1/6 max-[640px]:w-1/4"
+                  />
+                  <span>Kelola Ujian</span>
+                </li>
+                <li
+                  className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-x-3 max-[640px]:flex-col"
+                  id="manageStudent"
+                  onClick={(e) => handleClickItem(e.currentTarget.id)}
+                >
+                  <Image
+                    src="/img/dashboardTeacher/report-card.png"
+                    alt="Score"
+                    width={200}
+                    height={200}
+                    className="w-1/6 max-[640px]:w-1/4"
+                  />
+                  <span>Nilai Siswa</span>
+                </li>
+              </ul>
             </div>
             <div className="mt-10">
               {dashboardButton.viewResult === true ? (

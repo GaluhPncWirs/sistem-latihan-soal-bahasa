@@ -98,19 +98,31 @@ export default function TeacherProfile() {
     historyExams();
   }, [idTeacher]);
 
-  function handleEditProfileStudent(event: any) {
-    event.preventDefault();
-    const payload = {
-      nama: event.target.nama.value,
-      kelas: event.target.kelas.value,
-      email: event.target.email.value,
-    };
-  }
+  // function handleEditProfileStudent(event: any) {
+  //   event.preventDefault();
+  //   const payloadString = [
+  //     event.target.fullName.value || "",
+  //     event.target.pengajarMapel.value || "",
+  //     event.target.email.value || "",
+  //     event.target.noTlp.value || "",
+  //   ];
+  //   const filterEmptyInput = payloadString.filter(
+  //     (values: any) => values !== ""
+  //   );
+  //   const payload = {
+  //     fullName: event.target.fullName.value || "",
+  //     pengajarMapel: event.target.pengajarMapel.value || "",
+  //     email: event.target.email.value || "",
+  //     noTlp: event.target.noTlp.value || "",
+  //     filterEmptyInput,
+  //   };
+  //   console.log(payload);
+  // }
 
   return (
     <LayoutBodyContent>
       <div className="pt-24 w-3/4 mx-auto">
-        <h1 className="text-4xl font-bold mb-8 mt-7">Profil Guru</h1>
+        <h1 className="text-4xl font-bold mb-8 mt-5">Profil Guru</h1>
         <div className="flex justify-center items-center gap-7 mb-5">
           <Dialog>
             <DialogTrigger asChild className="cursor-pointer">
@@ -150,23 +162,21 @@ export default function TeacherProfile() {
               >
                 <DialogHeader>
                   <DialogTitle>Edit Profile</DialogTitle>
-                  <DialogDescription className="mt-1">
-                    <span className="text-base">
-                      Edit Seluruh Informasi Profil Kamu Disini
-                    </span>
+                  <DialogDescription className="mt-1 text-base">
+                    Edit Seluruh Informasi Profil Kamu Disini
                   </DialogDescription>
                   <div>
-                    <label htmlFor="nama" className="mb-2 block">
+                    <label htmlFor="fullName" className="mb-2 block">
                       Nama
                     </label>
-                    <Input id="nama" placeholder="Jhon Doe" />
+                    <Input id="fullName" placeholder="Jhon Doe" />
                   </div>
                   <div>
-                    <label htmlFor="kelas" className="mb-2 block">
+                    <label htmlFor="pengajarMapel" className="mb-2 block">
                       Ubah Pengajar Mata Pelajaran
                     </label>
                     <Input
-                      id="kelas"
+                      id="pengajarMapel"
                       placeholder="Matematika - Bahasa Indonesia - dst"
                     />
                   </div>
@@ -179,6 +189,12 @@ export default function TeacherProfile() {
                       id="email"
                       placeholder="jhondoe56@gmail.com"
                     />
+                  </div>
+                  <div>
+                    <label htmlFor="noTlp" className="mb-2 block">
+                      No Telepon
+                    </label>
+                    <Input type="text" id="noTlp" placeholder="089735283264" />
                   </div>
                   <span className="font-semibold block text-xs text-red-500 text-end">
                     * Jika Ingin Diubah Hanya Salah Satu Maka Sisanya
