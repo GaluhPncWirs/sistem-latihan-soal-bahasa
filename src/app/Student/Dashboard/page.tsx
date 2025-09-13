@@ -39,9 +39,9 @@ export default function DashboardStudent() {
   const getIdStudent = useGetIdStudent();
   const getDataStudent = useGetDataStudent(getIdStudent);
   const { push } = useRouter();
-  const [processedLateExams, setProcessedLateExams] = useState<Set<number>>(
-    new Set()
-  );
+  // const [processedLateExams, setProcessedLateExams] = useState<Set<number>>(
+  //   new Set()
+  // );
 
   useEffect(() => {
     if (!getDataStudent?.classes || !getIdStudent) return;
@@ -122,38 +122,38 @@ export default function DashboardStudent() {
     return hoursStr * 60 + minuteStr;
   }
 
-  async function lateExams(idUjian: any) {
-    const payload = {
-      created_at: new Date().toISOString(),
-      student_id: getIdStudent,
-      exam_id: Number(idUjian),
-      answer_student: null,
-      hasil_ujian: "Telat",
-      status_exam: true,
-      kelas: getDataStudent?.classes,
-    };
-    const { error } = await supabase
-      .from("history-exam-student")
-      .insert(payload);
-    if (error) {
-      console.log("gagal simpan data");
-    }
-  }
+  // async function lateExams(idUjian: any) {
+  //   const payload = {
+  //     created_at: new Date().toISOString(),
+  //     student_id: getIdStudent,
+  //     exam_id: Number(idUjian),
+  //     answer_student: null,
+  //     hasil_ujian: "Telat",
+  //     status_exam: true,
+  //     kelas: getDataStudent?.classes,
+  //   };
+  //   const { error } = await supabase
+  //     .from("history-exam-student")
+  //     .insert(payload);
+  //   if (error) {
+  //     console.log("gagal simpan data");
+  //   }
+  // }
 
-  async function handleLateExam(idUjian: number) {
-    if (!processedLateExams.has(idUjian)) {
-      setProcessedLateExams((prev) => new Set(prev).add(idUjian));
-    }
-  }
+  // async function handleLateExam(idUjian: number) {
+  //   if (!processedLateExams.has(idUjian)) {
+  //     setProcessedLateExams((prev) => new Set(prev).add(idUjian));
+  //   }
+  // }
 
-  useEffect(() => {
-    async function processLateExams() {
-      for (const id of processedLateExams) {
-        await lateExams(id);
-      }
-    }
-    processLateExams();
-  }, [processedLateExams]);
+  // useEffect(() => {
+  //   async function processLateExams() {
+  //     for (const id of processedLateExams) {
+  //       await lateExams(id);
+  //     }
+  //   }
+  //   processLateExams();
+  // }, [processedLateExams]);
 
   function convertDateToISO(dateStr: string) {
     const date = new Date(dateStr);
@@ -184,8 +184,8 @@ export default function DashboardStudent() {
       if (hariIni < mulaiUjian) {
         messageExams += "Ujian Belum Dimulai";
       } else if (hariIni > akhirUjian) {
-        // messageExams += "Ujian Telah Lewat Batas Waktu";
-        handleLateExam(idUjian);
+        messageExams += "Ujian Telah Lewat Batas Waktu";
+        // handleLateExam(idUjian);
       } else {
         return (
           <Dialog>
@@ -228,8 +228,8 @@ export default function DashboardStudent() {
     } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
       messageExams += "Ujian Belum Dimulai";
     } else {
-      handleLateExam(idUjian);
-      // messageExams += "Ujian Telah Lewat Batas Waktu";
+      // handleLateExam(idUjian);
+      messageExams += "Ujian Telah Lewat Batas Waktu";
     }
     return messageExams;
   }

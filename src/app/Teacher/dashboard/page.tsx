@@ -134,6 +134,8 @@ export default function Teacher() {
     getDataManageExams();
   }, [idTeacher]);
 
+  console.log(dataManageExams);
+
   return (
     <LayoutBodyContent>
       <div className="flex justify-between">

@@ -12,6 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -130,6 +135,62 @@ export default function TeacherProfile() {
         description: "Edit Profil Berhasil Di Update",
       });
     }
+  }
+
+  function nilaiRataRata(data: any) {
+    const resultExamsPg =
+      data.hasil_ujian
+        .map(Number)
+        .reduce((acc: any, cur: any) => acc + cur, 0) / data.student_id.length;
+
+    const filterResultExamScore = data.hasil_ujian.filter(
+      (fil: any) => fil !== "pending" && fil !== "telat"
+    );
+    const filterResultExamPending = data.hasil_ujian.filter(
+      (fil: any) => fil === "pending" && fil !== "telat"
+    );
+    const resultExamsEssay =
+      filterResultExamScore
+        .map(Number)
+        .reduce((acc: any, cur: any) => acc + cur, 0) / data.student_id.length;
+
+    if (filterResultExamScore.length > 0) {
+      if (data.tipeUjian === "pg") {
+        return Math.round(resultExamsPg);
+      } else {
+        return Math.round(resultExamsEssay);
+      }
+    } else {
+      return (
+        <HoverCard openDelay={200} closeDelay={200} key={data.exam_id}>
+          <HoverCardTrigger asChild>
+            <h1>{Math.round(resultExamsEssay)}</h1>
+          </HoverCardTrigger>
+          <HoverCardContent className="w-fit p-2">
+            <h1 className="font-semibold text-xs">
+              Ada {filterResultExamPending.length} Siswa Yang Belum Dinilai
+            </h1>
+          </HoverCardContent>
+        </HoverCard>
+      );
+    }
+
+    // if (data.tipeUjian === "pg") {
+    //   return Math.round(resultExamsPg);
+    // } else {
+    //   return (
+    //     <HoverCard openDelay={200} closeDelay={200} key={data.exam_id}>
+    //       <HoverCardTrigger asChild>
+    //         <h1>{Math.round(resultExamsEssay)}</h1>
+    //       </HoverCardTrigger>
+    //       <HoverCardContent className="w-fit p-2">
+    //         <h1 className="font-semibold text-xs">
+    //           Ada {filterResultExamPending.length} Siswa Yang Belum Dinilai
+    //         </h1>
+    //       </HoverCardContent>
+    //     </HoverCard>
+    //   );
+    // }
   }
 
   return (
@@ -335,21 +396,7 @@ export default function TeacherProfile() {
                       {item.student_id?.length}
                     </TableCell>
                     <TableCell className="text-center">
-                      {item.tipeUjian === "pg"
-                        ? Math.floor(
-                            item.hasil_ujian
-                              .map(Number)
-                              .reduce((acc: any, cur: any) => acc + cur, 0) /
-                              item.student_id.length
-                          )
-                        : item.hasil_ujian
-                            .filter(
-                              (f: any) => f !== "pending" && f !== "telat"
-                            )
-                            .map(Number)
-                            .reduce((acc: any, cur: any) => acc + cur, 0) /
-                          item.hasil_ujian.filter((f: any) => f !== "pending")
-                            .length}
+                      {nilaiRataRata(item)}
                     </TableCell>
                     <TableCell className="text-center">{item.kelas}</TableCell>
                     <TableCell className="text-center">
