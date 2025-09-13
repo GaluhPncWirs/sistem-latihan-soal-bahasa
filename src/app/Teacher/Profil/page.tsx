@@ -27,6 +27,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { Value } from "@radix-ui/react-select";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function TeacherProfile() {
   const idTeacher = useGetIdTeacher();
@@ -56,7 +57,9 @@ export default function TeacherProfile() {
           .eq("exams.idTeacher", idTeacher);
 
       if (errorDataManageExams || errorDataHistoryExams) {
-        console.log("data error ditampilkan");
+        toast("Gagal ❌", {
+          description: "Data Error Ditampilkan",
+        });
       }
 
       const fillterNotNull = dataHistoryExams.filter(
@@ -102,54 +105,31 @@ export default function TeacherProfile() {
   async function handleEditProfileStudent(event: any) {
     event.preventDefault();
     const fieldNames = ["fullName", "pengajarMapel", "email", "noTlp"];
-    const payloadString = [
-      event.target.fullName.value || "",
-      event.target.pengajarMapel.value || "",
-      event.target.email.value || "",
-      event.target.noTlp.value || "",
-    ];
-    // const payload = {
-    //   fullName: event.target.fullName.value || "",
-    //   pengajarMapel: event.target.pengajarMapel.value || "",
-    //   email: event.target.email.value || "",
-    //   noTlp: event.target.noTlp.value || "",
-    // };
-
-    const filterEmptyInput = payloadString.filter(
-      (values: any) => values !== ""
+    const payloadString = fieldNames.map(
+      (name: any) => event.target[name].value || ""
     );
+    const payload = fieldNames.reduce((acc: any, key: any, i: number) => {
+      const val = payloadString[i];
+      if (val !== "") {
+        acc[key] = val;
+      }
+      return acc;
+    }, {});
 
-    const payload = filterEmptyInput.reduce(
-      (acc: any, value: any, i: number) => {
-        acc[fieldNames[i]] = value;
-        return acc;
-      },
-      {}
-    );
-
-    // const { data } = await supabase
-    //   .from("account_teacher")
-    //   .select("*")
-    //   .eq("id_teacher", idTeacher)
-    //   .single();
-
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("account_teacher")
       .update(payload)
       .eq("id_teacher", idTeacher);
 
-    console.log(data);
-
-    // if(Object.keys(payload) !== Object.keys(data)){
-    //   console.log()
-    // }
-
-    // const dataTeacher = Object.keys(data).filter(
-    //   (fil: any) => fil === Object.keys(payload)
-    // );
-    // console.log(dataTeacher);
-
-    // console.log(data);
+    if (error) {
+      toast("Gagal ❌", {
+        description: "Edit Profil Gagal",
+      });
+    } else {
+      toast("Berhasil ✅", {
+        description: "Edit Profil Berhasil Di Update",
+      });
+    }
   }
 
   return (
@@ -178,9 +158,11 @@ export default function TeacherProfile() {
           </Dialog>
           <div className="basis-3/4">
             <h1 className="capitalize mb-2 font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
-              {getProfileTeacher?.fullName}
+              {getProfileTeacher?.fullName || ""}
             </h1>
-            <p className="font-medium">Matematika - Bahasa Indonesia</p>
+            <p className="font-medium">
+              {getProfileTeacher?.pengajarMapel || ""}
+            </p>
           </div>
           <Dialog>
             <DialogTrigger asChild>
@@ -286,13 +268,13 @@ export default function TeacherProfile() {
                   No Telepon
                 </TableCell>
                 <TableCell className="text-base font-medium">
-                  0898-2346-1232
+                  {getProfileTeacher?.noTlp || ""}
                 </TableCell>
               </TableRow>
               <TableRow className="border-black">
                 <TableCell className="text-base font-medium">Peran</TableCell>
                 <TableCell className="text-base font-medium">
-                  {getProfileTeacher?.role}
+                  {getProfileTeacher?.role || ""}
                 </TableCell>
               </TableRow>
               <TableRow className="border-black">
