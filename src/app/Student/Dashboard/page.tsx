@@ -5,7 +5,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
 import { toast } from "sonner";
 import { useGetIdStudent } from "../../hooks/getIdStudent";
@@ -39,9 +39,7 @@ export default function DashboardStudent() {
   const getIdStudent = useGetIdStudent();
   const getDataStudent = useGetDataStudent(getIdStudent);
   const { push } = useRouter();
-  // const [processedLateExams, setProcessedLateExams] = useState<Set<number>>(
-  //   new Set()
-  // );
+  const processedLateExams = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     if (!getDataStudent?.classes || !getIdStudent) return;
@@ -122,38 +120,31 @@ export default function DashboardStudent() {
     return hoursStr * 60 + minuteStr;
   }
 
-  // async function lateExams(idUjian: any) {
-  //   const payload = {
-  //     created_at: new Date().toISOString(),
-  //     student_id: getIdStudent,
-  //     exam_id: Number(idUjian),
-  //     answer_student: null,
-  //     hasil_ujian: "Telat",
-  //     status_exam: true,
-  //     kelas: getDataStudent?.classes,
-  //   };
-  //   const { error } = await supabase
-  //     .from("history-exam-student")
-  //     .insert(payload);
-  //   if (error) {
-  //     console.log("gagal simpan data");
-  //   }
-  // }
+  async function lateExams(idUjian: number) {
+    const payload = {
+      created_at: new Date().toISOString(),
+      student_id: getIdStudent,
+      exam_id: Number(idUjian),
+      answer_student: null,
+      hasil_ujian: "telat",
+      status_exam: true,
+      kelas: getDataStudent?.classes,
+    };
+    const { error } = await supabase
+      .from("history-exam-student")
+      .insert(payload);
+    if (error) {
+      console.log("gagal simpan data");
+    }
+  }
 
-  // async function handleLateExam(idUjian: number) {
-  //   if (!processedLateExams.has(idUjian)) {
-  //     setProcessedLateExams((prev) => new Set(prev).add(idUjian));
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   async function processLateExams() {
-  //     for (const id of processedLateExams) {
-  //       await lateExams(id);
-  //     }
-  //   }
-  //   processLateExams();
-  // }, [processedLateExams]);
+  async function handleLateExam(idUjian: number, student_id: string) {
+    const key = `${idUjian}-${student_id}`;
+    if (!processedLateExams.current.has(key)) {
+      processedLateExams.current.add(key);
+      await lateExams(idUjian);
+    }
+  }
 
   function convertDateToISO(dateStr: string) {
     const date = new Date(dateStr);
@@ -185,7 +176,7 @@ export default function DashboardStudent() {
         messageExams += "Ujian Belum Dimulai";
       } else if (hariIni > akhirUjian) {
         messageExams += "Ujian Telah Lewat Batas Waktu";
-        // handleLateExam(idUjian);
+        handleLateExam(idUjian, getIdStudent);
       } else {
         return (
           <Dialog>
@@ -228,7 +219,7 @@ export default function DashboardStudent() {
     } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
       messageExams += "Ujian Belum Dimulai";
     } else {
-      // handleLateExam(idUjian);
+      handleLateExam(idUjian, getIdStudent);
       messageExams += "Ujian Telah Lewat Batas Waktu";
     }
     return messageExams;
@@ -314,7 +305,6 @@ export default function DashboardStudent() {
                           {data.dibuat_tgl} {data.tenggat_waktu}
                         </TableCell>
                         <TableCell>{data.account_teacher.fullName}</TableCell>
-
                         <TableCell>
                           {data.status_exam === true &&
                           data.hasil_ujian !== "telat"

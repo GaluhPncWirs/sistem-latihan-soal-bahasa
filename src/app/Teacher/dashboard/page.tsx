@@ -1,5 +1,6 @@
 "use client";
 
+import { useConvertDate } from "@/app/hooks/getConvertDate";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions";
@@ -33,6 +34,69 @@ export default function Teacher() {
   const jumlahSiswa = new Set(
     dataManageExams.flatMap((a: any) => a.lengthStudent)
   );
+  // const waktuHariIni = useConvertDate(new Date().toISOString(), {
+  //   minute: "numeric",
+  //   hour: "numeric",
+  //   day: "numeric",
+  //   month: "long",
+  //   year: "numeric",
+  // })
+  //   .split(" ")
+  //   .slice(0, 3)
+  //   .join(" ");
+
+  // const waktuDurasiIni = useConvertDate(new Date().toISOString(), {
+  //   minute: "numeric",
+  //   hour: "numeric",
+  //   day: "numeric",
+  //   month: "long",
+  //   year: "numeric",
+  // })
+  //   .split(" ")
+  //   .slice(4, 5)
+  //   .join(" ");
+
+  //   function toMinute(val: any) {
+  //   const deleteDot = val.replace(/[:.]/g, "-");
+  //   const [hoursStr, minuteStr = "0"] = deleteDot.split("-").map(Number);
+  //   return hoursStr * 60 + minuteStr;
+  // }
+
+  // function convertDateToISO(dateStr: string) {
+  //   const date = new Date(dateStr);
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, "0");
+  //   const day = String(date.getDate()).padStart(2, "0");
+  //   const resultConvert = `${year}-${month}-${day}`;
+  //   return new Date(resultConvert + "T00:00:00").getTime();
+  // }
+
+  // function resultDeadlineExam(tenggat_waktu: string, tgl_ujian: string) {
+  //   const [startTimeExam, endTimeExams] = tenggat_waktu
+  //     .split("-")
+  //     .map((item: any) => item.trim());
+
+  //   const mulaiUjian = toMinute(startTimeExam);
+  //   const akhirUjian = toMinute(endTimeExams);
+  //   const hariIni = toMinute(waktuDurasiIni);
+
+  //   let messageExams = "";
+
+  //   if (tgl_ujian === waktuHariIni) {
+  //     if (hariIni < mulaiUjian) {
+  //       messageExams += "Ujian Belum Dimulai";
+  //     } else if (hariIni > akhirUjian) {
+  //       messageExams += "Ujian Telah Lewat Batas Waktu";
+  //     } else {
+  //       return "ke ujian";
+  //     }
+  //   } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
+  //     messageExams += "Ujian Belum Dimulai";
+  //   } else {
+  //     messageExams += "Ujian Telah Lewat Batas Waktu";
+  //   }
+  //   return messageExams;
+  // }
 
   function handleClickItem(event: any) {
     if (event === "viewResult") {
@@ -68,7 +132,9 @@ export default function Teacher() {
       const { data: isCompleteExam, error: errorIsCompleteExam }: any =
         await supabase
           .from("history-exam-student")
-          .select("exam_id,student_id,kelas,status_exam,exams(idTeacher)")
+          .select(
+            "exam_id,student_id,kelas,hasil_ujian,status_exam,exams(idTeacher)"
+          )
           .eq("exams.idTeacher", idTeacher);
       const { data: lengthStudent, error: errorLengthStudent }: any =
         await supabase.from("account-student").select("classes,idStudent");
@@ -86,10 +152,12 @@ export default function Teacher() {
               kelas: cur.kelas,
               exam_id: [cur.exam_id],
               student_id: [cur.student_id],
+              hasil_ujian: [cur.hasil_ujian],
             });
           } else {
             found.student_id.push(cur.student_id);
             found.exam_id.push(cur.exam_id);
+            found.hasil_ujian.push(cur.hasil_ujian);
           }
           return acc;
         }, []);
@@ -133,8 +201,6 @@ export default function Teacher() {
     }
     getDataManageExams();
   }, [idTeacher]);
-
-  console.log(dataManageExams);
 
   return (
     <LayoutBodyContent>

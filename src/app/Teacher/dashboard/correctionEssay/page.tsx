@@ -1,5 +1,6 @@
 "use client";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
+import { useHandleInput } from "@/app/hooks/handleInput";
 import { Button } from "@/components/ui/button";
 import {
   DialogClose,
@@ -109,12 +110,12 @@ export default function CorrectionEssay() {
                     type="number"
                     className="border-slate-600 border-2 mt-3"
                     id={item.id}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setGiveAssesmentExams((prev: any) => ({
                         ...prev,
                         [item.id]: e.target.value,
-                      }))
-                    }
+                      }));
+                    }}
                   />
                 </div>
               </div>

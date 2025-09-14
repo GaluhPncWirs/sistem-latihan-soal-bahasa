@@ -4,6 +4,8 @@ import { useRandomId } from "@/app/hooks/getRandomId";
 import { useHandleInput } from "@/app/hooks/handleInput";
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -16,6 +18,8 @@ export default function RegisterAccount() {
       email: "",
       password: "",
     });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { push } = useRouter();
 
   async function handleRegister(e: any) {
     e.preventDefault();
@@ -35,7 +39,6 @@ export default function RegisterAccount() {
       toast("Gagal ❌", {
         description: "Nama Email Sudah Ada. Buat kembali Yang Berbeda",
       });
-
       setClearForm(true);
     } else if (error) {
       toast("Data Gagal Diload");
@@ -48,6 +51,8 @@ export default function RegisterAccount() {
           description: "Gagal Membuat Akun",
         });
       } else {
+        setIsLoading(true);
+        push("/Autentikasi/Login");
         toast("Berhasil ✅", {
           description: "Berhasil Membuat Akun Silahkan Kembali Ke Form Login",
         });
@@ -123,11 +128,21 @@ export default function RegisterAccount() {
           value={formMustFilled.password}
         />
         <button
-          className="bg-blue-300 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
+          className="bg-blue-300 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer flex justify-center"
           type="submit"
           disabled={!isFormFilled()}
         >
-          Register
+          {isLoading ? (
+            <Image
+              src="/img/autentikasi/icon_loading.png"
+              alt="Loading"
+              width={200}
+              height={200}
+              className="w-1/12 animate-spin"
+            />
+          ) : (
+            "Register"
+          )}
         </button>
       </form>
     </LayoutFormAccount>
