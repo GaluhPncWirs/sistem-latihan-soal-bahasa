@@ -34,69 +34,11 @@ export default function Teacher() {
   const jumlahSiswa = new Set(
     dataManageExams.flatMap((a: any) => a.lengthStudent)
   );
-  // const waktuHariIni = useConvertDate(new Date().toISOString(), {
-  //   minute: "numeric",
-  //   hour: "numeric",
-  //   day: "numeric",
-  //   month: "long",
-  //   year: "numeric",
-  // })
-  //   .split(" ")
-  //   .slice(0, 3)
-  //   .join(" ");
-
-  // const waktuDurasiIni = useConvertDate(new Date().toISOString(), {
-  //   minute: "numeric",
-  //   hour: "numeric",
-  //   day: "numeric",
-  //   month: "long",
-  //   year: "numeric",
-  // })
-  //   .split(" ")
-  //   .slice(4, 5)
-  //   .join(" ");
-
-  //   function toMinute(val: any) {
-  //   const deleteDot = val.replace(/[:.]/g, "-");
-  //   const [hoursStr, minuteStr = "0"] = deleteDot.split("-").map(Number);
-  //   return hoursStr * 60 + minuteStr;
-  // }
-
-  // function convertDateToISO(dateStr: string) {
-  //   const date = new Date(dateStr);
-  //   const year = date.getFullYear();
-  //   const month = String(date.getMonth() + 1).padStart(2, "0");
-  //   const day = String(date.getDate()).padStart(2, "0");
-  //   const resultConvert = `${year}-${month}-${day}`;
-  //   return new Date(resultConvert + "T00:00:00").getTime();
-  // }
-
-  // function resultDeadlineExam(tenggat_waktu: string, tgl_ujian: string) {
-  //   const [startTimeExam, endTimeExams] = tenggat_waktu
-  //     .split("-")
-  //     .map((item: any) => item.trim());
-
-  //   const mulaiUjian = toMinute(startTimeExam);
-  //   const akhirUjian = toMinute(endTimeExams);
-  //   const hariIni = toMinute(waktuDurasiIni);
-
-  //   let messageExams = "";
-
-  //   if (tgl_ujian === waktuHariIni) {
-  //     if (hariIni < mulaiUjian) {
-  //       messageExams += "Ujian Belum Dimulai";
-  //     } else if (hariIni > akhirUjian) {
-  //       messageExams += "Ujian Telah Lewat Batas Waktu";
-  //     } else {
-  //       return "ke ujian";
-  //     }
-  //   } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
-  //     messageExams += "Ujian Belum Dimulai";
-  //   } else {
-  //     messageExams += "Ujian Telah Lewat Batas Waktu";
-  //   }
-  //   return messageExams;
-  // }
+  const averageValueExam = dataManageExams
+    ?.flatMap((item: any) => item.hasil_ujian)
+    .filter((a: any) => a !== "pending" && a !== "telat")
+    .map((toNum: any) => Number(toNum))
+    .reduce((acc: any, cur: any) => acc + cur, 0);
 
   function handleClickItem(event: any) {
     if (event === "viewResult") {
@@ -194,6 +136,7 @@ export default function Teacher() {
             ...item,
             lengthStudent: findStudent?.idStudent ?? [],
             lengthStudentCompleteExams: studentCompleteExams,
+            hasil_ujian: findsExams?.hasil_ujian ?? [],
           };
         });
         setDataManageExams(mergedData);
@@ -304,7 +247,7 @@ export default function Teacher() {
                   className="w-1/4 mx-auto"
                 />
                 <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
-                  12
+                  {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
                 </span>
                 <h1 className="font-medium">Nilai Rata-Rata</h1>
               </div>

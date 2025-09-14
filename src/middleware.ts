@@ -22,8 +22,6 @@ export async function middleware(req: NextRequest) {
     }
     const isDone = await isDoneExams(Number(examId), idStudent!);
 
-    console.log(isDone);
-
     if (isDone?.status_exam === undefined && isDone?.student_id === undefined) {
       return NextResponse.next();
     } else {

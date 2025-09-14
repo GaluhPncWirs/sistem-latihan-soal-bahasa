@@ -29,7 +29,6 @@ import {
 import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { Value } from "@radix-ui/react-select";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -38,12 +37,6 @@ export default function TeacherProfile() {
   const idTeacher = useGetIdTeacher();
   const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const getProfileTeacher = useGetDataTeacher(idTeacher);
-  const totalStudent = getHistoryExams?.flatMap((acc: any) => acc.student_id);
-  const averageValueExam = getHistoryExams
-    ?.flatMap((item: any) => item.hasil_ujian)
-    .filter((a: any) => a !== "pending" && a !== "telat")
-    .map((toNum: any) => Number(toNum))
-    .reduce((acc: any, cur: any) => acc + cur, 0);
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -147,7 +140,7 @@ export default function TeacherProfile() {
       (fil: any) => fil !== "pending" && fil !== "telat"
     );
     const filterResultExamPending = data.hasil_ujian.filter(
-      (fil: any) => fil === "pending" && fil !== "telat"
+      (fil: any) => fil === "pending"
     );
     const resultExamsEssay =
       filterResultExamScore
@@ -174,23 +167,6 @@ export default function TeacherProfile() {
         </HoverCard>
       );
     }
-
-    // if (data.tipeUjian === "pg") {
-    //   return Math.round(resultExamsPg);
-    // } else {
-    //   return (
-    //     <HoverCard openDelay={200} closeDelay={200} key={data.exam_id}>
-    //       <HoverCardTrigger asChild>
-    //         <h1>{Math.round(resultExamsEssay)}</h1>
-    //       </HoverCardTrigger>
-    //       <HoverCardContent className="w-fit p-2">
-    //         <h1 className="font-semibold text-xs">
-    //           Ada {filterResultExamPending.length} Siswa Yang Belum Dinilai
-    //         </h1>
-    //       </HoverCardContent>
-    //     </HoverCard>
-    //   );
-    // }
   }
 
   return (
@@ -329,7 +305,13 @@ export default function TeacherProfile() {
                   No Telepon
                 </TableCell>
                 <TableCell className="text-base font-medium">
-                  {getProfileTeacher?.noTlp || ""}
+                  {`${getProfileTeacher?.noTlp?.slice(
+                    0,
+                    4
+                  )}-${getProfileTeacher?.noTlp?.slice(
+                    4,
+                    8
+                  )}-${getProfileTeacher?.noTlp?.slice(8, 12)}` || ""}
                 </TableCell>
               </TableRow>
               <TableRow className="border-black">
