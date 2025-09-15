@@ -229,7 +229,6 @@ export default function DashboardStudent() {
     const startTimeExam = tenggat_waktu
       .split("-")
       .map((item: any) => item.trim())[0];
-
     return toMinute(startTimeExam);
   }
 
@@ -238,18 +237,17 @@ export default function DashboardStudent() {
   );
 
   const deadlineUjianTercepatHariIni = isComingSoonExams.reduce(
-    (acc: any, cur: any) => {
-      const curDeadline = examsComingSoon(cur.tenggat_waktu);
-      const accDeadline = examsComingSoon(cur.tenggat_waktu);
-      return Math.abs(curDeadline - toMinute(waktuDurasiIni)) <
-        Math.abs(accDeadline - toMinute(waktuDurasiIni))
-        ? cur
-        : acc;
+    (closestExam: any, currentExam: any) => {
+      if (!closestExam) return currentExam;
+      const closestDeadline = examsComingSoon(closestExam.tenggat_waktu);
+      const currentDeadline = examsComingSoon(currentExam.tenggat_waktu);
+      return Math.abs(currentDeadline - toMinute(waktuDurasiIni)) <
+        Math.abs(closestDeadline - toMinute(waktuDurasiIni))
+        ? currentExam
+        : closestExam;
     },
     null
   );
-
-  console.log(deadlineUjianTercepatHariIni);
 
   return (
     <LayoutBodyContent>
@@ -296,63 +294,67 @@ export default function DashboardStudent() {
             </div>
           </div>
           <div className="mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-10/12 lg:w-3/4 mt-8">
-            <div>
-              <h1 className="text-2xl font-semibold mb-4">
-                Ujian Yang Akan Datang
-              </h1>
-              <div className="bg-sky-300 flex justify-between p-5 items-center rounded-xl shadow-md shadow-slate-500">
-                {/* {
-                  scheduleExams.length > 0 ? 
-                  scheduleExams.map((data:any,i:number) => 
-                  data.dibuat_tgl === waktuHariIni ? 
-                  )
-                } */}
-                <div>
-                  <h1 className="text-2xl font-semibold mb-2">Ujian 123</h1>
-                  <p className="text-sm font-medium">
-                    23 April 2025 - 10:00 AM
-                  </p>
+            {deadlineUjianTercepatHariIni !== null && (
+              <div>
+                <h1 className="text-2xl font-semibold mb-4">
+                  Ujian Yang Waktu Tenggatnya Hampir Habis
+                </h1>
+                <div className="bg-sky-300 flex justify-between p-5 items-center rounded-xl shadow-md shadow-slate-500">
+                  <div>
+                    <h1 className="text-2xl font-semibold mb-2">
+                      {deadlineUjianTercepatHariIni?.exams.nama_ujian}
+                    </h1>
+                    <p className="text-sm font-medium">
+                      {`${deadlineUjianTercepatHariIni?.dibuat_tgl} Di jam ${deadlineUjianTercepatHariIni?.tenggat_waktu}`}
+                    </p>
+                  </div>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        className="cursor-pointer text-base font-semibold px-5"
+                        variant="secondary"
+                      >
+                        Mulai
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle className="mb-2">
+                          Konfirmasi Masuk Ujian
+                        </DialogTitle>
+                        <DialogDescription>
+                          Apakah Anda Yakin ingin Mengerjakan Soal{" "}
+                          <span className="font-bold">
+                            "
+                            {deadlineUjianTercepatHariIni?.exams.nama_ujian ||
+                              ""}
+                            "
+                          </span>{" "}
+                          Ini ?
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button variant="outline">Batal</Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                          <Button
+                            onClick={() =>
+                              push(
+                                `/Student/Exams?idExams=${deadlineUjianTercepatHariIni.idExams}&idStudent=${getIdStudent}`
+                              )
+                            }
+                            className="cursor-pointer"
+                          >
+                            Oke
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                 </div>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      className="cursor-pointer text-base font-semibold px-5"
-                      variant="secondary"
-                    >
-                      Mulai
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle className="mb-2">
-                        Konfirmasi Masuk Ujian
-                      </DialogTitle>
-                      <DialogDescription>
-                        Apakah Anda Yakin ingin Mengerjakan Soal{" "}
-                        <span className="font-bold">"asdfg"</span> Ini ?
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button variant="outline">Batal</Button>
-                      </DialogClose>
-                      <DialogClose asChild>
-                        <Button
-                          // onClick={() =>
-                          //   push(
-                          //     `/Student/Exams?idExams=${idUjian}&idStudent=${getIdStudent}`
-                          //   )
-                          // }
-                          className="cursor-pointer"
-                        >
-                          Oke
-                        </Button>
-                      </DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
               </div>
-            </div>
+            )}
             <div className="mt-8">
               <div className="mb-7">
                 <div className="font-semibold bg-[#0F4C75] rounded-md py-3 mb-5 text-slate-200 flex items-center max-[640px]:pl-0 max-[640px]:py-2 justify-center">

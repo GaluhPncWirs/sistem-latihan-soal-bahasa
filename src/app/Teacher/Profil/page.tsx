@@ -209,10 +209,10 @@ export default function TeacherProfile() {
             </DialogTrigger>
             <DialogContent>
               <form
-                className="grid gap-2"
+                className="grid gap-5"
                 onSubmit={(event) => handleEditProfileStudent(event)}
               >
-                <DialogHeader>
+                <DialogHeader className="text-start">
                   <DialogTitle>Edit Profile</DialogTitle>
                   <DialogDescription className="mt-1 text-base">
                     Edit Seluruh Informasi Profil Kamu Disini
