@@ -225,6 +225,32 @@ export default function DashboardStudent() {
     return messageExams;
   }
 
+  function examsComingSoon(tenggat_waktu: string) {
+    const startTimeExam = tenggat_waktu
+      .split("-")
+      .map((item: any) => item.trim())[0];
+
+    return toMinute(startTimeExam);
+  }
+
+  const isComingSoonExams = scheduleExams.filter(
+    (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni
+  );
+
+  const deadlineUjianTercepatHariIni = isComingSoonExams.reduce(
+    (acc: any, cur: any) => {
+      const curDeadline = examsComingSoon(cur.tenggat_waktu);
+      const accDeadline = examsComingSoon(cur.tenggat_waktu);
+      return Math.abs(curDeadline - toMinute(waktuDurasiIni)) <
+        Math.abs(accDeadline - toMinute(waktuDurasiIni))
+        ? cur
+        : acc;
+    },
+    null
+  );
+
+  console.log(deadlineUjianTercepatHariIni);
+
   return (
     <LayoutBodyContent>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
@@ -271,10 +297,16 @@ export default function DashboardStudent() {
           </div>
           <div className="mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-10/12 lg:w-3/4 mt-8">
             <div>
-              <h1 className="text-2xl font-semibold mb-3">
+              <h1 className="text-2xl font-semibold mb-4">
                 Ujian Yang Akan Datang
               </h1>
               <div className="bg-sky-300 flex justify-between p-5 items-center rounded-xl shadow-md shadow-slate-500">
+                {/* {
+                  scheduleExams.length > 0 ? 
+                  scheduleExams.map((data:any,i:number) => 
+                  data.dibuat_tgl === waktuHariIni ? 
+                  )
+                } */}
                 <div>
                   <h1 className="text-2xl font-semibold mb-2">Ujian 123</h1>
                   <p className="text-sm font-medium">
