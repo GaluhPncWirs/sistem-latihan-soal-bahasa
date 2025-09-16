@@ -77,19 +77,17 @@ export default function DashboardStudent() {
     getDataExamResult();
   }, [getDataStudent?.classes, getIdStudent]);
 
-  const averageValue = scheduleExams
-    .filter(
-      (avg: any) =>
-        avg.status_exam === true &&
-        avg.hasil_ujian !== "pending" &&
-        avg.hasil_ujian !== "telat"
-    )
-    .map((values: any) => Number(values.hasil_ujian))
-    .reduce((acc: any, cur: any) => acc + cur, 0);
+  const filterScoreExams = scheduleExams.filter(
+    (avg: any) =>
+      avg.status_exam === true &&
+      avg.hasil_ujian !== "pending" &&
+      avg.hasil_ujian !== "telat"
+  );
 
-  const isCompleteExam = scheduleExams
-    .map((isDone: any) => isDone.status_exam === true)
-    .filter((complete: any) => complete).length;
+  const averageValue =
+    filterScoreExams
+      .map((values: any) => Number(values.hasil_ujian))
+      .reduce((acc: any, cur: any) => acc + cur, 0) / filterScoreExams.length;
 
   // untuk fitur deadline
   const waktuHariIni = useConvertDate(new Date().toISOString(), {
@@ -254,7 +252,7 @@ export default function DashboardStudent() {
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
         <div className="w-10/12 mx-auto pt-28 max-[640px]:w-11/12">
           <div className="mb-7">
-            <h1 className="text-4xl max-[640px]:text-2xl font-bold mb-10">
+            <h1 className="text-4xl max-[640px]:text-3xl font-bold mb-8">
               Dashboard Siswa
             </h1>
             <h1 className="text-2xl max-[640px]:text-2xl font-bold mb-3">
@@ -288,9 +286,7 @@ export default function DashboardStudent() {
                 className="w-1/4"
               />
               <h1 className="text-lg max-[640px]:text-base">Nilai Rata Rata</h1>
-              <span className="text-xl">
-                {Math.floor(averageValue / isCompleteExam) || "0"}
-              </span>
+              <span className="text-xl">{Math.round(averageValue) || "0"}</span>
             </div>
           </div>
           <div className="mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-10/12 lg:w-3/4 mt-8">
@@ -359,7 +355,7 @@ export default function DashboardStudent() {
               <div className="mb-7">
                 <div className="font-semibold bg-[#0F4C75] rounded-md py-3 mb-5 text-slate-200 flex items-center max-[640px]:pl-0 max-[640px]:py-2 justify-center">
                   <span className="max-[640px]:basis-1/2 max-[640px]:text-base sm:text-xl sm:basis-2/5">
-                    Jadwal Ujian Tersedia
+                    Ujian Tersedia
                   </span>
                   <div className="max-[640px]:basis-1/3 flex sm:basis-1/2 justify-end">
                     {Array.from({ length: 6 }).map((_, i) => (

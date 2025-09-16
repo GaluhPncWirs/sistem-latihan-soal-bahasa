@@ -34,6 +34,28 @@ export default function Profil() {
   const idSiswa = useGetIdStudent();
   const dataStudent = useGetDataStudent(idSiswa);
   const [historyStudent, setHistoryStudent] = useState([]);
+  const [rankingClass, setRankingClass] = useState([]);
+  const filterScoreExams = historyStudent.filter(
+    (fil: any) => fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
+  );
+  const averageScoreExamsIndividu =
+    filterScoreExams
+      .map((values: any) => Number(values.hasil_ujian))
+      .reduce((acc: any, cur: any) => acc + cur, 0) / filterScoreExams.length;
+
+  const forRankingClasses = rankingClass.map((fil: any) => {
+    return {
+      ...fil,
+      hasil_ujian:
+        fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
+          ? fil.hasil_ujian
+          : "0",
+    };
+  });
+
+  // console.log(forRankingClasses);
+
+  const rank = rankingClass.map((item: any) => item.student_id);
 
   useEffect(() => {
     if (!idSiswa) return;
@@ -50,6 +72,21 @@ export default function Profil() {
 
     getHistoryStudent();
   }, [idSiswa]);
+
+  useEffect(() => {
+    async function getRankings() {
+      const { data, error }: any = await supabase
+        .from("history-exam-student")
+        .select("student_id,hasil_ujian");
+
+      if (error) {
+        console.log("gagal memuat data");
+      }
+      setRankingClass(data);
+    }
+
+    getRankings();
+  }, []);
 
   async function handleEditProfileStudent(event: any) {
     event.preventDefault();
@@ -83,6 +120,8 @@ export default function Profil() {
     }
   }
 
+  // console.log(historyStudent);
+
   return (
     <LayoutBodyContent>
       <div className="pt-16 flex max-[640px]:flex-col max-[640px]:gap-0 sm:flex-col sm:gap-0 lg:gap-10 md:flex-row">
@@ -90,11 +129,11 @@ export default function Profil() {
           <Dialog>
             <DialogTrigger asChild className="cursor-pointer">
               <Image
-                src="/img/profile/userProfile.png"
+                src="/img/profileStudent/userProfile.png"
                 alt="Profile User"
                 width={300}
                 height={300}
-                className="rounded-full max-[640px]:w-1/3 sm:w-1/4 md:w-1/3 lg:w-1/2 mb-3"
+                className="rounded-full max-[640px]:w-1/3 sm:w-1/4 md:w-1/2 mb-3"
               />
             </DialogTrigger>
             <DialogContent>
@@ -205,24 +244,55 @@ export default function Profil() {
         <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:basis-2/3">
           <div className="max-[640px]:w-11/12 sm:w-10/12 mx-auto md:w-11/12 lg:w-full max-[640px]:mb-7">
             <h1 className="text-3xl font-bold">Profil Siswa</h1>
-            <div className="flex justify-evenly items-center my-10">
-              <div className="bg-red-300 p-5 rounded-lg">
-                <h1 className="font-semibold mb-1">Ujian Diselesaikan</h1>
-                <p className="text-2xl font-bold">3</p>
+            <div className="flex justify-evenly items-center my-10 max-[640px]:gap-x-3">
+              <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
+                <Image
+                  src="/img/profileStudent/done.png"
+                  alt="Selesai"
+                  width={200}
+                  height={200}
+                  className="w-1/3"
+                />
+                <h1 className="font-semibold mb-1 text-center">
+                  Ujian Selesai
+                </h1>
+                <p className="text-2xl font-bold">
+                  {historyStudent.length || "0"}
+                </p>
               </div>
-              <div className="bg-red-300 p-5 rounded-lg">
-                <h1 className="font-semibold mb-1">Rata-Rata Nilai</h1>
-                <p className="text-2xl font-bold">88.5</p>
+              <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
+                <Image
+                  src="/img/profileStudent/average.png"
+                  alt="Nilai Rata-Rata"
+                  width={200}
+                  height={200}
+                  className="w-1/3"
+                />
+                <h1 className="font-semibold mb-1 text-center">
+                  Rata-Rata Nilai
+                </h1>
+                <p className="text-2xl font-bold">
+                  {Math.round(averageScoreExamsIndividu) || "0"}
+                </p>
               </div>
-              <div className="bg-red-300 p-5 rounded-lg">
-                <h1 className="font-semibold mb-1">Peringkat</h1>
-                <p className="text-2xl font-bold">3 / 20</p>
+              <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
+                <Image
+                  src="/img/profileStudent/rank.png"
+                  alt="Rank"
+                  width={200}
+                  height={200}
+                  className="w-1/3"
+                />
+                <h1 className="font-semibold mb-1 text-center">
+                  Peringkat Kelas
+                </h1>
+                <p className="text-2xl font-bold">
+                  {`3 / ${new Set(rank).size}` || "0"}
+                </p>
               </div>
             </div>
             <div>
-              <h1 className="mb-7 text-center text-2xl font-semibold">
-                Riwayat Ujian
-              </h1>
+              <h1 className="mb-7 text-2xl font-semibold">Riwayat Ujian</h1>
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#3282B8]">
