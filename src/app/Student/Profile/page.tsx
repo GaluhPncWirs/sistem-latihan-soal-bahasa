@@ -34,7 +34,6 @@ export default function Profil() {
   const idSiswa = useGetIdStudent();
   const dataStudent = useGetDataStudent(idSiswa);
   const [historyStudent, setHistoryStudent] = useState([]);
-  const { push } = useRouter();
 
   useEffect(() => {
     if (!idSiswa) return;
@@ -87,7 +86,7 @@ export default function Profil() {
   return (
     <LayoutBodyContent>
       <div className="pt-16 flex max-[640px]:flex-col max-[640px]:gap-0 sm:flex-col sm:gap-0 lg:gap-10 md:flex-row">
-        <div className="bg-[#71C9CE] bg-gradient-to-t to-[#08D9D6] px-7 pt-10 pb-7 shadow-lg md:basis-[28%] lg:basis-1/4 flex flex-col items-center">
+        <div className="md:bg-[#71C9CE] md:bg-gradient-to-t md:to-[#08D9D6] px-7 pt-10 pb-7 md:basis-[28%] lg:basis-1/4 flex flex-col items-center justify-center">
           <Dialog>
             <DialogTrigger asChild className="cursor-pointer">
               <Image
@@ -107,7 +106,6 @@ export default function Profil() {
               </DialogHeader>
             </DialogContent>
           </Dialog>
-
           <Table>
             <TableBody>
               <TableRow className="border-black">
@@ -117,8 +115,11 @@ export default function Profil() {
                 </TableCell>
               </TableRow>
               <TableRow className="border-black">
-                <TableCell className="text-base font-medium">Nis</TableCell>
-                <TableCell className="text-base font-medium">0836123</TableCell>
+                <TableCell className="text-base font-medium">NIS</TableCell>
+                <TableCell className="text-base font-medium">
+                  {" "}
+                  {dataStudent?.nis || ""}
+                </TableCell>
               </TableRow>
               <TableRow className="border-black">
                 <TableCell className="text-base font-medium">Kelas</TableCell>
@@ -147,56 +148,58 @@ export default function Profil() {
             </TableBody>
           </Table>
           <Dialog>
-            <DialogTrigger asChild>
-              <Button className="cursor-pointer mt-7">Edit Profile</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <form
-                className="grid gap-5"
-                onSubmit={(event) => handleEditProfileStudent(event)}
-              >
-                <DialogHeader className="text-start">
-                  <DialogTitle className="text-xl">Edit Profile</DialogTitle>
-                  <DialogDescription className="mt-1">
-                    Edit Seluruh Informasi Profil Kamu Disini
-                  </DialogDescription>
-                  <div>
-                    <label htmlFor="nama" className="mb-2 block">
-                      Nama
-                    </label>
-                    <Input id="nama" />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="mb-2 block">
-                      Email
-                    </label>
-                    <Input type="email" id="email" />
-                  </div>
-                  <div>
-                    <label htmlFor="changePassword" className="mb-2 block">
-                      Ubah Password
-                    </label>
-                    <Input type="password" id="changePassword" />
-                  </div>
-                  <span className="font-semibold block text-xs text-red-500 text-end">
-                    *Jika Ingin Diubah Hanya Salah Satu Maka Sisanya Dikosongkan
-                    Saja
-                  </span>
-                </DialogHeader>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="outline" className="cursor-pointer">
-                      Cancel
-                    </Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button type="submit" className="cursor-pointer">
-                      Confirm
-                    </Button>
-                  </DialogClose>
-                </DialogFooter>
-              </form>
-            </DialogContent>
+            <div className="max-[640px]:w-full sm:w-full md:w-fit">
+              <DialogTrigger asChild>
+                <Button className="cursor-pointer mt-7">Edit Profile</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <form
+                  className="grid gap-5"
+                  onSubmit={(event) => handleEditProfileStudent(event)}
+                >
+                  <DialogHeader className="text-start">
+                    <DialogTitle className="text-xl">Edit Profile</DialogTitle>
+                    <DialogDescription className="mt-1">
+                      Edit Seluruh Informasi Profil Kamu Disini
+                    </DialogDescription>
+                    <div>
+                      <label htmlFor="nama" className="mb-2 block">
+                        Nama
+                      </label>
+                      <Input id="nama" />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="mb-2 block">
+                        Email
+                      </label>
+                      <Input type="email" id="email" />
+                    </div>
+                    <div>
+                      <label htmlFor="changePassword" className="mb-2 block">
+                        Ubah Password
+                      </label>
+                      <Input type="password" id="changePassword" />
+                    </div>
+                    <span className="font-semibold block text-xs text-red-500 text-end">
+                      *Jika Ingin Diubah Hanya Salah Satu Maka Sisanya
+                      Dikosongkan Saja
+                    </span>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline" className="cursor-pointer">
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                      <Button type="submit" className="cursor-pointer">
+                        Confirm
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </div>
           </Dialog>
         </div>
         <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:basis-2/3">
@@ -204,12 +207,16 @@ export default function Profil() {
             <h1 className="text-3xl font-bold">Profil Siswa</h1>
             <div className="flex justify-evenly items-center my-10">
               <div className="bg-red-300 p-5 rounded-lg">
-                <h1>lorem</h1>
-                <p>lorem</p>
+                <h1 className="font-semibold mb-1">Ujian Diselesaikan</h1>
+                <p className="text-2xl font-bold">3</p>
               </div>
               <div className="bg-red-300 p-5 rounded-lg">
-                <h1>lorem</h1>
-                <p>lorem</p>
+                <h1 className="font-semibold mb-1">Rata-Rata Nilai</h1>
+                <p className="text-2xl font-bold">88.5</p>
+              </div>
+              <div className="bg-red-300 p-5 rounded-lg">
+                <h1 className="font-semibold mb-1">Peringkat</h1>
+                <p className="text-2xl font-bold">3 / 20</p>
               </div>
             </div>
             <div>

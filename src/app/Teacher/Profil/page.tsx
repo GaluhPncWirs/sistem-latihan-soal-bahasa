@@ -131,41 +131,45 @@ export default function TeacherProfile() {
   }
 
   function nilaiRataRata(data: any) {
-    const resultExamsPg =
-      data.hasil_ujian
-        .map(Number)
-        .reduce((acc: any, cur: any) => acc + cur, 0) / data.student_id.length;
-
     const filterResultExamScore = data.hasil_ujian.filter(
       (fil: any) => fil !== "pending" && fil !== "telat"
+    );
+    const filterResultExamPendingAndLate = data.hasil_ujian.filter(
+      (fil: any) => fil === "pending" || fil === "telat"
     );
     const filterResultExamPending = data.hasil_ujian.filter(
       (fil: any) => fil === "pending"
     );
-    const resultExamsEssay =
+    const filterResultExamTelat = data.hasil_ujian.filter(
+      (fil: any) => fil === "telat"
+    );
+
+    const resultExams =
       filterResultExamScore
         .map(Number)
-        .reduce((acc: any, cur: any) => acc + cur, 0) / data.student_id.length;
+        .reduce((acc: any, cur: any) => acc + cur, 0) /
+      filterResultExamScore.length;
 
-    if (filterResultExamScore.length > 0) {
-      if (data.tipeUjian === "pg") {
-        return Math.round(resultExamsPg);
-      } else {
-        return Math.round(resultExamsEssay);
-      }
-    } else {
+    if (filterResultExamPendingAndLate.length > 0) {
       return (
         <HoverCard openDelay={200} closeDelay={200} key={data.exam_id}>
           <HoverCardTrigger asChild>
-            <h1>{Math.round(resultExamsEssay)}</h1>
+            <h1>{Math.round(resultExams) || "0"}</h1>
           </HoverCardTrigger>
           <HoverCardContent className="w-fit p-2">
             <h1 className="font-semibold text-xs">
-              Ada {filterResultExamPending.length} Siswa Yang Belum Dinilai
+              {filterResultExamTelat[0] === "telat" &&
+              filterResultExamPending[0] === "pending"
+                ? `Ada ${filterResultExamTelat.length} Siswa Telat Dan ${filterResultExamPending.length} Belum Dinilai`
+                : filterResultExamTelat[0] === "telat"
+                ? `Ada ${filterResultExamTelat.length} Siswa Yang Telat Mengerjakan`
+                : `Ada ${filterResultExamPending.length} Siswa Yang Belum Dinilai`}
             </h1>
           </HoverCardContent>
         </HoverCard>
       );
+    } else {
+      return Math.round(resultExams);
     }
   }
 
@@ -289,15 +293,9 @@ export default function TeacherProfile() {
                 </TableCell>
               </TableRow>
               <TableRow className="border-black">
+                <TableCell className="text-base font-medium">NISN</TableCell>
                 <TableCell className="text-base font-medium">
-                  Tanggal Bergabung
-                </TableCell>
-                <TableCell className="text-base font-medium">
-                  {useConvertDate(getProfileTeacher?.created_at, {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  }) || ""}
+                  {getProfileTeacher?.nisn}
                 </TableCell>
               </TableRow>
               <TableRow className="border-black">
@@ -312,6 +310,18 @@ export default function TeacherProfile() {
                     4,
                     8
                   )}-${getProfileTeacher?.noTlp?.slice(8, 12)}` || ""}
+                </TableCell>
+              </TableRow>
+              <TableRow className="border-black">
+                <TableCell className="text-base font-medium">
+                  Tanggal Bergabung
+                </TableCell>
+                <TableCell className="text-base font-medium">
+                  {useConvertDate(getProfileTeacher?.created_at, {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  }) || ""}
                 </TableCell>
               </TableRow>
               <TableRow className="border-black">
