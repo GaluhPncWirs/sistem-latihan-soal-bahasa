@@ -27,7 +27,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function Profil() {
@@ -35,14 +34,11 @@ export default function Profil() {
   const dataStudent = useGetDataStudent(idSiswa);
   const [historyStudent, setHistoryStudent] = useState([]);
   const [rankingClass, setRankingClass] = useState([]);
-  const filterScoreExams = historyStudent.filter(
+  const filterExams = historyStudent.filter(
     (fil: any) => fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
   );
-  const averageScoreExamsIndividu =
-    filterScoreExams
-      .map((values: any) => Number(values.hasil_ujian))
-      .reduce((acc: any, cur: any) => acc + cur, 0) / filterScoreExams.length;
 
+  // untuk sistem ranking
   const forRankingClasses = rankingClass.map((fil: any) => {
     return {
       ...fil,
@@ -55,13 +51,14 @@ export default function Profil() {
 
   const rankingPerKelas = forRankingClasses.reduce((acc: any, cur: any) => {
     const kelasItem = acc.find((d: any) => d.kelas === cur.kelas);
+    const toNum = Number(cur.hasil_ujian);
     if (!kelasItem) {
       acc.push({
         kelas: cur.kelas,
         resultExam: [
           {
             student_id: cur.student_id,
-            pointExams: [cur.hasil_ujian],
+            pointExams: [toNum],
           },
         ],
       });
@@ -72,26 +69,49 @@ export default function Profil() {
       if (!studentItem) {
         kelasItem.resultExam.push({
           student_id: cur.student_id,
-          pointExams: [cur.hasil_ujian],
+          pointExams: [toNum],
         });
       } else {
-        studentItem.pointExams.push(cur.hasil_ujian);
+        studentItem.pointExams.push(toNum);
       }
     }
     return acc;
   }, []);
 
-  const lenStudentPerClass = rankingPerKelas.filter(
-    (fil: any) => fil.kelas === dataStudent?.classes
+  const calculateTotalEveryScoreExams =
+    rankingPerKelas
+      .filter((fil: any) => fil.kelas === dataStudent?.classes)[0]
+      ?.resultExam?.map((item: any) => {
+        return {
+          ...item,
+          pointExams: item.pointExams.reduce(
+            (acc: any, cur: any) => acc + cur,
+            0
+          ),
+        };
+      }) ?? [];
+
+  const sortRanking = calculateTotalEveryScoreExams?.sort(
+    (low: any, high: any) => high.pointExams - low.pointExams
   );
 
-  const calculateAverageEveryScoreExams =
-    lenStudentPerClass[0]?.resultExam
-      .filter((fil: any) => fil.student_id === idSiswa)
-      .flatMap((item: any) => item.pointExams)
-      .map(Number)
-      .reduce((acc: any, cur: any) => acc + cur, 0) / filterScoreExams.length;
-  console.log(calculateAverageEveryScoreExams);
+  let lastScore: number | null = null;
+  let lastRank: number = 0;
+  let index: number = 0;
+
+  const addRanking = sortRanking?.map((siswa: any) => {
+    index++;
+    if (siswa.pointExams !== lastScore) {
+      lastRank = index;
+      lastScore = siswa.pointExams;
+    }
+
+    return { ...siswa, ranking: lastRank };
+  });
+
+  const resultChooseRanking = addRanking?.filter(
+    (fil: any) => fil.student_id === idSiswa
+  );
 
   useEffect(() => {
     if (!idSiswa) return;
@@ -155,8 +175,6 @@ export default function Profil() {
       });
     }
   }
-
-  // console.log(historyStudent);
 
   return (
     <LayoutBodyContent>
@@ -308,7 +326,9 @@ export default function Profil() {
                   Rata-Rata Nilai
                 </h1>
                 <p className="text-2xl font-bold">
-                  {Math.round(calculateAverageEveryScoreExams) || "0"}
+                  {Math.round(
+                    resultChooseRanking[0]?.pointExams / filterExams.length
+                  ) || "0"}
                 </p>
               </div>
               <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
@@ -323,7 +343,9 @@ export default function Profil() {
                   Peringkat Kelas
                 </h1>
                 <p className="text-2xl font-bold">
-                  {`3 / ${lenStudentPerClass[0]?.resultExam.length}` || "0"}
+                  {`${resultChooseRanking[0]?.ranking || "0"} / ${
+                    calculateTotalEveryScoreExams.length
+                  }` || "0"}
                 </p>
               </div>
             </div>
