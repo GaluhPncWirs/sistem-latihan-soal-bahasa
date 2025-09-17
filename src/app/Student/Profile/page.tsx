@@ -53,9 +53,45 @@ export default function Profil() {
     };
   });
 
-  // console.log(forRankingClasses);
+  const rankingPerKelas = forRankingClasses.reduce((acc: any, cur: any) => {
+    const kelasItem = acc.find((d: any) => d.kelas === cur.kelas);
+    if (!kelasItem) {
+      acc.push({
+        kelas: cur.kelas,
+        resultExam: [
+          {
+            student_id: cur.student_id,
+            pointExams: [cur.hasil_ujian],
+          },
+        ],
+      });
+    } else {
+      const studentItem = kelasItem.resultExam.find(
+        (item: any) => item.student_id === cur.student_id
+      );
+      if (!studentItem) {
+        kelasItem.resultExam.push({
+          student_id: cur.student_id,
+          pointExams: [cur.hasil_ujian],
+        });
+      } else {
+        studentItem.pointExams.push(cur.hasil_ujian);
+      }
+    }
+    return acc;
+  }, []);
 
-  const rank = rankingClass.map((item: any) => item.student_id);
+  const lenStudentPerClass = rankingPerKelas.filter(
+    (fil: any) => fil.kelas === dataStudent?.classes
+  );
+
+  const calculateAverageEveryScoreExams =
+    lenStudentPerClass[0]?.resultExam
+      .filter((fil: any) => fil.student_id === idSiswa)
+      .flatMap((item: any) => item.pointExams)
+      .map(Number)
+      .reduce((acc: any, cur: any) => acc + cur, 0) / filterScoreExams.length;
+  console.log(calculateAverageEveryScoreExams);
 
   useEffect(() => {
     if (!idSiswa) return;
@@ -77,7 +113,7 @@ export default function Profil() {
     async function getRankings() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
-        .select("student_id,hasil_ujian");
+        .select("student_id,exam_id,hasil_ujian,kelas");
 
       if (error) {
         console.log("gagal memuat data");
@@ -272,7 +308,7 @@ export default function Profil() {
                   Rata-Rata Nilai
                 </h1>
                 <p className="text-2xl font-bold">
-                  {Math.round(averageScoreExamsIndividu) || "0"}
+                  {Math.round(calculateAverageEveryScoreExams) || "0"}
                 </p>
               </div>
               <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
@@ -287,7 +323,7 @@ export default function Profil() {
                   Peringkat Kelas
                 </h1>
                 <p className="text-2xl font-bold">
-                  {`3 / ${new Set(rank).size}` || "0"}
+                  {`3 / ${lenStudentPerClass[0]?.resultExam.length}` || "0"}
                 </p>
               </div>
             </div>
