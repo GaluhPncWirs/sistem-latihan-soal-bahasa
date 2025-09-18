@@ -168,9 +168,9 @@ export default function ViewQuestions() {
   return (
     <LayoutBodyContent>
       <div className="w-11/12 mx-auto pt-24">
-        <h1 className="text-4xl font-bold mb-10 text-center">Edit Soal</h1>
+        <h1 className="text-4xl font-bold mb-10 text-center">Kelola Soal</h1>
         <h2 className="text-2xl font-bold mb-7">
-          Nama Ujian : {viewQuestions.nama_ujian || ""}
+          Nama Ujian {viewQuestions.nama_ujian || ""}
         </h2>
         <Table>
           <TableHeader className="bg-[#3282B8]">
