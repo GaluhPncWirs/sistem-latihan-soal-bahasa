@@ -6,7 +6,7 @@ import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/component/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/component/khususGuru/kelolaSiswa/manageStudent";
-import SideBarDashboardTeacher from "@/component/khususGuru/navigasi/sideBar";
+import SideBarDashboardTeacher from "@/component/khususGuru/navigasi/floatingBar";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -147,182 +147,119 @@ export default function Teacher() {
 
   return (
     <LayoutBodyContent>
-      <div className="flex justify-between">
-        <div className="bg-[#476EAE] sticky top-16 h-screen rounded-br-lg md:mt-16 sm:hidden max-[640px]:hidden md:block md:w-1/4 lg:w-1/5">
-          <ul className="flex flex-col items-center h-3/4 gap-y-14 justify-center text-slate-200 font-medium text-xl">
-            <li
-              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
-              onClick={() => window.location.reload()}
-            >
+      <div className="pt-24 mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-2/3">
+        <h1 className="text-4xl font-bold">Dashboard Pengajar</h1>
+        <div>
+          <h1 className="text-3xl font-semibold mt-10">Ringkasan</h1>
+          <div className="flex justify-evenly items-center mt-8 text-slate-800">
+            <div className="bg-[#48B3AF] rounded-md max-[640px]:basis-[30%] max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
               <Image
-                src="/img/dashboardTeacher/dashboard.png"
-                alt="Dashboard"
+                src="/img/dashboardTeacher/complete.png"
+                alt="Complete"
                 width={200}
                 height={200}
-                className="w-1/6 opacity-60"
+                className="w-1/4 mx-auto"
               />
-              <span>Dashboard</span>
-            </li>
-            <li
-              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
-              id="createQusetions"
-              onClick={(e) => handleClickItem(e.currentTarget.id)}
-            >
-              <Image
-                src="/img/dashboardTeacher/create.png"
-                alt="Create"
-                width={200}
-                height={200}
-                className="w-1/6"
-              />
-              <span>Buat Soal</span>
-            </li>
-            <li
-              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
-              id="viewResult"
-              onClick={(e) => handleClickItem(e.currentTarget.id)}
-            >
-              <Image
-                src="/img/dashboardTeacher/request-service.png"
-                alt="Manage"
-                width={200}
-                height={200}
-                className="w-1/6"
-              />
-              <span>Kelola Ujian</span>
-            </li>
-            <li
-              className="cursor-pointer hover:text-slate-300 flex items-center gap-x-3"
-              id="manageStudent"
-              onClick={(e) => handleClickItem(e.currentTarget.id)}
-            >
-              <Image
-                src="/img/dashboardTeacher/report-card.png"
-                alt="Score"
-                width={200}
-                height={200}
-                className="w-1/6"
-              />
-              <span>Nilai Siswa</span>
-            </li>
-          </ul>
-        </div>
-        <div className="pt-24 mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-2/3">
-          <h1 className="text-4xl font-bold">Dashboard Pengajar</h1>
-          <div>
-            <h1 className="text-3xl font-semibold mt-10">Ringkasan</h1>
-            <div className="flex justify-evenly items-center mt-8 text-slate-800">
-              <div className="bg-[#48B3AF] rounded-md max-[640px]:basis-[30%] max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
-                <Image
-                  src="/img/dashboardTeacher/complete.png"
-                  alt="Complete"
-                  width={200}
-                  height={200}
-                  className="w-1/4 mx-auto"
-                />
-                <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
-                  {dataManageExams.length || "0"}
-                </span>
-                <h1 className="font-medium">Ujian Dibuat</h1>
-              </div>
-              <div className="bg-[#48B3AF] rounded-md max-[640px]:basis-[30%] max-[640px]:p-4 sm:p-3.5 sm:basis-[30%] lg:basis-1/4 lg:p-5">
-                <Image
-                  src="/img/dashboardTeacher/count.png"
-                  alt="Jumlah"
-                  width={200}
-                  height={200}
-                  className="w-[30%] mx-auto"
-                />
-                <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
-                  {jumlahSiswa.size || "0"}
-                </span>
-                <h1 className="font-medium">Jumlah Siswa</h1>
-              </div>
-              <div className="bg-[#48B3AF] basis-1/5 rounded-md p-4 max-[640px]:basis-[34%] sm:basis-[30%] lg:basis-1/4 lg:p-5">
-                <Image
-                  src="/img/dashboardTeacher/average.png"
-                  alt="Rata-Rata"
-                  width={200}
-                  height={200}
-                  className="w-1/4 mx-auto"
-                />
-                <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
-                  {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
-                </span>
-                <h1 className="font-medium">Nilai Rata-Rata</h1>
-              </div>
+              <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
+                {dataManageExams.length || "0"}
+              </span>
+              <h1 className="font-medium">Ujian Dibuat</h1>
             </div>
-            <SideBarDashboardTeacher handleClickItem={handleClickItem} />
-            <div className="mt-10">
-              {dashboardButton.viewResult === true ? (
-                <ViewQuestions />
-              ) : dashboardButton.manageStudent === true ? (
-                <ManageStudent />
-              ) : dashboardButton.createQusetions === true ? (
-                <CreateNewQuestions />
-              ) : (
-                <div>
-                  <h1 className="mb-7 text-2xl font-semibold">
-                    Jadwal Ujian Aktif Hari ini
-                  </h1>
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-[#3282B8]">
-                        <TableHead className="text-base text-center">
-                          No
-                        </TableHead>
-                        <TableHead className="text-base text-center">
-                          Nama Ujian
-                        </TableHead>
-                        <TableHead className="text-base text-center">
-                          Kelas
-                        </TableHead>
-                        <TableHead className="text-base text-center">
-                          Tenggat Waktu
-                        </TableHead>
-                        <TableHead className="text-base text-center">
-                          Status
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {dataManageExams.length > 0 ? (
-                        dataManageExams.map((item: any, i: number) => (
-                          <TableRow key={i}>
-                            <TableCell className="text-center">
-                              {i + 1}
-                            </TableCell>
-                            <TableCell>{item.exams?.nama_ujian}</TableCell>
-                            <TableCell className="text-center">
-                              {item.kelas}
-                            </TableCell>
-                            <TableCell className="text-center">
-                              {item.dibuat_tgl} {item.tenggat_waktu}
-                            </TableCell>
+            <div className="bg-[#48B3AF] rounded-md max-[640px]:basis-[30%] max-[640px]:p-4 sm:p-3.5 sm:basis-[30%] lg:basis-1/4 lg:p-5">
+              <Image
+                src="/img/dashboardTeacher/count.png"
+                alt="Jumlah"
+                width={200}
+                height={200}
+                className="w-[30%] mx-auto"
+              />
+              <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
+                {jumlahSiswa.size || "0"}
+              </span>
+              <h1 className="font-medium">Jumlah Siswa</h1>
+            </div>
+            <div className="bg-[#48B3AF] basis-1/5 rounded-md p-4 max-[640px]:basis-[34%] sm:basis-[30%] lg:basis-1/4 lg:p-5">
+              <Image
+                src="/img/dashboardTeacher/average.png"
+                alt="Rata-Rata"
+                width={200}
+                height={200}
+                className="w-1/4 mx-auto"
+              />
+              <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
+                {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
+              </span>
+              <h1 className="font-medium">Nilai Rata-Rata</h1>
+            </div>
+          </div>
+          <SideBarDashboardTeacher handleClickItem={handleClickItem} />
+          <div className="mt-10">
+            {dashboardButton.viewResult === true ? (
+              <ViewQuestions />
+            ) : dashboardButton.manageStudent === true ? (
+              <ManageStudent />
+            ) : dashboardButton.createQusetions === true ? (
+              <CreateNewQuestions />
+            ) : (
+              <div>
+                <h1 className="mb-7 text-2xl font-semibold">
+                  Jadwal Ujian Aktif Hari ini
+                </h1>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-[#3282B8]">
+                      <TableHead className="text-base text-center">
+                        No
+                      </TableHead>
+                      <TableHead className="text-base text-center">
+                        Nama Ujian
+                      </TableHead>
+                      <TableHead className="text-base text-center">
+                        Kelas
+                      </TableHead>
+                      <TableHead className="text-base text-center">
+                        Tenggat Waktu
+                      </TableHead>
+                      <TableHead className="text-base text-center">
+                        Status
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {dataManageExams.length > 0 ? (
+                      dataManageExams.map((item: any, i: number) => (
+                        <TableRow key={i}>
+                          <TableCell className="text-center">{i + 1}</TableCell>
+                          <TableCell>{item.exams?.nama_ujian}</TableCell>
+                          <TableCell className="text-center">
+                            {item.kelas}
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {item.dibuat_tgl} {item.tenggat_waktu}
+                          </TableCell>
 
-                            <TableCell className="text-center">
-                              {item.lengthStudent.length ===
-                              item.lengthStudentCompleteExams?.length
-                                ? "Selesai"
-                                : "Belum Selesai"}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      ) : (
-                        <TableRow>
-                          <TableCell
-                            colSpan={6}
-                            className="text-center text-lg font-semibold"
-                          >
-                            Belum Ada Soal Ujian Yang Dikelola
+                          <TableCell className="text-center">
+                            {item.lengthStudent.length ===
+                            item.lengthStudentCompleteExams?.length
+                              ? "Selesai"
+                              : "Belum Selesai"}
                           </TableCell>
                         </TableRow>
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </div>
+                      ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={6}
+                          className="text-center text-lg font-semibold"
+                        >
+                          Belum Ada Soal Ujian Yang Dikelola
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </div>
         </div>
       </div>

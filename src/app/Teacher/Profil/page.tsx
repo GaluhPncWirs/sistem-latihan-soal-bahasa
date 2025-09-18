@@ -30,13 +30,14 @@ import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export default function TeacherProfile() {
   const idTeacher = useGetIdTeacher();
   const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const getProfileTeacher = useGetDataTeacher(idTeacher);
+  const [previewImgProfil, setPreviewImgProfil] = useState<string | null>(null);
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -173,6 +174,13 @@ export default function TeacherProfile() {
     }
   }
 
+  function handleChangeImgProfile(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setPreviewImgProfil(URL.createObjectURL(file));
+    }
+  }
+
   return (
     <LayoutBodyContent>
       <div className="pt-24 mx-auto max-[640px]:w-10/12 sm:w-10/12 md:w-10/12 lg:w-3/4">
@@ -180,21 +188,44 @@ export default function TeacherProfile() {
         <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
           <Dialog>
             <DialogTrigger asChild className="cursor-pointer">
-              <Image
-                src="/img/profile/userProfile.png"
-                alt="Profile User"
-                width={300}
-                height={300}
-                className="rounded-full w-1/6 max-[640px]:w-1/3"
-              />
+              {previewImgProfil !== null ? (
+                <Image
+                  src={previewImgProfil}
+                  alt="Profile User"
+                  width={300}
+                  height={300}
+                  className="rounded-full w-1/6 max-[640px]:w-1/3"
+                />
+              ) : (
+                <Image
+                  src="/img/profile/userProfile.png"
+                  alt="Profile User"
+                  width={300}
+                  height={300}
+                  className="rounded-full w-1/6 max-[640px]:w-1/3"
+                />
+              )}
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Ubah Foto Profil</DialogTitle>
                 <div className="mt-3">
-                  <Input type="file" accept="image/*" id="imgProfil" />
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    id="imgProfil"
+                    onChange={handleChangeImgProfile}
+                  />
                 </div>
               </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button>Oke</Button>
+                </DialogClose>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
           <div className="basis-3/4">
@@ -247,11 +278,16 @@ export default function TeacherProfile() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="noTlp" className="mb-2 block">
-                      No Telepon
+                    <label htmlFor="password" className="mb-2 block">
+                      Ubah Password
                     </label>
-                    <Input type="text" id="noTlp" placeholder="089735283264" />
+                    <Input
+                      type="password"
+                      id="password"
+                      placeholder="**********"
+                    />
                   </div>
+
                   <span className="font-semibold block text-xs text-red-500 text-end">
                     *Jika Ingin Diubah Hanya Salah Satu Maka Sisanya Dikosongkan
                     Saja
@@ -314,7 +350,7 @@ export default function TeacherProfile() {
               </TableRow>
               <TableRow className="border-black">
                 <TableCell className="text-base font-medium">
-                  Tanggal Bergabung
+                  Bergabung
                 </TableCell>
                 <TableCell className="text-base font-medium">
                   {useConvertDate(getProfileTeacher?.created_at, {
