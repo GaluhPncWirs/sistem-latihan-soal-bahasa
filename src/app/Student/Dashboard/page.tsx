@@ -234,18 +234,26 @@ export default function DashboardStudent() {
     (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni
   );
 
-  const deadlineUjianTercepatHariIni = isComingSoonExams.reduce(
-    (closestExam: any, currentExam: any) => {
-      if (!closestExam) return currentExam;
+  function deadlineUjianTercepatHariIni() {
+    const hariIni = toMinute(waktuDurasiIni);
+    const validExams = isComingSoonExams.filter((exam: any) => {
+      const deadline = examsComingSoon(exam.tenggat_waktu);
+      return hariIni >= deadline;
+    });
+
+    if (validExams.length === 0) {
+      return null;
+    }
+
+    return validExams.reduce((closestExam: any, currentExam: any) => {
       const closestDeadline = examsComingSoon(closestExam.tenggat_waktu);
       const currentDeadline = examsComingSoon(currentExam.tenggat_waktu);
       return Math.abs(currentDeadline - toMinute(waktuDurasiIni)) <
         Math.abs(closestDeadline - toMinute(waktuDurasiIni))
         ? currentExam
         : closestExam;
-    },
-    null
-  );
+    });
+  }
 
   return (
     <LayoutBodyContent>
@@ -289,20 +297,33 @@ export default function DashboardStudent() {
               <span className="text-xl">{Math.round(averageValue) || "0"}</span>
             </div>
           </div>
-          <div className="mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-10/12 lg:w-3/4 mt-8">
-            {deadlineUjianTercepatHariIni !== null && (
+          <div className="mx-auto max-[640px]:w-full sm:w-11/12 md:w-10/12 lg:w-3/4 mt-8">
+            {deadlineUjianTercepatHariIni() !== null && (
               <div>
                 <h1 className="text-2xl font-semibold mb-4">
                   Ujian Yang Waktu Tenggatnya Hampir Habis
                 </h1>
-                <div className="bg-sky-300 flex justify-between p-5 items-center rounded-xl shadow-md shadow-slate-500">
-                  <div>
-                    <h1 className="text-2xl font-semibold mb-2">
-                      {deadlineUjianTercepatHariIni?.exams.nama_ujian}
-                    </h1>
-                    <p className="text-sm font-medium">
-                      {`${deadlineUjianTercepatHariIni?.dibuat_tgl} Di jam ${deadlineUjianTercepatHariIni?.tenggat_waktu}`}
-                    </p>
+                <div className="bg-sky-300 flex justify-between gap-x-3 p-5 items-center rounded-xl shadow-md shadow-slate-500">
+                  <div className="flex justify-center items-center gap-x-5">
+                    <Image
+                      src="/img/dashboardStudent/notification.png"
+                      alt="Notifikasi"
+                      width={300}
+                      height={300}
+                      className="w-[12%]"
+                    />
+                    <div>
+                      <h1 className="text-2xl font-semibold mb-2">
+                        {deadlineUjianTercepatHariIni()?.exams.nama_ujian}
+                      </h1>
+                      <p className="text-sm font-medium">
+                        {`${
+                          deadlineUjianTercepatHariIni()?.dibuat_tgl
+                        } di Jam ${
+                          deadlineUjianTercepatHariIni()?.tenggat_waktu
+                        }`}
+                      </p>
+                    </div>
                   </div>
                   <Dialog>
                     <DialogTrigger asChild>
@@ -322,7 +343,7 @@ export default function DashboardStudent() {
                           Apakah Anda Yakin ingin Mengerjakan Soal{" "}
                           <span className="font-bold">
                             "
-                            {deadlineUjianTercepatHariIni?.exams.nama_ujian ||
+                            {deadlineUjianTercepatHariIni()?.exams.nama_ujian ||
                               ""}
                             "
                           </span>{" "}
@@ -337,7 +358,9 @@ export default function DashboardStudent() {
                           <Button
                             onClick={() =>
                               push(
-                                `/Student/Exams?idExams=${deadlineUjianTercepatHariIni.idExams}&idStudent=${getIdStudent}`
+                                `/Student/Exams?idExams=${
+                                  deadlineUjianTercepatHariIni().idExams
+                                }&idStudent=${getIdStudent}`
                               )
                             }
                             className="cursor-pointer"

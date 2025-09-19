@@ -137,14 +137,15 @@ export default function Soal() {
 
   return (
     <LayoutBodyContent>
-      <div className="mx-auto pt-24 max-[640px]:w-11/12 sm:w-11/12 md:w-11/12 lg:w-10/12">
-        <h1 className="text-3xl font-semibold mb-10 max-[640px]:text-center sm:text-center md:text-start">
+      <div className="mx-auto pt-28 max-[640px]:w-11/12 sm:w-11/12 md:w-11/12 lg:w-10/12">
+        <h1 className="text-3xl font-semibold mb-7 max-[640px]:text-center sm:text-center md:text-start">
           Ujian {questions.exams?.nama_ujian}
         </h1>
         <div className="flex max-[640px]:gap-5 sm:gap-5 md:gap-x-10 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
           <div className="bg-[#71C9CE] p-5 rounded-lg max-[640px]:sticky max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-[5] sm:sticky sm:top-20 sm:w-10/12 sm:z-[5] md:basis-2/5 lg:basis-1/3 md:static md:top-0 md:z-0">
             <div className="flex justify-between items-center max-[640px]:justify-evenly sm:justify-evenly md:justify-between">
               <h1 className="text-xl font-semibold">
+                Ujian{" "}
                 {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
               </h1>
               {formatedTime !== "NaN:NaN" && (
@@ -186,7 +187,7 @@ export default function Soal() {
                 key={item.id}
               >
                 <span className="font-bold mr-1 text-lg">{i + 1}.</span>
-                <h1 className="inline-block text-lg font-semibold">
+                <h1 className="inline-block text-xl font-semibold">
                   {item.questions}
                 </h1>
                 {questions.tipe_ujian === "pg" ? (
@@ -201,7 +202,7 @@ export default function Soal() {
                           <Input
                             type="radio"
                             name={item.id}
-                            className="cursor-pointer w-5"
+                            className="cursor-pointer w-5 "
                             defaultChecked={isSelected}
                             onClick={() =>
                               handleSelectedAnswer(item.id, answerText)
@@ -224,7 +225,7 @@ export default function Soal() {
                     </label>
                     <Textarea
                       placeholder="Jawab Pertannyaan Kamu Disini"
-                      className="border-slate-600 border-2"
+                      className="border-slate-600 border-2 h-20 bg-stone-200"
                       id={item.id}
                       onCopy={(e) => e.preventDefault()}
                       onPaste={(e) => e.preventDefault()}

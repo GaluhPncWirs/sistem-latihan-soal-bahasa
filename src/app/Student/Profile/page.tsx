@@ -37,6 +37,7 @@ export default function Profil() {
   const filterExams = historyStudent.filter(
     (fil: any) => fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
   );
+  const [previewImgProfil, setPreviewImgProfil] = useState<string | null>(null);
 
   // untuk sistem ranking
   const forRankingClasses = rankingClass.map((fil: any) => {
@@ -176,27 +177,57 @@ export default function Profil() {
     }
   }
 
+  function handleChangeImgProfile(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setPreviewImgProfil(URL.createObjectURL(file));
+    }
+  }
+
   return (
     <LayoutBodyContent>
       <div className="pt-16 flex max-[640px]:flex-col max-[640px]:gap-0 sm:flex-col sm:gap-0 lg:gap-10 md:flex-row">
         <div className="md:bg-[#71C9CE] md:bg-gradient-to-t md:to-[#08D9D6] px-7 pt-10 pb-7 md:basis-[28%] lg:basis-1/4 flex flex-col items-center justify-center">
           <Dialog>
             <DialogTrigger asChild className="cursor-pointer">
-              <Image
-                src="/img/profileStudent/userProfile.png"
-                alt="Profile User"
-                width={300}
-                height={300}
-                className="rounded-full max-[640px]:w-1/3 sm:w-1/4 md:w-1/2 mb-3"
-              />
+              {previewImgProfil !== null ? (
+                <Image
+                  src={previewImgProfil}
+                  alt="Profile User"
+                  width={300}
+                  height={300}
+                  className="rounded-full max-[640px]:w-1/3 sm:w-1/4 md:w-1/2 mb-3"
+                />
+              ) : (
+                <Image
+                  src="/img/profileStudent/userProfile.png"
+                  alt="Profile User"
+                  width={300}
+                  height={300}
+                  className="rounded-full max-[640px]:w-1/3 sm:w-1/4 md:w-1/2 mb-3"
+                />
+              )}
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Ubah Foto Profil</DialogTitle>
                 <div className="mt-3">
-                  <Input type="file" accept="image/*" id="imgProfil" />
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    id="imgProfil"
+                    onChange={handleChangeImgProfile}
+                  />
                 </div>
               </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button>Oke</Button>
+                </DialogClose>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
           <Table>
