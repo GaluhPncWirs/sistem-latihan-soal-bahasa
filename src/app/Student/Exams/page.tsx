@@ -130,9 +130,11 @@ export default function Soal() {
   }
 
   useEffect(() => {
-    if (timeOutDone === true) {
-      handleSendExam();
-    }
+    setTimeout(() => {
+      if (timeOutDone === true) {
+        handleSendExam();
+      }
+    }, 5000);
   }, [timeOutDone]);
 
   return (
@@ -186,9 +188,8 @@ export default function Soal() {
                 className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
                 key={item.id}
               >
-                <span className="font-bold mr-1 text-lg">{i + 1}.</span>
-                <h1 className="inline-block text-xl font-semibold">
-                  {item.questions}
+                <h1 className="text-lg font-semibold">
+                  {i + 1}. {item.questions}
                 </h1>
                 {questions.tipe_ujian === "pg" ? (
                   <ul className="mt-3">

@@ -255,6 +255,8 @@ export default function DashboardStudent() {
     });
   }
 
+  console.log(scheduleExams);
+
   return (
     <LayoutBodyContent>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
@@ -508,9 +510,7 @@ export default function DashboardStudent() {
                             <TableCell>
                               {item.hasil_ujian !== "telat"
                                 ? item.tipe_ujian === "pg"
-                                  ? `${item.hasil_ujian} Dari ${
-                                      item.exams.questions_exam.length * 10
-                                    }`
+                                  ? `${item.hasil_ujian} Dari 100`
                                   : `${item.hasil_ujian} ${
                                       item.hasil_ujian !== "pending"
                                         ? "Dari 100"
