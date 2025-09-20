@@ -255,8 +255,6 @@ export default function DashboardStudent() {
     });
   }
 
-  console.log(scheduleExams);
-
   return (
     <LayoutBodyContent>
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
@@ -303,7 +301,7 @@ export default function DashboardStudent() {
             {deadlineUjianTercepatHariIni() !== null && (
               <div>
                 <h1 className="text-2xl font-semibold mb-4">
-                  Ujian Yang Waktu Tenggatnya Hampir Habis
+                  Ujian Yang Waktu Tenggatnya Habis
                 </h1>
                 <div className="bg-sky-300 flex justify-between gap-x-3 p-5 items-center rounded-xl shadow-md shadow-slate-500">
                   <div className="flex justify-center items-center gap-x-5">
@@ -485,7 +483,7 @@ export default function DashboardStudent() {
                               >
                                 <HoverCardTrigger asChild>
                                   <Link
-                                    href={`/Student/Dashboard/ResultExam/?id=${item.idExams}`}
+                                    href={`/Student/Dashboard/ResultExam/?id=${item.idExams}&idStudent=${getIdStudent}`}
                                     className="hover:underline hover:text-blue-700"
                                   >
                                     {item.exams.nama_ujian}

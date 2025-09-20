@@ -7,160 +7,125 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ResultExam() {
-  const [getDataStudent, setGetDataStudent] = useState<any>([]);
-  const [getDataExam, setGetDataExam] = useState<any>([]);
-  const paramId = useSearchParams().get("id");
+  const [getDataStudentAnswer, setGetDataStudentAnswer] = useState<any>({});
+  const paramIdExam = useSearchParams().get("id");
+  const paramIdStudent = useSearchParams().get("idStudent");
 
   function correctAnswer(questionsId: any, pg: any) {
-    if (!getDataStudent || getDataStudent.length === 0) return null;
-    const answerStudentObj = getDataStudent[0].answer_student;
+    if (!getDataStudentAnswer || getDataStudentAnswer.length === 0) return null;
+    const answerStudentObj = getDataStudentAnswer[0].answer_student;
     const studentAnswer = answerStudentObj[questionsId];
     return studentAnswer === pg ? "bg-amber-400 rounded-sm" : "";
   }
 
   useEffect(() => {
-    async function handleView() {
-      const { data, error } = await supabase
-        .from("exams")
-        .select("*")
-        .eq("id", Number(paramId));
-      if (error) {
-        console.log("data gagal ditampilkan:", error.message);
-      }
-      setGetDataExam(data);
-    }
-    handleView();
-  }, [paramId]);
-
-  useEffect(() => {
-    async function getDataAnswerStudent() {
+    if (!paramIdExam) return;
+    async function getDataAnswer() {
       const { data, error } = await supabase
         .from("history-exam-student")
-        .select("*")
-        .eq("exam_id", Number(paramId));
+        .select("*, exams(nama_ujian,tipeUjian,questions_exam)")
+        .eq("exam_id", Number(paramIdExam))
+        .eq("student_id", paramIdStudent)
+        .single();
 
       if (error) {
-        console.log("data gagal ditampilkan:", error.message);
+        console.log("gagal memuat data");
       }
-      setGetDataStudent(data);
+      setGetDataStudentAnswer(data);
     }
-    getDataAnswerStudent();
-  }, [paramId]);
+
+    getDataAnswer();
+  }, [paramIdExam]);
 
   return (
     <LayoutBodyContent>
-      <div className="w-10/12 mx-auto pt-24">
-        <div className="mt-5">
-          <h1 className="text-4xl font-semibold mb-5">Hasil Ujian</h1>
-          <h1 className="text-2xl font-semibold mb-7">
-            Nama Ujian {getDataExam[0]?.nama_ujian}
+      <div className="w-10/12 mx-auto pt-24 max-[640px]:w-11/12">
+        <div>
+          <h1 className="text-4xl font-semibold mb-7 max-[640px]:text-center">
+            Hasil Ujian
           </h1>
-          {
-            getDataExam.tipeUjian === "pg" ? (
-              <div className="grid lg:grid-cols-2 gap-3 max-[640px]:grid-cols-1 sm:grid-cols-1">
-                {getDataExam?.length > 0
-                  ? getDataExam
-                      .flatMap(
-                        (getQuestions: any) => getQuestions.questions_exam
-                      )
-                      .map((item: any, i: number) => (
-                        <div
-                          className="bg-[#08D9D6] rounded-lg p-7"
-                          key={item.id}
-                        >
-                          <h1 className="font-semibold text-lg">
-                            {i + 1}. {item.questions}
-                          </h1>
-                          <ul className="flex mt-3 flex-col justify-center gap-y-2">
-                            {["a", "b", "c", "d", "e"].map((opt) => {
-                              const answerKey = `answer_${opt}`;
-                              const answerText = item.answerPg[answerKey];
-                              return (
-                                <li
-                                  key={opt}
-                                  className={`w-fit px-3 ${correctAnswer(
-                                    item.id,
-                                    answerText
-                                  )}`}
-                                >
-                                  {opt.toUpperCase()}. {answerText}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                      ))
-                  : Array.from({ length: 5 }).map((_, i) => (
-                      <div className="mt-5 animate-pulse" key={i}>
-                        <div className="bg-slate-400 w-full h-8 rounded-md"></div>
-                        <div className="flex flex-col gap-5 mt-5">
-                          <div className="bg-slate-400 w-11/12 h-5 rounded-md"></div>
-                          <div className="bg-slate-400 w-4/5 h-5 rounded-md"></div>
-                          <div className="bg-slate-400 w-full h-5 rounded-md"></div>
-                          <div className="bg-slate-400 w-1/2 h-5 rounded-md"></div>
-                          <div className="bg-slate-400 w-3/5 h-5 rounded-md"></div>
+          <h1 className="text-2xl font-semibold mb-5">
+            Nama Ujian : {getDataStudentAnswer.exams?.nama_ujian}
+          </h1>
+
+          <div>
+            {Object.keys(getDataStudentAnswer).length > 0 ? (
+              getDataStudentAnswer.exams?.tipeUjian === "pg" ? (
+                <div className="grid lg:grid-cols-2 gap-3 max-[640px]:grid-cols-1 sm:grid-cols-1">
+                  {getDataStudentAnswer.exams?.questions_exam.map(
+                    (item: any, i: number) => (
+                      <div
+                        className="bg-[#08D9D6] rounded-lg p-7"
+                        key={item.id}
+                      >
+                        <h1 className="font-semibold text-lg">
+                          {i + 1}. {item.questions}
+                        </h1>
+                        <ul className="flex mt-3 flex-col justify-center gap-y-2">
+                          {["a", "b", "c", "d", "e"].map((opt) => {
+                            const answerKey = `answer_${opt}`;
+                            const answerText = item.answerPg[answerKey];
+                            return (
+                              <li
+                                key={opt}
+                                className={`w-fit px-3 ${correctAnswer(
+                                  item.id,
+                                  answerText
+                                )}`}
+                              >
+                                {opt.toUpperCase()}. {answerText}
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )
+                  )}
+                </div>
+              ) : (
+                <div className="grid lg:grid-cols-2 gap-3 max-[640px]:grid-cols-1 sm:grid-cols-1">
+                  {getDataStudentAnswer.exams?.questions_exam.map(
+                    (item: any, i: number) => (
+                      <div className="bg-[#08D9D6] rounded-lg p-7" key={i}>
+                        <h1 className="text-lg font-semibold">
+                          <span className="mr-0.5">{i + 1}.</span>{" "}
+                          {item.questions}
+                        </h1>
+                        <div className="mt-3">
+                          <label className="mb-2 font-semibold ml-1.5 inline-block">
+                            Jawaban :
+                          </label>
+                          <Textarea
+                            className="border-slate-600 border-2 font-bold h-28"
+                            disabled
+                            defaultValue={
+                              getDataStudentAnswer.answer_student?.[item.id] ||
+                              ""
+                            }
+                          />
                         </div>
                       </div>
-                    ))}
-              </div>
-            ) : getDataExam?.length > 0 ? (
-              getDataExam
-                .flatMap((getQuestions: any) => getQuestions.questions_exam)
-                .map((item: any, i: number) => (
-                  <div className="bg-[#08D9D6] rounded-lg p-7 mt-5">
-                    <h1 className="text-xl font-semibold">
-                      <span className="mr-0.5">{i + 1}.</span> {item.questions}
-                    </h1>
-                    <div className="mt-3">
-                      <label className="mb-2 font-semibold ml-1.5 inline-block">
-                        Jawaban :
-                      </label>
-                      {/* <Textarea
-                        className="border-slate-600 border-2 font-bold h-24"
-                        disabled
-                        defaultValue={
-                          item.answer_student?.[item.id] || ""
-                        }
-                      /> */}
-                    </div>
-                  </div>
-                ))
+                    )
+                  )}
+                </div>
+              )
             ) : (
-              Array.from({ length: 5 }).map((_, i) => (
-                <div className="mt-5 animate-pulse" key={i}>
-                  <div className="bg-slate-400 w-full h-8 rounded-md"></div>
-                  <div className="flex flex-col gap-5 mt-5">
-                    <div className="bg-slate-400 w-11/12 h-5 rounded-md"></div>
-                    <div className="bg-slate-400 w-4/5 h-5 rounded-md"></div>
-                    <div className="bg-slate-400 w-full h-5 rounded-md"></div>
-                    <div className="bg-slate-400 w-1/2 h-5 rounded-md"></div>
-                    <div className="bg-slate-400 w-3/5 h-5 rounded-md"></div>
-                  </div>
+              Array.from({ length: 7 }).map((_: any, i: number) => (
+                <div
+                  className="bg-slate-400 w-full p-5 h-52 rounded-md mb-5 animate-pulse"
+                  key={i}
+                >
+                  <div className="w-10/12 bg-slate-300 h-5 rounded-sm mb-5"></div>
+                  <div className="w-1/6 bg-slate-300 h-5 rounded-sm mb-3"></div>
+                  <div className="w-full bg-slate-300 h-24 rounded-md"></div>
                 </div>
               ))
-            )
-            // <div className="max-[640px]:w-full sm:w-11/12 md:basis-1/2 lg:basis-2/3">
-            //       <h1 className="text-xl font-semibold">
-            //         <span className="mr-0.5">{i + 1}.</span> {item.questions}
-            //       </h1>
-            //       <div className="mt-3">
-            //         <label className="mb-2 font-semibold ml-1.5 inline-block">
-            //           Jawaban Siswa :
-            //         </label>
-            //         <Textarea
-            //           className="border-slate-600 border-2 font-bold h-24"
-            //           disabled
-            //           defaultValue={
-            //             viewQuestionsExams.answer_student?.[item.id] || ""
-            //           }
-            //         />
-            //       </div>
-            //     </div>
-          }
+            )}
+          </div>
 
           <Link
             href="/Student/Dashboard"
-            className="mt-5 block px-8 bg-amber-300 w-fit py-2 rounded-lg font-semibold hover:bg-amber-400"
+            className="mt-5 block px-8 w-fit py-2 rounded-lg font-semibold bg-slate-800 text-slate-200 hover:text-slate-300"
           >
             Kembali
           </Link>

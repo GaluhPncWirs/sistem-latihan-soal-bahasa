@@ -46,6 +46,7 @@ export default function Soal() {
   const [answerEssayExams, setAnswerEssayExams] = useState<{
     [questions: string]: string;
   }>({});
+  const [markQuestions, setMarkQuestions] = useState<any>({});
   const [timeOutDone, setTimeOutDone] = useState<boolean>(false);
   const { push } = useRouter();
 
@@ -137,11 +138,13 @@ export default function Soal() {
     }, 5000);
   }, [timeOutDone]);
 
+  // console.log(markQuestions);
+
   return (
     <LayoutBodyContent>
       <div className="mx-auto pt-28 max-[640px]:w-11/12 sm:w-11/12 md:w-11/12 lg:w-10/12">
         <h1 className="text-3xl font-semibold mb-7 max-[640px]:text-center sm:text-center md:text-start">
-          Ujian {questions.exams?.nama_ujian}
+          {questions.exams?.nama_ujian}
         </h1>
         <div className="flex max-[640px]:gap-5 sm:gap-5 md:gap-x-10 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
           <div className="bg-[#71C9CE] p-5 rounded-lg max-[640px]:sticky max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-[5] sm:sticky sm:top-20 sm:w-10/12 sm:z-[5] md:basis-2/5 lg:basis-1/3 md:static md:top-0 md:z-0">
@@ -163,13 +166,14 @@ export default function Soal() {
                 </div>
               )}
             </div>
-            <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
+            <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-3 justify-center items-center p-5 rounded-md">
               {questions.exams?.questions_exam.map((item: any, i: number) => {
                 const isAnswerPg = clickedAnswerPg[item.id];
                 const isAnswerEssay = answerEssayExams[item.id];
+                // const isMarking = markQuestions[item.id];
                 return (
                   <div
-                    className={`h-10 w-10  rounded-md flex items-center justify-center font-bold text-lg ${
+                    className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg ${
                       isAnswerPg || isAnswerEssay
                         ? "bg-green-400"
                         : "bg-[#E3FDFD]"
@@ -188,7 +192,7 @@ export default function Soal() {
                 className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
                 key={item.id}
               >
-                <h1 className="text-lg font-semibold">
+                <h1 className="text-lg font-semibold" id="pertannyaan">
                   {i + 1}. {item.questions}
                 </h1>
                 {questions.tipe_ujian === "pg" ? (
@@ -215,6 +219,17 @@ export default function Soal() {
                         </li>
                       );
                     })}
+                    <Button
+                      className="cursor-pointer text-base mt-3"
+                      onClick={() =>
+                        setMarkQuestions((prev: any) => ({
+                          ...prev,
+                          [item.id]: item.questions,
+                        }))
+                      }
+                    >
+                      Tandai
+                    </Button>
                   </ul>
                 ) : (
                   <div className="mt-3">
@@ -286,13 +301,6 @@ export default function Soal() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-
-          <Link
-            href="/Student/Dashboard"
-            className="cursor-pointer px-7 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]"
-          >
-            Kembali
-          </Link>
         </div>
       </div>
     </LayoutBodyContent>
