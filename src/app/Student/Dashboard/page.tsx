@@ -174,7 +174,7 @@ export default function DashboardStudent() {
         messageExams += "Ujian Belum Dimulai";
       } else if (hariIni > akhirUjian) {
         messageExams += "Ujian Telah Lewat Batas Waktu";
-        handleLateExam(idUjian, getIdStudent);
+        // handleLateExam(idUjian, getIdStudent);
       } else {
         return (
           <Dialog>
@@ -217,7 +217,7 @@ export default function DashboardStudent() {
     } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
       messageExams += "Ujian Belum Dimulai";
     } else {
-      handleLateExam(idUjian, getIdStudent);
+      // handleLateExam(idUjian, getIdStudent);
       messageExams += "Ujian Telah Lewat Batas Waktu";
     }
     return messageExams;

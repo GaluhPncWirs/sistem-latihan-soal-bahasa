@@ -25,14 +25,12 @@ import { Input } from "@/components/ui/input";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -138,55 +136,62 @@ export default function Soal() {
     }, 5000);
   }, [timeOutDone]);
 
-  // console.log(markQuestions);
-
   return (
     <LayoutBodyContent>
-      <div className="mx-auto pt-28 max-[640px]:w-11/12 sm:w-11/12 md:w-11/12 lg:w-10/12">
+      <div className="mx-auto pt-28 max-[640px]:w-full sm:w-full md:w-11/12 lg:w-10/12">
         <h1 className="text-3xl font-semibold mb-7 max-[640px]:text-center sm:text-center md:text-start">
-          {questions.exams?.nama_ujian}
+          Ujian {questions.exams?.nama_ujian}
         </h1>
         <div className="flex max-[640px]:gap-5 sm:gap-5 md:gap-x-10 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
-          <div className="bg-[#71C9CE] p-5 rounded-lg max-[640px]:sticky max-[640px]:top-20 max-[640px]:w-11/12 max-[640px]:z-[5] sm:sticky sm:top-20 sm:w-10/12 sm:z-[5] md:basis-2/5 lg:basis-1/3 md:static md:top-0 md:z-0">
-            <div className="flex justify-between items-center max-[640px]:justify-evenly sm:justify-evenly md:justify-between">
+          <div className="bg-[#71C9CE] p-5 rounded-lg max-[640px]:w-11/12 sm:w-10/12 sm:z-[5] md:basis-2/5 lg:basis-[35%]">
+            <div className="flex items-center max-[640px]:justify-around sm:justify-around md:justify-between">
               <h1 className="text-xl font-semibold">
                 Ujian{" "}
                 {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
               </h1>
               {formatedTime !== "NaN:NaN" && (
-                <div className=" bg-[#F38181] px-4 py-1.5 rounded-lg flex flex-col items-center">
+                <div className=" bg-[#F38181] py-1.5 rounded-lg gap-x-2 flex items-center justify-center">
                   <Image
                     src="/img/examsStudent/stopwatch.png"
                     alt="Timer"
                     width={200}
                     height={200}
-                    className="w-1/2"
+                    className="w-1/4"
                   />
                   <span className="text-xl font-semibold">{formatedTime}</span>
                 </div>
               )}
             </div>
-            <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-3 justify-center items-center p-5 rounded-md">
+            <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3 rounded-md">
               {questions.exams?.questions_exam.map((item: any, i: number) => {
                 const isAnswerPg = clickedAnswerPg[item.id];
                 const isAnswerEssay = answerEssayExams[item.id];
-                // const isMarking = markQuestions[item.id];
+                const isMarking = markQuestions[item.id];
                 return (
                   <div
-                    className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg ${
+                    className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
                       isAnswerPg || isAnswerEssay
                         ? "bg-green-400"
                         : "bg-[#E3FDFD]"
                     }`}
                     key={i}
                   >
+                    {isMarking === true && !isAnswerPg && (
+                      <Image
+                        src="/img/examsStudent/flag.png"
+                        alt="Mark"
+                        width={200}
+                        height={200}
+                        className="w-1/4 absolute top-1.5 left-1.5"
+                      />
+                    )}
                     {i + 1}
                   </div>
                 );
               })}
             </div>
           </div>
-          <div className="basis-2/3 md:overflow-y-auto md:h-[28rem] md:scrollBarDesign max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-2/3">
+          <div className="md:overflow-y-auto md:h-[28rem] md:scrollBarDesign max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
             {questions.exams?.questions_exam.map((item: any, i: number) => (
               <div
                 className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
@@ -224,7 +229,7 @@ export default function Soal() {
                       onClick={() =>
                         setMarkQuestions((prev: any) => ({
                           ...prev,
-                          [item.id]: item.questions,
+                          [item.id]: !prev[item.id],
                         }))
                       }
                     >
@@ -275,10 +280,10 @@ export default function Soal() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <div className="mt-10 flex justify-between">
+        <div className="mt-7 max-[640px]:ml-5 sm:ml-7 md:ml-0">
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="cursor-pointer px-7 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
+              <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
                 Selesai
               </Button>
             </DialogTrigger>

@@ -12,8 +12,8 @@ export default function ResultExam() {
   const paramIdStudent = useSearchParams().get("idStudent");
 
   function correctAnswer(questionsId: any, pg: any) {
-    if (!getDataStudentAnswer || getDataStudentAnswer.length === 0) return null;
-    const answerStudentObj = getDataStudentAnswer[0].answer_student;
+    if (!getDataStudentAnswer) return null;
+    const answerStudentObj = getDataStudentAnswer?.answer_student;
     const studentAnswer = answerStudentObj[questionsId];
     return studentAnswer === pg ? "bg-amber-400 rounded-sm" : "";
   }
