@@ -265,5 +265,14 @@ input[type="time"]::-webkit-clear-button {
 
 /* Untuk Firefox */
 input[type="time"] {
-  -moz-appearance: textfield; /* Supaya tidak muncul arrow */
+  -moz-appearance: textfield;
 }
+
+/* .forBelowSm{
+  @apply flex flex-col
+} */
+
+
+/* .forAboveMedium{
+  @apply w-3/5 absolute shadow-lg shadow-slate-700 transition-all duration-200 ease-in-out hover:z-10 hover:translate-x-5 hover:w-2/3
+} */

@@ -141,35 +141,35 @@ export default function Home() {
         ></path>
       </svg>
 
-      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] max-[640px]:pt-36 sm:pt-40 md:pt-40 h-[50rem]">
+      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] max-[640px]:pt-16 sm:pt-20 md:pt-40 sm:h-[45rem] md:h-[50rem]">
         <div className="mx-auto max-[640px]:w-10/12 max-[640px]:py-16 sm:py-16 lg:pb-20 sm:w-10/12">
-          <h1 className="text-4xl font-bold mb-14">Tampilan Sistem</h1>
-          <div className="relative">
-            <div className="group">
+          <h1 className="text-4xl font-bold mb-7">Tampilan Sistem</h1>
+          <div>
+            <h1 className="text-lg font-medium mb-10 text-justify">
+              Antarmuka yang bersih dan juga intuitif, memudahkan peserta ujian
+              untuk fokus mengerjakan soal
+            </h1>
+            <div className="sm:relative max-[640px]:flex max-[640px]:flex-col max-[640px]:gap-y-5">
               <Image
                 src="/img/beranda/ujian.jpeg"
                 alt="Ujian Page"
                 width={500}
                 height={500}
-                className="w-2/3 absolute shadow-lg shadow-slate-700 transition-all duration-200 ease-in-out group-hover:z-20 group-hover:translate-x-72"
+                className="shadow-lg shadow-slate-700 sm:w-3/4 md:w-3/5 sm:absolute sm:transition-all sm:duration-200 sm:ease-in-out sm:hover:z-10 sm:hover:translate-x-5 sm:hover:w-10/12 md:hover:w-2/3 max-[640px]:w-full"
               />
-            </div>
-            <div className="group">
               <Image
                 src="/img/beranda/profile.jpeg"
                 alt="Profile Page"
                 width={500}
                 height={500}
-                className="w-2/3 absolute top-12 left-16 shadow-lg transition-all ease-in-out duration-200 shadow-slate-700 group-hover:z-20 group-hover:translate-x-60"
+                className="shadow-lg shadow-slate-700 sm:right-0 sm:w-3/4 md:w-3/5 sm:absolute sm:transition-all sm:duration-200 sm:ease-in-out sm:hover:z-10 sm:hover:-translate-x-5 sm:hover:w-10/12 md:hover:w-2/3 max-[640px]:w-full"
               />
-            </div>
-            <div className="group">
               <Image
                 src="/img/beranda/dashboard.jpeg"
                 alt="Dashboard Page"
                 width={500}
                 height={500}
-                className="w-[65%] absolute z-10 top-24 left-32 shadow-lg transition-all ease-in-out duration-200 shadow-slate-700 group-hover:z-20 group-hover:translate-x-40"
+                className="shadow-lg shadow-slate-700 sm:w-3/4 md:w-3/5 sm:absolute sm:transition-all sm:duration-200 sm:ease-in-out sm:hover:z-10 sm:hover:w-10/12 md:hover:w-2/3 sm:left-1/2 sm:-translate-x-1/2 max-[640px]:w-full"
               />
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function Home() {
       </svg>
 
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] max-[640px]:pt-36 sm:pt-40 md:pt-52">
-        <div className="w-2/3 mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-10/12 lg:w-2/3">
+        <div className="w-2/3 mx-auto max-[640px]:w-10/12 sm:w-10/12 lg:w-2/3">
           <h1 className="text-4xl font-bold sm:mb-10 pb-5">Alur Ujian</h1>
           <div className="flex mx-10 max-[640px]:ml-5 max-[640px]:mx-0 max-[640px]:pr-5 max-[640px]:mt-10">
             <div className="basis-1/6 flex flex-col items-center">
