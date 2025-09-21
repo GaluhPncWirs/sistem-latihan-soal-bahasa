@@ -137,13 +137,60 @@ export default function Home() {
         <path
           fill="#71C9CE"
           fillOpacity="1"
+          d="M0,128L48,138.7C96,149,192,171,288,165.3C384,160,480,128,576,106.7C672,85,768,75,864,90.7C960,107,1056,149,1152,149.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
+        ></path>
+      </svg>
+
+      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] max-[640px]:pt-36 sm:pt-40 md:pt-40 h-[50rem]">
+        <div className="mx-auto max-[640px]:w-10/12 max-[640px]:py-16 sm:py-16 lg:pb-20 sm:w-10/12">
+          <h1 className="text-4xl font-bold mb-14">Tampilan Sistem</h1>
+          <div className="relative">
+            <div className="group">
+              <Image
+                src="/img/beranda/ujian.jpeg"
+                alt="Ujian Page"
+                width={500}
+                height={500}
+                className="w-2/3 absolute shadow-lg shadow-slate-700 transition-all duration-200 ease-in-out group-hover:z-20 group-hover:translate-x-72"
+              />
+            </div>
+            <div className="group">
+              <Image
+                src="/img/beranda/profile.jpeg"
+                alt="Profile Page"
+                width={500}
+                height={500}
+                className="w-2/3 absolute top-12 left-16 shadow-lg transition-all ease-in-out duration-200 shadow-slate-700 group-hover:z-20 group-hover:translate-x-60"
+              />
+            </div>
+            <div className="group">
+              <Image
+                src="/img/beranda/dashboard.jpeg"
+                alt="Dashboard Page"
+                width={500}
+                height={500}
+                className="w-[65%] absolute z-10 top-24 left-32 shadow-lg transition-all ease-in-out duration-200 shadow-slate-700 group-hover:z-20 group-hover:translate-x-40"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 1440 320"
+        className="absolute"
+      >
+        <path
+          fill="#71C9CE"
+          fillOpacity="1"
           d="M0,192L30,170.7C60,149,120,107,180,101.3C240,96,300,128,360,144C420,160,480,160,540,138.7C600,117,660,75,720,96C780,117,840,203,900,229.3C960,256,1020,224,1080,176C1140,128,1200,64,1260,42.7C1320,21,1380,43,1410,53.3L1440,64L1440,0L1410,0C1380,0,1320,0,1260,0C1200,0,1140,0,1080,0C1020,0,960,0,900,0C840,0,780,0,720,0C660,0,600,0,540,0C480,0,420,0,360,0C300,0,240,0,180,0C120,0,60,0,30,0L0,0Z"
         ></path>
       </svg>
 
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] max-[640px]:pt-36 sm:pt-40 md:pt-52">
-        <h1 className="text-4xl font-bold text-center sm:mb-10">Alur Ujian</h1>
-        <div className="w-2/3 mx-auto pb-10 max-[640px]:w-11/12 sm:w-11/12 md:w-10/12">
+        <div className="w-2/3 mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-10/12 lg:w-2/3">
+          <h1 className="text-4xl font-bold sm:mb-10 pb-5">Alur Ujian</h1>
           <div className="flex mx-10 max-[640px]:ml-5 max-[640px]:mx-0 max-[640px]:pr-5 max-[640px]:mt-10">
             <div className="basis-1/6 flex flex-col items-center">
               <Image
@@ -225,8 +272,7 @@ export default function Home() {
                   />
                 </div>
                 <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
-                  Setelah selesai, langsung dapatkan hasil ujian dan nilai Anda
-                  secara real time
+                  Setelah selesai, langsung dapatkan hasil ujian dan nilai anda
                 </h2>
               </div>
             </div>
