@@ -3,9 +3,28 @@ import LayoutBodyContent from "@/layout/bodyContent";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetIdStudent } from "./hooks/getIdStudent";
-
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { useEffect, useState } from "react";
 export default function Home() {
   const isLogin = useGetIdStudent();
+  const [isSizeMobile, setIsSizeMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 640px)");
+    const handler = (e: MediaQueryListEvent | MediaQueryList) =>
+      setIsSizeMobile(e.matches);
+
+    handler(mediaQuery);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
   return (
     <LayoutBodyContent>
       <div className="relative">
@@ -145,11 +164,49 @@ export default function Home() {
         <div className="mx-auto max-[640px]:w-10/12 max-[640px]:py-16 sm:py-16 lg:pb-20 sm:w-10/12">
           <h1 className="text-4xl font-bold mb-7">Tampilan Sistem</h1>
           <div>
-            <h1 className="text-lg font-medium mb-10 text-justify">
+            <h1 className="text-lg font-medium mb-10 text-justify max-[640px]:mb-20">
               Antarmuka yang bersih dan juga intuitif, memudahkan peserta ujian
-              untuk fokus mengerjakan soal
+              untuk mengerjakan soal
             </h1>
-            <div className="sm:relative max-[640px]:flex max-[640px]:flex-col max-[640px]:gap-y-5">
+            <Carousel
+              opts={{
+                align: "start",
+              }}
+              orientation={isSizeMobile ? "vertical" : "horizontal"}
+            >
+              <CarouselContent className="max-[640px]:h-60">
+                <CarouselItem className="flex items-center justify-center p-6">
+                  <Image
+                    src="/img/beranda/ujian.jpeg"
+                    alt="Ujian Page"
+                    width={500}
+                    height={500}
+                    className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-3/4 rounded-md"
+                  />
+                </CarouselItem>
+                <CarouselItem className="flex items-center justify-center p-6">
+                  <Image
+                    src="/img/beranda/profile.jpeg"
+                    alt="Profile Page"
+                    width={500}
+                    height={500}
+                    className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-3/4 rounded-md"
+                  />
+                </CarouselItem>
+                <CarouselItem className="flex items-center justify-center p-6">
+                  <Image
+                    src="/img/beranda/dashboard.jpeg"
+                    alt="Dashboard Page"
+                    width={500}
+                    height={500}
+                    className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-2/3 rounded-md"
+                  />
+                </CarouselItem>
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+            {/* <div className="sm:relative max-[640px]:flex max-[640px]:flex-col max-[640px]:gap-y-5">
               <Image
                 src="/img/beranda/ujian.jpeg"
                 alt="Ujian Page"
@@ -171,7 +228,7 @@ export default function Home() {
                 height={500}
                 className="shadow-lg shadow-slate-700 sm:w-3/4 md:w-3/5 sm:absolute sm:transition-all sm:duration-200 sm:ease-in-out sm:hover:z-10 sm:hover:w-10/12 md:hover:w-2/3 sm:left-1/2 sm:-translate-x-1/2 max-[640px]:w-full"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
