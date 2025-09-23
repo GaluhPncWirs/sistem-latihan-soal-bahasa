@@ -40,7 +40,7 @@ export default function Soal() {
   const idExams = useSearchParams().get("idExams");
   const idStudent = useSearchParams().get("idStudent");
   const dataStudent = useGetDataStudent(idStudent!);
-  const [time, setTime] = useState<number>(0);
+  const [time, setTime] = useState<number | null>(null);
   const [answerEssayExams, setAnswerEssayExams] = useState<{
     [questions: string]: string;
   }>({});
@@ -60,36 +60,38 @@ export default function Soal() {
   }, [clickedAnswerPg]);
 
   useEffect(() => {
-    if (questions.exam_duration) {
-      setTime(time);
-      const timer = setInterval(() => {
-        setTime((prev) => {
-          if (prev <= 0) {
-            clearInterval(timer);
-            setTimeOutDone(true);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timer);
+    function initializedTime() {
+      const savedTimer = localStorage.getItem("timer");
+      if (savedTimer) {
+        const initialTime = JSON.parse(savedTimer);
+        return initialTime > 0 ? initialTime : questions.exam_duration;
+      }
+      return questions.exam_duration;
     }
+
+    setTime(initializedTime());
   }, [questions.exam_duration]);
 
-  const minute = Math.floor(time / 60);
-  const second = time % 60;
-  const formatedTime = `${minute}:${String(second).padStart(2, "0")}`;
-
   useEffect(() => {
-    const savedTimer = localStorage.getItem("timer");
-    if (savedTimer) {
-      setTime(JSON.parse(savedTimer));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("timer", JSON.stringify(time));
+    if (time === undefined || time === null) return;
+    const timer = setInterval(() => {
+      setTime((prev) => {
+        if (prev! <= 0) {
+          clearInterval(timer);
+          setTimeOutDone(true);
+          return 0;
+        }
+        const newTime = prev! - 1;
+        localStorage.setItem("timer", JSON.stringify(time));
+        return newTime;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
   }, [time]);
+
+  const minute = Math.floor(time! / 60);
+  const second = time! % 60;
+  const formatedTime = `${minute}:${String(second).padStart(2, "0")}`;
 
   useEffect(() => {
     if (!dataStudent?.classes) return;
@@ -163,13 +165,13 @@ export default function Soal() {
     }
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (timeOutDone === true) {
-        handleSendExam();
-      }
-    }, 5000);
-  }, [timeOutDone]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (timeOutDone === true) {
+  //       handleSendExam();
+  //     }
+  //   }, 5000);
+  // }, [timeOutDone]);
 
   return (
     <LayoutBodyContent>

@@ -43,7 +43,7 @@ export default function Home() {
             <div className="mt-10">
               <Link
                 href={isLogin ? "/Student/Dashboard" : "/Autentikasi/Login"}
-                className="text-center w-full bg-blue-400 rounded-md py-2 text-lg font-semibold cursor-pointer hover:text-blue-700 px-7"
+                className="text-center w-full bg-blue-400 rounded-md py-2 text-lg font-semibold cursor-pointer hover:bg-blue-500 px-7"
               >
                 Mulai Ujian
               </Link>
@@ -258,10 +258,10 @@ export default function Home() {
                 height={100}
               />
               <div className="w-1 h-full mt-5 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
-                <div className="w-3 h-3 rounded-full bg-[#F7F4EA] mt-10 max-[640px]:mt-9 sm:mt-11 md:mt-10"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F7F4EA] mt-32 max-[640px]:mt-[135px] sm:mt-[115px]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F7F4EA] mt-32 max-[640px]:mt-[110px] sm:mt-[115px] md:mt-[118px]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F7F4EA] mt-32 max-[640px]:mt-[135px] sm:mt-36 md:mt-[115px]"></div>
+                <div className="w-3 h-3 rounded-full bg-red-400 mt-10 max-[640px]:mt-9 sm:mt-11 md:mt-10"></div>
+                <div className="w-3 h-3 rounded-full bg-red-400 mt-32 max-[640px]:mt-[135px] sm:mt-[115px]"></div>
+                <div className="w-3 h-3 rounded-full bg-red-400 mt-32 max-[640px]:mt-[110px] sm:mt-[115px] md:mt-[118px]"></div>
+                <div className="w-3 h-3 rounded-full bg-red-400 mt-32 max-[640px]:mt-[135px] sm:mt-36 md:mt-[115px]"></div>
               </div>
             </div>
 

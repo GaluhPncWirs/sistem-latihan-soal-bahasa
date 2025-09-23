@@ -153,18 +153,27 @@ export default function DashboardStudent() {
     return new Date(resultConvert + "T00:00:00").getTime();
   }
 
+  function convertToNumber(tenggat_waktu: string) {
+    const [startTimeExam, endTimeExams] = tenggat_waktu
+      .split("-")
+      .map((item: any) => item.trim());
+    return [toMinute(startTimeExam), toMinute(endTimeExams)];
+  }
+
   function resultDeadlineExam(
     tenggat_waktu: string,
     nama_ujian: string,
     idUjian: number,
     tgl_ujian: string
   ) {
-    const [startTimeExam, endTimeExams] = tenggat_waktu
-      .split("-")
-      .map((item: any) => item.trim());
+    // const [startTimeExam, endTimeExams] = tenggat_waktu
+    //   .split("-")
+    //   .map((item: any) => item.trim());
 
-    const mulaiUjian = toMinute(startTimeExam);
-    const akhirUjian = toMinute(endTimeExams);
+    const startAndEndExams = convertToNumber(tenggat_waktu);
+
+    const mulaiUjian = startAndEndExams[0];
+    const akhirUjian = startAndEndExams[1];
     const hariIni = toMinute(waktuDurasiIni);
 
     let messageExams = "";
@@ -223,13 +232,6 @@ export default function DashboardStudent() {
     return messageExams;
   }
 
-  function examsComingSoon(tenggat_waktu: string) {
-    const startTimeExam = tenggat_waktu
-      .split("-")
-      .map((item: any) => item.trim())[0];
-    return toMinute(startTimeExam);
-  }
-
   const isComingSoonExams = scheduleExams.filter(
     (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni
   );
@@ -237,8 +239,8 @@ export default function DashboardStudent() {
   function deadlineUjianTercepatHariIni() {
     const hariIni = toMinute(waktuDurasiIni);
     const validExams = isComingSoonExams.filter((exam: any) => {
-      const deadline = examsComingSoon(exam.tenggat_waktu);
-      return hariIni >= deadline;
+      const filterScheduleExam = convertToNumber(exam.tenggat_waktu);
+      return hariIni > filterScheduleExam[0] && hariIni < filterScheduleExam[1];
     });
 
     if (validExams.length === 0) {
@@ -246,8 +248,8 @@ export default function DashboardStudent() {
     }
 
     return validExams.reduce((closestExam: any, currentExam: any) => {
-      const closestDeadline = examsComingSoon(closestExam.tenggat_waktu);
-      const currentDeadline = examsComingSoon(currentExam.tenggat_waktu);
+      const closestDeadline = convertToNumber(closestExam.tenggat_waktu)[0];
+      const currentDeadline = convertToNumber(currentExam.tenggat_waktu)[0];
       return Math.abs(currentDeadline - toMinute(waktuDurasiIni)) <
         Math.abs(closestDeadline - toMinute(waktuDurasiIni))
         ? currentExam

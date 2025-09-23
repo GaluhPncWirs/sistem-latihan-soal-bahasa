@@ -7,7 +7,7 @@ export default function LayoutBodyContent({ children }: any) {
   const params = usePathname();
   return (
     <>
-      {params !== "/Student/Exams" && <NavigasiBar />}
+      {!params.startsWith("/Student/Exams") && <NavigasiBar />}
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
         {children}
       </div>
