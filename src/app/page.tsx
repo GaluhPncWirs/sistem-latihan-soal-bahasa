@@ -258,10 +258,10 @@ export default function Home() {
                 height={100}
               />
               <div className="w-1 h-full mt-5 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
-                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-10 max-[640px]:mt-9 sm:mt-11 md:mt-10"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32 max-[640px]:mt-[135px] sm:mt-[115px]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32 max-[640px]:mt-[110px] sm:mt-[115px] md:mt-[118px]"></div>
-                <div className="w-3 h-3 rounded-full bg-[#F38181] mt-32 max-[640px]:mt-[135px] sm:mt-36 md:mt-[115px]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#F7F4EA] mt-10 max-[640px]:mt-9 sm:mt-11 md:mt-10"></div>
+                <div className="w-3 h-3 rounded-full bg-[#F7F4EA] mt-32 max-[640px]:mt-[135px] sm:mt-[115px]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#F7F4EA] mt-32 max-[640px]:mt-[110px] sm:mt-[115px] md:mt-[118px]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#F7F4EA] mt-32 max-[640px]:mt-[135px] sm:mt-36 md:mt-[115px]"></div>
               </div>
             </div>
 
@@ -313,7 +313,7 @@ export default function Home() {
                 </div>
                 <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
                   Kerjakan soal secara online melalui antarmuka yang sederhana,
-                  didukung fitur timer dan navigasi soal
+                  didukung dengan navigasi soal
                 </h2>
               </div>
 

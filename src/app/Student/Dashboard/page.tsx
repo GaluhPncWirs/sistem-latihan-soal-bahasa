@@ -339,7 +339,7 @@ export default function DashboardStudent() {
                         <DialogTitle className="mb-2">
                           Konfirmasi Masuk Ujian
                         </DialogTitle>
-                        <DialogDescription>
+                        <DialogDescription className="text-start">
                           Apakah Anda Yakin ingin Mengerjakan Soal{" "}
                           <span className="font-bold">
                             "

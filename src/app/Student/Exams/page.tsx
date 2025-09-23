@@ -49,8 +49,19 @@ export default function Soal() {
   const { push } = useRouter();
 
   useEffect(() => {
+    const savedAnswer = localStorage.getItem("exam-answer");
+    if (savedAnswer) {
+      setClickedAnswerPg(JSON.parse(savedAnswer));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("exam-answer", JSON.stringify(clickedAnswerPg));
+  }, [clickedAnswerPg]);
+
+  useEffect(() => {
     if (questions.exam_duration) {
-      setTime(questions.exam_duration);
+      setTime(time);
       const timer = setInterval(() => {
         setTime((prev) => {
           if (prev <= 0) {
@@ -68,6 +79,17 @@ export default function Soal() {
   const minute = Math.floor(time / 60);
   const second = time % 60;
   const formatedTime = `${minute}:${String(second).padStart(2, "0")}`;
+
+  useEffect(() => {
+    const savedTimer = localStorage.getItem("timer");
+    if (savedTimer) {
+      setTime(JSON.parse(savedTimer));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("timer", JSON.stringify(time));
+  }, [time]);
 
   useEffect(() => {
     if (!dataStudent?.classes) return;
@@ -116,6 +138,17 @@ export default function Soal() {
       kelas: dataStudent?.classes,
     };
 
+    // useEffect(() => {
+    //   function handleBack(e: any) {
+    //     console.log("tombol kembali telah aktif");
+    //     console.log(e);
+    //   }
+
+    //   window.addEventListener("popstate", handleBack);
+
+    //   return () => window.removeEventListener("popstate", handleBack);
+    // }, []);
+
     const { error: insertErr } = await supabase
       .from("history-exam-student")
       .insert(payload);
@@ -124,6 +157,8 @@ export default function Soal() {
       toast("Gagal ❌", { description: "Gagal menyimpan data" });
     } else {
       toast("Berhasil ✅", { description: "Ujian Telah Selesai" });
+      localStorage.removeItem("exam-answer");
+      localStorage.removeItem("timer");
       push("/Student/Dashboard");
     }
   }
@@ -138,7 +173,7 @@ export default function Soal() {
 
   return (
     <LayoutBodyContent>
-      <div className="mx-auto pt-28 max-[640px]:w-full sm:w-full md:w-11/12 lg:w-10/12">
+      <div className="mx-auto pt-10 max-[640px]:w-full sm:w-full md:w-11/12 lg:w-10/12">
         <h1 className="text-3xl font-semibold mb-7 max-[640px]:text-center sm:text-center md:text-start">
           Ujian {questions.exams?.nama_ujian}
         </h1>
