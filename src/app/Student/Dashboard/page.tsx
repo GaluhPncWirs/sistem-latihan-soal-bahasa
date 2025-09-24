@@ -33,6 +33,7 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { time } from "console";
 
 export default function DashboardStudent() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
@@ -40,6 +41,8 @@ export default function DashboardStudent() {
   const getDataStudent = useGetDataStudent(getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());
+  const [confirm, setConfirm] = useState<any>(0);
+  const [accepted, setAccepted] = useState(false);
 
   useEffect(() => {
     if (!getDataStudent?.classes || !getIdStudent) return;
@@ -184,7 +187,10 @@ export default function DashboardStudent() {
         return (
           <Dialog>
             <DialogTrigger asChild>
-              <button className="hover:underline hover:text-blue-700 cursor-pointer">
+              <button
+                className="hover:underline hover:text-blue-700 cursor-pointer"
+                onClick={() => setAccepted(true)}
+              >
                 Sedang Berlangsung
               </button>
             </DialogTrigger>
@@ -196,6 +202,8 @@ export default function DashboardStudent() {
                 <DialogDescription>
                   Apakah Anda Yakin ingin Mengerjakan Soal{" "}
                   <span className="font-bold">"{nama_ujian}"</span> Ini ?
+                  Dikarenakan Jika Anda Sudah Masuk Kedalam Halaman Ujian Maka
+                  Sudah Tidak Bisa Kembali Lagi
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
@@ -211,7 +219,7 @@ export default function DashboardStudent() {
                     }
                     className="cursor-pointer"
                   >
-                    Oke
+                    {confirm <= 0 ? "Oke" : confirm}
                   </Button>
                 </DialogClose>
               </DialogFooter>
@@ -252,6 +260,60 @@ export default function DashboardStudent() {
         : closestExam;
     });
   }
+
+  // const router = useRouter();
+  // const [timeLeft, setTimeLeft] = useState<number>(10); // 10 detik demo
+  // const [done, setDone] = useState<boolean>(false);
+
+  // // countdown timer
+  // useEffect(() => {
+  //   if (timeLeft <= 0) {
+  //     setDone(true);
+  //     return;
+  //   }
+
+  //   const timer = setInterval(() => {
+  //     setTimeLeft((prev) => prev - 1);
+  //   }, 1000);
+
+  //   return () => clearInterval(timer);
+  // }, [timeLeft]);
+
+  // // handle tombol back/forward browser
+  // useEffect(() => {
+  //   const handlePopstate = () => {
+  //     console.log("User tekan tombol back");
+
+  //     if (done) {
+  //       alert("Waktu ujian sudah habis, Anda tidak bisa kembali!");
+  //       router.replace("/timeout"); // arahkan ke halaman lain
+  //     }
+  //   };
+
+  //   window.addEventListener("popstate", handlePopstate);
+
+  //   return () => {
+  //     window.removeEventListener("popstate", handlePopstate);
+  //   };
+  // }, [done, router]);
+
+  useEffect(() => {
+    if (accepted) {
+      setConfirm(10);
+      const timer = setInterval(() => {
+        setConfirm((prev: any) => {
+          if (prev <= 0) {
+            clearInterval(timer);
+            setAccepted(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [accepted]);
 
   return (
     <LayoutBodyContent>
@@ -328,6 +390,7 @@ export default function DashboardStudent() {
                       <Button
                         className="cursor-pointer text-base font-semibold px-5"
                         variant="secondary"
+                        onClick={() => setAccepted(true)}
                       >
                         Mulai
                       </Button>
@@ -345,12 +408,18 @@ export default function DashboardStudent() {
                               ""}
                             "
                           </span>{" "}
-                          Ini ?
+                          Ini ? Dikarenakan Jika Anda Sudah Masuk Kedalam
+                          Halaman Ujian Maka Sudah Tidak Bisa Kembali Lagi
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
                         <DialogClose asChild>
-                          <Button variant="outline">Batal</Button>
+                          <Button
+                            variant="outline"
+                            onClick={() => setAccepted(false)}
+                          >
+                            Batal
+                          </Button>
                         </DialogClose>
                         <DialogClose asChild>
                           <Button
@@ -362,8 +431,9 @@ export default function DashboardStudent() {
                               )
                             }
                             className="cursor-pointer"
+                            disabled={accepted}
                           >
-                            Oke
+                            {confirm <= 0 ? "Oke" : confirm}
                           </Button>
                         </DialogClose>
                       </DialogFooter>
