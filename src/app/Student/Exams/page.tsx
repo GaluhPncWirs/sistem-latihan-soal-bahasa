@@ -140,17 +140,6 @@ export default function Soal() {
       kelas: dataStudent?.classes,
     };
 
-    // useEffect(() => {
-    //   function handleBack(e: any) {
-    //     console.log("tombol kembali telah aktif");
-    //     console.log(e);
-    //   }
-
-    //   window.addEventListener("popstate", handleBack);
-
-    //   return () => window.removeEventListener("popstate", handleBack);
-    // }, []);
-
     const { error: insertErr } = await supabase
       .from("history-exam-student")
       .insert(payload);

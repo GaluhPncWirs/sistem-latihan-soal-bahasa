@@ -160,11 +160,11 @@ export default function Home() {
         ></path>
       </svg>
 
-      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] max-[640px]:pt-16 sm:pt-20 md:pt-40 sm:h-[45rem] md:h-[50rem]">
-        <div className="mx-auto max-[640px]:w-10/12 max-[640px]:py-16 sm:py-16 lg:pb-20 sm:w-10/12">
+      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] max-[640px]:pt-16 sm:pt-20 lg:pt-32 sm:h-[38rem] lg:h-[48rem]">
+        <div className="mx-auto max-[640px]:w-10/12 max-[640px]:py-16 sm:py-16 sm:w-10/12">
           <h1 className="text-4xl font-bold mb-7">Tampilan Sistem</h1>
           <div>
-            <h1 className="text-lg font-medium mb-10 text-justify max-[640px]:mb-20">
+            <h1 className="text-lg font-medium text-justify max-[640px]:mb-14 sm:mb-10">
               Antarmuka yang bersih dan juga intuitif, memudahkan peserta ujian
               untuk mengerjakan soal
             </h1>
@@ -174,8 +174,8 @@ export default function Home() {
               }}
               orientation={isSizeMobile ? "vertical" : "horizontal"}
             >
-              <CarouselContent className="max-[640px]:h-60">
-                <CarouselItem className="flex items-center justify-center p-6">
+              <CarouselContent className="max-[640px]:h-60 sm:h-56 md:h-72 lg:h-96">
+                <CarouselItem className="flex items-center justify-center p-5">
                   <Image
                     src="/img/beranda/ujian.jpeg"
                     alt="Ujian Page"
@@ -184,7 +184,7 @@ export default function Home() {
                     className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-3/4 rounded-md"
                   />
                 </CarouselItem>
-                <CarouselItem className="flex items-center justify-center p-6">
+                <CarouselItem className="flex items-center justify-center p-5">
                   <Image
                     src="/img/beranda/profile.jpeg"
                     alt="Profile Page"
@@ -193,7 +193,7 @@ export default function Home() {
                     className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-3/4 rounded-md"
                   />
                 </CarouselItem>
-                <CarouselItem className="flex items-center justify-center p-6">
+                <CarouselItem className="flex items-center justify-center p-5">
                   <Image
                     src="/img/beranda/dashboard.jpeg"
                     alt="Dashboard Page"
@@ -206,29 +206,6 @@ export default function Home() {
               <CarouselPrevious />
               <CarouselNext />
             </Carousel>
-            {/* <div className="sm:relative max-[640px]:flex max-[640px]:flex-col max-[640px]:gap-y-5">
-              <Image
-                src="/img/beranda/ujian.jpeg"
-                alt="Ujian Page"
-                width={500}
-                height={500}
-                className="shadow-lg shadow-slate-700 sm:w-3/4 md:w-3/5 sm:absolute sm:transition-all sm:duration-200 sm:ease-in-out sm:hover:z-10 sm:hover:translate-x-5 sm:hover:w-10/12 md:hover:w-2/3 max-[640px]:w-full"
-              />
-              <Image
-                src="/img/beranda/profile.jpeg"
-                alt="Profile Page"
-                width={500}
-                height={500}
-                className="shadow-lg shadow-slate-700 sm:right-0 sm:w-3/4 md:w-3/5 sm:absolute sm:transition-all sm:duration-200 sm:ease-in-out sm:hover:z-10 sm:hover:-translate-x-5 sm:hover:w-10/12 md:hover:w-2/3 max-[640px]:w-full"
-              />
-              <Image
-                src="/img/beranda/dashboard.jpeg"
-                alt="Dashboard Page"
-                width={500}
-                height={500}
-                className="shadow-lg shadow-slate-700 sm:w-3/4 md:w-3/5 sm:absolute sm:transition-all sm:duration-200 sm:ease-in-out sm:hover:z-10 sm:hover:w-10/12 md:hover:w-2/3 sm:left-1/2 sm:-translate-x-1/2 max-[640px]:w-full"
-              />
-            </div> */}
           </div>
         </div>
       </div>

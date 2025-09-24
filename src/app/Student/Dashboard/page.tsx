@@ -166,10 +166,6 @@ export default function DashboardStudent() {
     idUjian: number,
     tgl_ujian: string
   ) {
-    // const [startTimeExam, endTimeExams] = tenggat_waktu
-    //   .split("-")
-    //   .map((item: any) => item.trim());
-
     const startAndEndExams = convertToNumber(tenggat_waktu);
 
     const mulaiUjian = startAndEndExams[0];

@@ -186,8 +186,8 @@ export default function Profil() {
 
   return (
     <LayoutBodyContent>
-      <div className="pt-16 flex max-[640px]:flex-col max-[640px]:gap-0 sm:flex-col sm:gap-0 lg:gap-10 md:flex-row">
-        <div className="md:bg-[#71C9CE] md:bg-gradient-to-t md:to-[#08D9D6] px-7 pt-10 pb-7 md:basis-[28%] lg:basis-1/4 flex flex-col items-center justify-center">
+      <div className="pt-14 flex max-[640px]:flex-col sm:flex-col md:flex-row md:gap-x-5 lg:gap-x-10">
+        <div className="md:bg-[#71C9CE] md:bg-gradient-to-t md:to-[#08D9D6] px-5 pt-10 pb-7 md:basis-1/4 lg:basis-1/4 flex flex-col items-center justify-center">
           <Dialog>
             <DialogTrigger asChild className="cursor-pointer">
               {previewImgProfil !== null ? (
@@ -258,9 +258,7 @@ export default function Profil() {
                 </TableCell>
               </TableRow>
               <TableRow className="border-black">
-                <TableCell className="text-base font-medium">
-                  Bergabung
-                </TableCell>
+                <TableCell className="text-base font-medium">Dibuat</TableCell>
                 <TableCell className="text-base font-medium">
                   {useConvertDate(dataStudent?.created_at, {
                     day: "numeric",
@@ -327,7 +325,7 @@ export default function Profil() {
           </Dialog>
         </div>
         <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:basis-2/3">
-          <div className="max-[640px]:w-11/12 sm:w-10/12 mx-auto md:w-11/12 lg:w-full max-[640px]:mb-7">
+          <div className="max-[640px]:w-11/12 sm:w-10/12 mx-auto md:w-11/12 max-[640px]:mb-7">
             <h1 className="text-3xl font-bold">Profil Siswa</h1>
             <div className="flex justify-evenly items-center my-10 max-[640px]:gap-x-3">
               <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
