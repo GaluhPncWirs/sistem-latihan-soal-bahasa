@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "./lib/supabase/data";
+import { useEffect } from "react";
 
 export async function middleware(req: NextRequest) {
   const role = req.cookies.get("role")?.value;
@@ -13,6 +14,18 @@ export async function middleware(req: NextRequest) {
 
     return statExam;
   }
+
+  // const getCookieStartExam = req.cookies.get("startExam")?.value;
+
+  // if (getCookieStartExam === "true") {
+  //   window.addEventListener("popstate", () => {
+  //     console.log("User tekan tombol back");
+  //     // if (!accepted) {
+  //     //   alert("Waktu ujian sudah habis, Anda tidak bisa kembali!");
+  //     //   // router.replace("/timeout");
+  //     // }
+  //   });
+  // }
 
   if (req.nextUrl.pathname.startsWith("/Student/Exams")) {
     const examId = req.nextUrl.searchParams.get("idExams");

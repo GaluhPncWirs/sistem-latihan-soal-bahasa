@@ -34,6 +34,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { time } from "console";
+import { cookies } from "next/headers";
 
 export default function DashboardStudent() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
@@ -43,6 +44,7 @@ export default function DashboardStudent() {
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<any>(0);
   const [accepted, setAccepted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (!getDataStudent?.classes || !getIdStudent) return;
@@ -261,42 +263,6 @@ export default function DashboardStudent() {
     });
   }
 
-  // const router = useRouter();
-  // const [timeLeft, setTimeLeft] = useState<number>(10); // 10 detik demo
-  // const [done, setDone] = useState<boolean>(false);
-
-  // // countdown timer
-  // useEffect(() => {
-  //   if (timeLeft <= 0) {
-  //     setDone(true);
-  //     return;
-  //   }
-
-  //   const timer = setInterval(() => {
-  //     setTimeLeft((prev) => prev - 1);
-  //   }, 1000);
-
-  //   return () => clearInterval(timer);
-  // }, [timeLeft]);
-
-  // // handle tombol back/forward browser
-  // useEffect(() => {
-  //   const handlePopstate = () => {
-  //     console.log("User tekan tombol back");
-
-  //     if (done) {
-  //       alert("Waktu ujian sudah habis, Anda tidak bisa kembali!");
-  //       router.replace("/timeout"); // arahkan ke halaman lain
-  //     }
-  //   };
-
-  //   window.addEventListener("popstate", handlePopstate);
-
-  //   return () => {
-  //     window.removeEventListener("popstate", handlePopstate);
-  //   };
-  // }, [done, router]);
-
   useEffect(() => {
     if (accepted) {
       setConfirm(10);
@@ -423,13 +389,14 @@ export default function DashboardStudent() {
                         </DialogClose>
                         <DialogClose asChild>
                           <Button
-                            onClick={() =>
+                            onClick={() => {
+                              localStorage.setItem("readyForExam", "true");
                               push(
                                 `/Student/Exams?idExams=${
                                   deadlineUjianTercepatHariIni().idExams
                                 }&idStudent=${getIdStudent}`
-                              )
-                            }
+                              );
+                            }}
                             className="cursor-pointer"
                             disabled={accepted}
                           >
