@@ -33,8 +33,6 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { time } from "console";
-import { cookies } from "next/headers";
 
 export default function DashboardStudent() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
@@ -44,7 +42,6 @@ export default function DashboardStudent() {
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<any>(0);
   const [accepted, setAccepted] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     if (!getDataStudent?.classes || !getIdStudent) return;
@@ -390,7 +387,7 @@ export default function DashboardStudent() {
                         <DialogClose asChild>
                           <Button
                             onClick={() => {
-                              localStorage.setItem("readyForExam", "true");
+                              document.cookie = "startExam=true; path=/";
                               push(
                                 `/Student/Exams?idExams=${
                                   deadlineUjianTercepatHariIni().idExams

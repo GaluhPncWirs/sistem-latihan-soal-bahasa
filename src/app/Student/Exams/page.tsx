@@ -155,6 +155,23 @@ export default function Soal() {
   }
 
   // useEffect(() => {
+  //   const getConfirm = localStorage.getItem("readyForExam");
+
+  //   router?.beforePopState(() => {
+  //     if (getConfirm) {
+  //       console.log("user pencet tombol back");
+  //     } else {
+  //       console.log("Popstate terpanggil, tapi readyForExam kosong");
+  //     }
+  //     return true;
+  //   });
+
+  //   return () => {
+  //     router?.beforePopState(() => true);
+  //   };
+  // }, [router]);
+
+  // useEffect(() => {
   //   setTimeout(() => {
   //     if (timeOutDone === true) {
   //       handleSendExam();

@@ -15,8 +15,6 @@ export async function middleware(req: NextRequest) {
     return statExam;
   }
 
-  // const getCookieStartExam = req.cookies.get("startExam")?.value;
-
   // if (getCookieStartExam === "true") {
   //   window.addEventListener("popstate", () => {
   //     console.log("User tekan tombol back");
@@ -28,8 +26,17 @@ export async function middleware(req: NextRequest) {
   // }
 
   if (req.nextUrl.pathname.startsWith("/Student/Exams")) {
+    const getCookieStartExam = req.cookies.get("startExam")?.value;
     const examId = req.nextUrl.searchParams.get("idExams");
     const idStudent = req.nextUrl.searchParams.get("idStudent");
+
+    const pathnameUrl = `/Student/Exams?idExams=${examId}&idStudent=${idStudent}`;
+
+    if (pathnameUrl && getCookieStartExam === "true") {
+      console.log("tes aja");
+      // return NextResponse.redirect(new URL("/Student/Exams", req.url));
+    }
+
     if (!examId && !idStudent) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
