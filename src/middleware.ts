@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 export async function middleware(req: NextRequest) {
   const role = req.cookies.get("role")?.value;
+  const isStartExam = req.cookies.get("startExam")?.value;
+
   async function isDoneExams(idExam: number, idStudent: string) {
     const { data: statExam } = await supabase
       .from("history-exam-student")
@@ -15,35 +17,33 @@ export async function middleware(req: NextRequest) {
     return statExam;
   }
 
-  // if (getCookieStartExam === "true") {
-  //   window.addEventListener("popstate", () => {
-  //     console.log("User tekan tombol back");
-  //     // if (!accepted) {
-  //     //   alert("Waktu ujian sudah habis, Anda tidak bisa kembali!");
-  //     //   // router.replace("/timeout");
-  //     // }
-  //   });
-  // }
-
   if (req.nextUrl.pathname.startsWith("/Student/Exams")) {
-    const getCookieStartExam = req.cookies.get("startExam")?.value;
     const examId = req.nextUrl.searchParams.get("idExams");
     const idStudent = req.nextUrl.searchParams.get("idStudent");
-
+    const isDone = await isDoneExams(Number(examId), idStudent!);
     const pathnameUrl = `/Student/Exams?idExams=${examId}&idStudent=${idStudent}`;
 
-    if (pathnameUrl && getCookieStartExam === "true") {
-      console.log("tes aja");
-      // return NextResponse.redirect(new URL("/Student/Exams", req.url));
+    if (
+      isStartExam === "true" &&
+      !req.nextUrl.pathname.startsWith("/Student/Exams")
+    ) {
+      return NextResponse.redirect(new URL(pathnameUrl, req.url));
     }
 
     if (!examId && !idStudent) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
-    const isDone = await isDoneExams(Number(examId), idStudent!);
 
     if (isDone?.status_exam === undefined && isDone?.student_id === undefined) {
-      return NextResponse.next();
+      const response = NextResponse.next();
+      response.cookies.set({
+        name: "startExam",
+        value: "true",
+        path: "/",
+        httpOnly: true,
+        sameSite: "strict",
+      });
+      return response;
     } else {
       if (
         (isDone.status_exam === true && isDone.student_id === idStudent) ||
@@ -53,7 +53,15 @@ export async function middleware(req: NextRequest) {
       ) {
         return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
       } else {
-        return NextResponse.next();
+        const response = NextResponse.next();
+        response.cookies.set({
+          name: "startExam",
+          value: "true",
+          path: "/",
+          httpOnly: true,
+          sameSite: "strict",
+        });
+        return response;
       }
     }
   }

@@ -262,7 +262,7 @@ export default function DashboardStudent() {
 
   useEffect(() => {
     if (accepted) {
-      setConfirm(10);
+      setConfirm(5);
       const timer = setInterval(() => {
         setConfirm((prev: any) => {
           if (prev <= 0) {
@@ -386,14 +386,13 @@ export default function DashboardStudent() {
                         </DialogClose>
                         <DialogClose asChild>
                           <Button
-                            onClick={() => {
-                              document.cookie = "startExam=true; path=/";
+                            onClick={() =>
                               push(
                                 `/Student/Exams?idExams=${
                                   deadlineUjianTercepatHariIni().idExams
                                 }&idStudent=${getIdStudent}`
-                              );
-                            }}
+                              )
+                            }
                             className="cursor-pointer"
                             disabled={accepted}
                           >

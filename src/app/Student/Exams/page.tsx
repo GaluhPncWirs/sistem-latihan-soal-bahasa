@@ -46,7 +46,7 @@ export default function Soal() {
   }>({});
   const [markQuestions, setMarkQuestions] = useState<any>({});
   const [timeOutDone, setTimeOutDone] = useState<boolean>(false);
-  const { push } = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const savedAnswer = localStorage.getItem("exam-answer");
@@ -150,24 +150,19 @@ export default function Soal() {
       toast("Berhasil ✅", { description: "Ujian Telah Selesai" });
       localStorage.removeItem("exam-answer");
       localStorage.removeItem("timer");
-      push("/Student/Dashboard");
+      router.push("/Student/Dashboard");
     }
   }
 
   // useEffect(() => {
-  //   const getConfirm = localStorage.getItem("readyForExam");
+  //   const handlePopState = () => {
+  //     router.push(window.location.href);
+  //   };
 
-  //   router?.beforePopState(() => {
-  //     if (getConfirm) {
-  //       console.log("user pencet tombol back");
-  //     } else {
-  //       console.log("Popstate terpanggil, tapi readyForExam kosong");
-  //     }
-  //     return true;
-  //   });
+  //   window.addEventListener("popstate", handlePopState);
 
   //   return () => {
-  //     router?.beforePopState(() => true);
+  //     window.removeEventListener("popstate", handlePopState);
   //   };
   // }, [router]);
 
