@@ -4,9 +4,8 @@ import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { useGetIdStudent } from "../../hooks/getIdStudent";
+// import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
-import Link from "next/link";
 import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 import {
   Dialog,
@@ -140,39 +139,63 @@ export default function Soal() {
       kelas: dataStudent?.classes,
     };
 
-    const { error: insertErr } = await supabase
-      .from("history-exam-student")
-      .insert(payload);
+    const response = await fetch("/api/examDone", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-    if (insertErr) {
-      toast("Gagal ❌", { description: "Gagal menyimpan data" });
-    } else {
+    const res = await response.json();
+
+    if (res.success) {
       toast("Berhasil ✅", { description: "Ujian Telah Selesai" });
       localStorage.removeItem("exam-answer");
       localStorage.removeItem("timer");
       router.push("/Student/Dashboard");
+    } else {
+      toast("Gagal ❌", { description: "Gagal menyimpan data" });
     }
   }
 
-  // useEffect(() => {
-  //   const handlePopState = () => {
-  //     router.push(window.location.href);
-  //   };
+  useEffect(() => {
+    setTimeout(() => {
+      if (timeOutDone === true) {
+        handleSendExam();
+      }
+    }, 5000);
+  }, [timeOutDone]);
 
-  //   window.addEventListener("popstate", handlePopState);
+  useEffect(() => {
+    const handleSelectStart = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  //   return () => {
-  //     window.removeEventListener("popstate", handlePopState);
-  //   };
-  // }, [router]);
+    // Prevent context menu (right-click)
+    const handleContextMenu = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (timeOutDone === true) {
-  //       handleSendExam();
-  //     }
-  //   }, 5000);
-  // }, [timeOutDone]);
+    // Prevent drag
+    const handleDragStart = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
+
+    document.addEventListener("selectstart", handleSelectStart);
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("dragstart", handleDragStart);
+
+    document.body.classList.add("no-select");
+
+    return () => {
+      document.removeEventListener("selectstart", handleSelectStart);
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("dragstart", handleDragStart);
+      document.body.classList.remove("no-select");
+    };
+  }, []);
 
   return (
     <LayoutBodyContent>

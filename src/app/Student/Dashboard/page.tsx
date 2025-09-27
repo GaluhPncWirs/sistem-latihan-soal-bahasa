@@ -201,8 +201,8 @@ export default function DashboardStudent() {
                 <DialogDescription>
                   Apakah Anda Yakin ingin Mengerjakan Soal{" "}
                   <span className="font-bold">"{nama_ujian}"</span> Ini ?
-                  Dikarenakan Jika Anda Sudah Masuk Kedalam Halaman Ujian Maka
-                  Sudah Tidak Bisa Kembali Lagi
+                  Persiapkan Diri Anda Dikarenakan Jika Sudah Masuk Kedalam
+                  Halaman Ujian Maka Sudah Tidak Bisa Kembali Lagi.
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
@@ -213,7 +213,7 @@ export default function DashboardStudent() {
                   <Button
                     onClick={() =>
                       push(
-                        `/Student/Exams?idExams=${idUjian}&idStudent=${getIdStudent}`
+                        `/Student/Exams/StartExam?idExams=${idUjian}&idStudent=${getIdStudent}`
                       )
                     }
                     className="cursor-pointer"
@@ -371,8 +371,9 @@ export default function DashboardStudent() {
                               ""}
                             "
                           </span>{" "}
-                          Ini ? Dikarenakan Jika Anda Sudah Masuk Kedalam
-                          Halaman Ujian Maka Sudah Tidak Bisa Kembali Lagi
+                          Ini ? Persiapkan Diri Anda Dikarenakan Jika Sudah
+                          Masuk Kedalam Halaman Ujian Maka Sudah Tidak Bisa
+                          Kembali Lagi.
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
@@ -388,7 +389,7 @@ export default function DashboardStudent() {
                           <Button
                             onClick={() =>
                               push(
-                                `/Student/Exams?idExams=${
+                                `/Student/Exams/StartExam?idExams=${
                                   deadlineUjianTercepatHariIni().idExams
                                 }&idStudent=${getIdStudent}`
                               )

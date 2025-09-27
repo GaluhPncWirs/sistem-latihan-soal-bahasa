@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "./lib/supabase/data";
-import { useEffect } from "react";
 
 export async function middleware(req: NextRequest) {
   const role = req.cookies.get("role")?.value;
@@ -21,13 +20,9 @@ export async function middleware(req: NextRequest) {
     const examId = req.nextUrl.searchParams.get("idExams");
     const idStudent = req.nextUrl.searchParams.get("idStudent");
     const isDone = await isDoneExams(Number(examId), idStudent!);
-    const pathnameUrl = `/Student/Exams?idExams=${examId}&idStudent=${idStudent}`;
 
-    if (
-      isStartExam === "true" &&
-      !req.nextUrl.pathname.startsWith("/Student/Exams")
-    ) {
-      return NextResponse.redirect(new URL(pathnameUrl, req.url));
+    if (isStartExam === "true" && req.nextUrl.pathname !== "/Student/Exams") {
+      return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
 
     if (!examId && !idStudent) {
@@ -36,9 +31,7 @@ export async function middleware(req: NextRequest) {
 
     if (isDone?.status_exam === undefined && isDone?.student_id === undefined) {
       const response = NextResponse.next();
-      response.cookies.set({
-        name: "startExam",
-        value: "true",
+      response.cookies.set("startExam", "true", {
         path: "/",
         httpOnly: true,
         sameSite: "strict",
@@ -54,9 +47,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
       } else {
         const response = NextResponse.next();
-        response.cookies.set({
-          name: "startExam",
-          value: "true",
+        response.cookies.set("startExam", "true", {
           path: "/",
           httpOnly: true,
           sameSite: "strict",
@@ -66,13 +57,17 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (role !== "pengajar") {
+  if (req.nextUrl.pathname.startsWith("/Teacher") && role !== "pengajar") {
     return NextResponse.redirect(new URL("/", req.url));
-  } else {
-    return NextResponse.next();
   }
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/Teacher/:path*", "/Student/Exams/:path*"],
+  matcher: [
+    "/Teacher/:path*",
+    "/Student/Exams/:path*",
+    "/Student/Dashboard/:path*",
+    "/api/:path*",
+  ],
 };
