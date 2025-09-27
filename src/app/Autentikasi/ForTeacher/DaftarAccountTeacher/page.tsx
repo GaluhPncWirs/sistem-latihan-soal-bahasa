@@ -1,7 +1,6 @@
 "use client";
 import { useRandomId } from "@/app/hooks/getRandomId";
 import { useHandleInput } from "@/app/hooks/handleInput";
-import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/data";
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";
@@ -52,7 +51,6 @@ export default function RegisterAccountTeacher() {
         toast("Berhasil ✅", {
           description: "Berhasil Membuat Akun, Silahkan Kembali Ke Form Login",
         });
-
         setClearForm(true);
       }
     }

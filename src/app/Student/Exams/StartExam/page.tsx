@@ -171,13 +171,11 @@ export default function Soal() {
       return false;
     };
 
-    // Prevent context menu (right-click)
     const handleContextMenu = (e: Event) => {
       e.preventDefault();
       return false;
     };
 
-    // Prevent drag
     const handleDragStart = (e: Event) => {
       e.preventDefault();
       return false;
@@ -196,6 +194,15 @@ export default function Soal() {
       document.body.classList.remove("no-select");
     };
   }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      router.push(window.location.href);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [router]);
 
   return (
     <LayoutBodyContent>

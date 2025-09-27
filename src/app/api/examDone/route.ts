@@ -21,6 +21,8 @@ export async function POST(req: NextRequest) {
       message: "Ujian Telah Selesai",
     });
     res.cookies.delete("startExam");
+    res.cookies.delete("examId");
+    res.cookies.delete("idStudent");
     return res;
   }
 }
