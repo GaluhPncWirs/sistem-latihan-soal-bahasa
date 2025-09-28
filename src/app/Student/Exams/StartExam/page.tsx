@@ -2,9 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-// import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 import {
@@ -38,6 +37,7 @@ export default function Soal() {
   }>({});
   const idExams = useSearchParams().get("idExams");
   const idStudent = useSearchParams().get("idStudent");
+  const examUrl = `/Student/Exams/StartExam?idExams=${idExams}&idStudent=${idStudent}`;
   const dataStudent = useGetDataStudent(idStudent!);
   const [time, setTime] = useState<number | null>(null);
   const [answerEssayExams, setAnswerEssayExams] = useState<{
@@ -46,6 +46,7 @@ export default function Soal() {
   const [markQuestions, setMarkQuestions] = useState<any>({});
   const [timeOutDone, setTimeOutDone] = useState<boolean>(false);
   const router = useRouter();
+  const params = usePathname();
 
   useEffect(() => {
     const savedAnswer = localStorage.getItem("exam-answer");
@@ -165,44 +166,47 @@ export default function Soal() {
     }, 5000);
   }, [timeOutDone]);
 
+  // useEffect(() => {
+  //   const handleSelectStart = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
+
+  //   const handleContextMenu = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
+
+  //   const handleDragStart = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
+
+  //   document.addEventListener("selectstart", handleSelectStart);
+  //   document.addEventListener("contextmenu", handleContextMenu);
+  //   document.addEventListener("dragstart", handleDragStart);
+
+  //   document.body.classList.add("no-select");
+
+  //   return () => {
+  //     document.removeEventListener("selectstart", handleSelectStart);
+  //     document.removeEventListener("contextmenu", handleContextMenu);
+  //     document.removeEventListener("dragstart", handleDragStart);
+  //     document.body.classList.remove("no-select");
+  //   };
+  // }, []);
+
   useEffect(() => {
-    const handleSelectStart = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
-
-    const handleContextMenu = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
-
-    const handleDragStart = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
-
-    document.addEventListener("selectstart", handleSelectStart);
-    document.addEventListener("contextmenu", handleContextMenu);
-    document.addEventListener("dragstart", handleDragStart);
-
-    document.body.classList.add("no-select");
-
-    return () => {
-      document.removeEventListener("selectstart", handleSelectStart);
-      document.removeEventListener("contextmenu", handleContextMenu);
-      document.removeEventListener("dragstart", handleDragStart);
-      document.body.classList.remove("no-select");
-    };
-  }, []);
-
-  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
     const handlePopState = () => {
-      router.push(window.location.href);
+      window.history.pushState(null, "", window.location.href);
+      toast("Tidak Bisa Kembali ❌", {
+        description: "Tombol dinonaktifkan selama ujian!",
+      });
     };
-
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
-  }, [router]);
+  }, []);
 
   return (
     <LayoutBodyContent>
