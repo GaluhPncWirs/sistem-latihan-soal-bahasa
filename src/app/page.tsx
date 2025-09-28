@@ -1,5 +1,4 @@
 "use client";
-import LayoutBodyContent from "@/layout/bodyContent";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetIdStudent } from "./hooks/getIdStudent";
@@ -11,6 +10,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
+import FooterComponent from "@/component/footer/footerComp";
+import NavigasiBar from "@/component/navigasiBar/navbar";
 export default function Home() {
   const isLogin = useGetIdStudent();
   const [isSizeMobile, setIsSizeMobile] = useState(false);
@@ -26,7 +27,8 @@ export default function Home() {
   }, []);
 
   return (
-    <LayoutBodyContent>
+    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] overflow-auto">
+      <NavigasiBar />
       <div className="relative">
         <div
           style={{ backgroundImage: "url(/img/beranda/heroSectionUjian.jpg)" }}
@@ -313,6 +315,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </LayoutBodyContent>
+      <FooterComponent />
+    </div>
   );
 }

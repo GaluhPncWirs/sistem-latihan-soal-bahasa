@@ -41,20 +41,19 @@ export default function ListClickContent() {
           <li className="cursor-pointer text-xl font-semibold">
             <Link
               className="hover:text-slate-500"
-              href={`${isUserThereStudent === true ? `/Student/Profile` : `/`}`}
-            >
-              Profil
-            </Link>
-          </li>
-
-          <li className="cursor-pointer text-xl font-semibold">
-            <Link
-              className="hover:text-slate-500"
               href={`${
                 isUserThereStudent === true ? `/Student/Dashboard` : `/`
               }`}
             >
               Dashboard
+            </Link>
+          </li>
+          <li className="cursor-pointer text-xl font-semibold">
+            <Link
+              className="hover:text-slate-500"
+              href={`${isUserThereStudent === true ? `/Student/Profile` : `/`}`}
+            >
+              Profil
             </Link>
           </li>
         </>

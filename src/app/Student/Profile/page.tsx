@@ -186,93 +186,64 @@ export default function Profil() {
 
   return (
     <LayoutBodyContent>
-      <div className="pt-14 flex max-[640px]:flex-col sm:flex-col md:flex-row md:gap-x-5 lg:gap-x-10">
-        <div className="md:bg-[#71C9CE] md:bg-gradient-to-t md:to-[#08D9D6] px-5 pt-10 pb-7 md:basis-1/4 lg:basis-1/4 flex flex-col items-center justify-center">
-          <Dialog>
-            <DialogTrigger asChild className="cursor-pointer">
-              {previewImgProfil !== null ? (
-                <Image
-                  src={previewImgProfil}
-                  alt="Profile User"
-                  width={300}
-                  height={300}
-                  className="rounded-full max-[640px]:w-1/3 sm:w-1/4 md:w-1/2 mb-3"
-                />
-              ) : (
-                <Image
-                  src="/img/profileStudent/userProfile.png"
-                  alt="Profile User"
-                  width={300}
-                  height={300}
-                  className="rounded-full max-[640px]:w-1/3 sm:w-1/4 md:w-1/2 mb-3"
-                />
-              )}
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Ubah Foto Profil</DialogTitle>
-                <div className="mt-3">
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    id="imgProfil"
-                    onChange={handleChangeImgProfile}
+      <div className="mx-auto w-[90%]">
+        <h1 className="text-4xl font-bold mb-8">Profil Siswa</h1>
+        <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
+        <div className="mt-7">
+          <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
+            <Dialog>
+              <DialogTrigger asChild className="cursor-pointer">
+                {previewImgProfil !== null ? (
+                  <Image
+                    src={previewImgProfil}
+                    alt="Profile User"
+                    width={300}
+                    height={300}
+                    className="rounded-full w-1/6 max-[640px]:w-1/3"
                   />
-                </div>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DialogClose>
-                <DialogClose asChild>
-                  <Button>Oke</Button>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-          <Table>
-            <TableBody>
-              <TableRow className="border-black">
-                <TableCell className="text-base font-medium">Nama</TableCell>
-                <TableCell className="text-base font-medium">
-                  {dataStudent?.fullName || ""}
-                </TableCell>
-              </TableRow>
-              <TableRow className="border-black">
-                <TableCell className="text-base font-medium">NIS</TableCell>
-                <TableCell className="text-base font-medium">
-                  {" "}
-                  {dataStudent?.nis || ""}
-                </TableCell>
-              </TableRow>
-              <TableRow className="border-black">
-                <TableCell className="text-base font-medium">Kelas</TableCell>
-                <TableCell className="text-base font-medium">
-                  {dataStudent?.classes || ""}
-                </TableCell>
-              </TableRow>
-              <TableRow className="border-black">
-                <TableCell className="text-base font-medium">Email</TableCell>
-                <TableCell className="text-base font-medium">
-                  {dataStudent?.email || ""}
-                </TableCell>
-              </TableRow>
-              <TableRow className="border-black">
-                <TableCell className="text-base font-medium">Dibuat</TableCell>
-                <TableCell className="text-base font-medium">
-                  {useConvertDate(dataStudent?.created_at, {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-          <Dialog>
-            <div className="max-[640px]:w-full sm:w-full md:w-fit">
+                ) : (
+                  <Image
+                    src="/img/profile/userProfile.png"
+                    alt="Profile User"
+                    width={300}
+                    height={300}
+                    className="rounded-full w-1/6 max-[640px]:w-1/3"
+                  />
+                )}
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Ubah Foto Profil</DialogTitle>
+                  <div className="mt-3">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      id="imgProfil"
+                      onChange={handleChangeImgProfile}
+                    />
+                  </div>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button>Oke</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <div className="basis-3/4">
+              <h1 className="capitalize mb-2 font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
+                {dataStudent?.fullName || ""}
+              </h1>
+              <p className="font-medium">NIS {dataStudent?.nis || ""}</p>
+            </div>
+            <Dialog>
               <DialogTrigger asChild>
-                <Button className="cursor-pointer mt-7">Edit Profile</Button>
+                <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-lg p-5">
+                  Edit Profil
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <form
@@ -321,12 +292,72 @@ export default function Profil() {
                   </DialogFooter>
                 </form>
               </DialogContent>
+            </Dialog>
+          </div>
+          <div className="mb-5">
+            <div className="flex items-center mb-5 gap-3">
+              <Image
+                src="/img/profileTeacher/account.png"
+                alt="Informasi Akun"
+                width={200}
+                height={200}
+                className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
+              />
+              <h1 className="text-2xl font-semibold">Informasi Akun</h1>
             </div>
-          </Dialog>
-        </div>
-        <div className="max-[640px]:mt-10 sm:mt-10 md:mt-16 md:basis-2/3">
-          <div className="max-[640px]:w-11/12 sm:w-10/12 mx-auto md:w-11/12 max-[640px]:mb-7">
-            <h1 className="text-3xl font-bold">Profil Siswa</h1>
+            <Table>
+              <TableBody>
+                <TableRow className="border-black">
+                  <TableCell className="text-base font-medium">Email</TableCell>
+                  <TableCell className="text-base font-medium">
+                    {dataStudent?.email || ""}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="border-black">
+                  <TableCell className="text-base font-medium">NIS</TableCell>
+                  <TableCell className="text-base font-medium">
+                    {dataStudent?.nis}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="border-black">
+                  <TableCell className="text-base font-medium">
+                    Bergabung
+                  </TableCell>
+                  <TableCell className="text-base font-medium">
+                    {useConvertDate(dataStudent?.created_at, {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="border-black">
+                  <TableCell className="text-base font-medium">Peran</TableCell>
+                  <TableCell className="text-base font-medium">
+                    {dataStudent?.role || ""}
+                  </TableCell>
+                </TableRow>
+                <TableRow className="border-black">
+                  <TableCell className="text-base font-medium">
+                    Status Akun
+                  </TableCell>
+                  <TableCell className="text-base font-medium">Aktif</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+          <div>
+            <div className="mb-5 flex items-center gap-3">
+              <Image
+                src="/img/profileTeacher/history.png"
+                alt="History"
+                width={200}
+                height={200}
+                className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
+              />
+              <h1 className="text-2xl font-semibold">Riwayat Ujian</h1>
+            </div>
+
             <div className="flex justify-evenly items-center my-10 max-[640px]:gap-x-3">
               <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
                 <Image
@@ -378,54 +409,51 @@ export default function Profil() {
                 </p>
               </div>
             </div>
-            <div>
-              <h1 className="mb-7 text-2xl font-semibold">Riwayat Ujian</h1>
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-[#3282B8]">
-                    <TableHead>No</TableHead>
-                    <TableHead>Nama Ujian</TableHead>
-                    <TableHead>Tanggal</TableHead>
-                    <TableHead>Nilai</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {historyStudent.length > 0 ? (
-                    historyStudent.map((item: any, i: number) => (
-                      <TableRow key={i}>
-                        <TableCell>{i + 1}</TableCell>
-                        <TableCell>{item.exams?.nama_ujian}</TableCell>
-                        <TableCell>
-                          {useConvertDate(item.created_at, {
-                            minute: "numeric",
-                            hour: "numeric",
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })}
-                        </TableCell>
-                        <TableCell>{item.hasil_ujian}</TableCell>
-                        <TableCell>
-                          {item.status_exam === true
-                            ? "Selesai"
-                            : "Belum Selesai"}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={5}
-                        className="text-center text-lg font-semibold"
-                      >
-                        Belum Ada History
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#3282B8]">
+                  <TableHead>No</TableHead>
+                  <TableHead>Nama Ujian</TableHead>
+                  <TableHead>Tanggal</TableHead>
+                  <TableHead>Nilai</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {historyStudent.length > 0 ? (
+                  historyStudent.map((item: any, i: number) => (
+                    <TableRow key={i}>
+                      <TableCell>{i + 1}</TableCell>
+                      <TableCell>{item.exams?.nama_ujian}</TableCell>
+                      <TableCell>
+                        {useConvertDate(item.created_at, {
+                          minute: "numeric",
+                          hour: "numeric",
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </TableCell>
+                      <TableCell>{item.hasil_ujian}</TableCell>
+                      <TableCell>
+                        {item.status_exam === true
+                          ? "Selesai"
+                          : "Belum Selesai"}
                       </TableCell>
                     </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="text-center text-lg font-semibold"
+                    >
+                      Belum Ada History
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
           </div>
         </div>
       </div>

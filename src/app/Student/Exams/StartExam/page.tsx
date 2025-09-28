@@ -209,9 +209,9 @@ export default function Soal() {
   }, []);
 
   return (
-    <LayoutBodyContent>
-      <div className="mx-auto pt-10 max-[640px]:w-full sm:w-full md:w-11/12 lg:w-10/12">
-        <h1 className="text-3xl font-semibold mb-7 max-[640px]:text-center sm:text-center md:text-start">
+    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] py-10 max-[640px]:h-full sm:h-full md:h-screen">
+      <div className="mx-auto max-[640px]:w-full sm:w-full md:w-11/12 lg:w-10/12">
+        <h1 className="text-3xl font-semibold mb-10 max-[640px]:text-center sm:text-center md:text-start">
           Ujian {questions.exams?.nama_ujian}
         </h1>
         <div className="flex max-[640px]:gap-5 sm:gap-5 md:gap-x-10 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
@@ -380,6 +380,6 @@ export default function Soal() {
           </Dialog>
         </div>
       </div>
-    </LayoutBodyContent>
+    </div>
   );
 }
