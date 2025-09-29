@@ -119,7 +119,7 @@ export default function Profil() {
     async function getHistoryStudent() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
-        .select("*, exams (nama_ujian)")
+        .select("*, exams(nama_ujian)")
         .eq("student_id", idSiswa);
       if (error) {
         console.log("gagal di tampilkan");
@@ -187,7 +187,7 @@ export default function Profil() {
   return (
     <LayoutBodyContent>
       <div className="mx-auto w-[90%]">
-        <h1 className="text-4xl font-bold mb-5">Profil Siswa</h1>
+        <h1 className="text-3xl font-bold mb-5">Profil Siswa</h1>
         <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
         <div className="mt-7">
           <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
