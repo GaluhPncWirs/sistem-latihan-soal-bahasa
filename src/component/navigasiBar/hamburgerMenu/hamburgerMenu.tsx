@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import ListClickContent from "../listContent/listClick";
 
 export default function HamburgerMenu({
   isUserThereTeacher,
@@ -62,7 +61,24 @@ export default function HamburgerMenu({
         ref={clickOutsidePath}
         id="navbar"
       >
-        <ListClickContent />
+        <Link
+          href="#"
+          className="cursor-pointer text-xl font-semibold text-slate-700"
+        >
+          <span>Beranda</span>
+        </Link>
+        <Link
+          href="#"
+          className="cursor-pointer text-xl font-semibold text-slate-700"
+        >
+          <span>Tentang</span>
+        </Link>
+        <Link
+          href="#"
+          className="cursor-pointer text-xl font-semibold text-slate-700"
+        >
+          <span>Tata Cara</span>
+        </Link>
         <li>
           {isUserThereStudent === true || isUserThereTeacher === true ? (
             <button

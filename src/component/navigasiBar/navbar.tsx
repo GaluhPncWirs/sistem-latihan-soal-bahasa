@@ -1,12 +1,10 @@
 "use client";
-import { Toaster } from "@/components/ui/sonner";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import HamburgerMenu from "./hamburgerMenu/hamburgerMenu";
-import ListClickContent from "./listContent/listClick";
 
 export default function NavigasiBar() {
   const [isUserThereStudent, setIsUserThereStudent] = useState<boolean>(false);
@@ -50,7 +48,24 @@ export default function NavigasiBar() {
           handleLogout={handleLogout}
         />
         <ul className="basis-3/5 flex justify-evenly h-full items-center max-[640px]:hidden">
-          <ListClickContent />
+          <Link
+            href="#"
+            className="cursor-pointer text-xl font-semibold text-slate-700"
+          >
+            <span>Beranda</span>
+          </Link>
+          <Link
+            href="#"
+            className="cursor-pointer text-xl font-semibold text-slate-700"
+          >
+            <span>Tentang</span>
+          </Link>
+          <Link
+            href="#"
+            className="cursor-pointer text-xl font-semibold text-slate-700"
+          >
+            <span>Tata Cara</span>
+          </Link>
         </ul>
         <div className="basis-1/4 pr-5 h-full flex items-center justify-center gap-5 max-[640px]:hidden bg-[#A6E3E9] bg-gradient-to-r to-sky-300">
           {isUserThereStudent === true || isUserThereTeacher === true ? (

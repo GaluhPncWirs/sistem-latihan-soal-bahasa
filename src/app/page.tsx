@@ -12,8 +12,10 @@ import {
 import { useEffect, useState } from "react";
 import FooterComponent from "@/component/footer/footerComp";
 import NavigasiBar from "@/component/navigasiBar/navbar";
+import { useGetIdTeacher } from "./hooks/getIdTeacher";
 export default function Home() {
-  const isLogin = useGetIdStudent();
+  const isLoginStudent = useGetIdStudent();
+  const isLoginTeacher = useGetIdTeacher();
   const [isSizeMobile, setIsSizeMobile] = useState(false);
 
   useEffect(() => {
@@ -44,16 +46,22 @@ export default function Home() {
             </p>
             <div className="mt-10">
               <Link
-                href={isLogin ? "/Student/Dashboard" : "/Autentikasi/Login"}
+                href={
+                  isLoginStudent
+                    ? "/Student/Dashboard"
+                    : isLoginTeacher
+                    ? "/Teacher/dashboard"
+                    : "/Autentikasi/Login"
+                }
                 className="text-center w-full bg-blue-400 rounded-md py-2 text-lg font-semibold cursor-pointer hover:bg-blue-500 px-7"
               >
-                Mulai Ujian
+                Mulai
               </Link>
             </div>
           </div>
           <Link
             href="#content"
-            className="text-center text-lg cursor-pointer mt-5 max-[640px]:mt-0"
+            className="text-center text-lg cursor-pointer mt-7 max-[640px]:mt-0"
           >
             Pelajari Lebih Lanjut Dibawah ini{" "}
             <Image

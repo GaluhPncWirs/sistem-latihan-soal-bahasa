@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function FloatingBarDashboardTeacher({ handleClickItem }: any) {
   return (
-    <div className="w-full sticky top-20 mt-8 z-10">
+    <div className="w-10/12 mx-auto sticky top-8 z-10">
       <ul className="bg-[#476EAE] flex items-center text-slate-200 font-medium max-[640px]:text-lg sm:text-xl rounded-md max-[640px]:p-4 justify-evenly gap-x-3 sm:p-5">
         <li
           className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-x-3 max-[640px]:flex-col sm:flex-col"

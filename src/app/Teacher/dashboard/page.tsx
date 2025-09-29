@@ -7,6 +7,7 @@ import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions"
 import ViewQuestions from "@/component/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/component/khususGuru/kelolaSiswa/manageStudent";
 import SideBarDashboardTeacher from "@/component/khususGuru/navigasi/floatingBar";
+import LayoutDasboard from "@/components/forDasboard/layoutDashboard";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -29,6 +30,7 @@ export default function Teacher() {
     manageStudent: false,
   });
   const idTeacher = useGetIdTeacher();
+  const dataUserTeacher = useGetDataTeacher(idTeacher);
   const [dataManageExams, setDataManageExams] = useState<any>([]);
   // const getProfileTeacher = useGetDataTeacher(idTeacher);
   const jumlahSiswa = new Set(
@@ -147,11 +149,13 @@ export default function Teacher() {
 
   return (
     <LayoutBodyContent>
-      <div className="pt-24 mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-2/3">
-        <h1 className="text-4xl font-bold">Dashboard Pengajar</h1>
-        <div>
-          <h1 className="text-3xl font-semibold mt-10">Ringkasan</h1>
-          <div className="flex justify-evenly items-center mt-8 text-slate-800">
+      <div className="w-[90%] mx-auto">
+        <LayoutDasboard user="Pengajar" fullName={dataUserTeacher.fullName} />
+        <div className="mt-5">
+          <h1 className="max-[640px]:text-lg text-3xl font-semibold">
+            Ringkasan Aktifitas Ujian
+          </h1>
+          <div className="flex justify-evenly items-center my-8 text-slate-800">
             <div className="bg-[#48B3AF] rounded-md max-[640px]:basis-[30%] max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
               <Image
                 src="/img/dashboardTeacher/complete.png"
@@ -193,7 +197,7 @@ export default function Teacher() {
             </div>
           </div>
           <SideBarDashboardTeacher handleClickItem={handleClickItem} />
-          <div className="mt-10">
+          <div className="mt-7">
             {dashboardButton.viewResult === true ? (
               <ViewQuestions />
             ) : dashboardButton.manageStudent === true ? (

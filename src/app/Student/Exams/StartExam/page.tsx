@@ -45,6 +45,7 @@ export default function Soal() {
   }>({});
   const [markQuestions, setMarkQuestions] = useState<any>({});
   const [timeOutDone, setTimeOutDone] = useState<boolean>(false);
+  const [showInformationExam, setShowInformationExam] = useState<boolean>(true);
   const router = useRouter();
   const params = usePathname();
 
@@ -209,61 +210,78 @@ export default function Soal() {
   }, []);
 
   return (
-    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] py-10 max-[640px]:h-full sm:h-full md:h-screen">
-      <div className="mx-auto max-[640px]:w-full sm:w-full md:w-11/12 lg:w-10/12">
-        <h1 className="text-3xl font-semibold mb-10 max-[640px]:text-center sm:text-center md:text-start">
+    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] py-10">
+      <div className="mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
+        <h1 className="text-3xl font-semibold mb-5 max-[640px]:text-center sm:text-center">
           Ujian {questions.exams?.nama_ujian}
         </h1>
-        <div className="flex max-[640px]:gap-5 sm:gap-5 md:gap-x-10 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
-          <div className="bg-[#71C9CE] p-5 rounded-lg max-[640px]:w-11/12 sm:w-10/12 sm:z-[5] md:basis-2/5 lg:basis-[35%]">
-            <div className="flex items-center max-[640px]:justify-around sm:justify-around md:justify-between">
-              <h1 className="text-xl font-semibold">
-                Ujian{" "}
-                {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
-              </h1>
-              {formatedTime !== "NaN:NaN" && (
-                <div className=" bg-[#F38181] py-1.5 rounded-lg gap-x-2 flex items-center justify-center">
-                  <Image
-                    src="/img/examsStudent/stopwatch.png"
-                    alt="Timer"
-                    width={200}
-                    height={200}
-                    className="w-1/4"
-                  />
-                  <span className="text-xl font-semibold">{formatedTime}</span>
-                </div>
-              )}
+        <div className="flex max-[640px]:gap-5 sm:gap-5 items-center justify-center max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
+          <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[35%]">
+            <div className="flex items-center gap-x-3">
+              <h1>Tampilkan Informasi Ujian</h1>
+              <Input
+                type="checkbox"
+                className="w-7"
+                onChange={(e) => setShowInformationExam(e.target.checked)}
+                checked={showInformationExam}
+              />
             </div>
-            <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3 rounded-md">
-              {questions.exams?.questions_exam.map((item: any, i: number) => {
-                const isAnswerPg = clickedAnswerPg[item.id];
-                const isAnswerEssay = answerEssayExams[item.id];
-                const isMarking = markQuestions[item.id];
-                return (
-                  <div
-                    className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
-                      isAnswerPg || isAnswerEssay
-                        ? "bg-green-400"
-                        : "bg-[#E3FDFD]"
-                    }`}
-                    key={i}
-                  >
-                    {isMarking === true && !isAnswerPg && (
+            {showInformationExam === true && (
+              <div className="bg-[#71C9CE] p-5 rounded-lg fixed top-1/3 max-[640px]:w-11/12 sm:w-10/12 md:w-2/5 lg:w-[35%] h-fit max-[640px]:-bottom-20">
+                <div className="flex items-center max-[640px]:justify-around sm:justify-around md:justify-between">
+                  <h1 className="text-xl font-semibold">
+                    Ujian{" "}
+                    {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
+                  </h1>
+                  {formatedTime !== "NaN:NaN" && (
+                    <div className=" bg-[#F38181] py-1.5 rounded-lg gap-x-2 flex items-center justify-center">
                       <Image
-                        src="/img/examsStudent/flag.png"
-                        alt="Mark"
+                        src="/img/examsStudent/stopwatch.png"
+                        alt="Timer"
                         width={200}
                         height={200}
-                        className="w-1/4 absolute top-1.5 left-1.5"
+                        className="w-1/4"
                       />
-                    )}
-                    {i + 1}
-                  </div>
-                );
-              })}
-            </div>
+                      <span className="text-xl font-semibold">
+                        {formatedTime}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3 rounded-md">
+                  {questions.exams?.questions_exam.map(
+                    (item: any, i: number) => {
+                      const isAnswerPg = clickedAnswerPg[item.id];
+                      const isAnswerEssay = answerEssayExams[item.id];
+                      const isMarking = markQuestions[item.id];
+                      return (
+                        <div
+                          className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
+                            isAnswerPg || isAnswerEssay
+                              ? "bg-green-400"
+                              : "bg-[#E3FDFD]"
+                          }`}
+                          key={i}
+                        >
+                          {isMarking === true && !isAnswerPg && (
+                            <Image
+                              src="/img/examsStudent/flag.png"
+                              alt="Mark"
+                              width={200}
+                              height={200}
+                              className="w-1/4 absolute top-1.5 left-1.5"
+                            />
+                          )}
+                          {i + 1}
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-          <div className="md:overflow-y-auto md:h-[28rem] md:scrollBarDesign max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
+          <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
             {questions.exams?.questions_exam.map((item: any, i: number) => (
               <div
                 className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"

@@ -33,6 +33,7 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import LayoutDasboard from "@/components/forDasboard/layoutDashboard";
 
 export default function DashboardStudent() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
@@ -281,41 +282,7 @@ export default function DashboardStudent() {
   return (
     <LayoutBodyContent>
       <div className="w-[90%] mx-auto">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Dashboard Siswa</h1>
-          <div className="flex items-center justify-end gap-x-3">
-            <Image
-              src="/img/dashboardStudent/bell.png"
-              alt="Notification"
-              width={200}
-              height={200}
-              className="w-1/12"
-            />
-            <Image
-              src="/img/profileStudent/userProfile.png"
-              alt="Img Profile"
-              width={200}
-              height={200}
-              className="w-1/6 rounded-full"
-            />
-          </div>
-        </div>
-        <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
-        <div className="mt-7 flex items-center gap-x-10">
-          <Image
-            src="/img/profileStudent/userProfile.png"
-            alt="Img Profile"
-            height={500}
-            width={500}
-            className="w-1/5 rounded-full"
-          />
-          <h1 className="text-3xl max-[640px]:text-2xl font-bold">
-            Halo Selamat Datang,{" "}
-            <span className="block capitalize mt-2">
-              {getDataStudent?.fullName}
-            </span>
-          </h1>
-        </div>
+        <LayoutDasboard user="Siswa" fullName={getDataStudent?.fullName} />
         <div className="mt-5">
           <p className="max-[640px]:text-lg text-2xl font-semibold">
             Berikut Ringkasan Ujian Anda
@@ -359,7 +326,7 @@ export default function DashboardStudent() {
               {deadlineUjianTercepatHariIni() !== null && (
                 <>
                   <h1 className="text-xl font-semibold mb-4">
-                    Ujian Yang Waktu Tenggatnya Habis
+                    Ujian Yang Waktu Tenggatnya Akan Habis
                   </h1>
                   <div className="bg-sky-300 flex justify-between gap-x-3 p-5 items-center rounded-xl shadow-md shadow-slate-600">
                     <div className="flex justify-center items-center gap-x-5">

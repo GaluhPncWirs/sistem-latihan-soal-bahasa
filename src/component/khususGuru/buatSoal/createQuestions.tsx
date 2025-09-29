@@ -220,7 +220,7 @@ export default function CreateNewQuestions() {
   }, [clearInput, chooseTypeExams]);
 
   return (
-    <div className="bg-[#476EAE] p-5 rounded-lg mx-auto max-[640px]:w-full sm:w-full md:w-11/12">
+    <div className="bg-[#476EAE] p-5 rounded-lg">
       <h1 className="text-2xl font-semibold mb-7 text-slate-100">
         Buat Soal Ujian
       </h1>
