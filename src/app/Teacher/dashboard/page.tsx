@@ -3,10 +3,10 @@
 import { useConvertDate } from "@/app/hooks/getConvertDate";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
-import CreateNewQuestions from "@/component/khususGuru/buatSoal/createQuestions";
-import ViewQuestions from "@/component/khususGuru/hasilPertanyaan/pertanyaan";
-import ManageStudent from "@/component/khususGuru/kelolaSiswa/manageStudent";
-import SideBarDashboardTeacher from "@/component/khususGuru/navigasi/floatingBar";
+import CreateNewQuestions from "@/components/khususGuru/buatSoal/createQuestions";
+import ViewQuestions from "@/components/khususGuru/hasilPertanyaan/pertanyaan";
+import ManageStudent from "@/components/khususGuru/kelolaSiswa/manageStudent";
+import SideBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
 import LayoutDasboard from "@/components/forDasboard/layoutDashboard";
 import { Button } from "@/components/ui/button";
 import {

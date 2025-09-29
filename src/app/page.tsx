@@ -10,8 +10,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
-import FooterComponent from "@/component/footer/footerComp";
-import NavigasiBar from "@/component/navigasiBar/navbar";
+import FooterComponent from "@/components/footer/footerComp";
+import NavigasiBar from "@/components/navigasiBar/navbar";
 import { useGetIdTeacher } from "./hooks/getIdTeacher";
 export default function Home() {
   const isLoginStudent = useGetIdStudent();

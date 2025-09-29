@@ -1,6 +1,6 @@
 "use client";
-import ButtonLogin from "@/component/btnFormAccount/btnLogin";
-import ButtonRegister from "@/component/btnFormAccount/btnRegister";
+import ButtonLogin from "@/components/btnFormAccount/btnLogin";
+import ButtonRegister from "@/components/btnFormAccount/btnRegister";
 import { Toaster } from "@/components/ui/sonner";
 import { usePathname } from "next/navigation";
 

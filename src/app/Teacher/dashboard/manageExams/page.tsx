@@ -1,6 +1,6 @@
 "use client";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
-import NavigasiBar from "@/component/navigasiBar/navbar";
+import NavigasiBar from "@/components/navigasiBar/navbar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
