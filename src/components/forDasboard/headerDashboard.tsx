@@ -6,17 +6,18 @@ import {
   HoverCardTrigger,
 } from "../ui/hover-card";
 import { usePathname } from "next/navigation";
+import HamburgerMenuBar from "../sidebar/compSidebar";
 
-export default function LayoutDasboard(props: any) {
+export default function HeaderDasboard(props: any) {
   const { user, fullName, totalExams } = props;
   const urlPathName = usePathname();
   function informExams() {
     if (urlPathName === "/Student/Dashboard") {
       const isNotLate = totalExams.filter(
-        (fil: any) => fil.hasil_ujian !== "telat"
+        (fil: any) => fil.hasil_ujian !== "telat" && !fil.status_exam
       );
       return (
-        <div className="flex items-center justify-end gap-x-2">
+        <div className="flex items-center justify-end gap-x-3">
           {isNotLate.length > 0 ? (
             <HoverCard>
               <HoverCardTrigger asChild>
@@ -47,27 +48,24 @@ export default function LayoutDasboard(props: any) {
               alt="Notification"
               width={200}
               height={200}
-              className="w-[10%] max-[640px]:w-[14%]"
+              className="max-[640px]:w-1/3 sm:w-1/3 md:w-[55%]"
             />
           )}
-          <Image
-            src="/img/profileStudent/userProfile.png"
-            alt="Img Profile"
-            width={200}
-            height={200}
-            className="w-1/5 rounded-full max-[640px]:w-1/4"
-          />
+          <HamburgerMenuBar />
         </div>
       );
     } else {
+      const filterNilaiSiswa = totalExams.filter(
+        (fil: any) => fil.hasil_ujian === "pending"
+      );
       return (
-        <div className="flex items-center justify-end gap-x-2">
-          {totalExams.length > 0 ? (
+        <div className="flex items-center justify-end gap-x-3">
+          {filterNilaiSiswa.length > 0 ? (
             <HoverCard>
               <HoverCardTrigger asChild>
                 <div className="relative flex justify-end">
                   <div className="h-4 w-4 bg-red-400 absolute rounded-md flex justify-center items-center">
-                    <span className="text-xs">{totalExams.length}</span>
+                    <span className="text-xs">{filterNilaiSiswa.length}</span>
                   </div>
                   <Image
                     src="/img/dashboardStudent/bell.png"
@@ -80,7 +78,7 @@ export default function LayoutDasboard(props: any) {
               </HoverCardTrigger>
               <HoverCardContent className="w-fit p-3">
                 <h1 className="font-semibold text-xs">
-                  Ada {totalExams.length} Ujian Yang Belum Dinilai
+                  Ada {filterNilaiSiswa.length} Ujian Yang Belum Dinilai
                 </h1>
               </HoverCardContent>
             </HoverCard>
@@ -90,23 +88,17 @@ export default function LayoutDasboard(props: any) {
               alt="Notification"
               width={200}
               height={200}
-              className="w-[10%] max-[640px]:w-[14%]"
+              className="max-[640px]:w-1/3 sm:w-1/3 md:w-[55%]"
             />
           )}
-          <Image
-            src="/img/profileStudent/userProfile.png"
-            alt="Img Profile"
-            width={200}
-            height={200}
-            className="w-1/5 rounded-full max-[640px]:w-1/4"
-          />
+          <HamburgerMenuBar />
         </div>
       );
     }
   }
 
   return (
-    <>
+    <div>
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Dashboard {user}</h1>
         {informExams()}
@@ -125,6 +117,6 @@ export default function LayoutDasboard(props: any) {
           <span className="block capitalize mt-2">{fullName}</span>
         </h1>
       </div>
-    </>
+    </div>
   );
 }

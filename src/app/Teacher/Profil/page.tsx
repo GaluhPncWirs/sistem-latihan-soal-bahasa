@@ -2,6 +2,7 @@
 import { useConvertDate } from "@/app/hooks/getConvertDate";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
+import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -184,7 +185,10 @@ export default function TeacherProfile() {
   return (
     <LayoutBodyContent>
       <div className="mx-auto w-[90%]">
-        <h1 className="text-4xl font-bold mb-5">Profil Guru</h1>
+        <div className="flex justify-between items-center mb-3">
+          <h1 className="text-4xl font-bold">Profil Guru</h1>
+          <HamburgerMenuBar />
+        </div>
         <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
         <div className="mt-7">
           <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">

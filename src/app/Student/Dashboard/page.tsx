@@ -33,7 +33,7 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import LayoutDasboard from "@/components/forDasboard/layoutDashboard";
+import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 
 export default function DashboardStudent() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
@@ -282,7 +282,7 @@ export default function DashboardStudent() {
   return (
     <LayoutBodyContent>
       <div className="w-[90%] mx-auto">
-        <LayoutDasboard
+        <HeaderDasboard
           user="Siswa"
           fullName={getDataStudent?.fullName}
           totalExams={scheduleExams}

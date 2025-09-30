@@ -114,7 +114,7 @@ export default function ViewQuestions() {
   }
 
   return (
-    <div className="w-full">
+    <div>
       <h1 className="mb-7 text-2xl font-semibold">Daftar Soal Ujian</h1>
       <Table>
         <TableHeader>

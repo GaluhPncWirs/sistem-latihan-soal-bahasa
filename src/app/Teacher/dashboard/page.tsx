@@ -7,7 +7,6 @@ import CreateNewQuestions from "@/components/khususGuru/buatSoal/createQuestions
 import ViewQuestions from "@/components/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/components/khususGuru/kelolaSiswa/manageStudent";
 import SideBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
-import LayoutDasboard from "@/components/forDasboard/layoutDashboard";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -22,6 +21,7 @@ import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -219,17 +219,13 @@ export default function Teacher() {
     getDataStudent();
   }, [idTeacher]);
 
-  const filterNilaiSiswa = dataStudents.filter(
-    (fil: any) => fil.tipe_ujian === "essay" && fil.hasil_ujian === "pending"
-  );
-
   return (
     <LayoutBodyContent>
-      <div className="mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-[90%]">
-        <LayoutDasboard
+      <div className="mx-auto max-[640px]:w-11/12 sm:w-11/12 lg:w-[90%]">
+        <HeaderDasboard
           user="Pengajar"
           fullName={dataUserTeacher.fullName}
-          totalExams={filterNilaiSiswa}
+          totalExams={dataStudents}
         />
         <div className="mt-5">
           <h1 className="max-[640px]:text-xl sm:text-2xl font-semibold">
@@ -242,7 +238,7 @@ export default function Teacher() {
                 alt="Complete"
                 width={200}
                 height={200}
-                className="w-[30%] mx-auto sm:w-1/4 md:w-[30%]"
+                className="mx-auto max-[640px]:w-[30%] sm:w-1/4"
               />
               <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
                 {dataManageExams.length || "0"}
@@ -255,7 +251,7 @@ export default function Teacher() {
                 alt="Jumlah"
                 width={200}
                 height={200}
-                className="w-[30%] mx-auto sm:w-1/4 md:w-[30%]"
+                className="mx-auto max-[640px]:w-[30%] sm:w-1/4"
               />
               <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
                 {jumlahSiswa.size || "0"}
@@ -268,7 +264,7 @@ export default function Teacher() {
                 alt="Rata-Rata"
                 width={200}
                 height={200}
-                className="w-1/4 mx-auto sm:w-1/4 md:w-[30%]"
+                className="mx-auto max-[640px]:w-1/4 sm:w-1/4"
               />
               <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
                 {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
