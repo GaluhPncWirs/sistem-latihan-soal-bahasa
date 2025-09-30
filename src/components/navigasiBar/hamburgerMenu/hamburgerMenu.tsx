@@ -63,19 +63,19 @@ export default function HamburgerMenu({
       >
         <Link
           href="#"
-          className="cursor-pointer text-xl font-semibold text-slate-700"
+          className="cursor-pointer text-xl font-semibold text-slate-800"
         >
           <span>Beranda</span>
         </Link>
         <Link
           href="#"
-          className="cursor-pointer text-xl font-semibold text-slate-700"
+          className="cursor-pointer text-xl font-semibold text-slate-800"
         >
           <span>Tentang</span>
         </Link>
         <Link
           href="#"
-          className="cursor-pointer text-xl font-semibold text-slate-700"
+          className="cursor-pointer text-xl font-semibold text-slate-800"
         >
           <span>Tata Cara</span>
         </Link>

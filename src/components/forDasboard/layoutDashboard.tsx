@@ -1,36 +1,124 @@
 import Image from "next/image";
+import Link from "next/link";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
+import { usePathname } from "next/navigation";
 
 export default function LayoutDasboard(props: any) {
-  const { user, fullName } = props;
-  return (
-    <>
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Dashboard {user}</h1>
-        <div className="flex items-center justify-end gap-x-3">
-          <Image
-            src="/img/dashboardStudent/bell.png"
-            alt="Notification"
-            width={200}
-            height={200}
-            className="w-1/12"
-          />
+  const { user, fullName, totalExams } = props;
+  const urlPathName = usePathname();
+  function informExams() {
+    if (urlPathName === "/Student/Dashboard") {
+      const isNotLate = totalExams.filter(
+        (fil: any) => fil.hasil_ujian !== "telat"
+      );
+      return (
+        <div className="flex items-center justify-end gap-x-2">
+          {isNotLate.length > 0 ? (
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <div className="relative flex justify-end">
+                  <div className="h-4 w-4 bg-red-400 absolute rounded-md flex justify-center items-center">
+                    <span className="text-xs font-bold">
+                      {isNotLate.length}
+                    </span>
+                  </div>
+                  <Image
+                    src="/img/dashboardStudent/bell.png"
+                    alt="Notification"
+                    width={200}
+                    height={200}
+                    className="w-[60%]"
+                  />
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-fit p-3">
+                <h1 className="font-semibold text-xs">
+                  Ada {isNotLate.length} Ujian Yang Belum Dikerjakan
+                </h1>
+              </HoverCardContent>
+            </HoverCard>
+          ) : (
+            <Image
+              src="/img/dashboardStudent/bell.png"
+              alt="Notification"
+              width={200}
+              height={200}
+              className="w-[10%] max-[640px]:w-[14%]"
+            />
+          )}
           <Image
             src="/img/profileStudent/userProfile.png"
             alt="Img Profile"
             width={200}
             height={200}
-            className="w-1/6 rounded-full"
+            className="w-1/5 rounded-full max-[640px]:w-1/4"
           />
         </div>
+      );
+    } else {
+      return (
+        <div className="flex items-center justify-end gap-x-2">
+          {totalExams.length > 0 ? (
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <div className="relative flex justify-end">
+                  <div className="h-4 w-4 bg-red-400 absolute rounded-md flex justify-center items-center">
+                    <span className="text-xs">{totalExams.length}</span>
+                  </div>
+                  <Image
+                    src="/img/dashboardStudent/bell.png"
+                    alt="Notification"
+                    width={200}
+                    height={200}
+                    className="w-[60%]"
+                  />
+                </div>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-fit p-3">
+                <h1 className="font-semibold text-xs">
+                  Ada {totalExams.length} Ujian Yang Belum Dinilai
+                </h1>
+              </HoverCardContent>
+            </HoverCard>
+          ) : (
+            <Image
+              src="/img/dashboardStudent/bell.png"
+              alt="Notification"
+              width={200}
+              height={200}
+              className="w-[10%] max-[640px]:w-[14%]"
+            />
+          )}
+          <Image
+            src="/img/profileStudent/userProfile.png"
+            alt="Img Profile"
+            width={200}
+            height={200}
+            className="w-1/5 rounded-full max-[640px]:w-1/4"
+          />
+        </div>
+      );
+    }
+  }
+
+  return (
+    <>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Dashboard {user}</h1>
+        {informExams()}
       </div>
-      <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
-      <div className="mt-7 flex items-center gap-x-10">
+      <div className="h-1 bg-slate-700 rounded-lg mt-3" />
+      <div className="mt-5 flex items-center gap-x-7">
         <Image
           src="/img/profileStudent/userProfile.png"
           alt="Img Profile"
           height={500}
           width={500}
-          className="w-1/5 rounded-full"
+          className="w-1/5 rounded-full max-[640px]:w-1/4"
         />
         <h1 className="text-3xl max-[640px]:text-2xl font-bold">
           Halo Selamat Datang,{" "}

@@ -36,6 +36,8 @@ export default function Teacher() {
   const jumlahSiswa = new Set(
     dataManageExams.flatMap((a: any) => a.lengthStudent)
   );
+  const [dataStudents, setDataStudents] = useState<any>([]);
+
   const averageValueExam = dataManageExams
     ?.flatMap((item: any) => item.hasil_ujian)
     .filter((a: any) => a !== "pending" && a !== "telat")
@@ -147,48 +149,126 @@ export default function Teacher() {
     getDataManageExams();
   }, [idTeacher]);
 
+  // untuk bagian nilai siswa atau kelola siswa
+  useEffect(() => {
+    if (!idTeacher) return;
+    async function getDataStudent() {
+      const { data: student, error: errorStudent } = await supabase
+        .from("account-student")
+        .select("fullName,classes,idStudent,email");
+      const { data: historyStudent, error: errorHistoryStudent } =
+        await supabase
+          .from("history-exam-student")
+          .select(
+            "student_id,exam_id,hasil_ujian,kelas,created_at,status_exam,exams(id,nama_ujian,tipeUjian,idTeacher)"
+          )
+          .eq("exams.idTeacher", idTeacher);
+
+      if (errorStudent || errorHistoryStudent) {
+        console.log("data gagal diambil");
+      } else {
+        const dataIsNotNull = historyStudent?.filter(
+          (a: any) => a.exams !== null
+        );
+
+        const idSiswa = dataIsNotNull.reduce((acc: any, cur: any) => {
+          const findId = acc.find((f: any) => f.student_id === cur.student_id);
+          if (!findId) {
+            acc.push({
+              student_id: cur.student_id,
+              resultUjian: [
+                {
+                  namaUjian:
+                    cur.exam_id === cur.exams.id ? cur.exams.nama_ujian : null,
+                  idUjian: cur.exam_id,
+                  tipe_ujian: cur.exams.tipeUjian,
+                  hasil_ujian: cur.hasil_ujian,
+                  status_exam: cur.status_exam,
+                },
+              ],
+              created_at: [cur.created_at],
+            });
+          } else {
+            findId.resultUjian.push({
+              namaUjian:
+                cur.exam_id === cur.exams.id ? cur.exams.nama_ujian : null,
+              idUjian: cur.exam_id,
+              tipe_ujian: cur.exams.tipeUjian,
+              hasil_ujian: cur.hasil_ujian,
+              status_exam: cur.status_exam,
+            });
+            findId.created_at.push(cur.created_at);
+          }
+          return acc;
+        }, []);
+
+        const mergedDatas = idSiswa.map((item: any) => {
+          const historyExam = student.find(
+            (f: any) => f.idStudent === item.student_id
+          );
+          return {
+            ...item,
+            fullName: historyExam?.fullName ?? null,
+            classes: historyExam?.classes ?? null,
+          };
+        });
+
+        setDataStudents(mergedDatas);
+      }
+    }
+    getDataStudent();
+  }, [idTeacher]);
+
+  const filterNilaiSiswa = dataStudents.filter(
+    (fil: any) => fil.tipe_ujian === "essay" && fil.hasil_ujian === "pending"
+  );
+
   return (
     <LayoutBodyContent>
-      <div className="w-[90%] mx-auto">
-        <LayoutDasboard user="Pengajar" fullName={dataUserTeacher.fullName} />
+      <div className="mx-auto max-[640px]:w-11/12 sm:w-11/12 md:w-[90%]">
+        <LayoutDasboard
+          user="Pengajar"
+          fullName={dataUserTeacher.fullName}
+          totalExams={filterNilaiSiswa}
+        />
         <div className="mt-5">
-          <h1 className="max-[640px]:text-lg text-3xl font-semibold">
+          <h1 className="max-[640px]:text-xl sm:text-2xl font-semibold">
             Ringkasan Aktifitas Ujian
           </h1>
-          <div className="flex justify-evenly items-center my-8 text-slate-800">
-            <div className="bg-[#48B3AF] rounded-md max-[640px]:basis-[30%] max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+          <div className="flex justify-evenly items-center my-7 text-slate-800 gap-x-1">
+            <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
               <Image
                 src="/img/dashboardTeacher/complete.png"
                 alt="Complete"
                 width={200}
                 height={200}
-                className="w-1/4 mx-auto"
+                className="w-[30%] mx-auto sm:w-1/4 md:w-[30%]"
               />
               <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
                 {dataManageExams.length || "0"}
               </span>
               <h1 className="font-medium">Ujian Dibuat</h1>
             </div>
-            <div className="bg-[#48B3AF] rounded-md max-[640px]:basis-[30%] max-[640px]:p-4 sm:p-3.5 sm:basis-[30%] lg:basis-1/4 lg:p-5">
+            <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
               <Image
                 src="/img/dashboardTeacher/count.png"
                 alt="Jumlah"
                 width={200}
                 height={200}
-                className="w-[30%] mx-auto"
+                className="w-[30%] mx-auto sm:w-1/4 md:w-[30%]"
               />
               <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
                 {jumlahSiswa.size || "0"}
               </span>
               <h1 className="font-medium">Jumlah Siswa</h1>
             </div>
-            <div className="bg-[#48B3AF] basis-1/5 rounded-md p-4 max-[640px]:basis-[34%] sm:basis-[30%] lg:basis-1/4 lg:p-5">
+            <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
               <Image
                 src="/img/dashboardTeacher/average.png"
                 alt="Rata-Rata"
                 width={200}
                 height={200}
-                className="w-1/4 mx-auto"
+                className="w-1/4 mx-auto sm:w-1/4 md:w-[30%]"
               />
               <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
                 {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
@@ -197,17 +277,17 @@ export default function Teacher() {
             </div>
           </div>
           <SideBarDashboardTeacher handleClickItem={handleClickItem} />
-          <div className="mt-7">
+          <div className="mt-5">
             {dashboardButton.viewResult === true ? (
               <ViewQuestions />
             ) : dashboardButton.manageStudent === true ? (
-              <ManageStudent />
+              <ManageStudent dataStudents={dataStudents} />
             ) : dashboardButton.createQusetions === true ? (
               <CreateNewQuestions />
             ) : (
               <div>
-                <h1 className="mb-7 text-2xl font-semibold">
-                  Jadwal Ujian Aktif Hari ini
+                <h1 className="mb-5 text-2xl font-semibold">
+                  Jadwal Ujian Hari ini
                 </h1>
                 <Table>
                   <TableHeader>

@@ -282,7 +282,11 @@ export default function DashboardStudent() {
   return (
     <LayoutBodyContent>
       <div className="w-[90%] mx-auto">
-        <LayoutDasboard user="Siswa" fullName={getDataStudent?.fullName} />
+        <LayoutDasboard
+          user="Siswa"
+          fullName={getDataStudent?.fullName}
+          totalExams={scheduleExams}
+        />
         <div className="mt-5">
           <p className="max-[640px]:text-lg text-2xl font-semibold">
             Berikut Ringkasan Ujian Anda
