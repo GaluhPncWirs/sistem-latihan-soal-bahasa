@@ -10,9 +10,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useEffect, useState } from "react";
-import FooterComponent from "@/components/footer/footerComp";
-import NavigasiBar from "@/components/navigasiBar/navbar";
 import { useGetIdTeacher } from "./hooks/getIdTeacher";
+import LayoutIntroductionsSystem from "@/layout/introductionSystem";
 export default function Home() {
   const isLoginStudent = useGetIdStudent();
   const isLoginTeacher = useGetIdTeacher();
@@ -29,8 +28,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] overflow-auto">
-      <NavigasiBar />
+    <LayoutIntroductionsSystem>
       <div className="relative">
         <div
           style={{ backgroundImage: "url(/img/beranda/heroSectionUjian.jpg)" }}
@@ -323,7 +321,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <FooterComponent />
-    </div>
+    </LayoutIntroductionsSystem>
   );
 }

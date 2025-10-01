@@ -38,34 +38,39 @@ export default function NavigasiBar() {
 
   return (
     <div className="w-full h-16 bg-[#A6E3E9] fixed shadow-lg shadow-slate-500 z-20">
-      <div className="flex items-center h-full gap-x-3">
-        <div className="basis-1/5 h-full flex items-center justify-center max-[640px]:basis-2/3 bg-[#A6E3E9] bg-gradient-to-l to-sky-300">
-          {/* <Image src="" alt="" width={500} height={500}/> */}
-          <h1>Logo</h1>
+      <div className="flex items-center h-full">
+        <div className="md:basis-1/5 sm:basis-1/3 h-full flex items-center justify-center max-[640px]:basis-2/3 max-[640px]:justify-start max-[640px]:pl-5 bg-[#A6E3E9] bg-gradient-to-l to-sky-300">
+          <Image
+            src="/img/footer/logo.png"
+            alt="Logo"
+            width={500}
+            height={500}
+            className="w-10/12 max-[640px]:w-3/5"
+          />
         </div>
         <HamburgerMenu
           isUserThereTeacher={isUserThereTeacher}
           isUserThereStudent={isUserThereStudent}
           handleLogout={handleLogout}
         />
-        <ul className="basis-3/5 flex justify-evenly h-full items-center max-[640px]:hidden">
+        <ul className="md:basis-3/5 sm:basis-1/2 flex justify-evenly h-full items-center max-[640px]:hidden">
           <Link
-            href="#"
+            href="/"
             className="cursor-pointer text-xl font-semibold text-slate-800"
           >
-            <span>Beranda</span>
+            <span className="sm:text-base md:text-xl">Beranda</span>
           </Link>
           <Link
             href="#"
             className="cursor-pointer text-xl font-semibold text-slate-800"
           >
-            <span>Tentang</span>
+            <span className="sm:text-base md:text-xl">Tentang</span>
           </Link>
           <Link
-            href="#"
+            href="/HowToUse"
             className="cursor-pointer text-xl font-semibold text-slate-800"
           >
-            <span>Tata Cara</span>
+            <span className="sm:text-base md:text-xl">Tata Cara</span>
           </Link>
         </ul>
         <div className="basis-1/4 pr-5 h-full flex items-center justify-center gap-5 max-[640px]:hidden bg-[#A6E3E9] bg-gradient-to-r to-sky-300">

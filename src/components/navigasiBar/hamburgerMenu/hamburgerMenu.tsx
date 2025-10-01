@@ -61,7 +61,7 @@ export default function HamburgerMenu({
         ref={clickOutsidePath}
       >
         <Link
-          href="#"
+          href="/"
           className="cursor-pointer text-xl font-semibold text-slate-800"
         >
           <span>Beranda</span>

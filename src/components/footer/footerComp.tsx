@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function FooterComponent() {
   return (
-    <>
+    <div className="bg-[#00ADB5]">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="absolute"
@@ -16,12 +16,81 @@ export default function FooterComponent() {
         ></path>
       </svg>
 
-      <div className=" bg-[#00ADB5] max-[640px]:pt-36 sm:pt-44 md:pt-52 lg:pt-64">
-        <div className="w-2/3 mx-auto max-[640px]:w-10/12">
-          <h1 className="text-3xl font-semibold max-[640px]:text-2xl">
-            Ikuti Media Sosial Kami di
-          </h1>
-          <ul className="flex justify-around items-center py-10 max-[640px]:flex-wrap max-[640px]:gap-5 max-[640px]:justify-center sm:flex-wrap sm:gap-7">
+      <div className="max-[640px]:pt-36 sm:pt-44 md:pt-52 lg:pt-64 grid grid-cols-2 pb-10 w-10/12 gap-7 mx-auto max-[640px]:grid-cols-1">
+        <div>
+          <Image
+            src="/img/footer/logo.png"
+            alt="Logo"
+            width={500}
+            height={500}
+            className="w-1/2"
+          />
+          <p className="mt-2 ml-2 font-semibold">
+            Ujian Tanpa Ribet, Hasil Lebih Akurat
+          </p>
+        </div>
+
+        <div>
+          <div>
+            <Image
+              className="size-10 absolute"
+              src="/img/footer/support.png"
+              alt="Jam Kerja"
+              width={300}
+              height={300}
+            />
+            <span className="ml-12 font-bold lg:text-2xl xl:text-3xl">
+              Kontak & Dukungan
+            </span>
+          </div>
+          <ul className="mt-5 xl:text-lg px-3">
+            <li>
+              Email :{" "}
+              <Link
+                href="mailto:loremipsum@gmail.com"
+                className="hover:underline"
+              >
+                loremipsum@gmail.com
+              </Link>
+            </li>
+            <li>No Telepon : 0898-2364-8262</li>
+            <Link href="#">Help / FAQ</Link>
+          </ul>
+        </div>
+
+        <div>
+          <div>
+            <Image
+              className="size-10 absolute"
+              src="/img/footer/location.png"
+              alt="Alamat"
+              width={300}
+              height={300}
+            />
+            <span className="ml-12 font-bold lg:text-2xl xl:text-3xl">
+              Alamat
+            </span>
+          </div>
+          <p className="mt-5 xl:text-lg px-3 max-w-3/4">
+            Perumahan Bumi Cikarang Asri No. 10 Ciantra Cikarang Selatan Bekasi,
+            Jawa Barat 17530
+          </p>
+        </div>
+
+        <div>
+          <div className="text-2xl font-bold mb-4 xl:text-3xl">
+            <Image
+              className="size-10 absolute"
+              src="/img/footer/follow.png"
+              alt="Follow"
+              width={300}
+              height={300}
+            />
+            <span className="ml-12 font-bold lg:text-2xl xl:text-3xl">
+              Follow Us
+            </span>
+          </div>
+          <div className="flex flex-wrap mt-5 gap-3">
             <Link
               href="#"
               className="flex items-center gap-3 grayscale-100 hover:grayscale-0 cursor-pointer transition-all"
@@ -31,7 +100,7 @@ export default function FooterComponent() {
                 alt="instagram"
                 width={200}
                 height={200}
-                className="w-1/4"
+                className="w-1/5"
               />{" "}
               Instagram
             </Link>
@@ -44,7 +113,7 @@ export default function FooterComponent() {
                 alt="linkedin"
                 width={200}
                 height={200}
-                className="w-1/4"
+                className="w-1/5"
               />{" "}
               Linkedin
             </Link>
@@ -57,7 +126,7 @@ export default function FooterComponent() {
                 alt="facebook"
                 width={200}
                 height={200}
-                className="w-1/4"
+                className="w-1/5"
               />{" "}
               Facebook
             </Link>
@@ -70,21 +139,24 @@ export default function FooterComponent() {
                 alt="tiktok"
                 width={200}
                 height={200}
-                className="w-1/4"
+                className="w-1/5"
               />{" "}
               Tiktok
             </Link>
-          </ul>
+          </div>
         </div>
-        <h1 className="py-5 w-10/12 mx-auto">
+      </div>
+
+      <div className="bg-[#00ADB5]">
+        <hr className="rounded-full border border-white mx-10" />
+        <h1 className="py-5 w-10/12 mx-auto font-semibold">
           <span>&copy;</span> Copyright{" "}
-          <span className="font-medium text-[#CBF1F5]">Lorem Ipsum</span> |
-          Dolor Amet{" "}
           <span className="text-[#E3FDFD] font-medium">
             {new Date(Date.now()).getFullYear()}
-          </span>
+          </span>{" "}
+          Lorem Ipsum All rights reserved.
         </h1>
       </div>
-    </>
+    </div>
   );
 }
