@@ -9,7 +9,7 @@ export default function HamburgerMenu({
 }: any) {
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const [isTrue, setIsTrue] = useState<boolean>(false);
-  const clickOutsideHamburgerMenu = useRef<any>(null);
+  const clickOutsideHamburgerMenu = useRef<HTMLInputElement | null>(null);
   const clickOutsidePath = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
@@ -59,7 +59,6 @@ export default function HamburgerMenu({
         className={`flex pt-24 gap-y-12 absolute right-0 top-16 h-screen flex-col bg-[#A6E3E9] bg-gradient-to-b to-sky-300 items-center w-1/2 transition-all duration-300 text-xl font-semibold rounded-bl-lg
       ${isCheked ? `translate-x-0` : `translate-x-full`}`}
         ref={clickOutsidePath}
-        id="navbar"
       >
         <Link
           href="#"

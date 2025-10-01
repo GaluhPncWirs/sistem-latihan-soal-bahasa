@@ -41,8 +41,8 @@ export default function DashboardStudent() {
   const getDataStudent = useGetDataStudent(getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());
-  const [confirm, setConfirm] = useState<any>(0);
-  const [accepted, setAccepted] = useState(false);
+  const [confirm, setConfirm] = useState<number>(0);
+  const [accepted, setAccepted] = useState<boolean>(false);
 
   useEffect(() => {
     if (!getDataStudent?.classes || !getIdStudent) return;

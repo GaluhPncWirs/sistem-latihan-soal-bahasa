@@ -14,7 +14,7 @@ export default function HeaderDasboard(props: any) {
   function informExams() {
     if (urlPathName === "/Student/Dashboard") {
       const isNotLate = totalExams.filter(
-        (fil: any) => fil.hasil_ujian !== "telat" && !fil.status_exam
+        (fil: any) => fil.hasil_ujian !== "telat" || !fil.status_exam
       );
       return (
         <div className="flex items-center justify-end gap-x-3">

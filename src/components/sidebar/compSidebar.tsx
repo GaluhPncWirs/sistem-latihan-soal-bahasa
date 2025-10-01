@@ -5,7 +5,7 @@ import ListSidebar from "./listSidebar/content";
 export default function HamburgerMenuBar() {
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const [isTrue, setIsTrue] = useState<boolean>(false);
-  const clickOutsideHamburgerMenu = useRef<any>(null);
+  const clickOutsideHamburgerMenu = useRef<HTMLInputElement | null>(null);
   const clickOutsidePath = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
@@ -55,7 +55,6 @@ export default function HamburgerMenuBar() {
         className={`flex gap-y-10 fixed left-0 top-0 flex-col bg-[#476EAE] items-center w-1/2 transition-all duration-300 text-xl font-semibold h-screen z-50 pt-28 sm:w-1/3
       ${isCheked ? `translate-x-0` : `-translate-x-full`}`}
         ref={clickOutsidePath}
-        id="navbar"
       >
         <ListSidebar />
       </ul>

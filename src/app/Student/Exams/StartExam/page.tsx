@@ -1,10 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/data";
-import { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import LayoutBodyContent from "@/layout/bodyContent";
 import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 import {
   Dialog,
@@ -37,7 +36,6 @@ export default function Soal() {
   }>({});
   const idExams = useSearchParams().get("idExams");
   const idStudent = useSearchParams().get("idStudent");
-  const examUrl = `/Student/Exams/StartExam?idExams=${idExams}&idStudent=${idStudent}`;
   const dataStudent = useGetDataStudent(idStudent!);
   const [time, setTime] = useState<number | null>(null);
   const [answerEssayExams, setAnswerEssayExams] = useState<{
@@ -47,18 +45,25 @@ export default function Soal() {
   const [timeOutDone, setTimeOutDone] = useState<boolean>(false);
   const [showInformationExam, setShowInformationExam] = useState<boolean>(true);
   const router = useRouter();
-  const params = usePathname();
+  const clickedOutsideCheked = useRef<HTMLInputElement | null>(null);
+  const handleClickedOutsideContent = useRef<HTMLDivElement | null>(null);
+  const clickedMarkQuestions = useRef<HTMLButtonElement | null>(null);
+  const clickedAnswerQuestions = useRef<HTMLInputElement | null>(null);
+  const [isClosedContent, setIsClosedContent] = useState<boolean>(false);
 
   useEffect(() => {
     const savedAnswer = localStorage.getItem("exam-answer");
-    if (savedAnswer) {
+    const savedMark = localStorage.getItem("markQuestions");
+    if (savedAnswer && savedMark) {
       setClickedAnswerPg(JSON.parse(savedAnswer));
+      setMarkQuestions(JSON.parse(savedMark));
     }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("exam-answer", JSON.stringify(clickedAnswerPg));
-  }, [clickedAnswerPg]);
+    localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
+  }, [clickedAnswerPg, markQuestions]);
 
   useEffect(() => {
     function initializedTime() {
@@ -209,6 +214,35 @@ export default function Soal() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
+  useEffect(() => {
+    function handleOutsideContent(e: any) {
+      if (
+        clickedOutsideCheked.current &&
+        !clickedOutsideCheked.current.contains(e.target) &&
+        handleClickedOutsideContent.current &&
+        !handleClickedOutsideContent.current.contains(e.target) &&
+        clickedMarkQuestions.current &&
+        !clickedMarkQuestions.current.contains(e.target) &&
+        clickedAnswerQuestions.current &&
+        !clickedAnswerQuestions.current.contains(e.target)
+      ) {
+        setIsClosedContent(true);
+      }
+    }
+
+    window.addEventListener("click", handleOutsideContent);
+    return () => {
+      window.removeEventListener("click", handleOutsideContent);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isClosedContent) {
+      setShowInformationExam(false);
+      setIsClosedContent(false);
+    }
+  }, [isClosedContent]);
+
   return (
     <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] py-10">
       <div>
@@ -218,59 +252,67 @@ export default function Soal() {
         <div className="w-11/12 h-1 bg-slate-700 rounded-lg my-3 mx-auto" />
       </div>
       <div className="flex items-center justify-center md:gap-x-3 max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
-        <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%]">
-          {showInformationExam === true && (
-            <div className="bg-[#71C9CE] p-3 rounded-lg fixed max-[640px]:w-11/12 sm:w-10/12 h-fit bottom-5 md:hidden">
-              <div className="flex items-center max-[640px]:justify-around sm:justify-around">
-                <h1 className="text-xl font-semibold">
-                  Ujian{" "}
-                  {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
-                </h1>
-                {formatedTime !== "NaN:NaN" && (
-                  <div className=" bg-[#F38181] py-1.5 rounded-lg gap-x-2 flex items-center justify-center">
-                    <Image
-                      src="/img/examsStudent/stopwatch.png"
-                      alt="Timer"
-                      width={200}
-                      height={200}
-                      className="w-1/4"
-                    />
-                    <span className="text-xl font-semibold">
-                      {formatedTime}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3 rounded-md">
-                {questions.exams?.questions_exam.map((item: any, i: number) => {
-                  const isAnswerPg = clickedAnswerPg[item.id];
-                  const isAnswerEssay = answerEssayExams[item.id];
-                  const isMarking = markQuestions[item.id];
-                  return (
-                    <div
-                      className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
-                        isAnswerPg || isAnswerEssay
-                          ? "bg-green-400"
-                          : "bg-[#E3FDFD]"
-                      }`}
-                      key={i}
-                    >
-                      {isMarking === true && !isAnswerPg && (
-                        <Image
-                          src="/img/examsStudent/flag.png"
-                          alt="Mark"
-                          width={200}
-                          height={200}
-                          className="w-1/4 absolute top-1.5 left-1.5"
-                        />
-                      )}
-                      {i + 1}
-                    </div>
-                  );
-                })}
-              </div>
+        <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%] flex justify-center">
+          <div
+            className={`bg-[#71C9CE] p-3 rounded-b-lg transition-all duration-300 fixed max-[640px]:w-full sm:w-full h-fit top-0 md:hidden ${
+              showInformationExam ? `translate-y-0` : `-translate-y-full`
+            }`}
+            ref={handleClickedOutsideContent}
+          >
+            <div className="flex items-center max-[640px]:justify-around sm:justify-around">
+              <h1 className="text-xl font-semibold">
+                Ujian{" "}
+                {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
+              </h1>
+              {formatedTime !== "NaN:NaN" && (
+                <div
+                  className={`py-1.5 rounded-lg gap-x-2 flex items-center justify-center ${
+                    minute === 0 && second <= 20
+                      ? `bg-red-500 animate-pulse`
+                      : "bg-green-500"
+                  }`}
+                >
+                  <Image
+                    src="/img/examsStudent/stopwatch.png"
+                    alt="Timer"
+                    width={200}
+                    height={200}
+                    className="w-1/4"
+                  />
+                  <span className="text-xl font-semibold">{formatedTime}</span>
+                </div>
+              )}
             </div>
-          )}
+            <div className="bg-[#A6E3E9] mt-3 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
+              {questions.exams?.questions_exam.map((item: any, i: number) => {
+                const isAnswerPg = clickedAnswerPg[item.id];
+                const isAnswerEssay = answerEssayExams[item.id];
+                const isMarking = markQuestions[item.id];
+                return (
+                  <div
+                    className={`h-8 w-8 rounded-md flex items-center justify-center font-bold text-base relative ${
+                      isAnswerPg || isAnswerEssay
+                        ? "bg-green-400"
+                        : "bg-[#E3FDFD]"
+                    }`}
+                    key={i}
+                  >
+                    {isMarking === true && !isAnswerPg && (
+                      <Image
+                        src="/img/examsStudent/flag.png"
+                        alt="Mark"
+                        width={200}
+                        height={200}
+                        className="w-1/4 absolute top-1 left-1.5"
+                      />
+                    )}
+                    {i + 1}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
           <div className="bg-[#71C9CE] p-5 rounded-lg fixed top-1/4 md:w-2/5 lg:w-[30%] h-fit max-[640px]:hidden sm:hidden md:block">
             <div className="flex items-center md:justify-between">
               <h1 className="text-xl font-semibold">
@@ -278,7 +320,13 @@ export default function Soal() {
                 {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
               </h1>
               {formatedTime !== "NaN:NaN" && (
-                <div className=" bg-[#F38181] py-1.5 rounded-lg gap-x-2 flex items-center justify-center">
+                <div
+                  className={`py-1.5 rounded-lg gap-x-2 flex items-center justify-center ${
+                    minute === 0 && second <= 20
+                      ? `bg-red-500 animate-pulse`
+                      : "bg-green-500"
+                  }`}
+                >
                   <Image
                     src="/img/examsStudent/stopwatch.png"
                     alt="Timer"
@@ -320,6 +368,7 @@ export default function Soal() {
             </div>
           </div>
         </div>
+
         <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
           {questions.exams?.questions_exam.map((item: any, i: number) => (
             <div
@@ -342,9 +391,11 @@ export default function Soal() {
                           name={item.id}
                           className="cursor-pointer w-5 "
                           defaultChecked={isSelected}
-                          onClick={() =>
-                            handleSelectedAnswer(item.id, answerText)
-                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelectedAnswer(item.id, answerText);
+                          }}
+                          ref={clickedAnswerQuestions}
                         />
                         <label>
                           {opt.toLocaleUpperCase()}. {answerText}
@@ -354,12 +405,14 @@ export default function Soal() {
                   })}
                   <Button
                     className="cursor-pointer text-base mt-3"
-                    onClick={() =>
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setMarkQuestions((prev: any) => ({
                         ...prev,
                         [item.id]: !prev[item.id],
-                      }))
-                    }
+                      }));
+                    }}
+                    ref={clickedMarkQuestions}
                   >
                     Tandai
                   </Button>
@@ -435,13 +488,17 @@ export default function Soal() {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed top-7 right-7 md:hidden">
+      <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">
         <div className="flex flex-col items-center justify-center gap-1 informExam">
           <Input
             type="checkbox"
             className="size-7 cursor-pointer absolute opacity-0 z-20"
-            onChange={(e) => setShowInformationExam(e.target.checked)}
+            onChange={(e) => {
+              setShowInformationExam(e.target.checked);
+              setIsClosedContent(false);
+            }}
             checked={showInformationExam}
+            ref={clickedOutsideCheked}
           />
           <span className="w-6 h-1 bg-black rounded-lg rotate-45 translate-y-1 transition-all duration-300 ease-in-out"></span>
           <span className="w-6 h-1 bg-black rounded-lg -rotate-45 -translate-y-1 transition-all duration-300 ease-in-out"></span>
