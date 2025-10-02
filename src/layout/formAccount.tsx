@@ -1,7 +1,6 @@
 "use client";
 import ButtonLogin from "@/components/btnFormAccount/btnLogin";
 import ButtonRegister from "@/components/btnFormAccount/btnRegister";
-import { Toaster } from "@/components/ui/sonner";
 import { usePathname } from "next/navigation";
 
 export default function LayoutFormAccount({ formTitle, children }: any) {
