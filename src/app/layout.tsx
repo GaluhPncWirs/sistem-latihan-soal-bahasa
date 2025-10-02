@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { Quicksand } from "next/font/google";
+import { Ubuntu, Open_Sans } from "next/font/google";
 
-const fontStyle = Quicksand({
+const fontStyle = Open_Sans({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400"],
 });
 
 export default function RootLayout({

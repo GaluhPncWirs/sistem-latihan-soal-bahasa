@@ -164,13 +164,13 @@ export default function Soal() {
     }
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (timeOutDone === true) {
-        handleSendExam();
-      }
-    }, 5000);
-  }, [timeOutDone]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (timeOutDone === true) {
+  //       handleSendExam();
+  //     }
+  //   }, 5000);
+  // }, [timeOutDone]);
 
   // useEffect(() => {
   //   const handleSelectStart = (e: Event) => {
@@ -254,7 +254,7 @@ export default function Soal() {
       <div className="flex items-center justify-center md:gap-x-3 max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
         <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%] flex justify-center">
           <div
-            className={`bg-[#71C9CE] p-3 rounded-b-lg transition-all duration-300 fixed max-[640px]:w-full sm:w-full h-fit top-0 md:hidden ${
+            className={`bg-[#71C9CE] p-3 rounded-b-lg transition-all duration-300 shadow-lg shadow-slate-800 fixed max-[640px]:w-full sm:w-full h-fit top-0 md:hidden ${
               showInformationExam ? `translate-y-0` : `-translate-y-full`
             }`}
             ref={handleClickedOutsideContent}
@@ -266,7 +266,7 @@ export default function Soal() {
               </h1>
               {formatedTime !== "NaN:NaN" && (
                 <div
-                  className={`py-1.5 rounded-lg gap-x-2 flex items-center justify-center ${
+                  className={`py-1.5 rounded-lg gap-x-2 flex items-center px-2 justify-center ${
                     minute === 0 && second <= 20
                       ? `bg-red-500 animate-pulse`
                       : "bg-green-500"
@@ -313,7 +313,7 @@ export default function Soal() {
             </div>
           </div>
 
-          <div className="bg-[#71C9CE] p-5 rounded-lg fixed top-1/4 md:w-2/5 lg:w-[30%] h-fit max-[640px]:hidden sm:hidden md:block">
+          <div className="bg-[#71C9CE] p-5 rounded-lg fixed top-1/4 md:w-2/5 shadow-lg shadow-slate-800 lg:w-[30%] h-fit max-[640px]:hidden sm:hidden md:block">
             <div className="flex items-center md:justify-between">
               <h1 className="text-xl font-semibold">
                 Ujian{" "}
@@ -461,7 +461,7 @@ export default function Soal() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <div className="mt-7 max-[640px]:ml-5 sm:ml-7 md:ml-0">
+      <div className="mt-7 max-[640px]:mx-5 sm:mx-7 md:mx-10">
         <Dialog>
           <DialogTrigger asChild>
             <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">

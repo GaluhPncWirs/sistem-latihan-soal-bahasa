@@ -7,6 +7,7 @@ import {
 } from "../ui/hover-card";
 import { usePathname } from "next/navigation";
 import HamburgerMenuBar from "../sidebar/compSidebar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 export default function HeaderDasboard(props: any) {
   const { user, fullName, totalExams } = props;
@@ -19,8 +20,8 @@ export default function HeaderDasboard(props: any) {
       return (
         <div className="flex items-center justify-end gap-x-3">
           {isNotLate.length > 0 ? (
-            <HoverCard>
-              <HoverCardTrigger asChild>
+            <Popover>
+              <PopoverTrigger asChild>
                 <div className="relative flex justify-end">
                   <div className="h-4 w-4 bg-red-400 absolute rounded-md flex justify-center items-center">
                     <span className="text-xs font-bold">
@@ -35,13 +36,13 @@ export default function HeaderDasboard(props: any) {
                     className="w-[60%]"
                   />
                 </div>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-fit p-3">
+              </PopoverTrigger>
+              <PopoverContent className="w-fit p-3">
                 <h1 className="font-semibold text-xs">
                   Ada {isNotLate.length} Ujian Yang Belum Dikerjakan
                 </h1>
-              </HoverCardContent>
-            </HoverCard>
+              </PopoverContent>
+            </Popover>
           ) : (
             <Image
               src="/img/dashboardStudent/bell.png"
@@ -61,11 +62,13 @@ export default function HeaderDasboard(props: any) {
       return (
         <div className="flex items-center justify-end gap-x-3">
           {filterNilaiSiswa.length > 0 ? (
-            <HoverCard>
-              <HoverCardTrigger asChild>
+            <Popover>
+              <PopoverTrigger asChild>
                 <div className="relative flex justify-end">
                   <div className="h-4 w-4 bg-red-400 absolute rounded-md flex justify-center items-center">
-                    <span className="text-xs">{filterNilaiSiswa.length}</span>
+                    <span className="text-xs font-bold">
+                      {filterNilaiSiswa.length}
+                    </span>
                   </div>
                   <Image
                     src="/img/dashboardStudent/bell.png"
@@ -75,13 +78,13 @@ export default function HeaderDasboard(props: any) {
                     className="w-[60%]"
                   />
                 </div>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-fit p-3">
+              </PopoverTrigger>
+              <PopoverContent className="w-fit p-3">
                 <h1 className="font-semibold text-xs">
                   Ada {filterNilaiSiswa.length} Ujian Yang Belum Dinilai
                 </h1>
-              </HoverCardContent>
-            </HoverCard>
+              </PopoverContent>
+            </Popover>
           ) : (
             <Image
               src="/img/dashboardStudent/bell.png"

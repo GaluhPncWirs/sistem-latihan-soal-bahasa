@@ -90,7 +90,7 @@ export default function FooterComponent() {
               Follow Us
             </span>
           </div>
-          <div className="flex flex-wrap mt-5 gap-3">
+          <div className="flex flex-wrap mt-5 gap-3 mx-2">
             <Link
               href="#"
               className="flex items-center gap-3 grayscale-100 hover:grayscale-0 cursor-pointer transition-all"

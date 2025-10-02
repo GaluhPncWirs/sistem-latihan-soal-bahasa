@@ -288,10 +288,10 @@ export default function DashboardStudent() {
           totalExams={scheduleExams}
         />
         <div className="mt-5">
-          <p className="max-[640px]:text-lg text-2xl font-semibold">
+          <p className="max-[640px]:text-xl text-2xl font-semibold">
             Berikut Ringkasan Ujian Anda
           </p>
-          <div className="max-[640px]:w-full sm:w-11/12 mx-auto mt-10">
+          <div className="max-[640px]:w-full sm:w-11/12 mx-auto mt-8">
             <div className="flex justify-around items-center">
               <div className="bg-[#3D74B6] text-slate-100 rounded-lg p-5 font-semibold max-[640px]:p-3 flex flex-col justify-center items-center gap-y-1">
                 <Image

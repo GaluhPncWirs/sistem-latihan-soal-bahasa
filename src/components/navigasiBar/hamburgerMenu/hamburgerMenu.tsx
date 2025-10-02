@@ -67,16 +67,10 @@ export default function HamburgerMenu({
           <span>Beranda</span>
         </Link>
         <Link
-          href="#"
+          href="/HowToUse"
           className="cursor-pointer text-xl font-semibold text-slate-800"
         >
-          <span>Tentang</span>
-        </Link>
-        <Link
-          href="#"
-          className="cursor-pointer text-xl font-semibold text-slate-800"
-        >
-          <span>Tata Cara</span>
+          <span>Cara Pakai</span>
         </Link>
         <li>
           {isUserThereStudent === true || isUserThereTeacher === true ? (
@@ -90,7 +84,7 @@ export default function HamburgerMenu({
             <>
               <Link
                 href="/Autentikasi/Daftar"
-                className="bg-[#71C9CE] py-1.5 px-5 rounded-lg hover:bg-teal-500 cursor-pointer font-semibold text-lg block mb-3"
+                className="bg-[#71C9CE] py-1.5 px-5 rounded-lg hover:bg-teal-500 cursor-pointer font-semibold text-lg block mb-4"
               >
                 Daftar
               </Link>

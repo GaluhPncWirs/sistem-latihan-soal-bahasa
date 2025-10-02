@@ -312,13 +312,15 @@ export default function Profil() {
             <Table>
               <TableBody>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">Email</TableCell>
+                  <TableCell className="text-base font-semibold">
+                    Email
+                  </TableCell>
                   <TableCell className="text-base font-medium">
                     {dataStudent?.email || ""}
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">
+                  <TableCell className="text-base font-semibold">
                     No Telepon
                   </TableCell>
                   <TableCell className="text-base font-medium">
@@ -326,7 +328,7 @@ export default function Profil() {
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">
+                  <TableCell className="text-base font-semibold">
                     Bergabung
                   </TableCell>
                   <TableCell className="text-base font-medium">
@@ -338,13 +340,15 @@ export default function Profil() {
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">Peran</TableCell>
+                  <TableCell className="text-base font-semibold">
+                    Peran
+                  </TableCell>
                   <TableCell className="text-base font-medium">
                     {dataStudent?.role || ""}
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">
+                  <TableCell className="text-base font-semibold">
                     Status Akun
                   </TableCell>
                   <TableCell className="text-base font-medium">Aktif</TableCell>

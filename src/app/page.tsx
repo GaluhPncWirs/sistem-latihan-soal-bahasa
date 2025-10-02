@@ -93,7 +93,7 @@ export default function Home() {
                     className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
                   />
                 </div>
-                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-medium">
+                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-semibold">
                   Mudah Diakses
                 </h1>
                 <p className="p-3 bg-[#CBF1F5] rounded-b-lg">
@@ -110,7 +110,7 @@ export default function Home() {
                     className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
                   />
                 </div>
-                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-medium">
+                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-semibold">
                   Hasil Langsung
                 </h1>
                 <p className="p-3 bg-[#CBF1F5] rounded-b-lg">
@@ -127,7 +127,7 @@ export default function Home() {
                     className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
                   />
                 </div>
-                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-medium">
+                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-semibold">
                   Soal Beragam
                 </h1>
                 <p className="p-3 bg-[#CBF1F5] rounded-b-lg">
@@ -144,7 +144,7 @@ export default function Home() {
                     className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
                   />
                 </div>
-                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-medium">
+                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-semibold">
                   Keamanan Terjamin
                 </h1>
                 <p className="p-3 bg-[#CBF1F5] rounded-b-lg">
@@ -185,11 +185,11 @@ export default function Home() {
               <CarouselContent className="max-[640px]:h-60 sm:h-56 md:h-72 lg:h-96">
                 <CarouselItem className="flex items-center justify-center p-5">
                   <Image
-                    src="/img/beranda/ujian.jpeg"
-                    alt="Ujian Page"
+                    src="/img/beranda/dashboard.jpeg"
+                    alt="Dashboard Page"
                     width={500}
                     height={500}
-                    className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-3/4 rounded-md"
+                    className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-2/3 rounded-md"
                   />
                 </CarouselItem>
                 <CarouselItem className="flex items-center justify-center p-5">
@@ -203,11 +203,11 @@ export default function Home() {
                 </CarouselItem>
                 <CarouselItem className="flex items-center justify-center p-5">
                   <Image
-                    src="/img/beranda/dashboard.jpeg"
-                    alt="Dashboard Page"
+                    src="/img/beranda/ujian.jpeg"
+                    alt="Ujian Page"
                     width={500}
                     height={500}
-                    className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-2/3 rounded-md"
+                    className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-3/4 rounded-md"
                   />
                 </CarouselItem>
               </CarouselContent>
@@ -232,91 +232,105 @@ export default function Home() {
 
       <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] max-[640px]:pt-36 sm:pt-40 md:pt-52">
         <div className="w-2/3 mx-auto max-[640px]:w-10/12 sm:w-10/12 lg:w-2/3">
-          <h1 className="text-4xl font-bold sm:mb-10 pb-5">Alur Ujian</h1>
-          <div className="flex mx-10 max-[640px]:ml-5 max-[640px]:mx-0 max-[640px]:pr-5 max-[640px]:mt-10">
-            <div className="basis-1/6 flex flex-col items-center">
-              <Image
-                src="/img/beranda/roadmap.png"
-                alt="roadmap"
-                className="max-[640px]:w-1/2 sm:w-1/3 lg:w-1/4"
-                width={100}
-                height={100}
-              />
-              <div className="w-1 h-full mt-5 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
-                <div className="w-3 h-3 rounded-full bg-red-400 mt-10 max-[640px]:mt-9 sm:mt-11 md:mt-10"></div>
-                <div className="w-3 h-3 rounded-full bg-red-400 mt-32 max-[640px]:mt-[135px] sm:mt-[115px]"></div>
-                <div className="w-3 h-3 rounded-full bg-red-400 mt-32 max-[640px]:mt-[110px] sm:mt-[115px] md:mt-[118px]"></div>
-                <div className="w-3 h-3 rounded-full bg-red-400 mt-32 max-[640px]:mt-[135px] sm:mt-36 md:mt-[115px]"></div>
+          <div className="flex items-center gap-x-5 mb-5">
+            <Image
+              src="/img/beranda/roadmap.png"
+              alt="roadmap"
+              className="max-[640px]:w-1/12 sm:w-[7%] lg:w-[6%]"
+              width={500}
+              height={500}
+            />
+            <h1 className="text-4xl font-bold">Alur Ujian</h1>
+          </div>
+          <div className="flex gap-x-5">
+            <div className="max-[640px]:basis-[7%] sm:basis-[7%] lg:basis-[5%] flex justify-center">
+              <div className="w-1 h-full mt-3 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-red-400 mt-7"></div>
               </div>
             </div>
-
-            <div className="basis-5/6">
-              <div className="mt-20">
-                <div className="flex gap-3 items-center text-[#0F4C75]">
-                  <h1 className="font-bold text-2xl">Daftar / Login</h1>
-                  <Image
-                    src="/img/beranda/login.png"
-                    alt="login"
-                    className="w-[5%] max-[640px]:w-1/12"
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
-                  Buat akun baru atau masuk dengan akun yang sudah ada untuk
-                  mengakses sistem ujian online
-                </h2>
+            <div className="basis-5/6 mt-7">
+              <div className="flex gap-3 items-center text-[#0F4C75]">
+                <h1 className="font-bold text-2xl">Daftar / Login</h1>
+                <Image
+                  src="/img/beranda/login.png"
+                  alt="login"
+                  className="w-[5%] max-[640px]:w-1/12"
+                  width={100}
+                  height={100}
+                />
               </div>
-
-              <div className="mt-10 max-[640px]:mt-5 sm:mt-7">
-                <div className="flex gap-3 items-center text-[#0F4C75]">
-                  <h1 className="font-bold text-2xl">Pilih Ujian</h1>
-                  <Image
-                    src="/img/beranda/choose.png"
-                    alt="choose"
-                    className="w-[5%] max-[640px]:w-1/12"
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
-                  Telusuri dan pilih ujian yang tersedia sesuai jadwal yang
-                  ingin Anda ikuti
-                </h2>
+              <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
+                Buat akun baru atau masuk dengan akun yang sudah ada untuk
+                mengakses sistem ujian online
+              </h2>
+            </div>
+          </div>
+          <div className="flex gap-x-5">
+            <div className="max-[640px]:basis-[7%] sm:basis-[7%] lg:basis-[5%] flex justify-center">
+              <div className="w-1 h-full mt-3 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-red-400 mt-7"></div>
               </div>
-
-              <div className="mt-10 max-[640px]:mt-5 sm:mt-7">
-                <div className="flex gap-3 items-center text-[#0F4C75]">
-                  <h1 className="font-bold text-2xl">Kejakan Ujiannya</h1>
-                  <Image
-                    src="/img/beranda/working.png"
-                    alt="working"
-                    className="w-[5%] max-[640px]:w-1/12"
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
-                  Kerjakan soal secara online melalui antarmuka yang sederhana,
-                  didukung dengan navigasi soal
-                </h2>
+            </div>
+            <div className="basis-5/6 mt-7">
+              <div className="flex gap-3 items-center text-[#0F4C75]">
+                <h1 className="font-bold text-2xl">Pilih Ujian</h1>
+                <Image
+                  src="/img/beranda/choose.png"
+                  alt="choose"
+                  className="w-[5%] max-[640px]:w-1/12"
+                  width={100}
+                  height={100}
+                />
               </div>
-
-              <div className="mt-10 max-[640px]:mt-5 sm:mt-7">
-                <div className="flex gap-3 items-center text-[#0F4C75]">
-                  <h1 className="font-bold text-2xl">Lihat Nilai</h1>
-                  <Image
-                    src="/img/beranda/exam.png"
-                    alt="exam"
-                    className="w-[5%] max-[640px]:w-1/12"
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
-                  Setelah selesai, langsung dapatkan hasil ujian dan nilai anda
-                </h2>
+              <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
+                Telusuri dan pilih ujian yang tersedia sesuai jadwal yang ingin
+                Anda ikuti
+              </h2>
+            </div>
+          </div>
+          <div className="flex gap-x-5">
+            <div className="max-[640px]:basis-[7%] sm:basis-[7%] lg:basis-[5%] flex justify-center">
+              <div className="w-1 h-full mt-3 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-red-400 mt-7"></div>
               </div>
+            </div>
+            <div className="basis-5/6 mt-7">
+              <div className="flex gap-3 items-center text-[#0F4C75]">
+                <h1 className="font-bold text-2xl">Kerjakan Ujiannya</h1>
+                <Image
+                  src="/img/beranda/working.png"
+                  alt="working"
+                  className="w-[5%] max-[640px]:w-1/12"
+                  width={100}
+                  height={100}
+                />
+              </div>
+              <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
+                Kerjakan soal secara online melalui antarmuka yang sederhana,
+                didukung dengan navigasi soal
+              </h2>
+            </div>
+          </div>
+          <div className="flex gap-x-5">
+            <div className="max-[640px]:basis-[7%] sm:basis-[7%] lg:basis-[5%] flex justify-center">
+              <div className="w-1 h-full mt-3 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-red-400 mt-7"></div>
+              </div>
+            </div>
+            <div className="basis-5/6 mt-7">
+              <div className="flex gap-3 items-center text-[#0F4C75]">
+                <h1 className="font-bold text-2xl">Lihat Nilai</h1>
+                <Image
+                  src="/img/beranda/exam.png"
+                  alt="exam"
+                  className="w-[5%] max-[640px]:w-1/12"
+                  width={100}
+                  height={100}
+                />
+              </div>
+              <h2 className="font-semibold text-xl mt-3 text-[#393E46] max-[640px]:text-lg">
+                Setelah selesai, langsung dapatkan hasil ujian dan nilai anda
+              </h2>
             </div>
           </div>
         </div>

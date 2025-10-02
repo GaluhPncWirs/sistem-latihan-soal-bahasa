@@ -58,19 +58,13 @@ export default function NavigasiBar() {
             href="/"
             className="cursor-pointer text-xl font-semibold text-slate-800"
           >
-            <span className="sm:text-base md:text-xl">Beranda</span>
-          </Link>
-          <Link
-            href="#"
-            className="cursor-pointer text-xl font-semibold text-slate-800"
-          >
-            <span className="sm:text-base md:text-xl">Tentang</span>
+            <span className="text-xl">Beranda</span>
           </Link>
           <Link
             href="/HowToUse"
             className="cursor-pointer text-xl font-semibold text-slate-800"
           >
-            <span className="sm:text-base md:text-xl">Tata Cara</span>
+            <span className="text-xl">Cara Pakai</span>
           </Link>
         </ul>
         <div className="basis-1/4 pr-5 h-full flex items-center justify-center gap-5 max-[640px]:hidden bg-[#A6E3E9] bg-gradient-to-r to-sky-300">

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import ListSidebar from "./listSidebar/content";
+import Image from "next/image";
 
 export default function HamburgerMenuBar() {
   const [isCheked, setIsCheked] = useState<boolean>(false);
@@ -51,8 +52,9 @@ export default function HamburgerMenuBar() {
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
       </div>
+
       <ul
-        className={`flex gap-y-10 fixed shadow-xl shadow-slate-700 left-0 top-0 flex-col bg-[#476EAE] items-center w-1/2 transition-all duration-300 text-xl font-semibold h-screen z-50 pt-28 sm:w-1/3
+        className={`flex gap-y-10 fixed shadow-xl shadow-slate-700 left-0 top-0 flex-col bg-[#476EAE] items-center w-1/2 transition-all duration-300 text-xl font-semibold h-screen z-50 pt-14 sm:w-1/3
       ${isCheked ? `translate-x-0` : `-translate-x-full`}`}
         ref={clickOutsidePath}
       >

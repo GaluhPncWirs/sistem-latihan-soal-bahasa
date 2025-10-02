@@ -34,6 +34,15 @@ export default function ListSidebar() {
   }
   return (
     <>
+      <div className="bg-slate-200 rounded-md w-10/12 h-16 mx-auto flex items-center px-3 shadow-lg shadow-slate-700 md:hidden">
+        <Image
+          src="/img/footer/logo.png"
+          alt="Logo"
+          width={400}
+          height={400}
+          className="w-full"
+        />
+      </div>
       <Link href="/" className="cursor-pointer flex items-center gap-x-5 w-2/3">
         <Image
           src="/img/dashboardStudent/home.png"

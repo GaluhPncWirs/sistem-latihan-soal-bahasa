@@ -6,7 +6,7 @@ export default function CaraPakaiSistemUjian() {
     <LayoutIntroductionsSystem>
       <div className="pt-24 bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
         <div className="mt-3 mx-auto max-[640px]:w-11/12 sm:w-3/4 md:w-11/12 lg:w-3/4">
-          <h1 className="text-3xl font-bold text-center text-blue-900">
+          <h1 className="text-3xl font-bold text-center text-blue-900 mb-10">
             Cara Menggunakan Sistem Ujian Online
           </h1>
           <p className="my-5 text-lg font-semibold">
@@ -125,7 +125,9 @@ export default function CaraPakaiSistemUjian() {
                   height={200}
                   className="max-[640px]:w-[6%] sm:w-[5%] md:w-[3%]"
                 />
-                <span>Jawaban Disimpan Otomatis Jika Waktu Telah Habis</span>
+                <span>
+                  Jawaban Disimpan Secara Otomatis Jika Waktu Telah Habis
+                </span>
               </li>
               <li className="flex items-center gap-x-3">
                 <Image
@@ -135,7 +137,7 @@ export default function CaraPakaiSistemUjian() {
                   height={200}
                   className="max-[640px]:w-[6%] sm:w-[5%] md:w-[3%]"
                 />
-                <span>Jangan Tutup Tab/Browser Sebelum Selesai</span>
+                <span>Jangan Tutup Tab/Browser Sebelum Ujian Selesai</span>
               </li>
             </ul>
           </div>
