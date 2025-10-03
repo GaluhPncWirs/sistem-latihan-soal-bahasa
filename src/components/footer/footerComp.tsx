@@ -72,8 +72,8 @@ export default function FooterComponent() {
             </span>
           </div>
           <p className="mt-5 xl:text-lg px-3 max-w-3/4">
-            Perumahan Bumi Cikarang Asri No. 10 Ciantra Cikarang Selatan Bekasi,
-            Jawa Barat 17530
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe
+            consectetur dolorum, magni dolores placeat
           </p>
         </div>
 

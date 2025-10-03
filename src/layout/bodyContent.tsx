@@ -21,7 +21,9 @@ export default function LayoutBodyContent({ children }: any) {
         </div>
       </div>
       <div className="max-[640px]:w-[95%] max-[640px]:mx-auto sm:w-[95%] sm:mx-auto md:w-3/4 lg:w-4/5 my-10">
-        {children}
+        <div className="mx-auto max-[640px]:w-11/12 sm:w-11/12 lg:w-[90%]">
+          {children}
+        </div>
       </div>
     </div>
   );

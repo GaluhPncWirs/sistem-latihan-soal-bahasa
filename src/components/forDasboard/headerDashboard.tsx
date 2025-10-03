@@ -1,10 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "../ui/hover-card";
 import { usePathname } from "next/navigation";
 import HamburgerMenuBar from "../sidebar/compSidebar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";

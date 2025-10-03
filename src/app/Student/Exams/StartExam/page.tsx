@@ -51,19 +51,54 @@ export default function Soal() {
   const clickedAnswerQuestions = useRef<HTMLInputElement | null>(null);
   const [isClosedContent, setIsClosedContent] = useState<boolean>(false);
 
-  useEffect(() => {
-    const savedAnswer = localStorage.getItem("exam-answer");
-    const savedMark = localStorage.getItem("markQuestions");
-    if (savedAnswer && savedMark) {
-      setClickedAnswerPg(JSON.parse(savedAnswer));
-      setMarkQuestions(JSON.parse(savedMark));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedAnswer = localStorage.getItem("exam-answer-pg");
+  //   const savedMark = localStorage.getItem("markQuestions");
+  //   if (savedAnswer && savedMark) {
+  //     setClickedAnswerPg(JSON.parse(savedAnswer));
+  //     setMarkQuestions(JSON.parse(savedMark));
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   localStorage.setItem("exam-answer-pg", JSON.stringify(clickedAnswerPg));
+  //   localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
+  // }, [clickedAnswerPg, markQuestions]);
 
   useEffect(() => {
-    localStorage.setItem("exam-answer", JSON.stringify(clickedAnswerPg));
-    localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
-  }, [clickedAnswerPg, markQuestions]);
+    if (questions?.tipe_ujian === "pg") {
+      const savedMark = localStorage.getItem("markQuestions");
+      const savedAnswerPg = localStorage.getItem("exam-answer-pg");
+      if (savedAnswerPg && savedMark) {
+        setClickedAnswerPg(JSON.parse(savedAnswerPg));
+        setMarkQuestions(JSON.parse(savedMark));
+      }
+    }
+
+    if (questions?.tipe_ujian === "essay") {
+      const savedMark = localStorage.getItem("markQuestions");
+      const savedAnswerEssay = localStorage.getItem("exam-answer-essay");
+      if (savedAnswerEssay && savedMark) {
+        setAnswerEssayExams(JSON.parse(savedAnswerEssay));
+        setMarkQuestions(JSON.parse(savedMark));
+      }
+    }
+  }, [questions?.tipe_ujian]);
+
+  useEffect(() => {
+    if (questions?.tipe_ujian === "pg") {
+      localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
+      localStorage.setItem("exam-answer-pg", JSON.stringify(clickedAnswerPg));
+    }
+
+    if (questions?.tipe_ujian === "essay") {
+      localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
+      localStorage.setItem(
+        "exam-answer-essay",
+        JSON.stringify(answerEssayExams)
+      );
+    }
+  }, [questions?.tipe_ujian, clickedAnswerPg, markQuestions, answerEssayExams]);
 
   useEffect(() => {
     function initializedTime() {
@@ -297,7 +332,7 @@ export default function Soal() {
                     }`}
                     key={i}
                   >
-                    {isMarking === true && !isAnswerPg && (
+                    {isMarking === true && (!isAnswerPg || !isAnswerEssay) && (
                       <Image
                         src="/img/examsStudent/flag.png"
                         alt="Mark"
@@ -352,7 +387,7 @@ export default function Soal() {
                     }`}
                     key={i}
                   >
-                    {isMarking === true && !isAnswerPg && (
+                    {isMarking === true && (!isAnswerPg || !isAnswerEssay) && (
                       <Image
                         src="/img/examsStudent/flag.png"
                         alt="Mark"
@@ -390,7 +425,12 @@ export default function Soal() {
                           type="radio"
                           name={item.id}
                           className="cursor-pointer w-5 "
-                          defaultChecked={isSelected}
+                          checked={isSelected}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              handleSelectedAnswer(item.id, answerText);
+                            }
+                          }}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleSelectedAnswer(item.id, answerText);
@@ -438,7 +478,21 @@ export default function Soal() {
                         [item.id]: e.target?.value,
                       }))
                     }
+                    defaultValue={answerEssayExams[item.id]}
                   />
+                  <Button
+                    className="cursor-pointer text-base mt-3"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMarkQuestions((prev: any) => ({
+                        ...prev,
+                        [item.id]: !prev[item.id],
+                      }));
+                    }}
+                    ref={clickedMarkQuestions}
+                  >
+                    Tandai
+                  </Button>
                 </div>
               )}
             </div>
