@@ -6,7 +6,6 @@ import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import CreateNewQuestions from "@/components/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/components/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/components/khususGuru/kelolaSiswa/manageStudent";
-import SideBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -22,6 +21,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
+import FloatingBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -272,7 +272,7 @@ export default function Teacher() {
               <h1 className="font-medium">Nilai Rata-Rata</h1>
             </div>
           </div>
-          <SideBarDashboardTeacher handleClickItem={handleClickItem} />
+          <FloatingBarDashboardTeacher handleClickItem={handleClickItem} />
           <div className="mt-5">
             {dashboardButton.viewResult === true ? (
               <ViewQuestions />

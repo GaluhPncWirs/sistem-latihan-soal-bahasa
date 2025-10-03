@@ -154,7 +154,7 @@ export default function FooterComponent() {
           <span className="text-[#E3FDFD] font-medium">
             {new Date(Date.now()).getFullYear()}
           </span>{" "}
-          Lorem Ipsum All rights reserved.
+          Galuh panca wirasa rights reserved.
         </h1>
       </div>
     </div>

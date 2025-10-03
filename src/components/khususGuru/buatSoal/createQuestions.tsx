@@ -23,6 +23,7 @@ import {
 import { useRandomId } from "@/app/hooks/getRandomId";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { useManageExamsData } from "@/app/hooks/getDataManageExams";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function CreateNewQuestions() {
   const [answer, setAnswer] = useState({
@@ -220,72 +221,74 @@ export default function CreateNewQuestions() {
   }, [clearInput, chooseTypeExams]);
 
   return (
-    <div className="bg-[#476EAE] p-5 rounded-lg">
-      <h1 className="text-2xl font-semibold mb-7 text-slate-100">
-        Buat Soal Ujian
-      </h1>
+    <div className="w-11/12 mx-auto">
+      <h1 className="text-2xl font-semibold mb-7">Buat Soal Ujian</h1>
       <form className="flex flex-col gap-5">
-        <div className="bg-[#EBEBEB] p-5 rounded-lg">
-          <Select onValueChange={(val) => setChooseTypeExams(val)}>
-            <SelectTrigger className="w-2/3">
-              <SelectValue placeholder="Pilih Tipe Ujian (PG / Essay)" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="pg">Pilihan Ganda</SelectItem>
-              <SelectItem value="essay">Essay</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex justify-around">
+          <div className="w-1/2">
+            <h1 className="font-semibold mb-2">Pilih Tipe Ujian</h1>
+            <Select onValueChange={(val) => setChooseTypeExams(val)}>
+              <SelectTrigger className="w-11/12 border border-black">
+                <SelectValue placeholder="Tipe Ujian (PG / Essay)" />
+              </SelectTrigger>
+              <SelectContent className="p-1">
+                <SelectItem value="pg">Pilihan Ganda</SelectItem>
+                <SelectItem value="essay">Essay</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-1/2">
+            <h1 className="font-semibold mb-2">Nama Ujian</h1>
+            <Select onValueChange={(val) => setSelectedValueNameExam(val)}>
+              <SelectTrigger className="w-11/12 border border-black">
+                <SelectValue placeholder="Pilih Nama Ujiannya" />
+              </SelectTrigger>
+              <SelectContent className="p-1">
+                <SelectItem
+                  value="buatUjianBaru"
+                  className="border-black border bg-slate-300"
+                >
+                  Buat Ujian Baru
+                </SelectItem>
+                {chooseTypeExams === "pg"
+                  ? dataNameExam.map(
+                      (nameExam: any, i: number) =>
+                        nameExam.tipeUjian === "pg" && (
+                          <SelectItem
+                            value={nameExam.nama_ujian || "Nama ujian"}
+                            key={i}
+                          >
+                            {nameExam.nama_ujian || "Nama Ujian"}
+                          </SelectItem>
+                        )
+                    )
+                  : dataNameExam.map(
+                      (nameExam: any, i: number) =>
+                        nameExam.tipeUjian === "essay" && (
+                          <SelectItem
+                            value={nameExam.nama_ujian || "Nama ujian"}
+                            key={i}
+                          >
+                            {nameExam.nama_ujian || "Nama Ujian"}
+                          </SelectItem>
+                        )
+                    )}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        <div className="bg-[#EBEBEB] p-5 rounded-lg">
-          <Select onValueChange={(val) => setSelectedValueNameExam(val)}>
-            <SelectTrigger className="w-2/3">
-              <SelectValue placeholder="Pilih Nama Ujiannya" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem
-                value="buatUjianBaru"
-                className="border-black border bg-slate-300"
-              >
-                Buat Ujian Baru
-              </SelectItem>
-              {chooseTypeExams === "pg"
-                ? dataNameExam.map(
-                    (nameExam: any, i: number) =>
-                      nameExam.tipeUjian === "pg" && (
-                        <SelectItem
-                          value={nameExam.nama_ujian || "Nama ujian"}
-                          key={i}
-                        >
-                          {nameExam.nama_ujian || "Nama Ujian"}
-                        </SelectItem>
-                      )
-                  )
-                : dataNameExam.map(
-                    (nameExam: any, i: number) =>
-                      nameExam.tipeUjian === "essay" && (
-                        <SelectItem
-                          value={nameExam.nama_ujian || "Nama ujian"}
-                          key={i}
-                        >
-                          {nameExam.nama_ujian || "Nama Ujian"}
-                        </SelectItem>
-                      )
-                  )}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex bg-[#EBEBEB] p-5 rounded-lg flex-col items-center gap-3">
+        <div className="w-3/4">
           {selectedValueNameExam === "buatUjianBaru" && (
             <>
               <label
                 htmlFor="nama_ujian"
-                className="text-lg font-semibold mb-2 w-10/12"
+                className="font-semibold mb-2 inline-block"
               >
                 Nama Ujian
               </label>
               <Input
                 id="nama_ujian"
-                className="border border-black rounded-sm p-1 px-2 w-10/12"
+                className="border border-black rounded-sm p-1 px-2"
                 onChange={(e: any) => setNameExams(e.currentTarget.value)}
                 value={nameExam}
               />
@@ -293,28 +296,30 @@ export default function CreateNewQuestions() {
           )}
           <label
             htmlFor="questions"
-            className="text-lg font-semibold mb-2 w-10/12"
+            className="font-semibold mb-2 inline-block mt-3"
           >
             Pertanyaan
           </label>
-          <Input
+          <Textarea
             id="questions"
-            className="border border-black rounded-sm p-1 px-2 w-10/12"
+            className="border border-black rounded-sm p-1 px-2"
             onChange={(e: any) => setQuestion(e.currentTarget.value)}
             value={question}
           />
         </div>
         {chooseTypeExams === "pg" && (
-          <>
-            <div className="bg-[#EBEBEB] p-5 rounded-lg">
-              <h1 className="text-lg font-semibold">Isi Jawaban</h1>
-              <div className="flex gap-5 mt-3 items-center justify-center flex-wrap">
-                <div className="text-center">
+          <div>
+            <div className="mb-5">
+              <h1 className="font-semibold inline-block mb-4">
+                Pilihan Jawaban
+              </h1>
+              <div className="flex gap-x-5 gap-y-3 flex-wrap">
+                <div>
                   <label
                     htmlFor="answer_a"
-                    className="text-base font-semibold mr-3"
+                    className="text-base font-semibold inline-block mb-2"
                   >
-                    Jawaban A
+                    Opsi A
                   </label>
                   <Input
                     id="answer_a"
@@ -324,12 +329,12 @@ export default function CreateNewQuestions() {
                     onChange={handleAddAnswer}
                   />
                 </div>
-                <div className="text-center ">
+                <div>
                   <label
                     htmlFor="answer_b"
-                    className="text-base font-semibold mr-3"
+                    className="text-base font-semibold inline-block mb-2"
                   >
-                    Jawaban B
+                    Opsi B
                   </label>
                   <Input
                     id="answer_b"
@@ -339,12 +344,12 @@ export default function CreateNewQuestions() {
                     onChange={handleAddAnswer}
                   />
                 </div>
-                <div className="text-center">
+                <div>
                   <label
                     htmlFor="answer_c"
-                    className="text-base font-semibold mr-3"
+                    className="text-base font-semibold inline-block mb-2"
                   >
-                    Jawaban C
+                    Opsi C
                   </label>
                   <Input
                     id="answer_c"
@@ -354,12 +359,12 @@ export default function CreateNewQuestions() {
                     onChange={handleAddAnswer}
                   />
                 </div>
-                <div className="text-center ">
+                <div>
                   <label
                     htmlFor="answer_d"
-                    className="text-base font-semibold mr-3"
+                    className="text-base font-semibold inline-block mb-2"
                   >
-                    Jawaban D
+                    Opsi D
                   </label>
                   <Input
                     id="answer_d"
@@ -369,12 +374,12 @@ export default function CreateNewQuestions() {
                     onChange={handleAddAnswer}
                   />
                 </div>
-                <div className="text-center ">
+                <div>
                   <label
                     htmlFor="answer_e"
-                    className="text-base font-semibold mr-3"
+                    className="text-base font-semibold inline-block mb-2"
                   >
-                    Jawaban E
+                    Opsi E
                   </label>
                   <Input
                     id="answer_e"
@@ -386,10 +391,10 @@ export default function CreateNewQuestions() {
                 </div>
               </div>
             </div>
-            <div className="bg-[#EBEBEB] p-5 rounded-lg">
-              <h1 className="text-lg font-semibold mb-3">Jawaban Yang Benar</h1>
+            <div>
+              <h1 className="font-semibold mb-3">Jawaban Yang Benar</h1>
               <Select onValueChange={(val) => setSelectCorrectAnswer(val)}>
-                <SelectTrigger className="w-2/3">
+                <SelectTrigger className="w-1/2 border border-black">
                   <SelectValue placeholder="Pilih Jawaban Yang Benar" />
                 </SelectTrigger>
                 <SelectContent>
@@ -411,12 +416,12 @@ export default function CreateNewQuestions() {
                 </SelectContent>
               </Select>
             </div>
-          </>
+          </div>
         )}
       </form>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="text-center text-lg mt-5 text-black px-8 rounded-md py-1.5 font-semibold cursor-pointer bg-slate-300 hover:bg-slate-400">
+          <Button className="text-center text-lg mt-10 text-black px-8 rounded-md py-1.5 font-semibold cursor-pointer bg-slate-300 hover:bg-slate-400">
             Buat
           </Button>
         </DialogTrigger>

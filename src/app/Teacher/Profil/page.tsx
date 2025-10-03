@@ -329,19 +329,23 @@ export default function TeacherProfile() {
             <Table>
               <TableBody>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">Email</TableCell>
+                  <TableCell className="text-base font-semibold">
+                    Email
+                  </TableCell>
                   <TableCell className="text-base font-medium">
                     {getProfileTeacher?.email || ""}
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">NISN</TableCell>
+                  <TableCell className="text-base font-semibold">
+                    NISN
+                  </TableCell>
                   <TableCell className="text-base font-medium">
                     {getProfileTeacher?.nisn}
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">
+                  <TableCell className="text-base font-semibold">
                     No Telepon
                   </TableCell>
                   <TableCell className="text-base font-medium">
@@ -355,7 +359,7 @@ export default function TeacherProfile() {
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">
+                  <TableCell className="text-base font-semibold">
                     Bergabung
                   </TableCell>
                   <TableCell className="text-base font-medium">
@@ -367,13 +371,15 @@ export default function TeacherProfile() {
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">Peran</TableCell>
+                  <TableCell className="text-base font-semibold">
+                    Peran
+                  </TableCell>
                   <TableCell className="text-base font-medium">
                     {getProfileTeacher?.role || ""}
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-black">
-                  <TableCell className="text-base font-medium">
+                  <TableCell className="text-base font-semibold">
                     Status Akun
                   </TableCell>
                   <TableCell className="text-base font-medium">Aktif</TableCell>
