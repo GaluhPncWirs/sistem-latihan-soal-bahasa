@@ -28,7 +28,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useGetMediaQuery } from "@/app/hooks/getMediaQuery";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
