@@ -8,18 +8,15 @@ export default function HeaderDasboard(props: any) {
   const urlPathName = usePathname();
   function informExams() {
     if (urlPathName === "/Student/Dashboard") {
-      const isNotLate = totalExams.filter(
-        (fil: any) => fil.hasil_ujian !== "telat" || !fil.status_exam
-      );
       return (
         <div className="flex items-center justify-end gap-x-3">
-          {isNotLate.length > 0 ? (
+          {totalExams.length > 0 ? (
             <Popover>
               <PopoverTrigger asChild>
                 <div className="relative flex justify-end">
                   <div className="h-4 w-4 bg-red-400 absolute rounded-md flex justify-center items-center">
                     <span className="text-xs font-bold">
-                      {isNotLate.length}
+                      {totalExams.length}
                     </span>
                   </div>
                   <Image
@@ -33,7 +30,7 @@ export default function HeaderDasboard(props: any) {
               </PopoverTrigger>
               <PopoverContent className="w-fit p-3">
                 <h1 className="font-semibold text-xs">
-                  Ada {isNotLate.length} Ujian Yang Belum Dikerjakan
+                  Ada {totalExams.length} Ujian Yang Belum Dikerjakan
                 </h1>
               </PopoverContent>
             </Popover>

@@ -9,9 +9,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useEffect, useState } from "react";
 import { useGetIdTeacher } from "./hooks/getIdTeacher";
 import LayoutIntroductionsSystem from "@/layout/introductionSystem";
+import { useEffect, useState } from "react";
+
 export default function Home() {
   const isLoginStudent = useGetIdStudent();
   const isLoginTeacher = useGetIdTeacher();
@@ -19,8 +20,9 @@ export default function Home() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 640px)");
-    const handler = (e: MediaQueryListEvent | MediaQueryList) =>
+    function handler(e: MediaQueryListEvent | MediaQueryList) {
       setIsSizeMobile(e.matches);
+    }
 
     handler(mediaQuery);
     mediaQuery.addEventListener("change", handler);

@@ -28,6 +28,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useGetMediaQuery } from "@/app/hooks/getMediaQuery";
 
 export default function Soal() {
   const [questions, setQuestions] = useState<any>([]);
@@ -51,6 +52,18 @@ export default function Soal() {
   const clickedAnswerQuestions = useRef<HTMLInputElement | null>(null);
   const [isClosedContent, setIsClosedContent] = useState<boolean>(false);
   const [dataUjianRandom, setDataUjianRandom] = useState<any>([]);
+  const [isSizeMobile, setIsSizeMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    function handler(e: MediaQueryListEvent | MediaQueryList) {
+      setIsSizeMobile(e.matches);
+    }
+
+    handler(mediaQuery);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => {
     if (questions?.tipe_ujian === "pg") {
@@ -196,6 +209,7 @@ export default function Soal() {
       localStorage.removeItem("timer");
       localStorage.removeItem("exam-answer-pg");
       localStorage.removeItem("markQuestions");
+      localStorage.removeItem("random-number-exam");
       router.push("/Student/Dashboard");
     } else {
       toast("Gagal ❌", { description: "Gagal menyimpan data" });
@@ -292,8 +306,12 @@ export default function Soal() {
       <div className="flex items-center justify-center md:gap-x-3 max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
         <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%] flex justify-center">
           <div
-            className={`bg-[#71C9CE] p-3 rounded-b-lg transition-all duration-300 shadow-lg shadow-slate-800 fixed max-[640px]:w-full sm:w-full h-fit top-0 md:hidden ${
-              showInformationExam ? `translate-y-0` : `-translate-y-full`
+            className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed p-5 rounded-md ${
+              isSizeMobile
+                ? `transition-all duration-300 max-[640px]:w-full sm:w-11/12 top-0 ${
+                    showInformationExam ? `translate-y-0` : `-translate-y-full`
+                  }`
+                : `top-1/4 md:w-2/5 lg:w-[30%]`
             }`}
             ref={handleClickedOutsideContent}
           >
@@ -304,65 +322,7 @@ export default function Soal() {
               </h1>
               {formatedTime !== "NaN:NaN" && (
                 <div
-                  className={`py-1.5 rounded-lg gap-x-2 flex items-center px-2 justify-center ${
-                    minute === 0 && second <= 20
-                      ? `bg-red-500 animate-pulse`
-                      : "bg-green-500"
-                  }`}
-                >
-                  <Image
-                    src="/img/examsStudent/stopwatch.png"
-                    alt="Timer"
-                    width={200}
-                    height={200}
-                    className="w-1/4"
-                  />
-                  <span className="text-xl font-semibold">{formatedTime}</span>
-                </div>
-              )}
-            </div>
-            <div className="bg-[#A6E3E9] mt-3 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
-              {dataUjianRandom.map((item: any, i: number) => {
-                const isAnswerPg = clickedAnswerPg[item.id];
-                const isAnswerEssay = answerEssayExams[item.id];
-                const isMarking = markQuestions[item.id];
-                return (
-                  <div
-                    className={`h-8 w-8 rounded-md flex items-center justify-center font-bold text-base relative ${
-                      isAnswerPg || isAnswerEssay
-                        ? "bg-green-400"
-                        : "bg-[#E3FDFD]"
-                    }`}
-                    key={i}
-                  >
-                    {isMarking === true &&
-                      ((questions?.tipe_ujian === "pg" && !isAnswerPg) ||
-                        (questions?.tipe_ujian === "essay" &&
-                          !isAnswerEssay)) && (
-                        <Image
-                          src="/img/examsStudent/flag.png"
-                          alt="Mark"
-                          width={200}
-                          height={200}
-                          className="w-1/4 absolute top-1 left-1.5"
-                        />
-                      )}
-                    {i + 1}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="bg-[#71C9CE] p-5 rounded-lg fixed top-1/4 md:w-2/5 shadow-lg shadow-slate-800 lg:w-[30%] h-fit max-[640px]:hidden sm:hidden md:block">
-            <div className="flex items-center md:justify-between">
-              <h1 className="text-xl font-semibold">
-                Ujian{" "}
-                {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
-              </h1>
-              {formatedTime !== "NaN:NaN" && (
-                <div
-                  className={`py-1.5 rounded-lg gap-x-2 flex items-center justify-center ${
+                  className={`py-1.5 rounded-md gap-x-2 flex items-center px-1.5 justify-center ${
                     minute === 0 && second <= 20
                       ? `bg-red-500 animate-pulse`
                       : "bg-green-500"
@@ -386,7 +346,7 @@ export default function Soal() {
                 const isMarking = markQuestions[item.id];
                 return (
                   <div
-                    className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
+                    className={`h-9 w-9 rounded-md flex items-center justify-center font-bold text-lg relative ${
                       isAnswerPg || isAnswerEssay
                         ? "bg-green-400"
                         : "bg-[#E3FDFD]"
@@ -416,7 +376,7 @@ export default function Soal() {
         <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
           {dataUjianRandom.map((item: any, i: number) => (
             <div
-              className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
+              className="mt-4 bg-[#36d4d2] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
               key={item.id}
             >
               <h1 className="text-lg font-semibold" id="pertannyaan">
