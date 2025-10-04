@@ -218,6 +218,7 @@ export default function DashboardStudent() {
                       )
                     }
                     className="cursor-pointer"
+                    disabled={accepted}
                   >
                     {confirm <= 0 ? "Oke" : confirm}
                   </Button>

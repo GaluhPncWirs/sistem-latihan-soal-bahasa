@@ -29,6 +29,8 @@ export default function ListSidebar() {
     const messageRespons = await responseDelCookies.json();
     localStorage.removeItem("idLoginSiswa");
     localStorage.removeItem("idLoginGuru");
+    localStorage.removeItem("idLoginGuru");
+    localStorage.removeItem("random-number-exam");
     push("/Autentikasi/Login");
     toast("Berhasil ✅", { description: messageRespons.message });
   }

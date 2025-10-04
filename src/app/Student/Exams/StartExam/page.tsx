@@ -50,20 +50,7 @@ export default function Soal() {
   const clickedMarkQuestions = useRef<HTMLButtonElement | null>(null);
   const clickedAnswerQuestions = useRef<HTMLInputElement | null>(null);
   const [isClosedContent, setIsClosedContent] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   const savedAnswer = localStorage.getItem("exam-answer-pg");
-  //   const savedMark = localStorage.getItem("markQuestions");
-  //   if (savedAnswer && savedMark) {
-  //     setClickedAnswerPg(JSON.parse(savedAnswer));
-  //     setMarkQuestions(JSON.parse(savedMark));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem("exam-answer-pg", JSON.stringify(clickedAnswerPg));
-  //   localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
-  // }, [clickedAnswerPg, markQuestions]);
+  const [dataUjianRandom, setDataUjianRandom] = useState<any>([]);
 
   useEffect(() => {
     if (questions?.tipe_ujian === "pg") {
@@ -99,6 +86,20 @@ export default function Soal() {
       );
     }
   }, [questions?.tipe_ujian, clickedAnswerPg, markQuestions, answerEssayExams]);
+
+  useEffect(() => {
+    if (questions?.exams?.questions_exam) {
+      const savedQuestions = localStorage.getItem("random-number-exam");
+      if (savedQuestions) {
+        setDataUjianRandom(JSON.parse(savedQuestions));
+      } else {
+        const questionsExam = questions.exams?.questions_exam ?? [];
+        const dataExams = [...questionsExam].sort(() => 0.5 - Math.random());
+        setDataUjianRandom(dataExams);
+        localStorage.setItem("random-number-exam", JSON.stringify(dataExams));
+      }
+    }
+  }, [questions]);
 
   useEffect(() => {
     function initializedTime() {
@@ -193,6 +194,8 @@ export default function Soal() {
       toast("Berhasil ✅", { description: "Ujian Telah Selesai" });
       localStorage.removeItem("exam-answer");
       localStorage.removeItem("timer");
+      localStorage.removeItem("exam-answer-pg");
+      localStorage.removeItem("markQuestions");
       router.push("/Student/Dashboard");
     } else {
       toast("Gagal ❌", { description: "Gagal menyimpan data" });
@@ -319,7 +322,7 @@ export default function Soal() {
               )}
             </div>
             <div className="bg-[#A6E3E9] mt-3 flex flex-wrap gap-2 justify-center items-center p-3 rounded-md">
-              {questions.exams?.questions_exam.map((item: any, i: number) => {
+              {dataUjianRandom.map((item: any, i: number) => {
                 const isAnswerPg = clickedAnswerPg[item.id];
                 const isAnswerEssay = answerEssayExams[item.id];
                 const isMarking = markQuestions[item.id];
@@ -332,15 +335,18 @@ export default function Soal() {
                     }`}
                     key={i}
                   >
-                    {isMarking === true && (!isAnswerPg || !isAnswerEssay) && (
-                      <Image
-                        src="/img/examsStudent/flag.png"
-                        alt="Mark"
-                        width={200}
-                        height={200}
-                        className="w-1/4 absolute top-1 left-1.5"
-                      />
-                    )}
+                    {isMarking === true &&
+                      ((questions?.tipe_ujian === "pg" && !isAnswerPg) ||
+                        (questions?.tipe_ujian === "essay" &&
+                          !isAnswerEssay)) && (
+                        <Image
+                          src="/img/examsStudent/flag.png"
+                          alt="Mark"
+                          width={200}
+                          height={200}
+                          className="w-1/4 absolute top-1 left-1.5"
+                        />
+                      )}
                     {i + 1}
                   </div>
                 );
@@ -374,7 +380,7 @@ export default function Soal() {
               )}
             </div>
             <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3 rounded-md">
-              {questions.exams?.questions_exam.map((item: any, i: number) => {
+              {dataUjianRandom.map((item: any, i: number) => {
                 const isAnswerPg = clickedAnswerPg[item.id];
                 const isAnswerEssay = answerEssayExams[item.id];
                 const isMarking = markQuestions[item.id];
@@ -387,15 +393,18 @@ export default function Soal() {
                     }`}
                     key={i}
                   >
-                    {isMarking === true && (!isAnswerPg || !isAnswerEssay) && (
-                      <Image
-                        src="/img/examsStudent/flag.png"
-                        alt="Mark"
-                        width={200}
-                        height={200}
-                        className="w-1/4 absolute top-1.5 left-1.5"
-                      />
-                    )}
+                    {isMarking === true &&
+                      ((questions?.tipe_ujian === "pg" && !isAnswerPg) ||
+                        (questions?.tipe_ujian === "essay" &&
+                          !isAnswerEssay)) && (
+                        <Image
+                          src="/img/examsStudent/flag.png"
+                          alt="Mark"
+                          width={200}
+                          height={200}
+                          className="w-1/4 absolute top-1.5 left-1.5"
+                        />
+                      )}
                     {i + 1}
                   </div>
                 );
@@ -405,7 +414,7 @@ export default function Soal() {
         </div>
 
         <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
-          {questions.exams?.questions_exam.map((item: any, i: number) => (
+          {dataUjianRandom.map((item: any, i: number) => (
             <div
               className="mt-4 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
               key={item.id}
@@ -424,7 +433,7 @@ export default function Soal() {
                         <Input
                           type="radio"
                           name={item.id}
-                          className="cursor-pointer w-5 "
+                          className="cursor-pointer w-5"
                           checked={isSelected}
                           onChange={(e) => {
                             if (e.target.checked) {
