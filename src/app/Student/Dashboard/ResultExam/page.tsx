@@ -41,9 +41,7 @@ export default function ResultExam() {
 
   return (
     <LayoutBodyContent>
-      <h1 className="text-3xl font-semibold max-[640px]:text-center">
-        Hasil Ujian
-      </h1>
+      <h1 className="text-3xl font-semibold">Hasil Ujian</h1>
       <div className="h-1 bg-slate-700 rounded-lg my-3" />
       <h2 className="text-xl font-semibold mb-7">
         Nama Ujian : {getDataStudentAnswer.exams?.nama_ujian}
@@ -54,7 +52,7 @@ export default function ResultExam() {
             <div className="grid lg:grid-cols-2 gap-3 max-[640px]:grid-cols-1 sm:grid-cols-1">
               {getDataStudentAnswer.exams?.questions_exam.map(
                 (item: any, i: number) => (
-                  <div className="p-7" key={item.id}>
+                  <div className="p-5" key={item.id}>
                     <h1 className="font-semibold text-lg">
                       {i + 1}. {item.questions}
                     </h1>
@@ -83,7 +81,7 @@ export default function ResultExam() {
             <div className="grid lg:grid-cols-2 gap-3 max-[640px]:grid-cols-1 sm:grid-cols-1">
               {getDataStudentAnswer.exams?.questions_exam.map(
                 (item: any, i: number) => (
-                  <div className="bg-[#08D9D6] rounded-lg p-7" key={i}>
+                  <div className="p-5" key={i}>
                     <h1 className="text-lg font-semibold">
                       <span className="mr-0.5">{i + 1}.</span> {item.questions}
                     </h1>
