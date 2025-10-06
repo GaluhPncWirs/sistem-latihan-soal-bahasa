@@ -41,7 +41,7 @@ export default function Teacher() {
   const averageValueExam = dataManageExams
     ?.flatMap((item: any) => item.hasil_ujian)
     .filter((a: any) => a !== "pending" && a !== "telat")
-    .map((toNum: any) => Number(toNum))
+    .map(Number)
     .reduce((acc: any, cur: any) => acc + cur, 0);
 
   function handleClickItem(event: any) {
@@ -159,9 +159,7 @@ export default function Teacher() {
       const { data: historyStudent, error: errorHistoryStudent } =
         await supabase
           .from("history-exam-student")
-          .select(
-            "student_id,exam_id,hasil_ujian,kelas,created_at,status_exam,exams(id,nama_ujian,tipeUjian,idTeacher)"
-          )
+          .select("*,exams(id,nama_ujian,tipeUjian,idTeacher)")
           .eq("exams.idTeacher", idTeacher);
 
       if (errorStudent || errorHistoryStudent) {
@@ -221,124 +219,185 @@ export default function Teacher() {
 
   return (
     <LayoutBodyContent>
-      <HeaderDasboard
-        user="Pengajar"
-        fullName={dataUserTeacher.fullName}
-        totalExams={dataStudents}
-      />
-      <div className="mt-5">
-        <h1 className="max-[640px]:text-xl sm:text-2xl font-semibold">
-          Ringkasan Aktifitas Ujian
-        </h1>
-        <div className="flex justify-evenly items-center my-7 text-slate-800 gap-x-1">
-          <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
-            <Image
-              src="/img/dashboardTeacher/complete.png"
-              alt="Complete"
-              width={200}
-              height={200}
-              className="mx-auto max-[640px]:w-[30%] sm:w-1/4"
-            />
-            <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
-              {dataManageExams.length || "0"}
-            </span>
-            <h1 className="font-medium">Ujian Dibuat</h1>
-          </div>
-          <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
-            <Image
-              src="/img/dashboardTeacher/count.png"
-              alt="Jumlah"
-              width={200}
-              height={200}
-              className="mx-auto max-[640px]:w-[30%] sm:w-1/4"
-            />
-            <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
-              {jumlahSiswa.size || "0"}
-            </span>
-            <h1 className="font-medium">Jumlah Siswa</h1>
-          </div>
-          <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
-            <Image
-              src="/img/dashboardTeacher/average.png"
-              alt="Rata-Rata"
-              width={200}
-              height={200}
-              className="mx-auto max-[640px]:w-1/4 sm:w-1/4"
-            />
-            <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
-              {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
-            </span>
-            <h1 className="font-medium">Nilai Rata-Rata</h1>
-          </div>
-        </div>
-        <FloatingBarDashboardTeacher handleClickItem={handleClickItem} />
-        <div className="mt-5">
-          {dashboardButton.viewResult === true ? (
-            <ViewQuestions />
-          ) : dashboardButton.manageStudent === true ? (
-            <ManageStudent dataStudents={dataStudents} />
-          ) : dashboardButton.createQusetions === true ? (
-            <CreateNewQuestions />
-          ) : (
-            <div>
-              <h1 className="mb-5 text-2xl font-semibold">
-                Jadwal Ujian Hari ini
-              </h1>
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-[#3282B8]">
-                    <TableHead className="text-base text-center">No</TableHead>
-                    <TableHead className="text-base text-center">
-                      Nama Ujian
-                    </TableHead>
-                    <TableHead className="text-base text-center">
-                      Kelas
-                    </TableHead>
-                    <TableHead className="text-base text-center">
-                      Tenggat Waktu
-                    </TableHead>
-                    <TableHead className="text-base text-center">
-                      Status
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {dataManageExams.length > 0 ? (
-                    dataManageExams.map((item: any, i: number) => (
-                      <TableRow key={i}>
-                        <TableCell className="text-center">{i + 1}</TableCell>
-                        <TableCell>{item.exams?.nama_ujian}</TableCell>
-                        <TableCell className="text-center">
-                          {item.kelas}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {item.dibuat_tgl} {item.tenggat_waktu}
-                        </TableCell>
-
-                        <TableCell className="text-center">
-                          {item.lengthStudent.length ===
-                          item.lengthStudentCompleteExams?.length
-                            ? "Selesai"
-                            : "Belum Selesai"}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={6}
-                        className="text-center text-lg font-semibold"
-                      >
-                        Belum Ada Soal Ujian Yang Dikelola
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
+      {dataManageExams.length > 0 ? (
+        <>
+          <HeaderDasboard
+            user="Pengajar"
+            fullName={dataUserTeacher.fullName}
+            totalExams={dataStudents}
+          />
+          <div className="mt-5">
+            <h1 className="max-[640px]:text-xl sm:text-2xl font-semibold">
+              Ringkasan Aktifitas Ujian
+            </h1>
+            <div className="flex justify-evenly items-center my-7 text-slate-800 gap-x-1">
+              <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+                <Image
+                  src="/img/dashboardTeacher/complete.png"
+                  alt="Complete"
+                  width={200}
+                  height={200}
+                  className="mx-auto max-[640px]:w-[30%] sm:w-1/4"
+                />
+                <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
+                  {dataManageExams.length || "0"}
+                </span>
+                <h1 className="font-medium">Ujian Dibuat</h1>
+              </div>
+              <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+                <Image
+                  src="/img/dashboardTeacher/count.png"
+                  alt="Jumlah"
+                  width={200}
+                  height={200}
+                  className="mx-auto max-[640px]:w-[30%] sm:w-1/4"
+                />
+                <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
+                  {jumlahSiswa.size || "0"}
+                </span>
+                <h1 className="font-medium">Jumlah Siswa</h1>
+              </div>
+              <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+                <Image
+                  src="/img/dashboardTeacher/average.png"
+                  alt="Rata-Rata"
+                  width={200}
+                  height={200}
+                  className="mx-auto max-[640px]:w-1/4 sm:w-1/4"
+                />
+                <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
+                  {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
+                </span>
+                <h1 className="font-medium">Nilai Rata-Rata</h1>
+              </div>
             </div>
-          )}
-        </div>
-      </div>
+            <FloatingBarDashboardTeacher handleClickItem={handleClickItem} />
+            <div className="mt-5">
+              {dashboardButton.viewResult === true ? (
+                <ViewQuestions />
+              ) : dashboardButton.manageStudent === true ? (
+                <ManageStudent dataStudents={dataStudents} />
+              ) : dashboardButton.createQusetions === true ? (
+                <CreateNewQuestions />
+              ) : (
+                <div>
+                  <h1 className="mb-5 text-2xl font-semibold">
+                    Jadwal Ujian Hari ini
+                  </h1>
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-[#3282B8]">
+                        <TableHead className="text-base text-center">
+                          No
+                        </TableHead>
+                        <TableHead className="text-base text-center">
+                          Nama Ujian
+                        </TableHead>
+                        <TableHead className="text-base text-center">
+                          Kelas
+                        </TableHead>
+                        <TableHead className="text-base text-center">
+                          Tenggat Waktu
+                        </TableHead>
+                        <TableHead className="text-base text-center">
+                          Status
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {dataManageExams.length > 0 ? (
+                        dataManageExams.map((item: any, i: number) => (
+                          <TableRow key={i}>
+                            <TableCell className="text-center">
+                              {i + 1}
+                            </TableCell>
+                            <TableCell>{item.exams?.nama_ujian}</TableCell>
+                            <TableCell className="text-center">
+                              {item.kelas}
+                            </TableCell>
+                            <TableCell className="text-center">
+                              {item.dibuat_tgl} {item.tenggat_waktu}
+                            </TableCell>
+
+                            <TableCell className="text-center">
+                              {item.lengthStudent.length ===
+                              item.lengthStudentCompleteExams?.length
+                                ? "Selesai"
+                                : "Belum Selesai"}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell
+                            colSpan={6}
+                            className="text-center text-lg font-semibold"
+                          >
+                            Belum Ada Soal Ujian Yang Dikelola
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex justify-between items-center">
+            <div className="w-1/3 h-10 max-[640px]:w-1/2 bg-slate-500 animate-pulse rounded-md"></div>
+            <div className="w-7 h-7 bg-slate-500 animate-pulse rounded-md"></div>
+          </div>
+          <div className="h-1 bg-slate-500 animate-pulse rounded-lg mt-3" />
+          <div className="mt-5 flex items-center gap-x-7">
+            <div className="h-36 sm:w-1/4 md:w-1/6 max-[640px]:w-1/3 max-[640px]:h-28 rounded-full bg-slate-500 animate-pulse"></div>
+            <div className="w-2/3 h-28 flex flex-col justify-center">
+              <div className="w-2/3 h-7 rounded-md bg-slate-500 animate-pulse"></div>
+              <div className="mt-2 h-5 rounded-md bg-slate-500 animate-pulse w-1/3"></div>
+            </div>
+          </div>
+          <div className="mt-5">
+            <div className="w-1/2 max-[640px]:w-3/4 h-7 bg-slate-500 animate-pulse rounded-md"></div>
+
+            <div className="flex justify-evenly items-center my-7 text-slate-800 gap-x-1">
+              <div className="bg-slate-500 animate-pulse rounded-md max-[640px]:p-4 max-[640px]:w-1/3 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+                <div className="w-3/4 h-7 bg-slate-400 animate-pulse rounded-md mb-2"></div>
+                <div className="w-1/2 h-6 bg-slate-400 animate-pulse rounded-md mb-2"></div>
+                <div className="w-2/3 h-6 bg-slate-400 animate-pulse rounded-md"></div>
+              </div>
+              <div className="bg-slate-500 animate-pulse rounded-md max-[640px]:p-4 max-[640px]:w-1/3 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+                <div className="w-3/4 h-7 bg-slate-400 animate-pulse rounded-md mb-2"></div>
+                <div className="w-1/2 h-6 bg-slate-400 animate-pulse rounded-md mb-2"></div>
+                <div className="w-2/3 h-6 bg-slate-400 animate-pulse rounded-md"></div>
+              </div>
+              <div className="bg-slate-500 animate-pulse rounded-md max-[640px]:p-4 max-[640px]:w-1/3 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+                <div className="w-3/4 h-7 bg-slate-400 animate-pulse rounded-md mb-2"></div>
+                <div className="w-1/2 h-6 bg-slate-400 animate-pulse rounded-md mb-2"></div>
+                <div className="w-2/3 h-6 bg-slate-400 animate-pulse rounded-md"></div>
+              </div>
+            </div>
+            <div className="flex justify-evenly mx-auto items-center h-20 bg-slate-500 animate-pulse rounded-md max-[640px]:w-full sm:w-full lg:w-11/12">
+              <div className="bg-slate-400 animate-pulse rounded-md w-1/6 h-10"></div>
+              <div className="bg-slate-400 animate-pulse rounded-md w-1/6 h-10"></div>
+              <div className="bg-slate-400 animate-pulse rounded-md w-1/6 h-10"></div>
+              <div className="bg-slate-400 animate-pulse rounded-md w-1/6 h-10"></div>
+            </div>
+            <div className="mt-5">
+              <div className="mb-5 bg-slate-500 animate-pulse rounded-md w-1/2 h-10"></div>
+              <div>
+                {Array.from({ length: 5 }).map((_: any, i: number) => (
+                  <div
+                    key={i}
+                    className="bg-slate-500 animate-pulse rounded-md w-full h-7 mb-3"
+                  ></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </LayoutBodyContent>
   );
 }

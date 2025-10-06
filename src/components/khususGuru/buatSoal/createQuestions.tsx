@@ -24,6 +24,7 @@ import { useRandomId } from "@/app/hooks/getRandomId";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { useManageExamsData } from "@/app/hooks/getDataManageExams";
 import { Textarea } from "@/components/ui/textarea";
+import { useHandleInput } from "@/app/hooks/handleInput";
 
 export default function CreateNewQuestions() {
   const [answer, setAnswer] = useState({
@@ -41,6 +42,40 @@ export default function CreateNewQuestions() {
   const [clearInput, setClearInput] = useState(false);
   const idTeacher = useGetIdTeacher();
   const dataNameExam = useManageExamsData(idTeacher);
+  const [chooseInputObject, setChooseInputObject] = useState({});
+  const { handleValueInput, isFormFilled } = useHandleInput(chooseInputObject);
+
+  useEffect(() => {
+    if (chooseTypeExams === "pg") {
+      if (selectedValueNameExam === "buatUjianBaru") {
+        setChooseInputObject({
+          nama_ujian: nameExam,
+          questions: question,
+          answer,
+        });
+      } else {
+        setChooseInputObject({
+          questions: question,
+          answer,
+        });
+      }
+    } else {
+      if (selectedValueNameExam === "buatUjianBaru") {
+        setChooseInputObject({
+          nama_ujian: nameExam,
+          questions: question,
+        });
+      } else {
+        setChooseInputObject({
+          questions: question,
+        });
+      }
+    }
+  }, [chooseTypeExams, selectedValueNameExam]);
+
+  // console.log(chooseInputObject);
+
+  // console.log(isFormFilled());
 
   function handleAddAnswer(event: any) {
     const { id, value } = event.target;
@@ -289,7 +324,10 @@ export default function CreateNewQuestions() {
               <Input
                 id="nama_ujian"
                 className="border border-black rounded-sm p-1 px-2"
-                onChange={(e: any) => setNameExams(e.currentTarget.value)}
+                onChange={(e: any) => {
+                  handleValueInput;
+                  setNameExams(e.currentTarget.value);
+                }}
                 value={nameExam}
               />
             </>
@@ -303,7 +341,10 @@ export default function CreateNewQuestions() {
           <Textarea
             id="questions"
             className="border border-black rounded-sm p-1 px-2"
-            onChange={(e: any) => setQuestion(e.currentTarget.value)}
+            onChange={(e: any) => {
+              handleValueInput;
+              setQuestion(e.currentTarget.value);
+            }}
             value={question}
           />
         </div>
@@ -421,7 +462,7 @@ export default function CreateNewQuestions() {
       </form>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="text-center text-lg mt-10 text-black px-8 rounded-md py-1.5 font-semibold cursor-pointer bg-slate-300 hover:bg-slate-400">
+          <Button className="text-center text-lg mt-10 px-8 rounded-md py-1.5 cursor-pointer bg-[#3282B8] hover:bg-blue-500">
             Buat
           </Button>
         </DialogTrigger>

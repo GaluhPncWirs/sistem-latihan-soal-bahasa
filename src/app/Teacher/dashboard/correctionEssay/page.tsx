@@ -22,7 +22,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function CorrectionEssay() {
-  const [viewQuestionsExams, setViewQuestionsExams] = useState<any>([]);
+  const [viewQuestionsExams, setViewQuestionsExams] = useState<any>({});
   const [giveAssesmentExams, setGiveAssesmentExams] = useState<any>({});
   const [finalResultAssesment, setFinalResultAssesment] = useState<number>(0);
   const searchParamsId = useSearchParams().get("idExam");
@@ -91,7 +91,7 @@ export default function CorrectionEssay() {
 
   return (
     <LayoutBodyContent>
-      {viewQuestionsExams !== null ? (
+      {Object.values(viewQuestionsExams).length > 0 ? (
         <>
           <h1 className="text-3xl font-semibold">Koreksi Soal Essay</h1>
           <div className="h-1 bg-slate-700 rounded-lg my-3" />
@@ -102,7 +102,7 @@ export default function CorrectionEssay() {
             {viewQuestionsExams.exams?.questions_exam?.map(
               (item: any, i: number) => (
                 <div
-                  className="mt-5 bg-[#08D9D6] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto flex max-[640px]:gap-5 sm:gap-5 md:gap-10 items-center max-[640px]:flex-col sm:flex-col md:flex-row"
+                  className="mt-5 rounded-lg p-5 mr-3 max-[640px]:w-full sm:w-full md:w-auto flex max-[640px]:gap-5 sm:gap-5 md:gap-10 items-center max-[640px]:flex-col sm:flex-col md:flex-row"
                   key={i}
                 >
                   <div className="max-[640px]:w-full sm:w-11/12 md:basis-1/2 lg:basis-2/3">
@@ -114,7 +114,7 @@ export default function CorrectionEssay() {
                         Jawaban Siswa :
                       </label>
                       <Textarea
-                        className="border-slate-600 border-2 font-bold h-24"
+                        className="border-black border-2 font-bold h-24"
                         disabled
                         defaultValue={
                           viewQuestionsExams.answer_student?.[item.id] || ""
@@ -209,11 +209,8 @@ export default function CorrectionEssay() {
             <div className="flex justify-between mt-7">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button
-                    className="h-full px-5 rounded-md text-lg font-semibold cursor-pointer"
-                    variant="outline"
-                  >
-                    Beri Penilaian
+                  <Button className="h-full px-5 rounded-md text-lg cursor-pointer bg-[#3282B8] hover:bg-blue-500">
+                    Beri Nilai
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
@@ -247,7 +244,7 @@ export default function CorrectionEssay() {
               </Dialog>
               <Link
                 href="/Teacher/dashboard"
-                className="bg-slate-700 hover:bg-slate-800 py-2 px-7 rounded-md text-lg text-slate-200 font-semibold"
+                className="py-2 px-5 rounded-md text-lg font-semibold border border-black"
               >
                 Kembali
               </Link>
@@ -256,9 +253,9 @@ export default function CorrectionEssay() {
         </>
       ) : (
         <>
-          <h1 className="w-1/3 h-10 bg-slate-500 animate-pulse rounded-md"></h1>
+          <div className="w-1/3 h-10 bg-slate-500 animate-pulse rounded-md"></div>
           <div className="h-1 bg-slate-500 animate-pulse rounded-md my-3" />
-          <h2 className="w-1/2 h-7 bg-slate-500 animate-pulse rounded-md mb-7"></h2>
+          <div className="w-1/2 h-7 bg-slate-500 animate-pulse rounded-md mb-7"></div>
           <div>
             {Array.from({ length: 5 }).map((_: any, i: any) => (
               <div
@@ -293,7 +290,6 @@ export default function CorrectionEssay() {
                 </div>
               </div>
             ))}
-
             <div className="flex justify-between mt-7">
               <div className="w-1/6 h-8 bg-slate-500 animate-pulse rounded-md"></div>
               <div className="w-1/6 h-8 bg-slate-500 animate-pulse rounded-md"></div>

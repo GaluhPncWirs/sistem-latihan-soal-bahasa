@@ -282,7 +282,7 @@ export default function ViewQuestions() {
       <div className="mt-7">
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="text-base px-7 bg-[#3282B8] hover:bg-blue-800 cursor-pointer">
+            <Button className="text-base px-7 bg-[#3282B8] hover:bg-blue-500 cursor-pointer">
               Kirim
             </Button>
           </DialogTrigger>

@@ -668,16 +668,6 @@ export default function DashboardStudent() {
                     <div className="bg-slate-500 animate-pulse w-3/4 h-6 rounded-md mb-1"></div>
                     <div className="bg-slate-500 animate-pulse w-1/3 h-6 rounded-md mb-1"></div>
                   </div>
-
-                  {/* <div className="bg-slate-300 rounded-md py-3 mb-5 flex items-center max-[640px]:pl-0 max-[640px]:py-2 justify-center">
-                  <span className="max-[640px]:basis-1/2 sm:basis-2/5 h-5 bg-slate-500 rounded-md"></span>
-                </div>
-                <div className="bg-slate-500 w-full h-5 rounded-md">
-                  <div className="bg-slate-500 w-1/2 h-5 rounded-md"></div>
-                  <div className="bg-slate-500 w-1/4 h-5 rounded-md"></div>
-                  <div className="bg-slate-500 w-3/4 h-5 rounded-md"></div>
-                  <div className="bg-slate-500 w-1/3 h-5 rounded-md"></div>
-                </div> */}
                 </div>
               </div>
             </div>
