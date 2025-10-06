@@ -47,9 +47,9 @@ export default function HeaderDasboard(props: any) {
         </div>
       );
     } else {
-      const filterNilaiSiswa = totalExams.filter(
-        (fil: any) => fil.hasil_ujian === "pending"
-      );
+      const filterNilaiSiswa = totalExams
+        .flatMap((fm: any) => fm.resultUjian)
+        .filter((fil: any) => fil.hasil_ujian === "pending");
       return (
         <div className="flex items-center justify-end gap-x-3">
           {filterNilaiSiswa.length > 0 ? (

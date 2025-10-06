@@ -103,14 +103,21 @@ export default function ResultExam() {
             </div>
           )
         ) : (
-          Array.from({ length: 7 }).map((_: any, i: number) => (
+          Array.from({ length: 5 }).map((_: any, i: number) => (
             <div
-              className="bg-slate-400 w-full p-5 h-52 rounded-md mb-5 animate-pulse"
+              className="grid lg:grid-cols-2 gap-3 max-[640px]:grid-cols-1 sm:grid-cols-1"
               key={i}
             >
-              <div className="w-10/12 bg-slate-300 h-5 rounded-sm mb-5"></div>
-              <div className="w-1/6 bg-slate-300 h-5 rounded-sm mb-3"></div>
-              <div className="w-full bg-slate-300 h-24 rounded-md"></div>
+              <div className="bg-slate-400 w-full p-5 h-52 rounded-md mb-5 animate-pulse ">
+                <div className="w-10/12 bg-slate-300 animate-pulse h-5 rounded-sm mb-5"></div>
+                <div className="w-1/6 bg-slate-300 animate-pulse h-5 rounded-sm mb-3"></div>
+                <div className="w-full bg-slate-300 animate-pulse h-24 rounded-md"></div>
+              </div>
+              <div className="bg-slate-400 w-full p-5 h-52 rounded-md mb-5 animate-pulse ">
+                <div className="w-10/12 bg-slate-300 animate-pulse h-5 rounded-sm mb-5"></div>
+                <div className="w-1/6 bg-slate-300 animate-pulse h-5 rounded-sm mb-3"></div>
+                <div className="w-full bg-slate-300 animate-pulse h-24 rounded-md"></div>
+              </div>
             </div>
           ))
         )}
