@@ -28,15 +28,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { SoalUjian } from "@/types/halamanUjian";
 
 export default function Soal() {
-  const [questions, setQuestions] = useState<any>([]);
+  const [questions, setQuestions] = useState<SoalUjian | null>(null);
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{
     [questions: string]: string;
   }>({});
   const [isClosedContent, setIsClosedContent] = useState<boolean>(false);
   const [dataUjianRandom, setDataUjianRandom] = useState<any>([]);
-  const [isSizeMobile, setIsSizeMobile] = useState(false);
+  const [isSizeMobile, setIsSizeMobile] = useState<boolean>(false);
   const [time, setTime] = useState<number | null>(null);
   const [answerEssayExams, setAnswerEssayExams] = useState<{
     [questions: string]: string;
@@ -118,13 +119,13 @@ export default function Soal() {
       const savedTimer = localStorage.getItem("timer");
       if (savedTimer) {
         const initialTime = JSON.parse(savedTimer);
-        return initialTime > 0 ? initialTime : questions.exam_duration;
+        return initialTime > 0 ? initialTime : questions?.exam_duration;
       }
-      return questions.exam_duration;
+      return questions?.exam_duration;
     }
 
     setTime(initializedTime());
-  }, [questions.exam_duration]);
+  }, [questions?.exam_duration]);
 
   useEffect(() => {
     if (time === undefined || time === null) return;
@@ -176,11 +177,13 @@ export default function Soal() {
 
   async function handleSendExam() {
     const pilihanSiswa = Object.values(clickedAnswerPg);
-    const jawabanYangBenar = questions.exams?.questions_exam
+    const jawabanYangBenar: any = questions?.exams?.questions_exam
       .flatMap((item: any) => item.correctAnswer)
       .filter((jawabanBenar: any) => pilihanSiswa.includes(jawabanBenar));
     const resultExam = Math.round(
-      (jawabanYangBenar.length / questions.exams.questions_exam.length) * 100
+      (jawabanYangBenar.length /
+        (questions?.exams?.questions_exam?.length ?? 0)) *
+        100
     );
 
     const payload = {
@@ -188,8 +191,8 @@ export default function Soal() {
       student_id: idStudent,
       exam_id: Number(idExams),
       answer_student:
-        questions.tipe_ujian === "pg" ? clickedAnswerPg : answerEssayExams,
-      hasil_ujian: questions.tipe_ujian === "pg" ? resultExam : "pending",
+        questions?.tipe_ujian === "pg" ? clickedAnswerPg : answerEssayExams,
+      hasil_ujian: questions?.tipe_ujian === "pg" ? resultExam : "pending",
       status_exam: true,
       kelas: dataStudent?.classes,
     };
@@ -215,43 +218,43 @@ export default function Soal() {
     }
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (timeOutDone === true) {
-  //       handleSendExam();
-  //     }
-  //   }, 5000);
-  // }, [timeOutDone]);
+  useEffect(() => {
+    setTimeout(() => {
+      if (timeOutDone === true) {
+        handleSendExam();
+      }
+    }, 5000);
+  }, [timeOutDone]);
 
-  // useEffect(() => {
-  //   const handleSelectStart = (e: Event) => {
-  //     e.preventDefault();
-  //     return false;
-  //   };
+  useEffect(() => {
+    const handleSelectStart = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  //   const handleContextMenu = (e: Event) => {
-  //     e.preventDefault();
-  //     return false;
-  //   };
+    const handleContextMenu = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  //   const handleDragStart = (e: Event) => {
-  //     e.preventDefault();
-  //     return false;
-  //   };
+    const handleDragStart = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  //   document.addEventListener("selectstart", handleSelectStart);
-  //   document.addEventListener("contextmenu", handleContextMenu);
-  //   document.addEventListener("dragstart", handleDragStart);
+    document.addEventListener("selectstart", handleSelectStart);
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("dragstart", handleDragStart);
 
-  //   document.body.classList.add("no-select");
+    document.body.classList.add("no-select");
 
-  //   return () => {
-  //     document.removeEventListener("selectstart", handleSelectStart);
-  //     document.removeEventListener("contextmenu", handleContextMenu);
-  //     document.removeEventListener("dragstart", handleDragStart);
-  //     document.body.classList.remove("no-select");
-  //   };
-  // }, []);
+    return () => {
+      document.removeEventListener("selectstart", handleSelectStart);
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("dragstart", handleDragStart);
+      document.body.classList.remove("no-select");
+    };
+  }, []);
 
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);
@@ -296,236 +299,303 @@ export default function Soal() {
 
   return (
     <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] py-10">
-      <div>
-        <h1 className="text-3xl font-semibold w-11/12 mx-auto mb-3">
-          Ujian {questions.exams?.nama_ujian}
-        </h1>
-        <div className="w-11/12 h-1 bg-slate-700 rounded-lg my-3 mx-auto" />
-      </div>
-      <div className="flex items-center justify-center md:gap-x-3 max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
-        <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%] flex justify-center">
-          <div
-            className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed p-5 rounded-md ${
-              isSizeMobile
-                ? `transition-all duration-300 max-[640px]:w-full sm:w-11/12 top-0 ${
-                    showInformationExam ? `translate-y-0` : `-translate-y-full`
-                  }`
-                : `top-1/4 md:w-2/5 lg:w-[30%]`
-            }`}
-            ref={handleClickedOutsideContent}
-          >
-            <div className="flex items-center max-[640px]:justify-around sm:justify-around">
-              <h1 className="text-xl font-semibold">
-                Ujian{" "}
-                {questions.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
-              </h1>
-              {formatedTime !== "NaN:NaN" && (
-                <div
-                  className={`py-1.5 rounded-md gap-x-2 flex items-center px-1.5 justify-center ${
-                    minute === 0 && second <= 20
-                      ? `bg-red-500 animate-pulse`
-                      : "bg-green-500"
-                  }`}
-                >
-                  <Image
-                    src="/img/examsStudent/stopwatch.png"
-                    alt="Timer"
-                    width={200}
-                    height={200}
-                    className="w-1/4"
-                  />
-                  <span className="text-xl font-semibold">{formatedTime}</span>
-                </div>
-              )}
-            </div>
-            <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3 rounded-md">
-              {dataUjianRandom.map((item: any, i: number) => {
-                const isAnswerPg = clickedAnswerPg[item.id];
-                const isAnswerEssay = answerEssayExams[item.id];
-                const isMarking = markQuestions[item.id];
-                return (
-                  <div
-                    className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
-                      isAnswerPg || isAnswerEssay
-                        ? "bg-green-400"
-                        : "bg-[#E3FDFD]"
-                    }`}
-                    key={i}
-                  >
-                    {isMarking === true &&
-                      ((questions?.tipe_ujian === "pg" && !isAnswerPg) ||
-                        (questions?.tipe_ujian === "essay" &&
-                          !isAnswerEssay)) && (
-                        <Image
-                          src="/img/examsStudent/flag.png"
-                          alt="Mark"
-                          width={200}
-                          height={200}
-                          className="w-1/4 absolute top-[5px] left-1.5"
-                        />
-                      )}
-                    {i + 1}
-                  </div>
-                );
-              })}
-            </div>
+      {Object.values(questions ?? {}).length > 0 ? (
+        <>
+          <div>
+            <h1 className="text-3xl font-semibold w-11/12 mx-auto mb-3">
+              Ujian {questions?.exams?.nama_ujian}
+            </h1>
+            <div className="w-11/12 h-1 bg-slate-700 rounded-lg my-3 mx-auto" />
           </div>
-        </div>
-
-        <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
-          {dataUjianRandom.map((item: any, i: number) => (
-            <div
-              className="mt-4 rounded-lg p-5 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
-              key={item.id}
-            >
-              <h1 className="text-lg font-semibold" id="pertannyaan">
-                {i + 1}. {item.questions}
-              </h1>
-              {questions.tipe_ujian === "pg" ? (
-                <ul className="mt-3">
-                  {["a", "b", "c", "d", "e"].map((opt) => {
-                    const answerKey = `answer_${opt}`;
-                    const answerText = item.answerPg[answerKey];
-                    const isSelected = clickedAnswerPg[item.id] === answerText;
+          <div className="flex items-center justify-center md:gap-x-3 max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
+            <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%] flex justify-center">
+              <div
+                className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed p-5 rounded-md ${
+                  isSizeMobile
+                    ? `transition-all duration-300 max-[640px]:w-full sm:w-11/12 top-0 ${
+                        showInformationExam
+                          ? `translate-y-0`
+                          : `-translate-y-full`
+                      }`
+                    : `top-1/4 md:w-2/5 lg:w-[30%]`
+                }`}
+                ref={handleClickedOutsideContent}
+              >
+                <div className="flex items-center max-[640px]:justify-around sm:justify-around">
+                  <h1 className="text-xl font-semibold">
+                    Ujian{" "}
+                    {questions?.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
+                  </h1>
+                  {formatedTime !== "NaN:NaN" && (
+                    <div
+                      className={`py-1.5 rounded-md gap-x-2 flex items-center px-1.5 justify-center ${
+                        minute === 0 && second <= 20
+                          ? `bg-red-500 animate-pulse`
+                          : "bg-green-500"
+                      }`}
+                    >
+                      <Image
+                        src="/img/examsStudent/stopwatch.png"
+                        alt="Timer"
+                        width={200}
+                        height={200}
+                        className="w-1/4"
+                      />
+                      <span className="text-xl font-semibold">
+                        {formatedTime}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3 rounded-md">
+                  {dataUjianRandom.map((item: any, i: number) => {
+                    const isAnswerPg = clickedAnswerPg[item.id];
+                    const isAnswerEssay = answerEssayExams[item.id];
+                    const isMarking = markQuestions[item.id];
                     return (
-                      <li key={opt} className="flex items-center gap-3">
-                        <Input
-                          type="radio"
-                          name={item.id}
-                          className="cursor-pointer w-5"
-                          checked={isSelected}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              handleSelectedAnswer(item.id, answerText);
-                            }
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSelectedAnswer(item.id, answerText);
-                          }}
-                          ref={clickedAnswerQuestions}
-                        />
-                        <label>
-                          {opt.toLocaleUpperCase()}. {answerText}
-                        </label>
-                      </li>
+                      <div
+                        className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
+                          isAnswerPg || isAnswerEssay
+                            ? "bg-green-400"
+                            : "bg-[#E3FDFD]"
+                        }`}
+                        key={i}
+                      >
+                        {isMarking === true &&
+                          ((questions?.tipe_ujian === "pg" && !isAnswerPg) ||
+                            (questions?.tipe_ujian === "essay" &&
+                              !isAnswerEssay)) && (
+                            <Image
+                              src="/img/examsStudent/flag.png"
+                              alt="Mark"
+                              width={200}
+                              height={200}
+                              className="w-1/4 absolute top-[5px] left-1.5"
+                            />
+                          )}
+                        {i + 1}
+                      </div>
                     );
                   })}
-                  <Button
-                    className="cursor-pointer text-base mt-3"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setMarkQuestions((prev: any) => ({
-                        ...prev,
-                        [item.id]: !prev[item.id],
-                      }));
-                    }}
-                    ref={clickedMarkQuestions}
-                  >
-                    Tandai
-                  </Button>
-                </ul>
-              ) : (
-                <div className="mt-3">
-                  <label
-                    className="mb-1 font-semibold ml-1.5 inline-block"
-                    htmlFor={item.id}
-                  >
-                    Jawab :
-                  </label>
-                  <Textarea
-                    placeholder="Jawab Pertannyaan Kamu Disini"
-                    className="border-slate-600 border-2 h-20 bg-stone-200"
-                    id={item.id}
-                    onCopy={(e) => e.preventDefault()}
-                    onPaste={(e) => e.preventDefault()}
-                    onCut={(e) => e.preventDefault()}
-                    onChange={(e) =>
-                      setAnswerEssayExams((prev: any) => ({
-                        ...prev,
-                        [item.id]: e.target?.value,
-                      }))
-                    }
-                    defaultValue={answerEssayExams[item.id]}
-                  />
-                  <Button
-                    className="cursor-pointer text-base mt-3"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setMarkQuestions((prev: any) => ({
-                        ...prev,
-                        [item.id]: !prev[item.id],
-                      }));
-                    }}
-                    ref={clickedMarkQuestions}
-                  >
-                    Tandai
-                  </Button>
                 </div>
-              )}
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-      <AlertDialog open={timeOutDone} onOpenChange={setTimeOutDone}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
-            <AlertDialogDescription>
-              Ujian telah mencapai batas waktu yang telah ditentukan. Jawaban
-              Anda akan disimpan secara otomatis.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction className="cursor-pointer">
-              Oke
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      <div className="mt-7 max-[640px]:mx-5 sm:mx-7 md:mx-10">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
-              Selesai
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Konfirmasi Ujian</DialogTitle>
-              <DialogDescription>
-                Apakah Anda Yakin Ingin Menyelesaikan Ujian ini?
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Batal</Button>
-              </DialogClose>
-              <DialogClose asChild>
-                <Button className="cursor-pointer" onClick={handleSendExam}>
+
+            <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
+              {dataUjianRandom.map((item: any, i: number) => (
+                <div
+                  className="mt-4 rounded-lg p-5 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
+                  key={item.id}
+                >
+                  <h1 className="text-lg font-semibold" id="pertannyaan">
+                    {i + 1}. {item.questions}
+                  </h1>
+                  {questions?.tipe_ujian === "pg" ? (
+                    <ul className="mt-3">
+                      {["a", "b", "c", "d", "e"].map((opt) => {
+                        const answerKey = `answer_${opt}`;
+                        const answerText = item.answerPg[answerKey];
+                        const isSelected =
+                          clickedAnswerPg[item.id] === answerText;
+                        return (
+                          <li key={opt} className="flex items-center gap-3">
+                            <Input
+                              type="radio"
+                              name={item.id}
+                              className="cursor-pointer w-5"
+                              checked={isSelected}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  handleSelectedAnswer(item.id, answerText);
+                                }
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSelectedAnswer(item.id, answerText);
+                              }}
+                              ref={clickedAnswerQuestions}
+                            />
+                            <label>
+                              {opt.toLocaleUpperCase()}. {answerText}
+                            </label>
+                          </li>
+                        );
+                      })}
+                      <Button
+                        className="cursor-pointer text-base mt-3"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMarkQuestions((prev: any) => ({
+                            ...prev,
+                            [item.id]: !prev[item.id],
+                          }));
+                        }}
+                        ref={clickedMarkQuestions}
+                      >
+                        Tandai
+                      </Button>
+                    </ul>
+                  ) : (
+                    <div className="mt-3">
+                      <label
+                        className="mb-1 font-semibold ml-1.5 inline-block"
+                        htmlFor={item.id}
+                      >
+                        Jawab :
+                      </label>
+                      <Textarea
+                        placeholder="Jawab Pertannyaan Kamu Disini"
+                        className="border-slate-600 border-2 h-20 bg-stone-200"
+                        id={item.id}
+                        onCopy={(e) => e.preventDefault()}
+                        onPaste={(e) => e.preventDefault()}
+                        onCut={(e) => e.preventDefault()}
+                        onChange={(e) =>
+                          setAnswerEssayExams((prev: any) => ({
+                            ...prev,
+                            [item.id]: e.target?.value,
+                          }))
+                        }
+                        defaultValue={answerEssayExams[item.id]}
+                      />
+                      <Button
+                        className="cursor-pointer text-base mt-3"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMarkQuestions((prev: any) => ({
+                            ...prev,
+                            [item.id]: !prev[item.id],
+                          }));
+                        }}
+                        ref={clickedMarkQuestions}
+                      >
+                        Tandai
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          <AlertDialog open={timeOutDone} onOpenChange={setTimeOutDone}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Ujian telah mencapai batas waktu yang telah ditentukan.
+                  Jawaban Anda akan disimpan secara otomatis.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogAction className="cursor-pointer">
                   Oke
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <div className="mt-7 max-[640px]:mx-5 sm:mx-7 md:mx-10">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
+                  Selesai
                 </Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
-      <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">
-        <div className="flex flex-col items-center justify-center gap-1 informExam">
-          <Input
-            type="checkbox"
-            className="size-7 cursor-pointer absolute opacity-0 z-20"
-            onChange={(e) => {
-              setShowInformationExam(e.target.checked);
-              setIsClosedContent(false);
-            }}
-            checked={showInformationExam}
-            ref={clickedOutsideCheked}
-          />
-          <span className="w-6 h-1 bg-black rounded-lg rotate-45 translate-y-1 transition-all duration-300 ease-in-out"></span>
-          <span className="w-6 h-1 bg-black rounded-lg -rotate-45 -translate-y-1 transition-all duration-300 ease-in-out"></span>
-        </div>
-      </div>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Konfirmasi Ujian</DialogTitle>
+                  <DialogDescription>
+                    Apakah Anda Yakin Ingin Menyelesaikan Ujian ini?
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Batal</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button className="cursor-pointer" onClick={handleSendExam}>
+                      Oke
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+          <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">
+            <div className="flex flex-col items-center justify-center gap-1 informExam">
+              <Input
+                type="checkbox"
+                className="size-7 cursor-pointer absolute opacity-0 z-20"
+                onChange={(e) => {
+                  setShowInformationExam(e.target.checked);
+                  setIsClosedContent(false);
+                }}
+                checked={showInformationExam}
+                ref={clickedOutsideCheked}
+              />
+              <span className="w-6 h-1 bg-black rounded-lg rotate-45 translate-y-1 transition-all duration-300 ease-in-out"></span>
+              <span className="w-6 h-1 bg-black rounded-lg -rotate-45 -translate-y-1 transition-all duration-300 ease-in-out"></span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <div className="w-11/12 mx-auto mb-3">
+              <div className="h-10 w-1/3 bg-slate-500 rounded-md"></div>
+            </div>
+            <div className="w-11/12 h-1 bg-slate-500 rounded-md my-3 mx-auto" />
+          </div>
+
+          <div className="flex items-center justify-center md:gap-x-3 max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
+            <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%] flex justify-center">
+              <div className="h-fit bg-slate-500 rounded-md fixed p-5 max-[640px]:w-full sm:w-11/12 max-[640px]:top-0 sm:top-0 md:top-1/4 md:w-2/5 lg:w-[30%]">
+                <div className="flex items-center max-[640px]:justify-around sm:justify-around">
+                  <div className="h-8 w-1/3 bg-slate-400 rounded-md"></div>
+                  <div className="bg-slate-400 rounded-md w-1/5 h-8"></div>
+                </div>
+
+                <div className="bg-slate-400 rounded-md mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3">
+                  {Array.from({ length: 20 }).map((_: any, i: number) => (
+                    <div
+                      className="bg-slate-500 rounded-md h-10 w-10"
+                      key={i}
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
+              {Array.from({ length: 3 }).map((_: any, i: number) => (
+                <div
+                  className="mt-4 bg-slate-500 rounded-md p-5 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
+                  key={i}
+                >
+                  <div className="bg-slate-400 rounded-md h-6 w-3/4"></div>
+                  <ul className="mt-5">
+                    <li className="flex gap-4 flex-col">
+                      <div className="bg-slate-400 rounded-md h-5 w-1/4"></div>
+                      <div className="bg-slate-400 rounded-md h-5 w-1/3"></div>
+                      <div className="bg-slate-400 rounded-md h-5 w-1/6"></div>
+                      <div className="bg-slate-400 rounded-md h-5 w-1/2"></div>
+                      <div className="bg-slate-400 rounded-md h-5 w-1/5"></div>
+                    </li>
+                    <div className="bg-slate-400 rounded-md mt-5 h-8 w-1/6"></div>
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-7 max-[640px]:mx-5 sm:mx-7 md:mx-10">
+            <div className="bg-slate-500 rounded-md w-1/12 h-10"></div>
+          </div>
+
+          <div className="bg-slate-400 h-12 w-12 rounded-full fixed bottom-7 right-7 md:hidden flex justify-center items-center">
+            <div className="bg-slate-500 rounded-md w-5 h-5 "></div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

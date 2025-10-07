@@ -246,8 +246,8 @@ export default function Home() {
           </div>
           <div className="flex gap-x-5">
             <div className="max-[640px]:basis-[7%] sm:basis-[7%] lg:basis-[5%] flex justify-center">
-              <div className="w-1 h-full mt-3 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
-                <div className="w-3 h-3 rounded-full bg-red-400 mt-7"></div>
+              <div className="w-1 h-full mt-3 bg-black rounded-t-lg rounded-b-lg flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-[#0F4C75] mt-7"></div>
               </div>
             </div>
             <div className="basis-5/6 mt-7">
@@ -269,8 +269,8 @@ export default function Home() {
           </div>
           <div className="flex gap-x-5">
             <div className="max-[640px]:basis-[7%] sm:basis-[7%] lg:basis-[5%] flex justify-center">
-              <div className="w-1 h-full mt-3 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
-                <div className="w-3 h-3 rounded-full bg-red-400 mt-7"></div>
+              <div className="w-1 h-full mt-3 bg-black rounded-t-lg rounded-b-lg flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-[#0F4C75] mt-7"></div>
               </div>
             </div>
             <div className="basis-5/6 mt-7">
@@ -292,8 +292,8 @@ export default function Home() {
           </div>
           <div className="flex gap-x-5">
             <div className="max-[640px]:basis-[7%] sm:basis-[7%] lg:basis-[5%] flex justify-center">
-              <div className="w-1 h-full mt-3 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
-                <div className="w-3 h-3 rounded-full bg-red-400 mt-7"></div>
+              <div className="w-1 h-full mt-3 bg-black rounded-t-lg rounded-b-lg flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-[#0F4C75] mt-7"></div>
               </div>
             </div>
             <div className="basis-5/6 mt-7">
@@ -315,8 +315,8 @@ export default function Home() {
           </div>
           <div className="flex gap-x-5">
             <div className="max-[640px]:basis-[7%] sm:basis-[7%] lg:basis-[5%] flex justify-center">
-              <div className="w-1 h-full mt-3 bg-[#393E46] rounded-t-lg rounded-b-lg flex flex-col items-center">
-                <div className="w-3 h-3 rounded-full bg-red-400 mt-7"></div>
+              <div className="w-1 h-full mt-3 bg-black rounded-t-lg rounded-b-lg flex flex-col items-center">
+                <div className="w-3 h-3 rounded-full bg-[#0F4C75] mt-7"></div>
               </div>
             </div>
             <div className="basis-5/6 mt-7">

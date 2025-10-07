@@ -147,7 +147,7 @@ export default function Profil() {
 
   async function handleEditProfileStudent(event: any) {
     event.preventDefault();
-    const idInputPayload = ["fullName", "email", "password"];
+    const idInputPayload = ["email", "password"];
     const payloadUser = idInputPayload.map(
       (id: any) => event.target[id].value || ""
     );
@@ -261,12 +261,6 @@ export default function Profil() {
                       <DialogDescription className="mt-1">
                         Edit Seluruh Informasi Profil Kamu Disini
                       </DialogDescription>
-                      <div>
-                        <label htmlFor="fullName" className="mb-2 block">
-                          Nama
-                        </label>
-                        <Input id="fullName" />
-                      </div>
                       <div>
                         <label htmlFor="email" className="mb-2 block">
                           Email

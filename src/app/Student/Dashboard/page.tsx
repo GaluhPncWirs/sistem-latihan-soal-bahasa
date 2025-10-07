@@ -287,7 +287,7 @@ export default function DashboardStudent() {
           <HeaderDasboard
             user="Siswa"
             fullName={getDataStudent?.fullName}
-            totalExams={filterScoreExams}
+            totalExams={scheduleExams}
           />
           <div className="mt-5">
             <p className="max-[640px]:text-xl text-2xl font-semibold">
