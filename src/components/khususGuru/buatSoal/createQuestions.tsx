@@ -43,7 +43,7 @@ export default function CreateNewQuestions() {
   const idTeacher = useGetIdTeacher();
   const dataNameExam = useManageExamsData(idTeacher);
   const [chooseInputObject, setChooseInputObject] = useState({});
-  const { handleValueInput, isFormFilled } = useHandleInput(chooseInputObject);
+  const { handleValueInput } = useHandleInput(chooseInputObject);
 
   useEffect(() => {
     if (chooseTypeExams === "pg") {
@@ -71,11 +71,11 @@ export default function CreateNewQuestions() {
         });
       }
     }
-  }, [chooseTypeExams, selectedValueNameExam]);
+  }, [chooseTypeExams, selectedValueNameExam, nameExam, question, answer]);
 
-  // console.log(chooseInputObject);
-
-  // console.log(isFormFilled());
+  function isFormFilled() {
+    return Object.values(chooseInputObject).every((item: any) => item !== "");
+  }
 
   function handleAddAnswer(event: any) {
     const { id, value } = event.target;
@@ -86,92 +86,28 @@ export default function CreateNewQuestions() {
   }
 
   async function handleCreateAddQuestion() {
-    const { data, error }: any = await supabase
-      .from("exams")
-      .select("nama_ujian")
-      .eq("nama_ujian", nameExam);
-
-    if (data?.length > 0) {
+    if (!chooseTypeExams || !selectedValueNameExam) {
       toast("Gagal ❌", {
-        description: "Soalnya Sama Seperti Yang Sebelumnya Telah Dibuat",
-      });
-    } else if (error) {
-      toast("Gagal ❌", {
-        description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+        description: "Pilih Terlebih Dahulu Tipe Dan Nama Ujiannya",
       });
     } else {
-      if (chooseTypeExams === "pg") {
-        if (selectedValueNameExam === "buatUjianBaru") {
-          const { error }: any = await supabase.from("exams").insert([
-            {
-              created_at_exams: new Date().toISOString(),
-              nama_ujian: nameExam,
-              questions_exam: [
-                {
-                  id: useRandomId(7, "EX"),
-                  questions: question,
-                  answerPg: answer,
-                  correctAnswer: selectCorrectAnswer,
-                },
-              ],
-              idTeacher: idTeacher,
-              tipeUjian: chooseTypeExams,
-            },
-          ]);
+      const { data, error }: any = await supabase
+        .from("exams")
+        .select("nama_ujian")
+        .eq("nama_ujian", nameExam);
 
-          if (error) {
-            toast("Gagal ❌", {
-              description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
-            });
-          } else {
-            toast("Berhasil ✅", {
-              description: "Soal Pilihan Ganda Berhasil Ditambahkan",
-            });
-            setClearInput(true);
-          }
-        } else {
-          const { data, error } = await supabase
-            .from("exams")
-            .select("questions_exam")
-            .eq("nama_ujian", selectedValueNameExam)
-            .single();
-
-          if (error) {
-            toast("Gagal ❌", {
-              description: "Ujian tidak ditemukan.",
-            });
-          } else {
-            const addQuestions = [
-              ...(data.questions_exam || []),
-              {
-                id: useRandomId(7, "EX"),
-                questions: question,
-                answerPg: answer,
-                correctAnswer: selectCorrectAnswer,
-              },
-            ];
-            const { error }: any = await supabase
-              .from("exams")
-              .update({ questions_exam: addQuestions })
-              .eq("nama_ujian", selectedValueNameExam);
-
-            if (error) {
-              toast("Gagal ❌", {
-                description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
-              });
-            } else {
-              toast("Berhasil ✅", {
-                description: "Soal Berhasil Ditambahkan",
-              });
-              setClearInput(true);
-            }
-          }
-        }
+      if (data?.length > 0) {
+        toast("Gagal ❌", {
+          description: "Soalnya Sama Seperti Yang Sebelumnya Telah Dibuat",
+        });
+      } else if (error) {
+        toast("Gagal ❌", {
+          description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+        });
       } else {
-        if (selectedValueNameExam === "buatUjianBaru") {
-          const { error: errorAddQuestionsExam } = await supabase
-            .from("exams")
-            .insert([
+        if (chooseTypeExams === "pg") {
+          if (selectedValueNameExam === "buatUjianBaru") {
+            const { error }: any = await supabase.from("exams").insert([
               {
                 created_at_exams: new Date().toISOString(),
                 nama_ujian: nameExam,
@@ -179,55 +115,125 @@ export default function CreateNewQuestions() {
                   {
                     id: useRandomId(7, "EX"),
                     questions: question,
+                    answerPg: answer,
+                    correctAnswer: selectCorrectAnswer,
                   },
                 ],
                 idTeacher: idTeacher,
                 tipeUjian: chooseTypeExams,
               },
             ]);
-          if (errorAddQuestionsExam) {
-            toast("Gagal ❌", {
-              description: "Soal Gagal Ditambahkan Periksa Kembali Soalnya",
-            });
-          } else {
-            toast("Berhasil ✅", {
-              description: "Soal Essay Berhasil Ditambahkan",
-            });
-            setClearInput(true);
-          }
-        } else {
-          const { data: dataEssay, error: errorDataEssay } = await supabase
-            .from("exams")
-            .select("questions_exam")
-            .eq("nama_ujian", selectedValueNameExam)
-            .single();
 
-          if (errorDataEssay) {
-            toast("Gagal ❌", {
-              description: "Ujian tidak ditemukan.",
-            });
-          } else {
-            const addEssay = [
-              ...(dataEssay.questions_exam || []),
-              {
-                id: useRandomId(7, "EX"),
-                questions: question,
-              },
-            ];
-            const { error: errorAddDataEssay } = await supabase
-              .from("exams")
-              .update({ questions_exam: addEssay })
-              .eq("nama_ujian", selectedValueNameExam);
-
-            if (errorAddDataEssay) {
+            if (error) {
               toast("Gagal ❌", {
                 description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
               });
             } else {
               toast("Berhasil ✅", {
-                description: "Soal Berhasil Ditambahkan",
+                description: "Soal Pilihan Ganda Berhasil Ditambahkan",
               });
               setClearInput(true);
+            }
+          } else {
+            const { data, error } = await supabase
+              .from("exams")
+              .select("questions_exam")
+              .eq("nama_ujian", selectedValueNameExam)
+              .single();
+
+            if (error) {
+              toast("Gagal ❌", {
+                description: "Ujian tidak ditemukan.",
+              });
+            } else {
+              const addQuestions = [
+                ...(data.questions_exam || []),
+                {
+                  id: useRandomId(7, "EX"),
+                  questions: question,
+                  answerPg: answer,
+                  correctAnswer: selectCorrectAnswer,
+                },
+              ];
+              const { error }: any = await supabase
+                .from("exams")
+                .update({ questions_exam: addQuestions })
+                .eq("nama_ujian", selectedValueNameExam);
+
+              if (error) {
+                toast("Gagal ❌", {
+                  description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+                });
+              } else {
+                toast("Berhasil ✅", {
+                  description: "Soal Berhasil Ditambahkan",
+                });
+                setClearInput(true);
+              }
+            }
+          }
+        } else {
+          if (selectedValueNameExam === "buatUjianBaru") {
+            const { error: errorAddQuestionsExam } = await supabase
+              .from("exams")
+              .insert([
+                {
+                  created_at_exams: new Date().toISOString(),
+                  nama_ujian: nameExam,
+                  questions_exam: [
+                    {
+                      id: useRandomId(7, "EX"),
+                      questions: question,
+                    },
+                  ],
+                  idTeacher: idTeacher,
+                  tipeUjian: chooseTypeExams,
+                },
+              ]);
+            if (errorAddQuestionsExam) {
+              toast("Gagal ❌", {
+                description: "Soal Gagal Ditambahkan Periksa Kembali Soalnya",
+              });
+            } else {
+              toast("Berhasil ✅", {
+                description: "Soal Essay Berhasil Ditambahkan",
+              });
+              setClearInput(true);
+            }
+          } else {
+            const { data: dataEssay, error: errorDataEssay } = await supabase
+              .from("exams")
+              .select("questions_exam")
+              .eq("nama_ujian", selectedValueNameExam)
+              .single();
+
+            if (errorDataEssay) {
+              toast("Gagal ❌", {
+                description: "Ujian tidak ditemukan.",
+              });
+            } else {
+              const addEssay = [
+                ...(dataEssay.questions_exam || []),
+                {
+                  id: useRandomId(7, "EX"),
+                  questions: question,
+                },
+              ];
+              const { error: errorAddDataEssay } = await supabase
+                .from("exams")
+                .update({ questions_exam: addEssay })
+                .eq("nama_ujian", selectedValueNameExam);
+
+              if (errorAddDataEssay) {
+                toast("Gagal ❌", {
+                  description: "Soal Gagal Tambahkan Periksa Kembali Soalnya",
+                });
+              } else {
+                toast("Berhasil ✅", {
+                  description: "Soal Berhasil Ditambahkan",
+                });
+                setClearInput(true);
+              }
             }
           }
         }
@@ -325,7 +331,7 @@ export default function CreateNewQuestions() {
                 id="nama_ujian"
                 className="border border-black rounded-sm p-1 px-2"
                 onChange={(e: any) => {
-                  handleValueInput;
+                  handleValueInput(e);
                   setNameExams(e.currentTarget.value);
                 }}
                 value={nameExam}
@@ -342,7 +348,7 @@ export default function CreateNewQuestions() {
             id="questions"
             className="border border-black rounded-sm p-1 px-2"
             onChange={(e: any) => {
-              handleValueInput;
+              handleValueInput(e);
               setQuestion(e.currentTarget.value);
             }}
             value={question}
@@ -367,7 +373,10 @@ export default function CreateNewQuestions() {
                     type="text"
                     className="border border-black rounded-sm p-1 px-2"
                     value={answer.answer_a}
-                    onChange={handleAddAnswer}
+                    onChange={(e) => {
+                      handleValueInput(e);
+                      handleAddAnswer(e);
+                    }}
                   />
                 </div>
                 <div>
@@ -382,7 +391,10 @@ export default function CreateNewQuestions() {
                     type="text"
                     className="border border-black rounded-sm p-1 px-2"
                     value={answer.answer_b}
-                    onChange={handleAddAnswer}
+                    onChange={(e) => {
+                      handleValueInput(e);
+                      handleAddAnswer(e);
+                    }}
                   />
                 </div>
                 <div>
@@ -397,7 +409,10 @@ export default function CreateNewQuestions() {
                     type="text"
                     className="border border-black rounded-sm p-1 px-2"
                     value={answer.answer_c}
-                    onChange={handleAddAnswer}
+                    onChange={(e) => {
+                      handleValueInput(e);
+                      handleAddAnswer(e);
+                    }}
                   />
                 </div>
                 <div>
@@ -412,7 +427,10 @@ export default function CreateNewQuestions() {
                     type="text"
                     className="border border-black rounded-sm p-1 px-2"
                     value={answer.answer_d}
-                    onChange={handleAddAnswer}
+                    onChange={(e) => {
+                      handleValueInput(e);
+                      handleAddAnswer(e);
+                    }}
                   />
                 </div>
                 <div>
@@ -427,7 +445,10 @@ export default function CreateNewQuestions() {
                     type="text"
                     className="border border-black rounded-sm p-1 px-2"
                     value={answer.answer_e}
-                    onChange={handleAddAnswer}
+                    onChange={(e) => {
+                      handleValueInput(e);
+                      handleAddAnswer(e);
+                    }}
                   />
                 </div>
               </div>
@@ -462,7 +483,10 @@ export default function CreateNewQuestions() {
       </form>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="text-center text-lg mt-10 px-8 rounded-md py-1.5 cursor-pointer bg-[#3282B8] hover:bg-blue-500">
+          <Button
+            className="text-center text-lg mt-10 px-8 rounded-md py-1.5 cursor-pointer bg-[#3282B8] hover:bg-blue-500"
+            disabled={!isFormFilled()}
+          >
             Buat
           </Button>
         </DialogTrigger>

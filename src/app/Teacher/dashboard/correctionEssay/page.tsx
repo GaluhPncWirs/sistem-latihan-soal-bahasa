@@ -59,7 +59,7 @@ export default function CorrectionEssay() {
     });
   }
 
-  async function giveAssesment(idExamQuestions: any, idStudent: any) {
+  function resultAssesmentExamStudent() {
     const toNumberValue = Object.values(giveAssesmentExams).map(Number);
     const totalMaxNilai = toNumberValue.reduce((sum: any) => sum + 100, 0);
     const resultAssesment = toNumberValue.reduce(
@@ -69,11 +69,13 @@ export default function CorrectionEssay() {
     setFinalResultAssesment(
       Math.round((resultAssesment / totalMaxNilai) * 100)
     );
+  }
 
+  async function giveAssesment(idExamQuestions: any, idStudent: any) {
     const { error: errorAssesment } = await supabase
       .from("history-exam-student")
       .update({
-        hasil_ujian: Math.round((resultAssesment / totalMaxNilai) * 100),
+        hasil_ujian: finalResultAssesment,
       })
       .eq("exam_id", idExamQuestions)
       .eq("student_id", idStudent);
@@ -209,7 +211,10 @@ export default function CorrectionEssay() {
             <div className="flex justify-between mt-7">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="h-full px-5 rounded-md text-lg cursor-pointer bg-[#3282B8] hover:bg-blue-500">
+                  <Button
+                    className="h-full px-5 rounded-md text-lg cursor-pointer bg-[#3282B8] hover:bg-blue-500"
+                    onClick={resultAssesmentExamStudent}
+                  >
                     Beri Nilai
                   </Button>
                 </DialogTrigger>

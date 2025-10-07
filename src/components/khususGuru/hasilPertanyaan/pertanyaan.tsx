@@ -237,7 +237,12 @@ export default function ViewQuestions() {
                   </Link>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button variant="destructive">Hapus</Button>
+                      <Button
+                        variant="destructive"
+                        className="cursor-pointer hover:bg-red-500"
+                      >
+                        Hapus
+                      </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>

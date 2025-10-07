@@ -34,9 +34,9 @@ export default function Soal() {
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{
     [questions: string]: string;
   }>({});
-  const idExams = useSearchParams().get("idExams");
-  const idStudent = useSearchParams().get("idStudent");
-  const dataStudent = useGetDataStudent(idStudent!);
+  const [isClosedContent, setIsClosedContent] = useState<boolean>(false);
+  const [dataUjianRandom, setDataUjianRandom] = useState<any>([]);
+  const [isSizeMobile, setIsSizeMobile] = useState(false);
   const [time, setTime] = useState<number | null>(null);
   const [answerEssayExams, setAnswerEssayExams] = useState<{
     [questions: string]: string;
@@ -44,14 +44,14 @@ export default function Soal() {
   const [markQuestions, setMarkQuestions] = useState<any>({});
   const [timeOutDone, setTimeOutDone] = useState<boolean>(false);
   const [showInformationExam, setShowInformationExam] = useState<boolean>(true);
-  const router = useRouter();
   const clickedOutsideCheked = useRef<HTMLInputElement | null>(null);
   const handleClickedOutsideContent = useRef<HTMLDivElement | null>(null);
   const clickedMarkQuestions = useRef<HTMLButtonElement | null>(null);
   const clickedAnswerQuestions = useRef<HTMLInputElement | null>(null);
-  const [isClosedContent, setIsClosedContent] = useState<boolean>(false);
-  const [dataUjianRandom, setDataUjianRandom] = useState<any>([]);
-  const [isSizeMobile, setIsSizeMobile] = useState(false);
+  const router = useRouter();
+  const idExams = useSearchParams().get("idExams");
+  const idStudent = useSearchParams().get("idStudent");
+  const dataStudent = useGetDataStudent(idStudent!);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -345,7 +345,7 @@ export default function Soal() {
                 const isMarking = markQuestions[item.id];
                 return (
                   <div
-                    className={`h-9 w-9 rounded-md flex items-center justify-center font-bold text-lg relative ${
+                    className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
                       isAnswerPg || isAnswerEssay
                         ? "bg-green-400"
                         : "bg-[#E3FDFD]"
@@ -361,7 +361,7 @@ export default function Soal() {
                           alt="Mark"
                           width={200}
                           height={200}
-                          className="w-1/4 absolute top-1.5 left-1.5"
+                          className="w-1/4 absolute top-[5px] left-1.5"
                         />
                       )}
                     {i + 1}
@@ -375,7 +375,7 @@ export default function Soal() {
         <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
           {dataUjianRandom.map((item: any, i: number) => (
             <div
-              className="mt-4 bg-[#36d4d2] rounded-lg p-7 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
+              className="mt-4 rounded-lg p-5 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
               key={item.id}
             >
               <h1 className="text-lg font-semibold" id="pertannyaan">

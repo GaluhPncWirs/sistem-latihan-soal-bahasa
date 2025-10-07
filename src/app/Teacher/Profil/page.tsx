@@ -109,7 +109,13 @@ export default function TeacherProfile() {
 
   async function handleEditProfileTeacher(event: any) {
     event.preventDefault();
-    const fieldNames = ["fullName", "pengajarMapel", "email", "noTlp"];
+    const fieldNames = [
+      "fullName",
+      "pengajarMapel",
+      "noTlp",
+      "email",
+      "password",
+    ];
     const payloadString = fieldNames.map(
       (id: any) => event.target[id].value || ""
     );
@@ -278,6 +284,12 @@ export default function TeacherProfile() {
                           id="pengajarMapel"
                           placeholder="Matematika - Bahasa Indonesia - dst"
                         />
+                      </div>
+                      <div>
+                        <label htmlFor="noTlp" className="mb-2 block">
+                          Ubah No Telepon
+                        </label>
+                        <Input id="noTlp" placeholder="089276361434" />
                       </div>
                       <div>
                         <label htmlFor="email" className="mb-2 block">
