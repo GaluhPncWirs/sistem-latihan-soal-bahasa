@@ -1,3 +1,14 @@
+import { Button } from "@/components/ui/button";
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Dialog } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -95,9 +106,32 @@ export default function ListSidebar() {
           height={200}
           className="w-1/5"
         />
-        <span className="text-slate-200" onClick={handleLogout}>
-          Logout
-        </span>
+        <Dialog>
+          <DialogTrigger asChild>
+            <span className="text-slate-200">Logout</span>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Konfirmasi Keluar Sistem</DialogTitle>
+              <DialogDescription className="mt-2">
+                Apakah Anda Yakin Ingin Logout Dari Sistem ini ?
+              </DialogDescription>
+            </DialogHeader>
+
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="secondary" className="cursor-pointer">
+                  Batal
+                </Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button onClick={handleLogout} className="cursor-pointer">
+                  Oke
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </li>
     </>
   );

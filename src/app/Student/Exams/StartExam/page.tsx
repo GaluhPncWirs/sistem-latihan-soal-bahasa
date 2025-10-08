@@ -175,6 +175,14 @@ export default function Soal() {
     }));
   }
 
+  function handleAnswerEmpty() {
+    const idSoalYangSudah = Object.keys(clickedAnswerPg);
+    const dataUjian = dataUjianRandom.filter(
+      (data: any) => !idSoalYangSudah.includes(data.id)
+    );
+    return dataUjian.length === 0;
+  }
+
   async function handleSendExam() {
     const pilihanSiswa = Object.values(clickedAnswerPg);
     const jawabanYangBenar: any = questions?.exams?.questions_exam
@@ -226,35 +234,35 @@ export default function Soal() {
     }, 5000);
   }, [timeOutDone]);
 
-  useEffect(() => {
-    const handleSelectStart = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
+  // useEffect(() => {
+  //   const handleSelectStart = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
 
-    const handleContextMenu = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
+  //   const handleContextMenu = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
 
-    const handleDragStart = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
+  //   const handleDragStart = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
 
-    document.addEventListener("selectstart", handleSelectStart);
-    document.addEventListener("contextmenu", handleContextMenu);
-    document.addEventListener("dragstart", handleDragStart);
+  //   document.addEventListener("selectstart", handleSelectStart);
+  //   document.addEventListener("contextmenu", handleContextMenu);
+  //   document.addEventListener("dragstart", handleDragStart);
 
-    document.body.classList.add("no-select");
+  //   document.body.classList.add("no-select");
 
-    return () => {
-      document.removeEventListener("selectstart", handleSelectStart);
-      document.removeEventListener("contextmenu", handleContextMenu);
-      document.removeEventListener("dragstart", handleDragStart);
-      document.body.classList.remove("no-select");
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("selectstart", handleSelectStart);
+  //     document.removeEventListener("contextmenu", handleContextMenu);
+  //     document.removeEventListener("dragstart", handleDragStart);
+  //     document.body.classList.remove("no-select");
+  //   };
+  // }, []);
 
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);
@@ -495,29 +503,68 @@ export default function Soal() {
           </AlertDialog>
           <div className="mt-7 max-[640px]:mx-5 sm:mx-7 md:mx-10">
             <Dialog>
-              <DialogTrigger asChild>
-                <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
-                  Selesai
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Konfirmasi Ujian</DialogTitle>
-                  <DialogDescription>
-                    Apakah Anda Yakin Ingin Menyelesaikan Ujian ini?
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="outline">Batal</Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button className="cursor-pointer" onClick={handleSendExam}>
-                      Oke
+              {handleAnswerEmpty() === false ? (
+                <>
+                  <DialogTrigger asChild>
+                    <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
+                      Selesai
                     </Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="mb-2">
+                        Jawaban Kamu Belum Selesai
+                      </DialogTitle>
+                      <DialogDescription>
+                        Terindikasi Bahwa Jawaban Belum Terisi Semua Apakah
+                        Yakin Ingin Mengakhiri Sesi Ujian Ini ?
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="secondary">Kembali</Button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <Button onClick={handleSendExam}>
+                          Akhiri Sekarang
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </>
+              ) : (
+                <>
+                  <DialogTrigger asChild>
+                    <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
+                      Selesai
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="mb-2">
+                        Konfirmasi Ujian
+                      </DialogTitle>
+                      <DialogDescription>
+                        Apakah Anda Yakin Ingin Menyelesaikan Ujian ini?
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline">Batal</Button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <Button
+                          className="cursor-pointer"
+                          onClick={handleSendExam}
+                        >
+                          Oke
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </>
+              )}
             </Dialog>
           </div>
           <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">

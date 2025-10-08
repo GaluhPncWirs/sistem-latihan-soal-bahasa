@@ -27,7 +27,7 @@ export interface SoalUjian {
   created_at: string;
   dibuat_tgl: string;
   exam_duration: number;
-  exams?: ExamData;
+  exams: ExamData;
   id: number;
   idExams: number;
   id_Teacher: string;

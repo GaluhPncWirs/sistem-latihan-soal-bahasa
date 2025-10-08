@@ -95,7 +95,7 @@ export default function Home() {
                     className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
                   />
                 </div>
-                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-semibold">
+                <h1 className="bg-sky-600 text-slate-200 p-2 rounded-t-lg text-center font-semibold">
                   Mudah Diakses
                 </h1>
                 <p className="p-3 bg-[#CBF1F5] rounded-b-lg">
@@ -112,7 +112,7 @@ export default function Home() {
                     className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
                   />
                 </div>
-                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-semibold">
+                <h1 className="bg-sky-600 text-slate-200 p-2 rounded-t-lg text-center font-semibold">
                   Hasil Langsung
                 </h1>
                 <p className="p-3 bg-[#CBF1F5] rounded-b-lg">
@@ -129,7 +129,7 @@ export default function Home() {
                     className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
                   />
                 </div>
-                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-semibold">
+                <h1 className="bg-sky-600 text-slate-200 p-2 rounded-t-lg text-center font-semibold">
                   Soal Beragam
                 </h1>
                 <p className="p-3 bg-[#CBF1F5] rounded-b-lg">
@@ -146,7 +146,7 @@ export default function Home() {
                     className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
                   />
                 </div>
-                <h1 className="bg-red-300 p-2 rounded-t-lg text-center font-semibold">
+                <h1 className="bg-sky-600 text-slate-200 p-2 rounded-t-lg text-center font-semibold">
                   Keamanan Terjamin
                 </h1>
                 <p className="p-3 bg-[#CBF1F5] rounded-b-lg">
@@ -207,6 +207,15 @@ export default function Home() {
                   <Image
                     src="/img/beranda/ujian.jpeg"
                     alt="Ujian Page"
+                    width={500}
+                    height={500}
+                    className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-3/4 rounded-md"
+                  />
+                </CarouselItem>
+                <CarouselItem className="flex items-center justify-center p-5">
+                  <Image
+                    src="/img/beranda/riwayatUjian.jpeg"
+                    alt="Riwayat Ujian Page"
                     width={500}
                     height={500}
                     className="shadow-lg shadow-slate-700 max-[640px]:w-full sm:w-3/4 rounded-md"
