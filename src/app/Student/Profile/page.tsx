@@ -312,7 +312,7 @@ export default function Profil() {
                       Email
                     </TableCell>
                     <TableCell className="text-base font-medium">
-                      {dataStudent?.email || ""}
+                      {dataStudent?.email}
                     </TableCell>
                   </TableRow>
                   <TableRow className="border-black">
@@ -320,7 +320,7 @@ export default function Profil() {
                       No Telepon
                     </TableCell>
                     <TableCell className="text-base font-medium">
-                      0898-9253-6124
+                      {dataStudent?.noTlp.match(/.{1,4}/g)?.join("-")}
                     </TableCell>
                   </TableRow>
                   <TableRow className="border-black">
@@ -340,7 +340,7 @@ export default function Profil() {
                       Peran
                     </TableCell>
                     <TableCell className="text-base font-medium">
-                      {dataStudent?.role || ""}
+                      {dataStudent?.role}
                     </TableCell>
                   </TableRow>
                   <TableRow className="border-black">

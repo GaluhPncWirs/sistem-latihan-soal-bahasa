@@ -346,7 +346,7 @@ export default function CreateNewQuestions() {
           </label>
           <Textarea
             id="questions"
-            className="border border-black rounded-sm p-1 px-2"
+            className="border border-black rounded-sm p-1 px-2 h-20"
             onChange={(e: any) => {
               handleValueInput(e);
               setQuestion(e.currentTarget.value);

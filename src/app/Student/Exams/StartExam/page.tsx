@@ -234,35 +234,35 @@ export default function Soal() {
     }, 5000);
   }, [timeOutDone]);
 
-  // useEffect(() => {
-  //   const handleSelectStart = (e: Event) => {
-  //     e.preventDefault();
-  //     return false;
-  //   };
+  useEffect(() => {
+    const handleSelectStart = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  //   const handleContextMenu = (e: Event) => {
-  //     e.preventDefault();
-  //     return false;
-  //   };
+    const handleContextMenu = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  //   const handleDragStart = (e: Event) => {
-  //     e.preventDefault();
-  //     return false;
-  //   };
+    const handleDragStart = (e: Event) => {
+      e.preventDefault();
+      return false;
+    };
 
-  //   document.addEventListener("selectstart", handleSelectStart);
-  //   document.addEventListener("contextmenu", handleContextMenu);
-  //   document.addEventListener("dragstart", handleDragStart);
+    document.addEventListener("selectstart", handleSelectStart);
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("dragstart", handleDragStart);
 
-  //   document.body.classList.add("no-select");
+    document.body.classList.add("no-select");
 
-  //   return () => {
-  //     document.removeEventListener("selectstart", handleSelectStart);
-  //     document.removeEventListener("contextmenu", handleContextMenu);
-  //     document.removeEventListener("dragstart", handleDragStart);
-  //     document.body.classList.remove("no-select");
-  //   };
-  // }, []);
+    return () => {
+      document.removeEventListener("selectstart", handleSelectStart);
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("dragstart", handleDragStart);
+      document.body.classList.remove("no-select");
+    };
+  }, []);
 
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);

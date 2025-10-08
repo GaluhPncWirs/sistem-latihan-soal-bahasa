@@ -367,13 +367,8 @@ export default function TeacherProfile() {
                       No Telepon
                     </TableCell>
                     <TableCell className="text-base font-medium">
-                      {`${getProfileTeacher?.noTlp?.slice(
-                        0,
-                        4
-                      )}-${getProfileTeacher?.noTlp?.slice(
-                        4,
-                        8
-                      )}-${getProfileTeacher?.noTlp?.slice(8, 12)}` || ""}
+                      {getProfileTeacher?.noTlp.match(/.{1,4}/g).join("-") ||
+                        ""}
                     </TableCell>
                   </TableRow>
                   <TableRow className="border-black">
