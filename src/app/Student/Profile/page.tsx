@@ -39,7 +39,6 @@ export default function Profil() {
   );
   const [previewImgProfil, setPreviewImgProfil] = useState<string | null>(null);
 
-  // untuk sistem ranking
   const forRankingClasses = rankingClass.map((fil: any) => {
     return {
       ...fil,

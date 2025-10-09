@@ -1,12 +1,9 @@
 "use client";
-
-import { useConvertDate } from "@/app/hooks/getConvertDate";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import CreateNewQuestions from "@/components/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/components/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/components/khususGuru/kelolaSiswa/manageStudent";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -18,7 +15,6 @@ import {
 import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import FloatingBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
@@ -32,7 +28,6 @@ export default function Teacher() {
   const idTeacher = useGetIdTeacher();
   const dataUserTeacher = useGetDataTeacher(idTeacher);
   const [dataManageExams, setDataManageExams] = useState<any>([]);
-  // const getProfileTeacher = useGetDataTeacher(idTeacher);
   const jumlahSiswa = new Set(
     dataManageExams.flatMap((a: any) => a.lengthStudent)
   );
@@ -149,7 +144,6 @@ export default function Teacher() {
     getDataManageExams();
   }, [idTeacher]);
 
-  // untuk bagian nilai siswa atau kelola siswa
   useEffect(() => {
     if (!idTeacher) return;
     async function getDataStudent() {
