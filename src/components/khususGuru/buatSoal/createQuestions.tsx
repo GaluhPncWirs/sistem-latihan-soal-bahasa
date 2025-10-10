@@ -34,12 +34,13 @@ export default function CreateNewQuestions() {
     answer_d: "",
     answer_e: "",
   });
-  const [question, setQuestion] = useState("");
-  const [selectCorrectAnswer, setSelectCorrectAnswer] = useState("");
-  const [nameExam, setNameExams] = useState("");
-  const [chooseTypeExams, setChooseTypeExams] = useState("");
-  const [selectedValueNameExam, setSelectedValueNameExam] = useState("");
-  const [clearInput, setClearInput] = useState(false);
+  const [question, setQuestion] = useState<string>("");
+  const [selectCorrectAnswer, setSelectCorrectAnswer] = useState<string>("");
+  const [nameExam, setNameExams] = useState<string>("");
+  const [chooseTypeExams, setChooseTypeExams] = useState<string>("");
+  const [selectedValueNameExam, setSelectedValueNameExam] =
+    useState<string>("");
+  const [clearInput, setClearInput] = useState<boolean>(false);
   const idTeacher = useGetIdTeacher();
   const dataNameExam = useManageExamsData(idTeacher);
   const [chooseInputObject, setChooseInputObject] = useState({});

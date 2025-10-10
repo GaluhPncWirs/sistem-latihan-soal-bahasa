@@ -1,10 +1,3 @@
-// export interface ExamQuestion {
-//   id: string;
-//   questions: string;
-//   answerPg: object;
-//   correct_answer: string;
-// }
-
 export interface QuestionExam {
   id: string;
   questions: string;

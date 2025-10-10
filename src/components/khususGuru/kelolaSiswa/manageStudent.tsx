@@ -1,4 +1,4 @@
-import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
+import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
 import {
   HoverCard,
   HoverCardContent,
@@ -12,11 +12,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { supabase } from "@/lib/supabase/data";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-export default function ManageStudent({ dataStudents }: any) {
+export default function ManageStudent() {
+  const dataStudentExams = getResultExamDataStudent();
   return (
     <div>
       <h1 className="mb-7 text-2xl font-semibold">Hasil Ujian Siswa</h1>
@@ -34,8 +33,8 @@ export default function ManageStudent({ dataStudents }: any) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {dataStudents.length > 0 ? (
-            dataStudents.map((data: any, i: number) => (
+          {dataStudentExams.length > 0 ? (
+            dataStudentExams.map((data: any, i: number) => (
               <TableRow key={i}>
                 <TableCell>{i + 1}</TableCell>
                 <TableCell>{data.fullName}</TableCell>

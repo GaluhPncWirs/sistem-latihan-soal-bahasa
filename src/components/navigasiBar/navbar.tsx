@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import HamburgerMenu from "./hamburgerMenu/hamburgerMenu";
-import HamburgerMenuBar from "../sidebar/compSidebar";
 
 export default function NavigasiBar() {
   const [isUserThereStudent, setIsUserThereStudent] = useState<boolean>(false);

@@ -2,10 +2,12 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import HamburgerMenuBar from "../sidebar/compSidebar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
 
 export default function HeaderDasboard(props: any) {
   const { user, fullName, totalExams } = props;
   const urlPathName = usePathname();
+  const dataStudentExams = getResultExamDataStudent();
   function informExams() {
     if (urlPathName === "/Student/Dashboard") {
       const filterSisaUjian = totalExams.filter(
@@ -50,7 +52,7 @@ export default function HeaderDasboard(props: any) {
         </div>
       );
     } else {
-      const filterNilaiSiswa = totalExams
+      const filterNilaiSiswa = dataStudentExams
         .flatMap((fm: any) => fm.resultUjian)
         .filter((fil: any) => fil.hasil_ujian === "pending");
       return (

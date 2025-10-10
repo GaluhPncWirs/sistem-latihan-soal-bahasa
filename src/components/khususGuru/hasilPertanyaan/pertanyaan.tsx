@@ -1,4 +1,3 @@
-import { useConvertDate } from "@/app/hooks/getConvertDate";
 import { useManageExamsData } from "@/app/hooks/getDataManageExams";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { Button } from "@/components/ui/button";
@@ -37,19 +36,19 @@ import {
 import { supabase } from "@/lib/supabase/data";
 import { ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export default function ViewQuestions() {
-  const [chooseClass, setChooseClass] = useState<any>([]);
-  const [chooseTimeExam, setChooseTimeExam] = useState<any>([]);
+  const [chooseClass, setChooseClass] = useState<string[]>([]);
+  const [chooseTimeExam, setChooseTimeExam] = useState<string[]>([]);
   const [dates, setDates] = useState<(Date | undefined)[]>([]);
   const [fromTimes, setFromTimes] = useState<string[]>([]);
   const [toTimes, setToTimes] = useState<string[]>([]);
   const idTeacher = useGetIdTeacher();
   const viewManageQuestionsExam = useManageExamsData(idTeacher);
   const tenggatWaktu = fromTimes.map(
-    (time: any, i: any) => `${time} - ${toTimes[i]}`
+    (time: any, i: number) => `${time} - ${toTimes[i]}`
   );
 
   const manipulateDate = dates.map((localDate: any) => {

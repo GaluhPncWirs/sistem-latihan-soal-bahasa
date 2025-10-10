@@ -4,9 +4,7 @@ import { Suspense } from "react";
 
 export default function ViewQuestions() {
   return (
-    <Suspense
-      fallback={<h1 className="text-3xl font-semibold">Loading Exam...</h1>}
-    >
+    <Suspense fallback={<h1 className="text-3xl font-semibold">Loading...</h1>}>
       <ManageExamComponent />
     </Suspense>
   );
