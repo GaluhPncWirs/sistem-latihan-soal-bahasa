@@ -29,56 +29,55 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
+import { DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
+import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
 
 export default function DashboardStudent() {
-  const [scheduleExams, setScheduleExams] = useState<any>([]);
+  const scheduleExams = useDataScheduleExams();
   const getIdStudent = useGetIdStudent();
   const getDataStudent = useGetDataStudent(getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(false);
+  //   if (!getDataStudent?.classes || !getIdStudent) return;
+  //   async function getDataExamResult() {
+  //     const { data: examsData, error: examsError } = await supabase
+  //       .from("managed_exams")
+  //       .select("*,account_teacher(fullName),exams(nama_ujian,questions_exam)")
+  //       .eq("kelas", getDataStudent?.classes);
 
-  useEffect(() => {
-    if (!getDataStudent?.classes || !getIdStudent) return;
-    async function getDataExamResult() {
-      const { data: examsData, error: examsError } = await supabase
-        .from("managed_exams")
-        .select("*,account_teacher(fullName),exams(nama_ujian,questions_exam)")
-        .eq("kelas", getDataStudent?.classes);
+  //     const { data: historyDataExams, error: historyDataError }: any =
+  //       await supabase
+  //         .from("history-exam-student")
+  //         .select("exam_id,status_exam,created_at,hasil_ujian")
+  //         .eq("student_id", getIdStudent);
 
-      const { data: historyDataExams, error: historyDataError }: any =
-        await supabase
-          .from("history-exam-student")
-          .select("exam_id,status_exam,created_at,hasil_ujian")
-          .eq("student_id", getIdStudent);
+  //     if (examsError || historyDataError) {
+  //       toast("data tidak bisa ditampilkan, error");
+  //       return;
+  //     }
 
-      if (examsError || historyDataError) {
-        toast("data tidak bisa ditampilkan, error");
-        return;
-      }
+  //     const mergedDataScheduleExams = examsData.map((item: any) => {
+  //       const finds = historyDataExams.find(
+  //         (f: any) => f.exam_id === item.idExams
+  //       );
+  //       return {
+  //         ...item,
+  //         status_exam: finds?.status_exam ?? null,
+  //         created_at_historyExams: finds?.created_at ?? null,
+  //         hasil_ujian: finds?.hasil_ujian ?? null,
+  //       };
+  //     });
 
-      const mergedDataScheduleExams = examsData.map((item: any) => {
-        const finds = historyDataExams.find(
-          (f: any) => f.exam_id === item.idExams
-        );
-        return {
-          ...item,
-          status_exam: finds?.status_exam ?? null,
-          created_at_historyExams: finds?.created_at ?? null,
-          hasil_ujian: finds?.hasil_ujian ?? null,
-        };
-      });
-
-      setScheduleExams(mergedDataScheduleExams);
-    }
-    getDataExamResult();
-  }, [getDataStudent?.classes, getIdStudent]);
+  //     setScheduleExams(mergedDataScheduleExams);
+  //   }
+  //   getDataExamResult();
+  // }, [getDataStudent?.classes, getIdStudent]);
 
   const filterScoreExams = scheduleExams.filter(
     (avg: any) =>
@@ -182,7 +181,7 @@ export default function DashboardStudent() {
         messageExams += "Ujian Belum Dimulai";
       } else if (hariIni > akhirUjian) {
         messageExams += "Ujian Telah Lewat Batas Waktu";
-        // handleLateExam(idUjian, getIdStudent);
+        handleLateExam(idUjian, getIdStudent);
       } else {
         return (
           <Dialog>
@@ -231,7 +230,7 @@ export default function DashboardStudent() {
     } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
       messageExams += "Ujian Belum Dimulai";
     } else {
-      // handleLateExam(idUjian, getIdStudent);
+      handleLateExam(idUjian, getIdStudent);
       messageExams += "Ujian Telah Lewat Batas Waktu";
     }
     return messageExams;
@@ -284,11 +283,7 @@ export default function DashboardStudent() {
     <LayoutBodyContent>
       {scheduleExams.length > 0 ? (
         <>
-          <HeaderDasboard
-            user="Siswa"
-            fullName={getDataStudent?.fullName}
-            totalExams={scheduleExams}
-          />
+          <HeaderDasboard user="Siswa" fullName={getDataStudent?.fullName} />
           <div className="mt-5">
             <p className="max-[640px]:text-xl text-2xl font-semibold">
               Berikut Ringkasan Ujian Anda

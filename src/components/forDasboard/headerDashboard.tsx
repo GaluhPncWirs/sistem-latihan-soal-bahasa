@@ -3,14 +3,16 @@ import { usePathname } from "next/navigation";
 import HamburgerMenuBar from "../sidebar/compSidebar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
+import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
 
 export default function HeaderDasboard(props: any) {
-  const { user, fullName, totalExams } = props;
+  const { user, fullName } = props;
   const urlPathName = usePathname();
   const dataStudentExams = getResultExamDataStudent();
+  const scheduleExams = useDataScheduleExams();
   function informExams() {
     if (urlPathName === "/Student/Dashboard") {
-      const filterSisaUjian = totalExams.filter(
+      const filterSisaUjian = scheduleExams.filter(
         (done: any) => done.status_exam !== true
       );
       return (
