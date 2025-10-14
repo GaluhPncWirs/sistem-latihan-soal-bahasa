@@ -148,11 +148,7 @@ export default function Teacher() {
     <LayoutBodyContent>
       {dataManageExams.length > 0 ? (
         <>
-          <HeaderDasboard
-            user="Pengajar"
-            fullName={dataUserTeacher.fullName}
-            totalExams={[]}
-          />
+          <HeaderDasboard user="Pengajar" fullName={dataUserTeacher.fullName} />
           <div className="mt-5">
             <h1 className="max-[640px]:text-xl sm:text-2xl font-semibold">
               Ringkasan Aktifitas Ujian
@@ -214,19 +210,19 @@ export default function Teacher() {
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-[#3282B8]">
-                        <TableHead className="text-base text-center">
+                        <TableHead className="text-base text-center font-semibold">
                           No
                         </TableHead>
-                        <TableHead className="text-base text-center">
+                        <TableHead className="text-base text-center font-semibold">
                           Nama Ujian
                         </TableHead>
-                        <TableHead className="text-base text-center">
+                        <TableHead className="text-base text-center font-semibold">
                           Kelas
                         </TableHead>
-                        <TableHead className="text-base text-center">
+                        <TableHead className="text-base text-center font-semibold">
                           Tenggat Waktu
                         </TableHead>
-                        <TableHead className="text-base text-center">
+                        <TableHead className="text-base text-center font-semibold">
                           Status
                         </TableHead>
                       </TableRow>

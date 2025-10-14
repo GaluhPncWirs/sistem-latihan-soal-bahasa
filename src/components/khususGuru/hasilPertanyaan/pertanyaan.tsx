@@ -92,7 +92,10 @@ export default function ViewQuestions() {
           description: "Soal Berhasil Dikirimkan",
         });
       }
-    }
+    } else
+      toast("Gagal ❌", {
+        description: "Ada Soal Yang Belum di Kelola, Dicek Kembali",
+      });
   }
 
   async function handleDeleteExam(idExams: number) {
@@ -118,14 +121,24 @@ export default function ViewQuestions() {
       <Table>
         <TableHeader>
           <TableRow className="bg-[#3282B8]">
-            <TableHead className="text-center text-base">No</TableHead>
-            <TableHead className="text-center text-base">Nama Ujian</TableHead>
-            <TableHead className="text-center text-base">
+            <TableHead className="text-center text-base font-semibold">
+              No
+            </TableHead>
+            <TableHead className="text-center text-base font-semibold">
+              Nama Ujian
+            </TableHead>
+            <TableHead className="text-center text-base font-semibold">
               Kirim Ke Kelas
             </TableHead>
-            <TableHead className="text-center text-base">Batas Ujian</TableHead>
-            <TableHead className="text-center text-base">Waktu Ujian</TableHead>
-            <TableHead className="text-center text-base">Kelola</TableHead>
+            <TableHead className="text-center text-base font-semibold">
+              Batas Ujian
+            </TableHead>
+            <TableHead className="text-center text-base font-semibold">
+              Waktu Ujian
+            </TableHead>
+            <TableHead className="text-center text-base font-semibold">
+              Kelola
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -179,26 +192,36 @@ export default function ViewQuestions() {
                         />
                       </PopoverContent>
                     </Popover>
-                    <Input
-                      type="time"
-                      defaultValue={fromTimes[i] || "00:00"}
-                      onChange={(e) => {
-                        const newTime = [...fromTimes];
-                        newTime[i] = e.currentTarget.value;
-                        setFromTimes(newTime);
-                      }}
-                      className="p-2 w-1/3 flex justify-center"
-                    />
-                    <Input
-                      type="time"
-                      defaultValue={toTimes[i] || "00:00"}
-                      onChange={(e) => {
-                        const newTime = [...toTimes];
-                        newTime[i] = e.currentTarget.value;
-                        setToTimes(newTime);
-                      }}
-                      className="p-2 w-1/3 flex justify-center"
-                    />
+                    <div>
+                      <label className="mb-1 inline-block text-center w-full">
+                        Mulai
+                      </label>
+                      <Input
+                        type="time"
+                        defaultValue={fromTimes[i] || "00:00"}
+                        onChange={(e) => {
+                          const newTime = [...fromTimes];
+                          newTime[i] = e.currentTarget.value;
+                          setFromTimes(newTime);
+                        }}
+                        className="px-2"
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 inline-block text-center w-full">
+                        Selesai
+                      </label>
+                      <Input
+                        type="time"
+                        defaultValue={toTimes[i] || "00:00"}
+                        onChange={(e) => {
+                          const newTime = [...toTimes];
+                          newTime[i] = e.currentTarget.value;
+                          setToTimes(newTime);
+                        }}
+                        className="px-2"
+                      />
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -238,7 +261,7 @@ export default function ViewQuestions() {
                     <DialogTrigger asChild>
                       <Button
                         variant="destructive"
-                        className="cursor-pointer hover:bg-red-500"
+                        className="hover:bg-red-500"
                       >
                         Hapus
                       </Button>
@@ -259,7 +282,7 @@ export default function ViewQuestions() {
                         <DialogClose asChild>
                           <Button
                             variant="destructive"
-                            className="cursor-pointer hover:bg-red-700"
+                            className="hover:bg-red-700"
                             onClick={() => handleDeleteExam(data.id)}
                           >
                             Hapus
@@ -286,13 +309,13 @@ export default function ViewQuestions() {
       <div className="mt-7">
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="text-base px-7 bg-[#3282B8] hover:bg-blue-500 cursor-pointer">
+            <Button className="text-base px-7 bg-[#3282B8] hover:bg-blue-500">
               Kirim
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Konfirmasi Soal</DialogTitle>
-            <DialogDescription className="my-2 text-base max-w-11/12 mx-auto">
+            <DialogDescription className="text-base">
               Apakah Anda Sudah Benar - Benar Ingin Mengirimkan Soalnya Ke Siswa
               ?
             </DialogDescription>

@@ -22,14 +22,24 @@ export default function ManageStudent() {
       <Table>
         <TableHeader>
           <TableRow className="bg-[#3282B8]">
-            <TableHead className="text-center text-base">No</TableHead>
-            <TableHead className="text-center text-base">Nama Siswa</TableHead>
-            <TableHead className="text-center text-base">Ujian</TableHead>
-            <TableHead className="text-center text-base">Nilai</TableHead>
-            <TableHead className="text-center text-base">
+            <TableHead className="text-center text-base font-semibold">
+              No
+            </TableHead>
+            <TableHead className="text-center text-base font-semibold">
+              Nama Siswa
+            </TableHead>
+            <TableHead className="text-center text-base font-semibold">
+              Ujian
+            </TableHead>
+            <TableHead className="text-center text-base font-semibold">
+              Nilai
+            </TableHead>
+            <TableHead className="text-center text-base font-semibold">
               Status Tugas
             </TableHead>
-            <TableHead className="text-center text-base">Kelas</TableHead>
+            <TableHead className="text-center text-base font-semibold">
+              Kelas
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

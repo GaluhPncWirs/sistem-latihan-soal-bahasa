@@ -43,7 +43,7 @@ export default function CreateNewQuestions() {
   const [clearInput, setClearInput] = useState<boolean>(false);
   const idTeacher = useGetIdTeacher();
   const dataNameExam = useManageExamsData(idTeacher);
-  const [chooseInputObject, setChooseInputObject] = useState({});
+  const [chooseInputObject, setChooseInputObject] = useState<any>({});
   const { handleValueInput } = useHandleInput(chooseInputObject);
 
   useEffect(() => {
@@ -75,6 +75,17 @@ export default function CreateNewQuestions() {
   }, [chooseTypeExams, selectedValueNameExam, nameExam, question, answer]);
 
   function isFormFilled() {
+    if (chooseTypeExams === "pg") {
+      const isArray = Object.values(chooseInputObject).filter(
+        (val: any) => typeof val === "string" && val !== null
+      );
+      const isObject: any = Object.entries(chooseInputObject)
+        .filter(([_, value]) => typeof value === "object" && value !== null)
+        .flatMap(([_, value]: any) => Object.values(value));
+
+      const resultData = isArray.concat(isObject);
+      return resultData.every((item: any) => item !== "");
+    }
     return Object.values(chooseInputObject).every((item: any) => item !== "");
   }
 
@@ -485,7 +496,7 @@ export default function CreateNewQuestions() {
       <Dialog>
         <DialogTrigger asChild>
           <Button
-            className="text-center text-lg mt-10 px-8 rounded-md py-1.5 cursor-pointer bg-[#3282B8] hover:bg-blue-500"
+            className="text-center text-lg mt-10 px-8 rounded-md py-1.5 bg-[#3282B8] hover:bg-blue-500"
             disabled={!isFormFilled()}
           >
             Buat

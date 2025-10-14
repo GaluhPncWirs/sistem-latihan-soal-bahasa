@@ -44,8 +44,9 @@ export default function ManageExamComponent() {
     answer_d: "",
     answer_e: "",
   });
-  const [selectCorrectNewAnswer, setSelectCorrectNewAnswer] = useState("");
-  const [updateQuestion, setUpdateQuestion] = useState("");
+  const [selectCorrectNewAnswer, setSelectCorrectNewAnswer] =
+    useState<string>("");
+  const [updateQuestion, setUpdateQuestion] = useState<string>("");
   const searchParams = useSearchParams();
   const getParamId = searchParams.get("id");
   const idTeacher = useGetIdTeacher();
@@ -287,7 +288,12 @@ export default function ManageExamComponent() {
                                   <h1 className="mb-2">Edit Jawaban</h1>
                                   <div className="grid grid-cols-2 gap-3 max-[640px]:gap-5 max-[640px]:grid-cols-3">
                                     <div>
-                                      <label htmlFor="answer_a">Opsi A</label>
+                                      <label
+                                        htmlFor="answer_a"
+                                        className="mb-1 inline-block"
+                                      >
+                                        Opsi A
+                                      </label>
                                       <Input
                                         id="answer_a"
                                         onChange={handleUpdateAnswer}
@@ -295,7 +301,12 @@ export default function ManageExamComponent() {
                                       />
                                     </div>
                                     <div>
-                                      <label htmlFor="answer_b">Opsi B</label>
+                                      <label
+                                        htmlFor="answer_b"
+                                        className="mb-1 inline-block"
+                                      >
+                                        Opsi B
+                                      </label>
                                       <Input
                                         id="answer_b"
                                         onChange={handleUpdateAnswer}
@@ -303,7 +314,12 @@ export default function ManageExamComponent() {
                                       />
                                     </div>
                                     <div>
-                                      <label htmlFor="answer_c">Opsi C</label>
+                                      <label
+                                        htmlFor="answer_c"
+                                        className="mb-1 inline-block"
+                                      >
+                                        Opsi C
+                                      </label>
                                       <Input
                                         id="answer_c"
                                         onChange={handleUpdateAnswer}
@@ -311,7 +327,12 @@ export default function ManageExamComponent() {
                                       />
                                     </div>
                                     <div>
-                                      <label htmlFor="answer_d">Opsi D</label>
+                                      <label
+                                        htmlFor="answer_d"
+                                        className="mb-1 inline-block"
+                                      >
+                                        Opsi D
+                                      </label>
                                       <Input
                                         id="answer_d"
                                         onChange={handleUpdateAnswer}
@@ -319,7 +340,12 @@ export default function ManageExamComponent() {
                                       />
                                     </div>
                                     <div>
-                                      <label htmlFor="answer_e">Opsi E</label>
+                                      <label
+                                        htmlFor="answer_e"
+                                        className="mb-1 inline-block"
+                                      >
+                                        Opsi E
+                                      </label>
                                       <Input
                                         id="answer_e"
                                         onChange={handleUpdateAnswer}
@@ -419,7 +445,9 @@ export default function ManageExamComponent() {
                           </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
-                              <DialogTitle>Hapus Soal</DialogTitle>
+                              <DialogTitle className="mb-2">
+                                Hapus Soal
+                              </DialogTitle>
                               <DialogDescription>
                                 {`Apakah Anda Benar - Benar Ingin Menghapus Soal "${data.questions}" ini ?`}
                               </DialogDescription>
@@ -509,7 +537,7 @@ export default function ManageExamComponent() {
                             <DialogHeader>
                               <DialogTitle>Hapus Soal</DialogTitle>
                               <DialogDescription>
-                                {`Apakah Anda Benar - Benar Ingin Menghapus Soal "${data.questions}" ini ?`}
+                                {`Apakah Anda Benar - Benar Ingin Menghapus Soal No "${data.questions}" ini ?`}
                               </DialogDescription>
                             </DialogHeader>
                             <DialogFooter>
