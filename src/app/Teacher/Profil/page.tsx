@@ -28,6 +28,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import LayoutBodyContent from "@/layout/bodyContent";
+import LayoutProfileUser from "@/layout/layoutProfile";
 import { supabase } from "@/lib/supabase/data";
 import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
@@ -38,7 +39,6 @@ export default function TeacherProfile() {
   const idTeacher = useGetIdTeacher();
   const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const getProfileTeacher = useGetDataTeacher(idTeacher);
-  const [previewImgProfil, setPreviewImgProfil] = useState<string | null>(null);
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -181,13 +181,6 @@ export default function TeacherProfile() {
     }
   }
 
-  function handleChangeImgProfile(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setPreviewImgProfil(URL.createObjectURL(file));
-    }
-  }
-
   return (
     <LayoutBodyContent>
       {getHistoryExams.length > 0 ? (
@@ -198,56 +191,15 @@ export default function TeacherProfile() {
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">
-            <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
-              <Dialog>
-                <DialogTrigger asChild className="cursor-pointer">
-                  {previewImgProfil !== null ? (
-                    <Image
-                      src={previewImgProfil}
-                      alt="Profile User"
-                      width={300}
-                      height={300}
-                      className="rounded-full w-1/6 max-[640px]:w-1/3"
-                    />
-                  ) : (
-                    <Image
-                      src="/img/profile/userProfile.png"
-                      alt="Profile User"
-                      width={300}
-                      height={300}
-                      className="rounded-full w-1/6 max-[640px]:w-1/3"
-                    />
-                  )}
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Ubah Foto Profil</DialogTitle>
-                    <div className="mt-3">
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        id="imgProfil"
-                        onChange={handleChangeImgProfile}
-                      />
-                    </div>
-                  </DialogHeader>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                      <Button>Oke</Button>
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+            <LayoutProfileUser dataUser={getProfileTeacher}>
               <div className="basis-3/4">
-                <h1 className="capitalize mb-2 font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
+                <h1 className="capitalize font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
                   {getProfileTeacher?.fullName || ""}
                 </h1>
-                <p className="font-medium">
-                  {getProfileTeacher?.pengajarMapel || ""}
+                <p className="font-medium my-1.5">
+                  NISN : {getProfileTeacher?.nisn || ""}
                 </p>
+                <p>{getProfileTeacher?.pengajarMapel || ""}</p>
               </div>
               <Dialog>
                 <DialogTrigger asChild>
@@ -263,7 +215,7 @@ export default function TeacherProfile() {
                     <DialogHeader className="text-start">
                       <DialogTitle>Edit Profile</DialogTitle>
                       <DialogDescription className="mt-1 text-base">
-                        Edit Seluruh Informasi Profil Kamu Disini
+                        Edit Seluruh Informasi Profil Anda Disini
                       </DialogDescription>
                       <div>
                         <label htmlFor="fullName" className="mb-2 block">
@@ -327,76 +279,8 @@ export default function TeacherProfile() {
                   </form>
                 </DialogContent>
               </Dialog>
-            </div>
-            <div className="mb-5">
-              <div className="flex items-center mb-5 gap-3">
-                <Image
-                  src="/img/profileTeacher/account.png"
-                  alt="Informasi Akun"
-                  width={200}
-                  height={200}
-                  className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
-                />
-                <h1 className="text-2xl font-semibold">Informasi Akun</h1>
-              </div>
-              <Table>
-                <TableBody>
-                  <TableRow className="border-black">
-                    <TableCell className="text-base font-semibold">
-                      Email
-                    </TableCell>
-                    <TableCell className="text-base font-medium">
-                      {getProfileTeacher?.email || ""}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow className="border-black">
-                    <TableCell className="text-base font-semibold">
-                      NISN
-                    </TableCell>
-                    <TableCell className="text-base font-medium">
-                      {getProfileTeacher?.nisn}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow className="border-black">
-                    <TableCell className="text-base font-semibold">
-                      No Telepon
-                    </TableCell>
-                    <TableCell className="text-base font-medium">
-                      {getProfileTeacher?.noTlp.match(/.{1,4}/g).join("-") ||
-                        ""}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow className="border-black">
-                    <TableCell className="text-base font-semibold">
-                      Bergabung
-                    </TableCell>
-                    <TableCell className="text-base font-medium">
-                      {useConvertDate(getProfileTeacher?.created_at, {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      }) || ""}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow className="border-black">
-                    <TableCell className="text-base font-semibold">
-                      Peran
-                    </TableCell>
-                    <TableCell className="text-base font-medium">
-                      {getProfileTeacher?.role || ""}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow className="border-black">
-                    <TableCell className="text-base font-semibold">
-                      Status Akun
-                    </TableCell>
-                    <TableCell className="text-base font-medium">
-                      Aktif
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
+            </LayoutProfileUser>
+
             <div>
               <div className="mb-5 flex items-center gap-3">
                 <Image
@@ -517,3 +401,204 @@ export default function TeacherProfile() {
     </LayoutBodyContent>
   );
 }
+
+// <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
+//   <Dialog>
+//     <DialogTrigger asChild className="cursor-pointer">
+//       {previewImgProfil !== null ? (
+//         <Image
+//           src={previewImgProfil}
+//           alt="Profile User"
+//           width={300}
+//           height={300}
+//           className="rounded-full w-1/6 max-[640px]:w-1/3"
+//         />
+//       ) : (
+//         <Image
+//           src="/img/profileStudent/userProfile.png"
+//           alt="Profile User"
+//           width={300}
+//           height={300}
+//           className="rounded-full w-1/6 max-[640px]:w-1/3"
+//         />
+//       )}
+//     </DialogTrigger>
+//     <DialogContent>
+//       <DialogHeader>
+//         <DialogTitle>Ubah Foto Profil</DialogTitle>
+//         <div className="mt-3">
+//           <Input
+//             type="file"
+//             accept="image/*"
+//             id="imgProfil"
+//             onChange={handleChangeImgProfile}
+//           />
+//         </div>
+//       </DialogHeader>
+//       <DialogFooter>
+//         <DialogClose asChild>
+//           <Button variant="outline">Cancel</Button>
+//         </DialogClose>
+//         <DialogClose asChild>
+//           <Button>Oke</Button>
+//         </DialogClose>
+//       </DialogFooter>
+//     </DialogContent>
+//   </Dialog>
+//   <div className="basis-3/4">
+//     <h1 className="capitalize mb-2 font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
+//       {getProfileTeacher?.fullName || ""}
+//     </h1>
+//     <p className="font-medium">
+//       {getProfileTeacher?.pengajarMapel || ""}
+//     </p>
+//   </div>
+//   <Dialog>
+//     <DialogTrigger asChild>
+//       <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-lg p-5">
+//         Edit Profil
+//       </Button>
+//     </DialogTrigger>
+//     <DialogContent>
+//       <form
+//         className="grid gap-5"
+//         onSubmit={(event) => handleEditProfileTeacher(event)}
+//       >
+//         <DialogHeader className="text-start">
+//           <DialogTitle>Edit Profile</DialogTitle>
+//           <DialogDescription className="mt-1 text-base">
+//             Edit Seluruh Informasi Profil Kamu Disini
+//           </DialogDescription>
+//           <div>
+//             <label htmlFor="fullName" className="mb-2 block">
+//               Nama
+//             </label>
+//             <Input id="fullName" placeholder="Jhon Doe" />
+//           </div>
+//           <div>
+//             <label htmlFor="pengajarMapel" className="mb-2 block">
+//               Ubah Pengajar Mata Pelajaran
+//             </label>
+//             <Input
+//               id="pengajarMapel"
+//               placeholder="Matematika - Bahasa Indonesia - dst"
+//             />
+//           </div>
+//           <div>
+//             <label htmlFor="noTlp" className="mb-2 block">
+//               Ubah No Telepon
+//             </label>
+//             <Input id="noTlp" placeholder="089276361434" />
+//           </div>
+//           <div>
+//             <label htmlFor="email" className="mb-2 block">
+//               Email
+//             </label>
+//             <Input
+//               type="email"
+//               id="email"
+//               placeholder="jhondoe56@gmail.com"
+//             />
+//           </div>
+//           <div>
+//             <label htmlFor="password" className="mb-2 block">
+//               Ubah Password
+//             </label>
+//             <Input
+//               type="password"
+//               id="password"
+//               placeholder="**********"
+//             />
+//           </div>
+
+//           <span className="font-semibold block text-xs text-red-500 text-end">
+//             *Jika Ingin Diubah Hanya Salah Satu Maka Sisanya
+//             Dikosongkan Saja
+//           </span>
+//         </DialogHeader>
+//         <DialogFooter className="mt-3">
+//           <DialogClose asChild>
+//             <Button className="cursor-pointer" variant="outline">
+//               Cancel
+//             </Button>
+//           </DialogClose>
+//           <DialogClose asChild>
+//             <Button type="submit" className="cursor-pointer">
+//               Confirm
+//             </Button>
+//           </DialogClose>
+//         </DialogFooter>
+//       </form>
+//     </DialogContent>
+//   </Dialog>
+// </div>
+
+// <div className="mb-5">
+//   <div className="flex items-center mb-5 gap-3">
+//     <Image
+//       src="/img/profileTeacher/account.png"
+//       alt="Informasi Akun"
+//       width={200}
+//       height={200}
+//       className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
+//     />
+//     <h1 className="text-2xl font-semibold">Informasi Akun</h1>
+//   </div>
+//   <Table>
+//     <TableBody>
+//       <TableRow className="border-black">
+//         <TableCell className="text-base font-semibold">
+//           Email
+//         </TableCell>
+//         <TableCell className="text-base font-medium">
+//           {getProfileTeacher?.email || ""}
+//         </TableCell>
+//       </TableRow>
+//       {/* <TableRow className="border-black">
+//         <TableCell className="text-base font-semibold">
+//           NISN
+//         </TableCell>
+//         <TableCell className="text-base font-medium">
+//           {getProfileTeacher?.nisn}
+//         </TableCell>
+//       </TableRow> */}
+//       <TableRow className="border-black">
+//         <TableCell className="text-base font-semibold">
+//           No Telepon
+//         </TableCell>
+//         <TableCell className="text-base font-medium">
+//           {getProfileTeacher?.noTlp.match(/.{1,4}/g).join("-") ||
+//             ""}
+//         </TableCell>
+//       </TableRow>
+//       <TableRow className="border-black">
+//         <TableCell className="text-base font-semibold">
+//           Bergabung
+//         </TableCell>
+//         <TableCell className="text-base font-medium">
+//           {useConvertDate(getProfileTeacher?.created_at, {
+//             day: "numeric",
+//             month: "long",
+//             year: "numeric",
+//           }) || ""}
+//         </TableCell>
+//       </TableRow>
+//       <TableRow className="border-black">
+//         <TableCell className="text-base font-semibold">
+//           Peran
+//         </TableCell>
+//         <TableCell className="text-base font-medium">
+//           {getProfileTeacher?.role || ""}
+//         </TableCell>
+//       </TableRow>
+//       <TableRow className="border-black">
+//         <TableCell className="text-base font-semibold">
+//           Status Akun
+//         </TableCell>
+//         <TableCell className="text-base font-medium">
+//           Aktif
+//         </TableCell>
+//       </TableRow>
+//     </TableBody>
+//   </Table>
+// </div>
