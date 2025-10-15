@@ -41,7 +41,7 @@ export default function LoginAccount() {
       if (dataLogin.success) {
         if (dataLogin.tipe === "siswa") {
           localStorage.setItem("idLoginSiswa", dataLogin.id);
-          push("/");
+          push("/Student/Dashboard");
           toast("Berhasil ✅", {
             description: "Masuk Akun Berhasil",
           });

@@ -311,11 +311,21 @@ export default function Profil() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#3282B8]">
-                    <TableHead>No</TableHead>
-                    <TableHead>Nama Ujian</TableHead>
-                    <TableHead>Tanggal</TableHead>
-                    <TableHead>Nilai</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead className="text-base font-semibold">
+                      No
+                    </TableHead>
+                    <TableHead className="text-base font-semibold">
+                      Nama Ujian
+                    </TableHead>
+                    <TableHead className="text-base font-semibold">
+                      Tanggal
+                    </TableHead>
+                    <TableHead className="text-base font-semibold">
+                      Nilai
+                    </TableHead>
+                    <TableHead className="text-base font-semibold">
+                      Status
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

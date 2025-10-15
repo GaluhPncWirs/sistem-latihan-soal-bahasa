@@ -390,7 +390,7 @@ export default function CreateNewQuestions() {
                   return (
                     <div
                       key={`answer-option-${option}`}
-                      className="max-[640px]:w-10/12 "
+                      className="max-[640px]:w-2/3"
                     >
                       <label
                         htmlFor={answerKey}

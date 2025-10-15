@@ -44,40 +44,6 @@ export default function DashboardStudent() {
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(false);
-  //   if (!getDataStudent?.classes || !getIdStudent) return;
-  //   async function getDataExamResult() {
-  //     const { data: examsData, error: examsError } = await supabase
-  //       .from("managed_exams")
-  //       .select("*,account_teacher(fullName),exams(nama_ujian,questions_exam)")
-  //       .eq("kelas", getDataStudent?.classes);
-
-  //     const { data: historyDataExams, error: historyDataError }: any =
-  //       await supabase
-  //         .from("history-exam-student")
-  //         .select("exam_id,status_exam,created_at,hasil_ujian")
-  //         .eq("student_id", getIdStudent);
-
-  //     if (examsError || historyDataError) {
-  //       toast("data tidak bisa ditampilkan, error");
-  //       return;
-  //     }
-
-  //     const mergedDataScheduleExams = examsData.map((item: any) => {
-  //       const finds = historyDataExams.find(
-  //         (f: any) => f.exam_id === item.idExams
-  //       );
-  //       return {
-  //         ...item,
-  //         status_exam: finds?.status_exam ?? null,
-  //         created_at_historyExams: finds?.created_at ?? null,
-  //         hasil_ujian: finds?.hasil_ujian ?? null,
-  //       };
-  //     });
-
-  //     setScheduleExams(mergedDataScheduleExams);
-  //   }
-  //   getDataExamResult();
-  // }, [getDataStudent?.classes, getIdStudent]);
 
   const filterScoreExams = scheduleExams.filter(
     (avg: any) =>
@@ -121,20 +87,34 @@ export default function DashboardStudent() {
   }
 
   async function lateExams(idUjian: number) {
-    const payload = {
-      created_at: new Date().toISOString(),
-      student_id: getIdStudent,
-      exam_id: Number(idUjian),
-      answer_student: null,
-      hasil_ujian: "telat",
-      status_exam: true,
-      kelas: getDataStudent?.classes,
-    };
-    const { error } = await supabase
+    const { data: historyExams, error: errHistoryExams }: any = await supabase
       .from("history-exam-student")
-      .insert(payload);
-    if (error) {
+      .select("hasil_ujian,exam_id")
+      .eq("hasil_ujian", "telat")
+      .eq("exam_id", idUjian);
+
+    if (historyExams?.length > 0) {
+      console.log("tidak bisa terduplikat");
+    } else if (errHistoryExams) {
       console.log("gagal simpan data");
+    } else {
+      const payload = {
+        created_at: new Date().toISOString(),
+        student_id: getIdStudent,
+        exam_id: Number(idUjian),
+        answer_student: null,
+        hasil_ujian: "telat",
+        status_exam: true,
+        kelas: getDataStudent?.classes,
+      };
+      const { error } = await supabase
+        .from("history-exam-student")
+        .insert(payload);
+      if (error) {
+        console.log("gagal simpan data");
+      } else {
+        console.log("data sudah masuk ke database");
+      }
     }
   }
 
@@ -162,7 +142,7 @@ export default function DashboardStudent() {
     return [toMinute(startTimeExam), toMinute(endTimeExams)];
   }
 
-  function resultDeadlineExam(
+  function getExamsStatusAndHandleLateExam(
     tenggat_waktu: string,
     nama_ujian: string,
     idUjian: number,
@@ -230,11 +210,34 @@ export default function DashboardStudent() {
     } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
       messageExams += "Ujian Belum Dimulai";
     } else {
-      handleLateExam(idUjian, getIdStudent);
       messageExams += "Ujian Telah Lewat Batas Waktu";
+      handleLateExam(idUjian, getIdStudent);
     }
     return messageExams;
   }
+
+  // function checkAndHandleLateExam(tenggat_waktu: string,
+  //   nama_ujian: string,
+  //   idUjian: number,
+  //   tgl_ujian: string) {
+
+  //     const statusExam : any = getExamsStatus(tenggat_waktu,nama_ujian,idUjian,tgl_ujian)
+
+  //     if(statusExam.isLate){
+  //       setIsLate(true)
+  //     }
+
+  //     return statusExam.message
+  // }
+
+  // useEffect(() => {
+  //   async function excutableFunctionLate(){
+  //     if(isLate){
+  //       await lateExams()
+  //     }
+  //   }
+
+  // },[isLate])
 
   const isComingSoonExams = scheduleExams.filter(
     (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni
@@ -432,17 +435,19 @@ export default function DashboardStudent() {
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-[#3282B8]">
-                          <TableHead className="text-slate-200">No</TableHead>
-                          <TableHead className="text-slate-200">
+                          <TableHead className="text-base font-semibold">
+                            No
+                          </TableHead>
+                          <TableHead className="text-base font-semibold">
                             Nama Ujian
                           </TableHead>
-                          <TableHead className="text-slate-200">
+                          <TableHead className="text-base font-semibold">
                             Waktu Tenggat
                           </TableHead>
-                          <TableHead className="text-slate-200">
+                          <TableHead className="text-base font-semibold">
                             Guru Pengampu
                           </TableHead>
-                          <TableHead className="text-slate-200">
+                          <TableHead className="text-base font-semibold">
                             Status Ujian
                           </TableHead>
                         </TableRow>
@@ -466,7 +471,7 @@ export default function DashboardStudent() {
                                   : data.status_exam === true &&
                                     data.hasil_ujian === "telat"
                                   ? "Telat"
-                                  : resultDeadlineExam(
+                                  : getExamsStatusAndHandleLateExam(
                                       data.tenggat_waktu,
                                       data.exams.nama_ujian,
                                       data.idExams,
@@ -509,14 +514,16 @@ export default function DashboardStudent() {
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-[#3282B8]">
-                          <TableHead className="text-slate-200">No</TableHead>
-                          <TableHead className="text-slate-200">
+                          <TableHead className="text-base font-semibold">
+                            No
+                          </TableHead>
+                          <TableHead className="text-base font-semibold">
                             Nama Ujian
                           </TableHead>
-                          <TableHead className="text-slate-200">
+                          <TableHead className="text-base font-semibold">
                             Tgl Pengerjaan
                           </TableHead>
-                          <TableHead className="text-slate-200">
+                          <TableHead className="text-base font-semibold">
                             Nilai Ujian
                           </TableHead>
                         </TableRow>
@@ -524,7 +531,8 @@ export default function DashboardStudent() {
                       <TableBody>
                         {scheduleExams.length > 0 ? (
                           scheduleExams.map((item: any, i: number) =>
-                            item.status_exam === true ? (
+                            item.status_exam === true &&
+                            item.hasil_ujian !== "telat" ? (
                               <TableRow key={i}>
                                 <TableCell>{i + 1}</TableCell>
                                 <TableCell>
@@ -572,7 +580,7 @@ export default function DashboardStudent() {
                                     : "Tidak Ada Nilai"}
                                 </TableCell>
                               </TableRow>
-                            ) : resultDeadlineExam(
+                            ) : getExamsStatusAndHandleLateExam(
                                 item.tenggat_waktu,
                                 item.exams.nama_ujian,
                                 item.idExams,
