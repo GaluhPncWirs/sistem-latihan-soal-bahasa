@@ -27,7 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useHandleInput } from "@/app/hooks/handleInput";
 
 export default function CreateNewQuestions() {
-  const [answer, setAnswer] = useState({
+  const [answer, setAnswer] = useState<any>({
     answer_a: "",
     answer_b: "",
     answer_c: "",
@@ -53,11 +53,13 @@ export default function CreateNewQuestions() {
           nama_ujian: nameExam,
           questions: question,
           answer,
+          selectCorrectAnswer,
         });
       } else {
         setChooseInputObject({
           questions: question,
           answer,
+          selectCorrectAnswer,
         });
       }
     } else {
@@ -72,17 +74,21 @@ export default function CreateNewQuestions() {
         });
       }
     }
-  }, [chooseTypeExams, selectedValueNameExam, nameExam, question, answer]);
+  }, [
+    chooseTypeExams,
+    selectedValueNameExam,
+    nameExam,
+    question,
+    answer,
+    selectCorrectAnswer,
+  ]);
 
   function isFormFilled() {
     if (chooseTypeExams === "pg") {
       const isArray = Object.values(chooseInputObject).filter(
         (val: any) => typeof val === "string" && val !== null
       );
-      const isObject: any = Object.entries(chooseInputObject)
-        .filter(([_, value]) => typeof value === "object" && value !== null)
-        .flatMap(([_, value]: any) => Object.values(value));
-
+      const isObject: string[] = Object.values(chooseInputObject.answer || {});
       const resultData = isArray.concat(isObject);
       return resultData.every((item: any) => item !== "");
     }
@@ -91,10 +97,16 @@ export default function CreateNewQuestions() {
 
   function handleAddAnswer(event: any) {
     const { id, value } = event.target;
-    setAnswer((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
+    setAnswer((prev: any) => {
+      // const someAnswer = prev.some((a: any) => a.value === value);
+      // if (someAnswer) return prev;
+      // return [...prev, { id, value }];
+
+      return {
+        ...prev,
+        [id]: value,
+      };
+    });
   }
 
   async function handleCreateAddQuestion() {
@@ -330,7 +342,7 @@ export default function CreateNewQuestions() {
             </Select>
           </div>
         </div>
-        <div className="w-3/4">
+        <div className="w-3/4 max-[640px]:w-full">
           {selectedValueNameExam === "buatUjianBaru" && (
             <>
               <label
@@ -373,120 +385,50 @@ export default function CreateNewQuestions() {
                 Pilihan Jawaban
               </h1>
               <div className="flex gap-x-5 gap-y-3 flex-wrap">
-                <div>
-                  <label
-                    htmlFor="answer_a"
-                    className="text-base font-semibold inline-block mb-2"
-                  >
-                    Opsi A
-                  </label>
-                  <Input
-                    id="answer_a"
-                    type="text"
-                    className="border border-black rounded-sm p-1 px-2"
-                    value={answer.answer_a}
-                    onChange={(e) => {
-                      handleValueInput(e);
-                      handleAddAnswer(e);
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="answer_b"
-                    className="text-base font-semibold inline-block mb-2"
-                  >
-                    Opsi B
-                  </label>
-                  <Input
-                    id="answer_b"
-                    type="text"
-                    className="border border-black rounded-sm p-1 px-2"
-                    value={answer.answer_b}
-                    onChange={(e) => {
-                      handleValueInput(e);
-                      handleAddAnswer(e);
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="answer_c"
-                    className="text-base font-semibold inline-block mb-2"
-                  >
-                    Opsi C
-                  </label>
-                  <Input
-                    id="answer_c"
-                    type="text"
-                    className="border border-black rounded-sm p-1 px-2"
-                    value={answer.answer_c}
-                    onChange={(e) => {
-                      handleValueInput(e);
-                      handleAddAnswer(e);
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="answer_d"
-                    className="text-base font-semibold inline-block mb-2"
-                  >
-                    Opsi D
-                  </label>
-                  <Input
-                    id="answer_d"
-                    type="text"
-                    className="border border-black rounded-sm p-1 px-2"
-                    value={answer.answer_d}
-                    onChange={(e) => {
-                      handleValueInput(e);
-                      handleAddAnswer(e);
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="answer_e"
-                    className="text-base font-semibold inline-block mb-2"
-                  >
-                    Opsi E
-                  </label>
-                  <Input
-                    id="answer_e"
-                    type="text"
-                    className="border border-black rounded-sm p-1 px-2"
-                    value={answer.answer_e}
-                    onChange={(e) => {
-                      handleValueInput(e);
-                      handleAddAnswer(e);
-                    }}
-                  />
-                </div>
+                {["a", "b", "c", "d", "e"].map((option: any) => {
+                  const answerKey: any = `answer_${option}`;
+                  return (
+                    <div
+                      key={`answer-option-${option}`}
+                      className="max-[640px]:w-10/12 "
+                    >
+                      <label
+                        htmlFor={answerKey}
+                        className="text-base font-semibold inline-block mb-2"
+                      >
+                        {`Opsi ${option.toLocaleUpperCase()}`}
+                      </label>
+                      <Input
+                        id={answerKey}
+                        type="text"
+                        className="border border-black rounded-sm p-1 px-2 max-[640px]:w-full"
+                        value={answer[answerKey]}
+                        onChange={(e) => {
+                          handleValueInput(e);
+                          handleAddAnswer(e);
+                        }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div>
               <h1 className="font-semibold mb-3">Jawaban Yang Benar</h1>
               <Select onValueChange={(val) => setSelectCorrectAnswer(val)}>
-                <SelectTrigger className="w-1/2 border border-black">
+                <SelectTrigger className="w-1/2 border border-black max-[640px]:w-full">
                   <SelectValue placeholder="Pilih Jawaban Yang Benar" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={answer.answer_a || "Jawaban A"}>
-                    {answer.answer_a || "Jawaban A"}
-                  </SelectItem>
-                  <SelectItem value={answer.answer_b || "Jawaban B"}>
-                    {answer.answer_b || "Jawaban B"}
-                  </SelectItem>
-                  <SelectItem value={answer.answer_c || "Jawaban C"}>
-                    {answer.answer_c || "Jawaban C"}
-                  </SelectItem>
-                  <SelectItem value={answer.answer_d || "Jawaban D"}>
-                    {answer.answer_d || "Jawaban D"}
-                  </SelectItem>
-                  <SelectItem value={answer.answer_e || "Jawaban E"}>
-                    {answer.answer_e || "Jawaban E"}
-                  </SelectItem>
+                  {["a", "b", "c", "d", "e"].map((option: any) => {
+                    const answerKey = `answer_${option}`;
+                    return (
+                      <SelectItem key={option} value={option}>
+                        {answer[answerKey] ||
+                          `Opsi ${option.toLocaleUpperCase()}`}
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             </div>
@@ -509,35 +451,37 @@ export default function CreateNewQuestions() {
               Dengan Soal Seperti ini
             </DialogDescription>
             <DialogDescription>
-              Pertanyaan = <span className="font-bold">"{question}"</span>
+              Pertanyaan <span className="font-bold">" {question} "</span>
             </DialogDescription>
             {chooseTypeExams === "pg" && (
               <>
-                <div className="flex justify-around items-center my-3">
+                <div className="my-2 flex flex-col gap-y-2 ">
                   <DialogDescription>
                     Jawaban A{" "}
-                    <span className="font-bold">{answer.answer_a}</span>
+                    <span className="font-bold"> : "{answer.answer_a}"</span>
                   </DialogDescription>
                   <DialogDescription>
                     Jawaban B{" "}
-                    <span className="font-bold">{answer.answer_b}</span>
+                    <span className="font-bold"> : "{answer.answer_b}"</span>
                   </DialogDescription>
                   <DialogDescription>
                     Jawaban C{" "}
-                    <span className="font-bold">{answer.answer_c}</span>
+                    <span className="font-bold"> : "{answer.answer_c}"</span>
                   </DialogDescription>
                   <DialogDescription>
                     Jawaban D{" "}
-                    <span className="font-bold">{answer.answer_d}</span>
+                    <span className="font-bold"> : "{answer.answer_d}"</span>
                   </DialogDescription>
                   <DialogDescription>
                     Jawaban E{" "}
-                    <span className="font-bold">{answer.answer_e}</span>
+                    <span className="font-bold"> : "{answer.answer_e}"</span>
                   </DialogDescription>
                 </div>
                 <DialogDescription>
-                  Jawaban Yang Benar ={" "}
-                  <span className="font-bold">{selectCorrectAnswer}</span>
+                  Jawaban Yang Benar{" "}
+                  <span className="font-bold">
+                    {selectCorrectAnswer.toLocaleUpperCase()}
+                  </span>
                 </DialogDescription>
               </>
             )}
