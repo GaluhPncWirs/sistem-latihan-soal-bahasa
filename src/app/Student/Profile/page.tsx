@@ -190,10 +190,11 @@ export default function Profil() {
           <div className="mt-7">
             <LayoutProfileUser dataUser={dataStudent}>
               <div className="basis-3/4">
-                <h1 className="capitalize mb-2 font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
+                <h1 className="capitalize font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
                   {dataStudent?.fullName || ""}
                 </h1>
-                <p className="font-medium">NIS : {dataStudent?.nis || ""}</p>
+                <h1 className="my-1.5">NIS : {dataStudent?.nis || ""}</h1>
+                <h1>Kelas : {dataStudent?.classes || ""}</h1>
               </div>
               <Dialog>
                 <DialogTrigger asChild>

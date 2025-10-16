@@ -94,9 +94,9 @@ export default function DashboardStudent() {
       .eq("exam_id", idUjian);
 
     if (historyExams?.length > 0) {
-      console.log("tidak bisa terduplikat");
+      return;
     } else if (errHistoryExams) {
-      console.log("gagal simpan data");
+      console.log("Gagal Simpan Data");
     } else {
       const payload = {
         created_at: new Date().toISOString(),
@@ -111,9 +111,7 @@ export default function DashboardStudent() {
         .from("history-exam-student")
         .insert(payload);
       if (error) {
-        console.log("gagal simpan data");
-      } else {
-        console.log("data sudah masuk ke database");
+        console.log("Gagal Simpan Data");
       }
     }
   }
@@ -215,29 +213,6 @@ export default function DashboardStudent() {
     }
     return messageExams;
   }
-
-  // function checkAndHandleLateExam(tenggat_waktu: string,
-  //   nama_ujian: string,
-  //   idUjian: number,
-  //   tgl_ujian: string) {
-
-  //     const statusExam : any = getExamsStatus(tenggat_waktu,nama_ujian,idUjian,tgl_ujian)
-
-  //     if(statusExam.isLate){
-  //       setIsLate(true)
-  //     }
-
-  //     return statusExam.message
-  // }
-
-  // useEffect(() => {
-  //   async function excutableFunctionLate(){
-  //     if(isLate){
-  //       await lateExams()
-  //     }
-  //   }
-
-  // },[isLate])
 
   const isComingSoonExams = scheduleExams.filter(
     (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni
