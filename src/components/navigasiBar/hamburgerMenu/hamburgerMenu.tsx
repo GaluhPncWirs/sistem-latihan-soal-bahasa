@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import ButtonAutentications from "../buttonAuth/content";
 
 export default function HamburgerMenu({
   isUserThereTeacher,
@@ -10,7 +11,7 @@ export default function HamburgerMenu({
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const [isTrue, setIsTrue] = useState<boolean>(false);
   const clickOutsideHamburgerMenu = useRef<HTMLInputElement | null>(null);
-  const clickOutsidePath = useRef<HTMLUListElement | null>(null);
+  const clickOutsidePath = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function handleClickOutsideNavbar(event: any) {
@@ -40,7 +41,7 @@ export default function HamburgerMenu({
 
   return (
     <div className="sm:hidden">
-      <div className="menu flex flex-col h-5 justify-between absolute right-7 top-6">
+      <div className="menu flex flex-col h-5 justify-between absolute right-7 top-7">
         <Input
           type="checkbox"
           className="size-5 absolute z-20 cursor-pointer opacity-0"
@@ -55,7 +56,7 @@ export default function HamburgerMenu({
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
       </div>
-      <ul
+      <div
         className={`flex pt-24 gap-y-12 absolute right-0 top-16 h-screen flex-col bg-[#A6E3E9] bg-gradient-to-b to-sky-300 items-center w-1/2 transition-all duration-300 text-xl font-semibold rounded-bl-lg
       ${isCheked ? `translate-x-0` : `translate-x-full`}`}
         ref={clickOutsidePath}
@@ -72,32 +73,12 @@ export default function HamburgerMenu({
         >
           <span>Cara Pakai</span>
         </Link>
-        <li>
-          {isUserThereStudent === true || isUserThereTeacher === true ? (
-            <button
-              onClick={handleLogout}
-              className="bg-[#71C9CE] py-1.5 px-5 rounded-lg hover:bg-teal-500 cursor-pointer font-semibold text-lg"
-            >
-              Logout
-            </button>
-          ) : (
-            <>
-              <Link
-                href="/Autentikasi/Daftar"
-                className="bg-[#71C9CE] py-1.5 px-5 rounded-lg hover:bg-teal-500 cursor-pointer font-semibold text-lg block mb-4"
-              >
-                Daftar
-              </Link>
-              <Link
-                href="/Autentikasi/Login"
-                className="border border-black py-1.5 px-5 rounded-lg hover:bg-teal-400 cursor-pointer font-semibold text-lg block"
-              >
-                Login
-              </Link>
-            </>
-          )}
-        </li>
-      </ul>
+        <ButtonAutentications
+          isUserThereStudent={isUserThereStudent}
+          isUserThereTeacher={isUserThereTeacher}
+          handleLogout={handleLogout}
+        />
+      </div>
     </div>
   );
 }
