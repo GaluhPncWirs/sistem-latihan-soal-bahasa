@@ -36,7 +36,7 @@ export default function NavigasiBar() {
   }
 
   return (
-    <div className="w-full h-16 bg-[#A6E3E9] fixed shadow-lg shadow-slate-500 z-20">
+    <div className="w-full h-20 bg-[#A6E3E9] fixed shadow-lg shadow-slate-500 z-20">
       <div className="flex items-center h-full">
         <div className="md:basis-1/5 sm:basis-1/3 h-full flex items-center justify-center max-[640px]:basis-2/3 max-[640px]:justify-start max-[640px]:pl-5 bg-[#A6E3E9] bg-gradient-to-l to-sky-300">
           <Image
@@ -44,7 +44,7 @@ export default function NavigasiBar() {
             alt="Logo"
             width={500}
             height={500}
-            className="w-10/12 max-[640px]:w-3/5"
+            className="w-52"
           />
         </div>
         <HamburgerMenu
@@ -55,15 +55,29 @@ export default function NavigasiBar() {
         <ul className="md:basis-3/5 sm:basis-1/2 flex justify-evenly h-full items-center max-[640px]:hidden">
           <Link
             href="/"
-            className="cursor-pointer text-xl font-semibold text-slate-800"
+            className="cursor-pointer text-xl font-semibold text-slate-800 flex flex-col items-center hover:text-slate-600"
           >
-            <span className="text-xl">Beranda</span>
+            <Image
+              src="/img/global/home.png"
+              alt="Beranda"
+              width={200}
+              height={200}
+              className="size-7"
+            />
+            <span className="text-lg">Beranda</span>
           </Link>
           <Link
             href="/HowToUse"
-            className="cursor-pointer text-xl font-semibold text-slate-800"
+            className="cursor-pointer text-xl font-semibold text-slate-800 flex flex-col items-center hover:text-slate-600"
           >
-            <span className="text-xl">Cara Pakai</span>
+            <Image
+              src="/img/global/how.png"
+              alt="How"
+              width={200}
+              height={200}
+              className="size-8"
+            />
+            <span className="text-lg">Cara Pakai</span>
           </Link>
         </ul>
         <div className="basis-1/4 pr-5 h-full flex items-center justify-center gap-5 max-[640px]:hidden bg-[#A6E3E9] bg-gradient-to-r to-sky-300">
