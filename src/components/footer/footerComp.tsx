@@ -16,34 +16,34 @@ export default function FooterComponent() {
         ></path>
       </svg>
 
-      <div className="max-[640px]:pt-36 sm:pt-44 md:pt-52 lg:pt-64 grid grid-cols-2 pb-10 w-10/12 gap-7 mx-auto max-[640px]:grid-cols-1">
+      <div className="max-[640px]:pt-36 sm:pt-44 md:pt-52 lg:pt-64 grid pb-10 w-10/12 gap-10 mx-auto max-[640px]:grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
         <div>
           <Image
-            src="/img/footer/logo.png"
+            src="/img/global/logo.png"
             alt="Logo"
             width={500}
             height={500}
-            className="w-1/2"
+            className="w-72"
           />
-          <p className="mt-2 ml-2 font-semibold">
+          <p className="mt-2 font-semibold text-xl">
             Ujian Tanpa Ribet, Hasil Lebih Akurat
           </p>
         </div>
 
         <div>
-          <div>
+          <div className="flex items-center gap-x-2">
             <Image
-              className="size-10 absolute"
+              className="size-10"
               src="/img/footer/support.png"
               alt="Jam Kerja"
               width={300}
               height={300}
             />
-            <span className="ml-12 font-bold lg:text-2xl xl:text-3xl">
+            <span className="font-bold text-2xl xl:text-3xl">
               Kontak & Dukungan
             </span>
           </div>
-          <ul className="mt-5 xl:text-lg px-3">
+          <ul className="mt-3 text-lg">
             <li>
               Email :{" "}
               <Link
@@ -59,38 +59,34 @@ export default function FooterComponent() {
         </div>
 
         <div>
-          <div>
+          <div className="flex items-center gap-x-2">
             <Image
-              className="size-10 absolute"
+              className="size-10"
               src="/img/footer/location.png"
               alt="Alamat"
               width={300}
               height={300}
             />
-            <span className="ml-12 font-bold lg:text-2xl xl:text-3xl">
-              Alamat
-            </span>
+            <span className="font-bold text-2xl xl:text-3xl">Alamat</span>
           </div>
-          <p className="mt-5 xl:text-lg px-3 max-w-3/4">
+          <p className="mt-3 text-lg text-justify">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe
             consectetur dolorum, magni dolores placeat
           </p>
         </div>
 
         <div>
-          <div className="text-2xl font-bold mb-4 xl:text-3xl">
+          <div className="flex items-center gap-x-2">
             <Image
-              className="size-10 absolute"
+              className="size-10"
               src="/img/footer/follow.png"
               alt="Follow"
               width={300}
               height={300}
             />
-            <span className="ml-12 font-bold lg:text-2xl xl:text-3xl">
-              Follow Us
-            </span>
+            <span className="font-bold text-2xl xl:text-3xl">Follow Us</span>
           </div>
-          <div className="flex flex-wrap mt-5 gap-3 mx-2">
+          <div className="flex flex-wrap mt-3 gap-5 text-lg">
             <Link
               href="#"
               className="flex items-center gap-3 grayscale-100 hover:grayscale-0 cursor-pointer transition-all"
@@ -100,9 +96,9 @@ export default function FooterComponent() {
                 alt="instagram"
                 width={200}
                 height={200}
-                className="w-1/5"
-              />{" "}
-              Instagram
+                className="size-10"
+              />
+              <span>Instagram</span>
             </Link>
             <Link
               href="#"
@@ -113,9 +109,9 @@ export default function FooterComponent() {
                 alt="linkedin"
                 width={200}
                 height={200}
-                className="w-1/5"
-              />{" "}
-              Linkedin
+                className="size-10"
+              />
+              <span>Linkedin</span>
             </Link>
             <Link
               href="#"
@@ -126,9 +122,9 @@ export default function FooterComponent() {
                 alt="facebook"
                 width={200}
                 height={200}
-                className="w-1/5"
-              />{" "}
-              Facebook
+                className="size-10"
+              />
+              <span>Facebook</span>
             </Link>
             <Link
               href="#"
@@ -139,15 +135,15 @@ export default function FooterComponent() {
                 alt="tiktok"
                 width={200}
                 height={200}
-                className="w-1/5"
-              />{" "}
-              Tiktok
+                className="size-10"
+              />
+              <span>Tiktok</span>
             </Link>
           </div>
         </div>
       </div>
 
-      <div className="bg-[#00ADB5]">
+      <div>
         <hr className="rounded-full border border-white mx-10" />
         <h1 className="py-5 w-10/12 mx-auto font-semibold">
           <span>&copy;</span> Copyright{" "}

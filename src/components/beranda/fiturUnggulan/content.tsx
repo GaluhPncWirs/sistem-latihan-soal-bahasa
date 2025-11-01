@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function FiturUnggulan({
+export default function CompFiturUnggulan({
   imgSrc,
   imgAlt,
   children,
@@ -10,7 +10,7 @@ export default function FiturUnggulan({
   children: React.ReactNode;
 }) {
   return (
-    <div className="max-w-3/12 max-[640px]:max-w-2/3 sm:max-w-2/5 lg:max-w-2/6">
+    <div className="max-[640px]:max-w-2/3 sm:max-w-2/5">
       <div className="w-full flex justify-center mb-4">
         <Image
           src={imgSrc}
@@ -20,7 +20,7 @@ export default function FiturUnggulan({
           className="sm:w-1/5 md:w-1/6 max-[640px]:w-1/6"
         />
       </div>
-      {children}
+      <div className="shadow-lg shadow-slate-600">{children}</div>
     </div>
   );
 }
