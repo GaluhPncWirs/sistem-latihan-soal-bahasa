@@ -74,61 +74,76 @@ export default function RegisterAccount() {
   return (
     <LayoutFormAccount formTitle={"Buat Akun"}>
       <form
-        className="flex justify-center flex-col w-3/4 gap-3 mx-auto max-[640px]:gap-2"
+        className="flex justify-center flex-col w-3/4 gap-y-3 mx-auto"
         onSubmit={(e) => handleRegister(e)}
       >
-        <label
-          htmlFor="fullname"
-          className="text-xl font-semibold text-blue-500"
-        >
-          Nama
-        </label>
-        <input
-          type="text"
-          id="fullname"
-          placeholder="adam jobs"
-          className="w-full rounded-md p-2.5 bg-teal-100"
-          onChange={handleValueInput}
-          value={formMustFilled.fullname}
-        />
-        <label htmlFor="kelas" className="text-xl font-semibold text-blue-500">
-          Kelas
-        </label>
-        <input
-          type="text"
-          id="kelas"
-          placeholder="Tp 5"
-          className="w-full rounded-md p-2.5 bg-teal-100"
-          onChange={handleValueInput}
-          value={formMustFilled.kelas}
-        />
-        <label htmlFor="email" className="text-xl font-semibold text-blue-500">
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          placeholder="adamJobs@gmail.com"
-          className="w-full rounded-md p-2.5 bg-teal-100"
-          onChange={handleValueInput}
-          value={formMustFilled.email}
-        />
-        <label
-          htmlFor="password"
-          className="text-xl font-semibold text-blue-500"
-        >
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          placeholder="**********"
-          className="w-full rounded-md p-2.5 bg-teal-100"
-          onChange={handleValueInput}
-          value={formMustFilled.password}
-        />
+        <div>
+          <label
+            htmlFor="fullname"
+            className="text-xl font-semibold text-blue-500 inline-block mb-3"
+          >
+            Nama
+          </label>
+          <input
+            type="text"
+            id="fullname"
+            placeholder="adam jobs"
+            className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.fullname}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="kelas"
+            className="text-xl font-semibold text-blue-500 inline-block mb-3"
+          >
+            Kelas
+          </label>
+          <input
+            type="text"
+            id="kelas"
+            placeholder="Tp 5"
+            className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.kelas}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="email"
+            className="text-xl font-semibold text-blue-500 inline-block mb-3"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            placeholder="adamJobs@gmail.com"
+            className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.email}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="password"
+            className="text-xl font-semibold text-blue-500 inline-block mb-3"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            placeholder="**********"
+            className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.password}
+          />
+        </div>
+
         <button
-          className="bg-blue-300 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer flex justify-center"
+          className="bg-blue-400 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-500 hover:text-slate-200 disabled:cursor-not-allowed cursor-pointer flex justify-center text-lg"
           type="submit"
           disabled={!isFormFilled()}
         >

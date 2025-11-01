@@ -18,6 +18,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import FloatingBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
+import { usePathname } from "next/navigation";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -28,6 +29,7 @@ export default function Teacher() {
   const idTeacher = useGetIdTeacher();
   const dataUserTeacher = useGetDataTeacher(idTeacher);
   const [dataManageExams, setDataManageExams] = useState<any>([]);
+  const isLocationPage = usePathname();
 
   function handleClickItem(event: any) {
     if (event === "viewResult") {
@@ -145,7 +147,7 @@ export default function Teacher() {
   }, [idTeacher]);
 
   return (
-    <LayoutBodyContent>
+    <LayoutBodyContent isLocationPage={isLocationPage}>
       {dataManageExams.length > 0 ? (
         <>
           <HeaderDasboard user="Pengajar" fullName={dataUserTeacher.fullName} />

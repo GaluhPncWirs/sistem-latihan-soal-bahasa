@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import ButtonAutentications from "../buttonAuth/content";
+import ListContent from "../listContent/content";
 
 export default function HamburgerMenu({
   isUserThereTeacher,
@@ -40,7 +41,7 @@ export default function HamburgerMenu({
   }, [isTrue]);
 
   return (
-    <div className="sm:hidden">
+    <div className="md:hidden">
       <div className="menu flex flex-col h-5 justify-between absolute right-7 top-7">
         <Input
           type="checkbox"
@@ -57,22 +58,11 @@ export default function HamburgerMenu({
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
       </div>
       <div
-        className={`flex pt-24 gap-y-12 absolute right-0 top-16 h-screen flex-col bg-[#A6E3E9] bg-gradient-to-b to-sky-300 items-center w-1/2 transition-all duration-300 text-xl font-semibold rounded-bl-lg
+        className={`flex pt-24 gap-y-12 absolute right-0 top-16 h-screen flex-col bg-[#A6E3E9] bg-gradient-to-b to-sky-300 items-center w-60 transition-all duration-300 text-xl font-semibold rounded-bl-lg
       ${isCheked ? `translate-x-0` : `translate-x-full`}`}
         ref={clickOutsidePath}
       >
-        <Link
-          href="/"
-          className="cursor-pointer text-xl font-semibold text-slate-800"
-        >
-          <span>Beranda</span>
-        </Link>
-        <Link
-          href="/HowToUse"
-          className="cursor-pointer text-xl font-semibold text-slate-800"
-        >
-          <span>Cara Pakai</span>
-        </Link>
+        <ListContent />
         <ButtonAutentications
           isUserThereStudent={isUserThereStudent}
           isUserThereTeacher={isUserThereTeacher}

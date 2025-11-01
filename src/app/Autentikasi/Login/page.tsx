@@ -68,51 +68,60 @@ export default function LoginAccount() {
   return (
     <LayoutFormAccount formTitle={"Login"}>
       <form
-        className="flex justify-center flex-col w-3/4 gap-3 mx-auto max-[640px]:gap-2"
+        className="flex justify-center flex-col w-3/4 gap-y-3 mx-auto"
         onSubmit={(e) => handleLogin(e)}
       >
-        <label
-          htmlFor="akunGuru"
-          className="text-xl font-semibold text-blue-500"
-        >
-          Jenis Akun
-        </label>
-        <Select onValueChange={(val) => setValueTypeAccount(val)}>
-          <SelectTrigger className="w-full bg-teal-100 cursor-pointer">
-            <SelectValue placeholder="Pilih Jenis" />
-          </SelectTrigger>
-          <SelectContent className="bg-teal-100 p-1">
-            <SelectItem value="guru">Guru</SelectItem>
-            <SelectItem value="siswa">Siswa</SelectItem>
-          </SelectContent>
-        </Select>
-        <label htmlFor="email" className="text-xl font-semibold text-blue-500">
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          placeholder="adamJobs@gmail.com"
-          className="w-full rounded-md p-2.5 bg-teal-100"
-          onChange={handleValueInput}
-          value={formMustFilled.email}
-        />
-        <label
-          htmlFor="password"
-          className="text-xl font-semibold text-blue-500"
-        >
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          placeholder="**********"
-          className="w-full rounded-md p-2.5 bg-teal-100"
-          onChange={handleValueInput}
-          value={formMustFilled.password}
-        />
+        <div>
+          <label
+            htmlFor="akunGuru"
+            className="text-xl font-semibold text-blue-500 inline-block mb-3"
+          >
+            Jenis Akun
+          </label>
+          <Select onValueChange={(val) => setValueTypeAccount(val)}>
+            <SelectTrigger className="w-full bg-teal-100 cursor-pointer">
+              <SelectValue placeholder="Pilih Jenis" />
+            </SelectTrigger>
+            <SelectContent className="bg-teal-100 p-1">
+              <SelectItem value="guru">Guru</SelectItem>
+              <SelectItem value="siswa">Siswa</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <label
+            htmlFor="email"
+            className="text-xl font-semibold text-blue-500 inline-block mb-3"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            placeholder="adamJobs@gmail.com"
+            className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.email}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="password"
+            className="text-xl font-semibold text-blue-500 inline-block mb-3"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            placeholder="**********"
+            className="w-full rounded-md p-2.5 bg-teal-100"
+            onChange={handleValueInput}
+            value={formMustFilled.password}
+          />
+        </div>
         <button
-          className="bg-blue-300 font-semibold rounded-md w-full py-2 mt-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer flex justify-center"
+          className="bg-blue-400 font-semibold rounded-md w-full py-2 mt-3 hover:bg-blue-500 hover:text-slate-200 disabled:cursor-not-allowed cursor-pointer flex justify-center text-lg"
           type="submit"
           disabled={!isFormFilled()}
         >

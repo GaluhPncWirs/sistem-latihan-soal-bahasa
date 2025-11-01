@@ -7,7 +7,6 @@ import {
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
-import { toast } from "sonner";
 import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { useGetDataStudent } from "../../hooks/getDataStudent";
@@ -31,7 +30,7 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
@@ -44,6 +43,7 @@ export default function DashboardStudent() {
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(false);
+  const isLocationPage = usePathname();
 
   const filterScoreExams = scheduleExams.filter(
     (avg: any) =>
@@ -258,7 +258,7 @@ export default function DashboardStudent() {
   }, [accepted]);
 
   return (
-    <LayoutBodyContent>
+    <LayoutBodyContent isLocationPage={isLocationPage}>
       {scheduleExams.length > 0 ? (
         <>
           <HeaderDasboard user="Siswa" fullName={getDataStudent?.fullName} />

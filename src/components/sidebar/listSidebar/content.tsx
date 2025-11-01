@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function ListSidebar() {
+export default function ListSidebar({ isLocationPage }: any) {
   const [isUserThereStudent, setIsUserThereStudent] = useState<boolean>(false);
   const [isUserThereTeacher, setIsUserThereTeacher] = useState<boolean>(false);
   const { push } = useRouter();
@@ -45,6 +45,7 @@ export default function ListSidebar() {
     push("/Autentikasi/Login");
     toast("Berhasil ✅", { description: messageRespons.message });
   }
+
   return (
     <>
       <div className="bg-slate-200 rounded-md w-10/12 h-16 mx-auto flex items-center px-3 shadow-lg shadow-slate-700 md:hidden">
@@ -56,16 +57,6 @@ export default function ListSidebar() {
           className="w-full"
         />
       </div>
-      <Link href="/" className="cursor-pointer flex items-center gap-x-5 w-2/3">
-        <Image
-          src="/img/dashboardStudent/home.png"
-          alt="Dashboard"
-          width={200}
-          height={200}
-          className="w-1/5"
-        />
-        <span className="text-slate-200">Beranda</span>
-      </Link>
       <Link
         href={
           isUserThereTeacher === true
@@ -75,11 +66,15 @@ export default function ListSidebar() {
         className="cursor-pointer flex items-center gap-x-6 w-2/3"
       >
         <Image
-          src="/img/dashboardStudent/dashboard.png"
+          src={`/img/global/${
+            isLocationPage === "/Student/Dashboard"
+              ? "dashboard-full"
+              : "dashboard-outline"
+          }.png`}
           alt="Dashboard"
           width={200}
           height={200}
-          className="w-1/6"
+          className="size-8"
         />
         <span className="text-slate-200">Dashboard</span>
       </Link>
@@ -90,21 +85,33 @@ export default function ListSidebar() {
         className="cursor-pointer flex items-center gap-x-5 w-2/3"
       >
         <Image
-          src="/img/dashboardStudent/user.png"
-          alt="Dashboard"
+          src={`/img/global/${
+            isLocationPage === "/Student/Profile" ? "user-full" : "user-outline"
+          }.png`}
+          alt="Profile"
           width={200}
           height={200}
-          className="w-1/5"
+          className="size-9"
         />
         <span className="text-slate-200">Profil</span>
       </Link>
-      <li className="cursor-pointer flex items-center gap-x-5 w-2/3">
+      <Link href="/" className="cursor-pointer flex items-center gap-x-5 w-2/3">
         <Image
-          src="/img/dashboardStudent/logout.png"
-          alt="Dashboard"
+          src="/img/global/home-full.png"
+          alt="Home"
           width={200}
           height={200}
-          className="w-1/5"
+          className="size-9"
+        />
+        <span className="text-slate-200">Beranda</span>
+      </Link>
+      <div className="cursor-pointer flex items-center gap-x-5 w-2/3">
+        <Image
+          src="/img/global/logout.png"
+          alt="Logout"
+          width={200}
+          height={200}
+          className="size-9"
         />
         <Dialog>
           <DialogTrigger asChild>
@@ -132,7 +139,7 @@ export default function ListSidebar() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </li>
+      </div>
     </>
   );
 }

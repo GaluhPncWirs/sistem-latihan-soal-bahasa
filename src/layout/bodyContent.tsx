@@ -1,7 +1,7 @@
 import ListSidebar from "@/components/sidebar/listSidebar/content";
 import Image from "next/image";
 
-export default function LayoutBodyContent({ children }: any) {
+export default function LayoutBodyContent({ children, isLocationPage }: any) {
   return (
     <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] flex">
       <div className="md:w-1/4 lg:w-1/5 max-[640px]:hidden sm:hidden md:block">
@@ -16,7 +16,7 @@ export default function LayoutBodyContent({ children }: any) {
             />
           </div>
           <ul className="flex flex-col items-center gap-y-10 mt-10 text-slate-200 font-medium text-xl">
-            <ListSidebar />
+            <ListSidebar isLocationPage={isLocationPage} />
           </ul>
         </div>
       </div>

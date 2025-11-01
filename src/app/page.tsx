@@ -54,7 +54,7 @@ export default function Home() {
                   ? "/Teacher/dashboard"
                   : "/Autentikasi/Login"
               }
-              className="text-center bg-blue-400 rounded-md py-2 text-lg font-semibold cursor-pointer px-8 mt-6 inline-block shadow-md shadow-slate-600"
+              className="text-center bg-blue-400 hover:bg-blue-500 rounded-md py-2 text-lg font-semibold cursor-pointer px-8 mt-6 inline-block shadow-md shadow-slate-600"
             >
               Mulai
             </Link>

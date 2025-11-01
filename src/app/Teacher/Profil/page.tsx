@@ -6,6 +6,7 @@ import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -30,8 +31,8 @@ import {
 import LayoutBodyContent from "@/layout/bodyContent";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { supabase } from "@/lib/supabase/data";
-import { DialogClose } from "@radix-ui/react-dialog";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -39,6 +40,7 @@ export default function TeacherProfile() {
   const idTeacher = useGetIdTeacher();
   const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const getProfileTeacher = useGetDataTeacher(idTeacher);
+  const isLocationPage = usePathname();
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -182,7 +184,7 @@ export default function TeacherProfile() {
   }
 
   return (
-    <LayoutBodyContent>
+    <LayoutBodyContent isLocationPage={isLocationPage}>
       {getHistoryExams.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">

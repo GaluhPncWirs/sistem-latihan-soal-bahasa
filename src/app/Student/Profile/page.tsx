@@ -29,6 +29,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import LayoutProfileUser from "@/layout/layoutProfile";
+import { usePathname } from "next/navigation";
 
 export default function Profil() {
   const idSiswa = useGetIdStudent();
@@ -38,6 +39,7 @@ export default function Profil() {
   const filterExams = historyStudent.filter(
     (fil: any) => fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
   );
+  const isLocationPage = usePathname();
 
   const forRankingClasses = rankingClass.map((fil: any) => {
     return {
@@ -179,7 +181,7 @@ export default function Profil() {
   }
 
   return (
-    <LayoutBodyContent>
+    <LayoutBodyContent isLocationPage={isLocationPage}>
       {historyStudent.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">
