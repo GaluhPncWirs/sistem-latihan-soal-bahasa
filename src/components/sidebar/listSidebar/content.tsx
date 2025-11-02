@@ -126,14 +126,10 @@ export default function ListSidebar({ isLocationPage }: any) {
 
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button variant="secondary" className="cursor-pointer">
-                    Batal
-                  </Button>
+                  <Button variant="secondary">Batal</Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button onClick={handleLogout} className="cursor-pointer">
-                    Oke
-                  </Button>
+                  <Button onClick={handleLogout}>Oke</Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>

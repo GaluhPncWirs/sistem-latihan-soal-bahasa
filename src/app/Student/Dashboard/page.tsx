@@ -261,41 +261,41 @@ export default function DashboardStudent() {
     <LayoutBodyContent isLocationPage={isLocationPage}>
       {scheduleExams.length > 0 ? (
         <>
-          <HeaderDasboard user="Siswa" fullName={getDataStudent?.fullName} />
+          <HeaderDasboard
+            user="Siswa"
+            fullName={getDataStudent?.fullName}
+            isLocationPage={isLocationPage}
+          />
           <div className="mt-5">
-            <p className="max-[640px]:text-xl text-2xl font-semibold">
+            <p className="text-2xl font-semibold">
               Berikut Ringkasan Ujian Anda
             </p>
-            <div className="max-[640px]:w-full sm:w-11/12 mx-auto mt-8">
+            <div className="mt-8">
               <div className="flex justify-around items-center">
-                <div className="bg-[#3D74B6] text-slate-100 rounded-lg p-5 font-semibold max-[640px]:p-3 flex flex-col justify-center items-center gap-y-1">
+                <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
                   <Image
                     src="/img/dashboardStudent/schedule.png"
                     alt="Jadwal"
                     width={300}
                     height={300}
-                    className="w-1/4"
+                    className="size-9"
                   />
-                  <h1 className="text-lg max-[640px]:text-base">
-                    Ujian Terjadwal
-                  </h1>
+                  <h1 className="text-lg">Ujian Terjadwal</h1>
                   <span className="text-xl">
                     {scheduleExams.filter(
                       (done: any) => done.status_exam !== true
                     ).length || "0"}
                   </span>
                 </div>
-                <div className="bg-[#3D74B6] text-slate-100 rounded-lg p-5 font-semibold max-[640px]:p-3 flex flex-col justify-center items-center gap-y-1">
+                <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
                   <Image
                     src="/img/dashboardStudent/average.png"
                     alt="Average"
                     width={300}
                     height={300}
-                    className="w-1/4"
+                    className="size-9"
                   />
-                  <h1 className="text-lg max-[640px]:text-base">
-                    Nilai Rata Rata
-                  </h1>
+                  <h1 className="text-lg">Nilai Rata Rata</h1>
                   <span className="text-xl">
                     {Math.round(averageValue) || "0"}
                   </span>
@@ -390,18 +390,16 @@ export default function DashboardStudent() {
                 )}
                 <div className="mt-8">
                   <div className="mb-7">
-                    <div className="font-semibold bg-[#0F4C75] rounded-md py-3 mb-5 text-slate-200 flex items-center max-[640px]:pl-0 max-[640px]:py-2 justify-center">
-                      <span className="max-[640px]:basis-1/2 max-[640px]:text-base sm:text-xl sm:basis-2/5">
-                        Ujian Tersedia
-                      </span>
-                      <div className="max-[640px]:basis-1/3 flex sm:basis-1/2 justify-end">
+                    <div className="font-semibold bg-[#0F4C75] rounded-md py-3 mb-5 text-slate-200 flex items-center justify-between px-5 lg:px-7">
+                      <span className="text-xl">Ujian Tersedia</span>
+                      <div className="flex">
                         {Array.from({ length: 6 }).map((_, i) => (
                           <Image
                             src="/img/dashboardStudent/right.png"
                             alt="Arrow Right"
                             width={500}
                             height={500}
-                            className="max-[640px]:w-1/6 sm:w-[13%] lg:w-1/12"
+                            className="size-8"
                             key={i}
                           />
                         ))}
@@ -410,21 +408,11 @@ export default function DashboardStudent() {
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-[#3282B8]">
-                          <TableHead className="text-base font-semibold">
-                            No
-                          </TableHead>
-                          <TableHead className="text-base font-semibold">
-                            Nama Ujian
-                          </TableHead>
-                          <TableHead className="text-base font-semibold">
-                            Waktu Tenggat
-                          </TableHead>
-                          <TableHead className="text-base font-semibold">
-                            Guru Pengampu
-                          </TableHead>
-                          <TableHead className="text-base font-semibold">
-                            Status Ujian
-                          </TableHead>
+                          <TableHead>No</TableHead>
+                          <TableHead>Nama Ujian</TableHead>
+                          <TableHead>Waktu Tenggat</TableHead>
+                          <TableHead>Guru Pengampu</TableHead>
+                          <TableHead>Status Ujian</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -469,38 +457,29 @@ export default function DashboardStudent() {
                     </Table>
                   </div>
                   <div>
-                    <div className="font-semibold bg-[#0F4C75] rounded-md py-3 mb-5 text-slate-200 flex flex-row-reverse max-[640px]:gap-x-3 sm:gap-x-0 items-center max-[640px]:py-2 justify-center">
-                      <span className="max-[640px]:basis-1/2 max-[640px]:text-base sm:text-xl text-end sm:basis-2/5">
-                        Nilai Terakhir
-                      </span>
-                      <div className="max-[640px]:basis-1/3 flex sm:basis-1/2">
+                    <div className="font-semibold bg-[#0F4C75] rounded-md py-3 mb-5 text-slate-200 flex items-center flex-row-reverse justify-between px-5 lg:px-7">
+                      <span className="text-xl text-end">Nilai Terakhir</span>
+                      <div className="flex">
                         {Array.from({ length: 6 }).map((_, i) => (
                           <Image
                             src="/img/dashboardStudent/left.png"
                             alt="Arrow Right"
                             width={500}
                             height={500}
-                            className="max-[640px]:w-1/6 sm:w-[13%] lg:w-1/12"
+                            className="size-8"
                             key={i}
                           />
                         ))}
                       </div>
                     </div>
+
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-[#3282B8]">
-                          <TableHead className="text-base font-semibold">
-                            No
-                          </TableHead>
-                          <TableHead className="text-base font-semibold">
-                            Nama Ujian
-                          </TableHead>
-                          <TableHead className="text-base font-semibold">
-                            Tgl Pengerjaan
-                          </TableHead>
-                          <TableHead className="text-base font-semibold">
-                            Nilai Ujian
-                          </TableHead>
+                          <TableHead>No</TableHead>
+                          <TableHead>Nama Ujian</TableHead>
+                          <TableHead>Tgl Pengerjaan</TableHead>
+                          <TableHead>Nilai Ujian</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>

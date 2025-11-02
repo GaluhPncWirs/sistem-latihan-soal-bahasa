@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import HamburgerMenuBar from "../sidebar/compSidebar";
 
-export default function HeaderDashboard({ remainder }: any) {
+export default function HeaderDashboard({ remainder, isLocationPage }: any) {
   return (
     <div className="flex items-center justify-end gap-x-3">
       {remainder.length > 0 ? (
@@ -36,7 +36,7 @@ export default function HeaderDashboard({ remainder }: any) {
           className="size-8"
         />
       )}
-      <HamburgerMenuBar />
+      <HamburgerMenuBar isLocationPage={isLocationPage} />
     </div>
   );
 }

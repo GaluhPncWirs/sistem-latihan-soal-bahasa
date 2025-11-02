@@ -40,7 +40,7 @@ export default function LayoutProfileUser({
                 alt="Profile User"
                 width={300}
                 height={300}
-                className="rounded-full w-1/6 max-[640px]:w-1/3"
+                className="rounded-full size-48"
               />
             ) : (
               <Image
@@ -48,7 +48,7 @@ export default function LayoutProfileUser({
                 alt="Profile User"
                 width={300}
                 height={300}
-                className="rounded-full w-1/6 max-[640px]:w-1/3"
+                className="rounded-full size-48"
               />
             )}
           </DialogTrigger>
@@ -80,11 +80,11 @@ export default function LayoutProfileUser({
       <div className="mb-5">
         <div className="flex items-center mb-5 gap-3">
           <Image
-            src="/img/profileTeacher/account.png"
+            src="/img/global/account.png"
             alt="Informasi Akun"
             width={200}
             height={200}
-            className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
+            className="size-8"
           />
           <h1 className="text-2xl font-semibold">Informasi Akun</h1>
         </div>

@@ -186,17 +186,25 @@ export default function Profil() {
         <>
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-4xl font-bold">Profil Siswa</h1>
-            <HamburgerMenuBar />
+            <HamburgerMenuBar isLocationPage={isLocationPage} />
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">
             <LayoutProfileUser dataUser={dataStudent}>
-              <div className="basis-3/4">
-                <h1 className="capitalize font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
+              <div className="basis-3/4 flex flex-col gap-y-1.5">
+                <h1 className="capitalize font-semibold text-4xl xl:text-5xl">
                   {dataStudent?.fullName || ""}
                 </h1>
-                <h1 className="my-1.5">NIS : {dataStudent?.nis || ""}</h1>
-                <h1>Kelas : {dataStudent?.classes || ""}</h1>
+                <div className="text-lg">
+                  <h2>
+                    <span>NIS </span>
+                    {dataStudent?.nis || ""}
+                  </h2>
+                  <h2>
+                    <span>Kelas </span>
+                    {dataStudent?.classes || ""}
+                  </h2>
+                </div>
               </div>
               <Dialog>
                 <DialogTrigger asChild>
@@ -251,59 +259,55 @@ export default function Profil() {
             <div>
               <div className="mb-5 flex items-center gap-3">
                 <Image
-                  src="/img/profileTeacher/history.png"
+                  src="/img/global/history.png"
                   alt="History"
                   width={200}
                   height={200}
-                  className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
+                  className="size-8"
                 />
                 <h1 className="text-2xl font-semibold">Riwayat Ujian</h1>
               </div>
 
-              <div className="flex justify-evenly items-center my-10 max-[640px]:gap-x-3">
-                <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
+              <div className="flex justify-evenly items-center my-10">
+                <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
                   <Image
                     src="/img/profileStudent/done.png"
                     alt="Selesai"
                     width={200}
                     height={200}
-                    className="w-1/3"
+                    className="size-9"
                   />
-                  <h1 className="font-semibold mb-1 text-center">
-                    Ujian Selesai
-                  </h1>
+                  <h1 className="text-lg">Ujian Selesai</h1>
                   <p className="text-2xl font-bold">
                     {historyStudent.length || "0"}
                   </p>
                 </div>
-                <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
+                {/* <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
                   <Image
                     src="/img/profileStudent/average.png"
                     alt="Nilai Rata-Rata"
                     width={200}
                     height={200}
-                    className="w-1/3"
+                    className="size-9"
                   />
-                  <h1 className="font-semibold mb-1 text-center">
-                    Rata-Rata Nilai
+                  <h1 className="text-lg">
+                    Nilai Rata-Rata
                   </h1>
                   <p className="text-2xl font-bold">
                     {Math.round(
                       resultChooseRanking[0]?.pointExams / filterExams.length
                     ) || "0"}
                   </p>
-                </div>
-                <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
+                </div> */}
+                <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
                   <Image
                     src="/img/profileStudent/rank.png"
                     alt="Rank"
                     width={200}
                     height={200}
-                    className="w-1/3"
+                    className="size-9"
                   />
-                  <h1 className="font-semibold mb-1 text-center">
-                    Peringkat Kelas
-                  </h1>
+                  <h1 className="text-lg">Peringkat Kelas</h1>
                   <p className="text-2xl font-bold">
                     {`${resultChooseRanking[0]?.ranking || "0"} / ${
                       calculateTotalEveryScoreExams.length
@@ -314,21 +318,11 @@ export default function Profil() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#3282B8]">
-                    <TableHead className="text-base font-semibold">
-                      No
-                    </TableHead>
-                    <TableHead className="text-base font-semibold">
-                      Nama Ujian
-                    </TableHead>
-                    <TableHead className="text-base font-semibold">
-                      Tanggal
-                    </TableHead>
-                    <TableHead className="text-base font-semibold">
-                      Nilai
-                    </TableHead>
-                    <TableHead className="text-base font-semibold">
-                      Status
-                    </TableHead>
+                    <TableHead>No</TableHead>
+                    <TableHead>Nama Ujian</TableHead>
+                    <TableHead>Tanggal</TableHead>
+                    <TableHead>Nilai</TableHead>
+                    <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

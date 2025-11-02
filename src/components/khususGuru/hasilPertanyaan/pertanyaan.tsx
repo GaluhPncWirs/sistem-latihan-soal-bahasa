@@ -121,24 +121,12 @@ export default function ViewQuestions() {
       <Table>
         <TableHeader>
           <TableRow className="bg-[#3282B8]">
-            <TableHead className="text-center text-base font-semibold">
-              No
-            </TableHead>
-            <TableHead className="text-center text-base font-semibold">
-              Nama Ujian
-            </TableHead>
-            <TableHead className="text-center text-base font-semibold">
-              Kirim Ke Kelas
-            </TableHead>
-            <TableHead className="text-center text-base font-semibold">
-              Batas Ujian
-            </TableHead>
-            <TableHead className="text-center text-base font-semibold">
-              Waktu Ujian
-            </TableHead>
-            <TableHead className="text-center text-base font-semibold">
-              Kelola
-            </TableHead>
+            <TableHead>No</TableHead>
+            <TableHead>Nama Ujian</TableHead>
+            <TableHead>Kirim Ke Kelas</TableHead>
+            <TableHead>Batas Ujian</TableHead>
+            <TableHead>Waktu Ujian</TableHead>
+            <TableHead>Kelola</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

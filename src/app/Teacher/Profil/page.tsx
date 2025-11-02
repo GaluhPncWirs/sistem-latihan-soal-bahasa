@@ -1,5 +1,4 @@
 "use client";
-import { useConvertDate } from "@/app/hooks/getConvertDate";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
@@ -189,19 +188,21 @@ export default function TeacherProfile() {
         <>
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-4xl font-bold">Profil Guru</h1>
-            <HamburgerMenuBar />
+            <HamburgerMenuBar isLocationPage={isLocationPage} />
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">
             <LayoutProfileUser dataUser={getProfileTeacher}>
-              <div className="basis-3/4">
-                <h1 className="capitalize font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
+              <div className="basis-3/4 flex flex-col gap-y-1.5">
+                <h1 className="capitalize font-semibold text-4xl xl:text-5xl">
                   {getProfileTeacher?.fullName || ""}
                 </h1>
-                <p className="font-medium my-1.5">
-                  NISN : {getProfileTeacher?.nisn || ""}
-                </p>
-                <p>{getProfileTeacher?.pengajarMapel || ""}</p>
+                <div className="text-lg">
+                  <h2>
+                    <span>NISN</span> {getProfileTeacher?.nisn || ""}
+                  </h2>
+                  <h2>{getProfileTeacher?.pengajarMapel || ""}</h2>
+                </div>
               </div>
               <Dialog>
                 <DialogTrigger asChild>
@@ -286,11 +287,11 @@ export default function TeacherProfile() {
             <div>
               <div className="mb-5 flex items-center gap-3">
                 <Image
-                  src="/img/profileTeacher/history.png"
+                  src="/img/global/history.png"
                   alt="History"
                   width={200}
                   height={200}
-                  className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
+                  className="size-8"
                 />
                 <h1 className="text-2xl font-semibold">
                   Riwayat Ujian Yang Dibuat
@@ -300,24 +301,12 @@ export default function TeacherProfile() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-[#3282B8]">
-                    <TableHead className="text-center text-base font-semibold">
-                      No
-                    </TableHead>
-                    <TableHead className="text-center text-base font-semibold">
-                      Nama Ujian
-                    </TableHead>
-                    <TableHead className="text-center text-base font-semibold">
-                      Jumlah Siswa
-                    </TableHead>
-                    <TableHead className="text-center text-base font-semibold">
-                      Nilai Rata-Rata
-                    </TableHead>
-                    <TableHead className="text-center text-base font-semibold">
-                      Kelas
-                    </TableHead>
-                    <TableHead className="text-center text-base font-semibold">
-                      Tanggal
-                    </TableHead>
+                    <TableHead>No</TableHead>
+                    <TableHead>Nama Ujian</TableHead>
+                    <TableHead>Jumlah Siswa</TableHead>
+                    <TableHead>Nilai Rata-Rata</TableHead>
+                    <TableHead>Kelas</TableHead>
+                    <TableHead>Tanggal</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

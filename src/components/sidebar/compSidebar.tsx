@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import ListSidebar from "./listSidebar/content";
 
-export default function HamburgerMenuBar() {
+export default function HamburgerMenuBar({ isLocationPage }: any) {
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const [isTrue, setIsTrue] = useState<boolean>(false);
   const clickOutsideHamburgerMenu = useRef<HTMLInputElement | null>(null);
@@ -57,7 +57,7 @@ export default function HamburgerMenuBar() {
       ${isCheked ? `translate-x-0` : `-translate-x-full`}`}
         ref={clickOutsidePath}
       >
-        <ListSidebar />
+        <ListSidebar isLocationPage={isLocationPage} />
       </ul>
     </div>
   );

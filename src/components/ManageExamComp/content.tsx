@@ -178,15 +178,9 @@ export default function ManageExamComponent() {
           <Table>
             <TableHeader className="bg-[#3282B8]">
               <TableRow>
-                <TableHead className="text-base text-center font-semibold text-slate-200">
-                  No
-                </TableHead>
-                <TableHead className="text-center text-base font-semibold text-slate-200">
-                  Soal Ujian
-                </TableHead>
-                <TableHead className="text-center text-base font-semibold text-slate-200">
-                  Kelola
-                </TableHead>
+                <TableHead>No</TableHead>
+                <TableHead>Soal Ujian</TableHead>
+                <TableHead>Kelola</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

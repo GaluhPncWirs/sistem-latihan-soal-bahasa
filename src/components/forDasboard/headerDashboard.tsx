@@ -5,7 +5,7 @@ import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
 import HeaderDashboard from "../headerDashboard/content";
 
 export default function HeaderDasboard(props: any) {
-  const { user, fullName } = props;
+  const { user, fullName, isLocationPage } = props;
   const urlPathName = usePathname();
   const dataStudentExams = getResultExamDataStudent();
   const scheduleExams = useDataScheduleExams();
@@ -14,12 +14,22 @@ export default function HeaderDasboard(props: any) {
       const filterSisaUjian = scheduleExams.filter(
         (done: any) => done.status_exam !== true
       );
-      return <HeaderDashboard remainder={filterSisaUjian} />;
+      return (
+        <HeaderDashboard
+          remainder={filterSisaUjian}
+          isLocationPage={isLocationPage}
+        />
+      );
     } else {
       const filterNilaiSiswa = dataStudentExams
         .flatMap((fm: any) => fm.resultUjian)
         .filter((fil: any) => fil.hasil_ujian === "pending");
-      return <HeaderDashboard remainder={filterNilaiSiswa} />;
+      return (
+        <HeaderDashboard
+          remainder={filterNilaiSiswa}
+          isLocationPage={isLocationPage}
+        />
+      );
     }
   }
 
@@ -40,7 +50,7 @@ export default function HeaderDasboard(props: any) {
         />
         <h1 className="text-3xl max-[640px]:text-2xl font-bold">
           Halo Selamat Datang{" "}
-          <span className="block capitalize mt-2">{fullName}</span>
+          <span className="block capitalize mt-1.5">{fullName}</span>
         </h1>
       </div>
     </div>

@@ -161,45 +161,49 @@ export default function Teacher() {
     <LayoutBodyContent isLocationPage={isLocationPage}>
       {dataManageExams.length > 0 ? (
         <>
-          <HeaderDasboard user="Pengajar" fullName={dataUserTeacher.fullName} />
+          <HeaderDasboard
+            user="Pengajar"
+            fullName={dataUserTeacher.fullName}
+            isLocationPage={isLocationPage}
+          />
           <div className="mt-5">
             <h1 className="text-2xl font-semibold">
               Ringkasan Aktifitas Ujian
             </h1>
-            <div className="flex justify-evenly my-7 text-slate-800 gap-x-1">
-              <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+            <div className="flex justify-evenly my-7 text-slate-800">
+              <div className="bg-[#48B3AF] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
                 <Image
                   src="/img/dashboardTeacher/complete.png"
                   alt="Complete"
                   width={200}
                   height={200}
-                  className="mx-auto size-9 sm:size-12"
+                  className="mx-auto size-10"
                 />
                 <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
                   {dataManageExams.length || "0"}
                 </span>
                 <h1 className="font-semibold">Ujian Dibuat</h1>
               </div>
-              <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+              <div className="bg-[#48B3AF] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
                 <Image
                   src="/img/dashboardTeacher/count.png"
                   alt="Jumlah"
                   width={200}
                   height={200}
-                  className="mx-auto size-9 sm:size-12"
+                  className="mx-auto size-10"
                 />
                 <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
                   {jumlahSiswa.size || "0"}
                 </span>
                 <h1 className="font-semibold">Jumlah Siswa</h1>
               </div>
-              <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
+              <div className="bg-[#48B3AF] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
                 <Image
                   src="/img/dashboardTeacher/average.png"
                   alt="Rata-Rata"
                   width={200}
                   height={200}
-                  className="mx-auto size-8 sm:size-10"
+                  className="mx-auto size-10"
                 />
                 <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
                   {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
@@ -220,21 +224,11 @@ export default function Teacher() {
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-[#3282B8]">
-                        <TableHead className="text-base text-center font-semibold">
-                          No
-                        </TableHead>
-                        <TableHead className="text-base text-center font-semibold">
-                          Nama Ujian
-                        </TableHead>
-                        <TableHead className="text-base text-center font-semibold">
-                          Kelas
-                        </TableHead>
-                        <TableHead className="text-base text-center font-semibold">
-                          Tenggat Waktu
-                        </TableHead>
-                        <TableHead className="text-base text-center font-semibold">
-                          Status
-                        </TableHead>
+                        <TableHead>No</TableHead>
+                        <TableHead>Nama Ujian</TableHead>
+                        <TableHead>Kelas</TableHead>
+                        <TableHead>Tenggat Waktu</TableHead>
+                        <TableHead>Status</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
