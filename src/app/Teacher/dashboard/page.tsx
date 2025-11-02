@@ -22,7 +22,8 @@ import { usePathname } from "next/navigation";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
-    createQusetions: false,
+    scheduleExams: true,
+    createQuestions: false,
     viewResult: false,
     manageStudent: false,
   });
@@ -32,23 +33,33 @@ export default function Teacher() {
   const isLocationPage = usePathname();
 
   function handleClickItem(event: any) {
-    if (event === "viewResult") {
+    if (event === "scheduleExams") {
       setDashboardButton({
-        createQusetions: false,
+        scheduleExams: true,
+        createQuestions: false,
+        viewResult: false,
+        manageStudent: false,
+      });
+    } else if (event === "createQuestions") {
+      setDashboardButton({
+        scheduleExams: false,
+        createQuestions: true,
+        viewResult: false,
+        manageStudent: false,
+      });
+    } else if (event === "viewResult") {
+      setDashboardButton({
+        scheduleExams: false,
+        createQuestions: false,
         viewResult: true,
         manageStudent: false,
       });
     } else if (event === "manageStudent") {
       setDashboardButton({
-        createQusetions: false,
+        scheduleExams: false,
+        createQuestions: false,
         viewResult: false,
         manageStudent: true,
-      });
-    } else if (event === "createQusetions") {
-      setDashboardButton({
-        createQusetions: true,
-        viewResult: false,
-        manageStudent: false,
       });
     }
   }
@@ -152,22 +163,22 @@ export default function Teacher() {
         <>
           <HeaderDasboard user="Pengajar" fullName={dataUserTeacher.fullName} />
           <div className="mt-5">
-            <h1 className="max-[640px]:text-xl sm:text-2xl font-semibold">
+            <h1 className="text-2xl font-semibold">
               Ringkasan Aktifitas Ujian
             </h1>
-            <div className="flex justify-evenly items-center my-7 text-slate-800 gap-x-1">
+            <div className="flex justify-evenly my-7 text-slate-800 gap-x-1">
               <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
                 <Image
                   src="/img/dashboardTeacher/complete.png"
                   alt="Complete"
                   width={200}
                   height={200}
-                  className="mx-auto max-[640px]:w-[30%] sm:w-1/4"
+                  className="mx-auto size-9 sm:size-12"
                 />
                 <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
                   {dataManageExams.length || "0"}
                 </span>
-                <h1 className="font-medium">Ujian Dibuat</h1>
+                <h1 className="font-semibold">Ujian Dibuat</h1>
               </div>
               <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
                 <Image
@@ -175,12 +186,12 @@ export default function Teacher() {
                   alt="Jumlah"
                   width={200}
                   height={200}
-                  className="mx-auto max-[640px]:w-[30%] sm:w-1/4"
+                  className="mx-auto size-9 sm:size-12"
                 />
                 <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
                   {jumlahSiswa.size || "0"}
                 </span>
-                <h1 className="font-medium">Jumlah Siswa</h1>
+                <h1 className="font-semibold">Jumlah Siswa</h1>
               </div>
               <div className="bg-[#48B3AF] rounded-md max-[640px]:p-4 sm:basis-[30%] sm:p-4 lg:basis-1/4 lg:p-5">
                 <Image
@@ -188,23 +199,20 @@ export default function Teacher() {
                   alt="Rata-Rata"
                   width={200}
                   height={200}
-                  className="mx-auto max-[640px]:w-1/4 sm:w-1/4"
+                  className="mx-auto size-8 sm:size-10"
                 />
                 <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
                   {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
                 </span>
-                <h1 className="font-medium">Nilai Rata-Rata</h1>
+                <h1 className="font-semibold">Nilai Rata-Rata</h1>
               </div>
             </div>
-            <FloatingBarDashboardTeacher handleClickItem={handleClickItem} />
+            <FloatingBarDashboardTeacher
+              handleClickItem={handleClickItem}
+              dashboardButton={dashboardButton}
+            />
             <div className="mt-5">
-              {dashboardButton.viewResult === true ? (
-                <ViewQuestions />
-              ) : dashboardButton.manageStudent === true ? (
-                <ManageStudent />
-              ) : dashboardButton.createQusetions === true ? (
-                <CreateNewQuestions />
-              ) : (
+              {dashboardButton.scheduleExams === true ? (
                 <div>
                   <h1 className="mb-5 text-2xl font-semibold">
                     Jadwal Ujian Hari ini
@@ -265,7 +273,13 @@ export default function Teacher() {
                     </TableBody>
                   </Table>
                 </div>
-              )}
+              ) : dashboardButton.viewResult === true ? (
+                <ViewQuestions />
+              ) : dashboardButton.manageStudent === true ? (
+                <ManageStudent />
+              ) : dashboardButton.createQuestions === true ? (
+                <CreateNewQuestions />
+              ) : null}
             </div>
           </div>
         </>
