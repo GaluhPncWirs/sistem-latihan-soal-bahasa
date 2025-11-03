@@ -303,8 +303,8 @@ export default function DashboardStudent() {
               </div>
               <div className="mt-10">
                 {deadlineUjianTercepatHariIni() !== null && (
-                  <>
-                    <h1 className="text-xl font-semibold mb-4">
+                  <div>
+                    <h1 className="text-2xl font-semibold mb-4">
                       Ujian Yang Waktu Tenggatnya Akan Habis
                     </h1>
                     <div className="bg-sky-300 flex justify-between gap-x-3 p-5 items-center rounded-xl shadow-md shadow-slate-600">
@@ -317,7 +317,7 @@ export default function DashboardStudent() {
                           className="w-[12%]"
                         />
                         <div>
-                          <h1 className="text-2xl font-semibold mb-2">
+                          <h1 className="text-xl font-semibold mb-1.5">
                             {deadlineUjianTercepatHariIni()?.exams.nama_ujian}
                           </h1>
                           <p className="text-sm font-medium">
@@ -352,9 +352,12 @@ export default function DashboardStudent() {
                                   .nama_ujian || ""}
                                 "
                               </span>{" "}
-                              Ini ? Persiapkan Diri Anda Dikarenakan Jika Sudah
-                              Masuk Kedalam Halaman Ujian Maka Sudah Tidak Bisa
-                              Kembali Lagi.
+                              Ini ?{" "}
+                              <span className="block mt-2">
+                                Persiapkan Diri Anda Dikarenakan Jika Sudah
+                                Masuk Kedalam Halaman Ujian Maka Sudah Tidak
+                                Bisa Kembali Lagi.
+                              </span>
                             </DialogDescription>
                           </DialogHeader>
 
@@ -386,7 +389,7 @@ export default function DashboardStudent() {
                         </DialogContent>
                       </Dialog>
                     </div>
-                  </>
+                  </div>
                 )}
                 <div className="mt-8">
                   <div className="mb-7">

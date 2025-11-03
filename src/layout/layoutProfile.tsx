@@ -44,7 +44,7 @@ export default function LayoutProfileUser({
               />
             ) : (
               <Image
-                src="/img/profileStudent/userProfile.png"
+                src="/img/global/userProfile.png"
                 alt="Profile User"
                 width={300}
                 height={300}

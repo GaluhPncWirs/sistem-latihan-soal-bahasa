@@ -282,23 +282,6 @@ export default function Profil() {
                     {historyStudent.length || "0"}
                   </p>
                 </div>
-                {/* <div className="bg-[#3396D3] p-4 rounded-lg flex flex-col items-center gap-y-1 shadow-md shadow-slate-700">
-                  <Image
-                    src="/img/profileStudent/average.png"
-                    alt="Nilai Rata-Rata"
-                    width={200}
-                    height={200}
-                    className="size-9"
-                  />
-                  <h1 className="text-lg">
-                    Nilai Rata-Rata
-                  </h1>
-                  <p className="text-2xl font-bold">
-                    {Math.round(
-                      resultChooseRanking[0]?.pointExams / filterExams.length
-                    ) || "0"}
-                  </p>
-                </div> */}
                 <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
                   <Image
                     src="/img/profileStudent/rank.png"

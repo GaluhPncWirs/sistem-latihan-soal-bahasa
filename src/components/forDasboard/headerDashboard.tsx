@@ -42,7 +42,7 @@ export default function HeaderDasboard(props: any) {
       <div className="h-1 bg-slate-700 rounded-lg mt-3" />
       <div className="mt-5 flex items-center gap-x-7">
         <Image
-          src="/img/profileStudent/userProfile.png"
+          src="/img/global/userProfile.png"
           alt="Img Profile"
           height={500}
           width={500}

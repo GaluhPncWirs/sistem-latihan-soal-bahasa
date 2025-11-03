@@ -227,43 +227,43 @@ export default function ExamsComponent() {
     }
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (timeOutDone === true) {
-        handleSendExam();
-      }
-    }, 5000);
-  }, [timeOutDone]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (timeOutDone === true) {
+  //       handleSendExam();
+  //     }
+  //   }, 5000);
+  // }, [timeOutDone]);
 
-  useEffect(() => {
-    const handleSelectStart = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
+  // useEffect(() => {
+  //   const handleSelectStart = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
 
-    const handleContextMenu = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
+  //   const handleContextMenu = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
 
-    const handleDragStart = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
+  //   const handleDragStart = (e: Event) => {
+  //     e.preventDefault();
+  //     return false;
+  //   };
 
-    document.addEventListener("selectstart", handleSelectStart);
-    document.addEventListener("contextmenu", handleContextMenu);
-    document.addEventListener("dragstart", handleDragStart);
+  //   document.addEventListener("selectstart", handleSelectStart);
+  //   document.addEventListener("contextmenu", handleContextMenu);
+  //   document.addEventListener("dragstart", handleDragStart);
 
-    document.body.classList.add("no-select");
+  //   document.body.classList.add("no-select");
 
-    return () => {
-      document.removeEventListener("selectstart", handleSelectStart);
-      document.removeEventListener("contextmenu", handleContextMenu);
-      document.removeEventListener("dragstart", handleDragStart);
-      document.body.classList.remove("no-select");
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("selectstart", handleSelectStart);
+  //     document.removeEventListener("contextmenu", handleContextMenu);
+  //     document.removeEventListener("dragstart", handleDragStart);
+  //     document.body.classList.remove("no-select");
+  //   };
+  // }, []);
 
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);
@@ -307,40 +307,38 @@ export default function ExamsComponent() {
   }, [isClosedContent]);
 
   return (
-    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] py-10">
+    <div className="bg-[#A6E3E9] py-10">
       {Object.values(questions ?? {}).length > 0 ? (
-        <>
-          <div>
-            <h1 className="text-3xl font-semibold w-11/12 mx-auto mb-3">
-              Ujian {questions?.exams?.nama_ujian}
-            </h1>
-            <div className="w-11/12 h-1 bg-slate-700 rounded-lg my-3 mx-auto" />
-          </div>
-          <div className="flex items-center justify-center md:gap-x-3 max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
-            <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%] flex justify-center">
+        <div className="bg-slate-50 w-11/12 mx-auto rounded-md py-8 px-10">
+          <h1 className="text-3xl font-semibold mb-3">
+            Ujian {questions?.exams?.nama_ujian}
+          </h1>
+          <div className="h-1 bg-slate-700 rounded-lg my-3" />
+          <div className="flex items-center justify-between flex-col md:gap-x-5 md:flex-row-reverse">
+            <div className="flex justify-center max-[640px]:w-11/12 sm:w-10/12 lg:w-1/2">
               <div
-                className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed p-5 rounded-md ${
+                className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed p-6 rounded-md ${
                   isSizeMobile
-                    ? `transition-all duration-300 max-[640px]:w-full sm:w-11/12 top-0 ${
+                    ? `transition-all duration-300 max-[640px]:w-11/12 sm:w-10/12 top-0 ${
                         showInformationExam
                           ? `translate-y-0`
                           : `-translate-y-full`
                       }`
-                    : `top-1/4 md:w-2/5 lg:w-[30%]`
+                    : `top-40 md:w-1/3 lg:w-96`
                 }`}
                 ref={handleClickedOutsideContent}
               >
-                <div className="flex items-center max-[640px]:justify-around sm:justify-around">
-                  <h1 className="text-xl font-semibold">
-                    Ujian{" "}
+                <h1 className="text-2xl font-semibold">Navigasi Soal</h1>
+                <div className="flex items-center max-[640px]:justify-around sm:justify-around mt-3">
+                  <h2 className="text-lg font-medium">
                     {questions?.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
-                  </h1>
+                  </h2>
                   {formatedTime !== "NaN:NaN" && (
                     <div
-                      className={`py-1.5 rounded-md gap-x-2 flex items-center px-1.5 justify-center ${
+                      className={`px-5 py-2 rounded-md gap-x-2 flex items-center justify-evenly ${
                         minute === 0 && second <= 20
                           ? `bg-red-500 animate-pulse`
-                          : "bg-green-500"
+                          : "bg-green-400 shadow-md shadow-slate-700"
                       }`}
                     >
                       <Image
@@ -348,7 +346,7 @@ export default function ExamsComponent() {
                         alt="Timer"
                         width={200}
                         height={200}
-                        className="w-1/4"
+                        className="size-7"
                       />
                       <span className="text-xl font-semibold">
                         {formatedTime}
@@ -356,14 +354,14 @@ export default function ExamsComponent() {
                     </div>
                   )}
                 </div>
-                <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3 rounded-md">
+                <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center p-4 rounded-md">
                   {dataUjianRandom.map((item: any, i: number) => {
                     const isAnswerPg = clickedAnswerPg[item.id];
                     const isAnswerEssay = answerEssayExams[item.id];
                     const isMarking = markQuestions[item.id];
                     return (
                       <div
-                        className={`h-10 w-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
+                        className={`size-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
                           isAnswerPg || isAnswerEssay
                             ? "bg-green-400"
                             : "bg-[#E3FDFD]"
@@ -388,14 +386,12 @@ export default function ExamsComponent() {
                   })}
                 </div>
               </div>
+              <div>hello dunia</div>
             </div>
 
-            <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
+            <div className="md:max-w-md lg:max-w-xl">
               {dataUjianRandom.map((item: any, i: number) => (
-                <div
-                  className="mt-4 rounded-lg p-5 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
-                  key={item.id}
-                >
+                <div className="mt-5" key={item.id}>
                   <h1 className="text-lg font-semibold" id="pertannyaan">
                     {i + 1}. {item.questions}
                   </h1>
@@ -430,19 +426,6 @@ export default function ExamsComponent() {
                           </li>
                         );
                       })}
-                      <Button
-                        className="cursor-pointer text-base mt-3"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setMarkQuestions((prev: any) => ({
-                            ...prev,
-                            [item.id]: !prev[item.id],
-                          }));
-                        }}
-                        ref={clickedMarkQuestions}
-                      >
-                        Tandai
-                      </Button>
                     </ul>
                   ) : (
                     <div className="mt-3">
@@ -467,21 +450,21 @@ export default function ExamsComponent() {
                         }
                         defaultValue={answerEssayExams[item.id]}
                       />
-                      <Button
-                        className="cursor-pointer text-base mt-3"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setMarkQuestions((prev: any) => ({
-                            ...prev,
-                            [item.id]: !prev[item.id],
-                          }));
-                        }}
-                        ref={clickedMarkQuestions}
-                      >
-                        Tandai
-                      </Button>
                     </div>
                   )}
+                  <Button
+                    className="cursor-pointer text-base mt-3 bg-blue-500"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMarkQuestions((prev: any) => ({
+                        ...prev,
+                        [item.id]: !prev[item.id],
+                      }));
+                    }}
+                    ref={clickedMarkQuestions}
+                  >
+                    Tandai
+                  </Button>
                 </div>
               ))}
             </div>
@@ -507,7 +490,10 @@ export default function ExamsComponent() {
               {handleAnswerEmpty() === false ? (
                 <>
                   <DialogTrigger asChild>
-                    <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
+                    <Button
+                      className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg"
+                      variant="outline"
+                    >
                       Selesai
                     </Button>
                   </DialogTrigger>
@@ -584,7 +570,7 @@ export default function ExamsComponent() {
               <span className="w-6 h-1 bg-black rounded-lg -rotate-45 -translate-y-1 transition-all duration-300 ease-in-out"></span>
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <SkeletonExam />
       )}
