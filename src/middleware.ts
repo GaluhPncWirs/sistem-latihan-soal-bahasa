@@ -13,7 +13,17 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
 
-    const { data: isDone } = await supabase
+    const { data: isNotIdExam } = await supabase
+      .from("exams")
+      .select("id")
+      .eq("id", examId)
+      .single();
+
+    if (isNotIdExam === null) {
+      return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
+    }
+
+    const { data: isDone }: any = await supabase
       .from("history-exam-student")
       .select("status_exam,student_id,hasil_ujian")
       .eq("exam_id", examId)

@@ -228,14 +228,6 @@ export default function ExamsComponent() {
   }
 
   // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (timeOutDone === true) {
-  //       handleSendExam();
-  //     }
-  //   }, 5000);
-  // }, [timeOutDone]);
-
-  // useEffect(() => {
   //   const handleSelectStart = (e: Event) => {
   //     e.preventDefault();
   //     return false;
@@ -313,85 +305,82 @@ export default function ExamsComponent() {
           <h1 className="text-3xl font-semibold mb-3">
             Ujian {questions?.exams?.nama_ujian}
           </h1>
-          <div className="h-1 bg-slate-700 rounded-lg my-3" />
-          <div className="flex items-center justify-between flex-col md:gap-x-5 md:flex-row-reverse">
-            <div className="flex justify-center max-[640px]:w-11/12 sm:w-10/12 lg:w-1/2">
-              <div
-                className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed p-6 rounded-md ${
-                  isSizeMobile
-                    ? `transition-all duration-300 max-[640px]:w-11/12 sm:w-10/12 top-0 ${
-                        showInformationExam
-                          ? `translate-y-0`
-                          : `-translate-y-full`
-                      }`
-                    : `top-40 md:w-1/3 lg:w-96`
-                }`}
-                ref={handleClickedOutsideContent}
-              >
-                <h1 className="text-2xl font-semibold">Navigasi Soal</h1>
-                <div className="flex items-center max-[640px]:justify-around sm:justify-around mt-3">
-                  <h2 className="text-lg font-medium">
-                    {questions?.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
-                  </h2>
-                  {formatedTime !== "NaN:NaN" && (
-                    <div
-                      className={`px-5 py-2 rounded-md gap-x-2 flex items-center justify-evenly ${
-                        minute === 0 && second <= 20
-                          ? `bg-red-500 animate-pulse`
-                          : "bg-green-400 shadow-md shadow-slate-700"
-                      }`}
-                    >
-                      <Image
-                        src="/img/examsStudent/stopwatch.png"
-                        alt="Timer"
-                        width={200}
-                        height={200}
-                        className="size-7"
-                      />
-                      <span className="text-xl font-semibold">
-                        {formatedTime}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center p-4 rounded-md">
-                  {dataUjianRandom.map((item: any, i: number) => {
-                    const isAnswerPg = clickedAnswerPg[item.id];
-                    const isAnswerEssay = answerEssayExams[item.id];
-                    const isMarking = markQuestions[item.id];
-                    return (
-                      <div
-                        className={`size-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
-                          isAnswerPg || isAnswerEssay
-                            ? "bg-green-400"
-                            : "bg-[#E3FDFD]"
-                        }`}
-                        key={i}
-                      >
-                        {isMarking === true &&
-                          ((questions?.tipe_ujian === "pg" && !isAnswerPg) ||
-                            (questions?.tipe_ujian === "essay" &&
-                              !isAnswerEssay)) && (
-                            <Image
-                              src="/img/examsStudent/flag.png"
-                              alt="Mark"
-                              width={200}
-                              height={200}
-                              className="w-1/4 absolute top-[5px] left-1.5"
-                            />
-                          )}
-                        {i + 1}
-                      </div>
-                    );
-                  })}
-                </div>
+          <div className="h-1 bg-slate-700 rounded-lg mt-3" />
+          <div className="flex justify-between items-center flex-col md:items-baseline md:flex-row-reverse md:gap-5">
+            <div
+              className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed md:sticky p-6 rounded-md ${
+                isSizeMobile
+                  ? `transition-all duration-300 max-[640px]:w-11/12 sm:w-10/12 top-0 ${
+                      showInformationExam
+                        ? `translate-y-0`
+                        : `-translate-y-full shadow-none`
+                    }`
+                  : `md:basis-sm md:top-36`
+              }`}
+              ref={handleClickedOutsideContent}
+            >
+              <h1 className="text-2xl font-semibold">Navigasi Soal</h1>
+              <div className="flex items-center max-[640px]:justify-around sm:justify-around mt-3">
+                <h2 className="text-lg font-medium">
+                  {questions?.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
+                </h2>
+                {formatedTime !== "NaN:NaN" && (
+                  <div
+                    className={`px-5 py-2 rounded-md gap-x-2 flex items-center justify-evenly ${
+                      minute === 0 && second <= 20
+                        ? `bg-red-500 animate-pulse`
+                        : "bg-green-400 shadow-md shadow-slate-700"
+                    }`}
+                  >
+                    <Image
+                      src="/img/examsStudent/stopwatch.png"
+                      alt="Timer"
+                      width={200}
+                      height={200}
+                      className="size-7"
+                    />
+                    <span className="text-xl font-semibold">
+                      {formatedTime}
+                    </span>
+                  </div>
+                )}
               </div>
-              <div>hello dunia</div>
+              <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center p-4 rounded-md">
+                {dataUjianRandom.map((item: any, i: number) => {
+                  const isAnswerPg = clickedAnswerPg[item.id];
+                  const isAnswerEssay = answerEssayExams[item.id];
+                  const isMarking = markQuestions[item.id];
+                  return (
+                    <div
+                      className={`size-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
+                        isAnswerPg || isAnswerEssay
+                          ? "bg-green-400"
+                          : "bg-[#E3FDFD]"
+                      }`}
+                      key={i}
+                    >
+                      {isMarking === true &&
+                        ((questions?.tipe_ujian === "pg" && !isAnswerPg) ||
+                          (questions?.tipe_ujian === "essay" &&
+                            !isAnswerEssay)) && (
+                          <Image
+                            src="/img/examsStudent/flag.png"
+                            alt="Mark"
+                            width={200}
+                            height={200}
+                            className="size-2.5 absolute top-[5px] left-1.5"
+                          />
+                        )}
+                      {i + 1}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="md:max-w-md lg:max-w-xl">
+            <div className="md:basis-1/2">
               {dataUjianRandom.map((item: any, i: number) => (
-                <div className="mt-5" key={item.id}>
+                <div className="mb-5" key={item.id}>
                   <h1 className="text-lg font-semibold" id="pertannyaan">
                     {i + 1}. {item.questions}
                   </h1>
@@ -479,23 +468,23 @@ export default function ExamsComponent() {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogAction className="cursor-pointer">
+                <AlertDialogAction
+                  className="cursor-pointer"
+                  onClick={handleSendExam}
+                >
                   Oke
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-          <div className="mt-7 max-[640px]:mx-5 sm:mx-7 md:mx-10">
+          <div className="mt-5">
             <Dialog>
               {handleAnswerEmpty() === false ? (
                 <>
                   <DialogTrigger asChild>
-                    <Button
-                      className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg"
-                      variant="outline"
-                    >
+                    <button className="cursor-pointer px-6 py-2 rounded-md font-semibold text-lg border-2 border-slate-800 hover:opacity-60">
                       Selesai
-                    </Button>
+                    </button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>

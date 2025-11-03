@@ -69,7 +69,7 @@ export default function FooterComponent() {
             />
             <span className="font-bold text-2xl xl:text-3xl">Alamat</span>
           </div>
-          <p className="mt-3 text-lg text-justify">
+          <p className="mt-3 text-lg text-justify max-w-sm">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Saepe
             consectetur dolorum, magni dolores placeat
           </p>

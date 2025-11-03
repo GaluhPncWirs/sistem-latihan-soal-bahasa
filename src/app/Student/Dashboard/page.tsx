@@ -307,7 +307,7 @@ export default function DashboardStudent() {
                     <h1 className="text-2xl font-semibold mb-4">
                       Ujian Yang Waktu Tenggatnya Akan Habis
                     </h1>
-                    <div className="bg-sky-300 flex justify-between gap-x-3 p-5 items-center rounded-xl shadow-md shadow-slate-600">
+                    <div className="bg-sky-300 flex justify-between gap-x-4 p-5 items-center rounded-xl shadow-md shadow-slate-600">
                       <div className="flex justify-center items-center gap-x-5">
                         <Image
                           src="/img/dashboardStudent/notification.png"
