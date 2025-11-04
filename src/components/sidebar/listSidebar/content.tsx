@@ -38,7 +38,7 @@ export default function ListSidebar({ isLocationPage }: any) {
       headers: { "Content-Type": "application/json" },
     });
     const messageRespons = await responseDelCookies.json();
-    localStorage.removeItem("idLoginSiswa");
+    localStorage.removeItem("sessionTokenLoginStudent");
     localStorage.removeItem("idLoginGuru");
     localStorage.removeItem("idLoginGuru");
     localStorage.removeItem("random-number-exam");

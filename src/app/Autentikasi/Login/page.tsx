@@ -1,5 +1,5 @@
 "use client";
-import { useHandleInput } from "@/app/hooks/handleInput";
+import { useHandleInput } from "@/app/hooks/getHandleInput";
 import {
   Select,
   SelectContent,
@@ -40,7 +40,7 @@ export default function LoginAccount() {
     if (valueTypeAccount !== "") {
       if (dataLogin.success) {
         if (dataLogin.tipe === "siswa") {
-          localStorage.setItem("idLoginSiswa", dataLogin.id);
+          localStorage.setItem("sessionTokenLoginStudent", dataLogin.tokenJWT);
           push("/Student/Dashboard");
           toast("Berhasil ✅", {
             description: "Masuk Akun Berhasil",

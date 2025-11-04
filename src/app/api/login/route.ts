@@ -17,6 +17,7 @@ export async function POST(req: Request) {
     }
     const token = jwt.sign(
       {
+        idStudent: dataStudent.idStudent,
         email: valueEmail,
         name: dataStudent.fullName,
       },

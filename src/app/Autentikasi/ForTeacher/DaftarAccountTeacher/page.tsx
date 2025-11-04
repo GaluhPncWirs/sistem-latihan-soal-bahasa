@@ -1,6 +1,6 @@
 "use client";
 import { useRandomId } from "@/app/hooks/getRandomId";
-import { useHandleInput } from "@/app/hooks/handleInput";
+import { useHandleInput } from "@/app/hooks/getHandleInput";
 import { supabase } from "@/lib/supabase/data";
 import { ChevronLeftIcon } from "lucide-react";
 import Link from "next/link";

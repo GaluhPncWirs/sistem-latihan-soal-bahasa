@@ -24,7 +24,7 @@ import { useRandomId } from "@/app/hooks/getRandomId";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { useManageExamsData } from "@/app/hooks/getDataManageExams";
 import { Textarea } from "@/components/ui/textarea";
-import { useHandleInput } from "@/app/hooks/handleInput";
+import { useHandleInput } from "@/app/hooks/getHandleInput";
 
 export default function CreateNewQuestions() {
   const [answer, setAnswer] = useState<any>({

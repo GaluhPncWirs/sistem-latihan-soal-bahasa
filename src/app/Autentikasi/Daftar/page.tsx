@@ -1,7 +1,7 @@
 "use client";
 
 import { useRandomId } from "@/app/hooks/getRandomId";
-import { useHandleInput } from "@/app/hooks/handleInput";
+import { useHandleInput } from "@/app/hooks/getHandleInput";
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
