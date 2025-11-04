@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase/data";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function POST(req: Request) {
   const { valueEmail, valuePassword, valueTypeAccount } = await req.json();
@@ -7,17 +8,27 @@ export async function POST(req: Request) {
   if (valueTypeAccount === "siswa") {
     const { data: dataStudent, error }: any = await supabase
       .from("account-student")
-      .select("idStudent")
+      .select("idStudent,fullName")
       .eq("email", valueEmail)
       .eq("password", valuePassword)
       .single();
     if (error) {
       return NextResponse.json({ success: false, status: 401 });
     }
+    const token = jwt.sign(
+      {
+        email: valueEmail,
+        name: dataStudent.fullName,
+      },
+      process.env.JWT_SECRET || "mySecretKey123",
+      { expiresIn: "2h" }
+    );
+
     const res = NextResponse.json({
       success: true,
       id: dataStudent.idStudent,
       tipe: valueTypeAccount,
+      tokenJWT: token,
     });
     res.cookies.set("role", "pelajar", {
       path: "/",

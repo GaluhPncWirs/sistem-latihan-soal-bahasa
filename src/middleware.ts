@@ -13,19 +13,27 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
 
-    const { data: isNotIdExam } = await supabase
+    const { data: isExamNone }: any = await supabase
       .from("exams")
-      .select("id")
+      .select("id,nama_ujian")
       .eq("id", examId)
       .single();
 
-    if (isNotIdExam === null) {
+    const { data: isIdStudentNone }: any = await supabase
+      .from("account-student")
+      .select("fullName, idStudent")
+      .eq("idStudent", idStudent)
+      .single();
+
+    if (isExamNone === null || isIdStudentNone === null) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
 
+    // /Student/Exams/StartExam?idExams=2&idStudent=STD-aMClguF
+
     const { data: isDone }: any = await supabase
       .from("history-exam-student")
-      .select("status_exam,student_id,hasil_ujian")
+      .select("status_exam,student_id,hasil_ujian,exams(id)")
       .eq("exam_id", examId)
       .eq("student_id", idStudent)
       .single();
