@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function useGetIdStudent(tokenJWT: any) {
+export function useGetIdStudent() {
   const [getId, setGetId] = useState<string>("");
-  async function getIdStudent() {
-    if (tokenJWT) {
-      const request = await fetch(`/api/decodeToken?token=${tokenJWT}`);
-      const response = await request.json();
-      return setGetId(response.data.idStudent);
+  useEffect(() => {
+    async function getIdStudent() {
+      try {
+        const request = await fetch(`/api/decodeToken`, {
+          credentials: "include",
+        });
+        const response = await request.json();
+        if (response.data.idStudent) {
+          setGetId(response.data.idStudent);
+        }
+      } catch (err) {
+        console.error("Gagal mengambil ID student :");
+      }
     }
-  }
-  getIdStudent();
+    getIdStudent();
+  }, []);
 
   return getId;
 }

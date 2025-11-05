@@ -27,14 +27,18 @@ export async function POST(req: Request) {
 
     const res = NextResponse.json({
       success: true,
-      id: dataStudent.idStudent,
       tipe: valueTypeAccount,
-      tokenJWT: token,
     });
     res.cookies.set("role", "pelajar", {
       path: "/",
       httpOnly: true,
       sameSite: "lax",
+    });
+    res.cookies.set("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      path: "/",
     });
     return res;
   } else if (valueTypeAccount === "guru") {

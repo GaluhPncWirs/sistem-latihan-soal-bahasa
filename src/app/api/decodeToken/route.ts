@@ -1,17 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const token: any = req.nextUrl.searchParams.get("token");
+  const tokenJWTFromCokies: any = req.cookies.get("token")?.value;
   try {
-    const verifyToken = jwtDecode(token);
+    const resultDecodeJWT = jwtDecode(tokenJWTFromCokies);
     return NextResponse.json({
       status: true,
-      message: "Berhasi Decode Token",
-      data: verifyToken,
-      expired: verifyToken.exp,
+      message: "Berhasil Decode Token",
+      data: resultDecodeJWT,
+      expired: resultDecodeJWT.exp,
     });
-  } catch (error) {
+  } catch (err) {
     return NextResponse.json({
       status: false,
       message: "Token Gagal Di Decode",

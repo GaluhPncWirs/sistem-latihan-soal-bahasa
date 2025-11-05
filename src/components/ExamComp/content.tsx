@@ -33,8 +33,7 @@ export default function ExamsComponent() {
   const router = useRouter();
   const searchParam = useSearchParams();
   const idExams = searchParam.get("idExams");
-  const token = searchParam.get("token");
-  const getIdStudent = useGetIdStudent(token);
+  const getIdStudent = useGetIdStudent();
   const [questionsExam, setQuestionsExam] = useState<SoalUjian | null>(null);
   const [dataStudent, setDataStudent] = useState<any>(null);
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{
@@ -204,7 +203,7 @@ export default function ExamsComponent() {
 
     const payload = {
       created_at: new Date().toISOString(),
-      student_id: token,
+      student_id: getIdStudent,
       exam_id: Number(idExams),
       answer_student:
         questionsExam?.tipe_ujian === "pg" ? clickedAnswerPg : answerEssayExams,

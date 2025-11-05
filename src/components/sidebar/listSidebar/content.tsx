@@ -34,11 +34,10 @@ export default function ListSidebar({ isLocationPage }: any) {
 
   async function handleLogout() {
     const responseDelCookies = await fetch("/api/delCookies", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: "DELETE",
+      credentials: "include",
     });
     const messageRespons = await responseDelCookies.json();
-    localStorage.removeItem("sessionTokenLoginStudent");
     localStorage.removeItem("idLoginGuru");
     localStorage.removeItem("idLoginGuru");
     localStorage.removeItem("random-number-exam");

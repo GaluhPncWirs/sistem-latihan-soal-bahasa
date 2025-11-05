@@ -40,7 +40,6 @@ export default function LoginAccount() {
     if (valueTypeAccount !== "") {
       if (dataLogin.success) {
         if (dataLogin.tipe === "siswa") {
-          localStorage.setItem("sessionTokenLoginStudent", dataLogin.tokenJWT);
           push("/Student/Dashboard");
           toast("Berhasil ✅", {
             description: "Masuk Akun Berhasil",

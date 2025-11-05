@@ -34,12 +34,10 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
-import { useGetToken } from "@/app/hooks/getToken";
 
 export default function DashboardStudent() {
+  const getIdStudent = useGetIdStudent();
   const scheduleExams = useDataScheduleExams();
-  const getToken = useGetToken();
-  const getIdStudent = useGetIdStudent(getToken);
   const getDataStudent = useGetDataStudent(getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());
@@ -192,9 +190,7 @@ export default function DashboardStudent() {
                 <DialogClose asChild>
                   <Button
                     onClick={() =>
-                      push(
-                        `/Student/Exams/StartExam?idExams=${idUjian}&token=${getToken}`
-                      )
+                      push(`/Student/Exams/StartExam?idExams=${idUjian}`)
                     }
                     className="cursor-pointer"
                     disabled={accepted}
@@ -216,12 +212,11 @@ export default function DashboardStudent() {
     return messageExams;
   }
 
-  const isComingSoonExams = scheduleExams.filter(
-    (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni
-  );
-
   function deadlineUjianTercepatHariIni() {
     const hariIni = toMinute(waktuDurasiIni);
+    const isComingSoonExams = scheduleExams.filter(
+      (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni
+    );
     const validExams = isComingSoonExams.filter((exam: any) => {
       const filterScheduleExam = convertToNumber(exam.tenggat_waktu);
       return hariIni > filterScheduleExam[0] && hariIni < filterScheduleExam[1];
@@ -378,7 +373,7 @@ export default function DashboardStudent() {
                                   push(
                                     `/Student/Exams/StartExam?idExams=${
                                       deadlineUjianTercepatHariIni().idExams
-                                    }&token=${getToken}`
+                                    }`
                                   )
                                 }
                                 className="cursor-pointer"

@@ -8,33 +8,19 @@ export function useVerifyToken() {
   const { push } = useRouter();
   useEffect(() => {
     async function verifyTokenJWT() {
-      const getToken = localStorage.getItem("sessionTokenLoginStudent");
-      if (!getToken) {
+      const request = await fetch(`/api/verifyToken`);
+      const response = await request.json();
+      if (!response.status) {
         toast("❌ Gagal", {
-          description: "Belum Ada Sesi Token, Silahkan Login Terlebih Dahulu",
+          description: "Token Sudah Expired, Tolong Untuk Login Lagi",
         });
-        push("/Autentikasi/Login");
-        return;
+        setStatusToken(false);
+        setTimeout(() => {
+          push("/Autentikasi/Login");
+        }, 5000);
       }
-
-      if (getToken) {
-        const request = await fetch(`/api/verifyToken?token=${getToken}`);
-        const response = await request.json();
-
-        if (!response.status) {
-          toast("❌ Gagal", {
-            description: "Token Sudah Expired, Tolong Untuk Login Lagi",
-          });
-          setStatusToken(false);
-          localStorage.removeItem("sessionTokenLoginStudent");
-          setTimeout(() => {
-            push("/Autentikasi/Login");
-          }, 5000);
-          return;
-        }
-        setStatusToken(true);
-        setLoadingSesion(false);
-      }
+      setStatusToken(true);
+      setLoadingSesion(false);
     }
     verifyTokenJWT();
   }, []);

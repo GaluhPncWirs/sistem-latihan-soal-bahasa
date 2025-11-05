@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
 export async function GET(req: NextRequest) {
-  const token: any = req.nextUrl.searchParams.get("token");
+  const token: any = req.cookies.get("token")?.value;
   const secret = process.env.JWT_SECRET || "mySecretKey123";
   try {
     const verifyToken = jwt.verify(token, secret);

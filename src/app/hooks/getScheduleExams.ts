@@ -3,12 +3,10 @@ import { useGetIdStudent } from "./getIdStudent";
 import { useGetDataStudent } from "./getDataStudent";
 import { supabase } from "@/lib/supabase/data";
 import { toast } from "sonner";
-import { useGetToken } from "./getToken";
 
 export function useDataScheduleExams() {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
-  const getToken = useGetToken();
-  const getIdStudent = useGetIdStudent(getToken);
+  const getIdStudent = useGetIdStudent();
   const getDataStudent = useGetDataStudent(getIdStudent);
 
   useEffect(() => {

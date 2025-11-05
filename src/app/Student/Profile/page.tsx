@@ -36,9 +36,6 @@ export default function Profil() {
   const dataStudent = useGetDataStudent(idSiswa);
   const [historyStudent, setHistoryStudent] = useState<any>([]);
   const [rankingClass, setRankingClass] = useState<any>([]);
-  const filterExams = historyStudent.filter(
-    (fil: any) => fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
-  );
   const isLocationPage = usePathname();
 
   const forRankingClasses = rankingClass.map((fil: any) => {
@@ -52,7 +49,7 @@ export default function Profil() {
   });
 
   const rankingPerKelas = forRankingClasses.reduce((acc: any, cur: any) => {
-    const kelasItem = acc.find((d: any) => d.kelas === cur.kelas);
+    const kelasItem = acc.find((data: any) => data.kelas === cur.kelas);
     const toNum = Number(cur.hasil_ujian);
     if (!kelasItem) {
       acc.push({

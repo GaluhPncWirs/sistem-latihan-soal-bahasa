@@ -1,33 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "./lib/supabase/data";
+import { jwtVerify } from "jose";
 
 export async function middleware(req: NextRequest) {
   const { pathname, searchParams } = req.nextUrl;
   const role = req.cookies.get("role")?.value;
   const isStartExam = req.cookies.get("startExam")?.value;
+  const token = req.cookies.get("token")?.value;
+
+  if (!token) {
+    return NextResponse.redirect(new URL("/Autentikasi/Login", req.url));
+  }
 
   // Proteksi Halaman StartExam
   if (pathname.startsWith("/Student/Exams/StartExam")) {
     const examId = searchParams.get("idExams");
-    const token = searchParams.get("token");
 
-    if (!examId || !token) {
+    if (!examId) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
 
-    let idStudent: string | null = null;
-
-    try {
-      const res = await fetch(
-        `${req.nextUrl.origin}/api/decodeToken?token=${token}`
-      );
-      if (!res.ok) throw new Error("Invalid response from decodeToken API");
-      const result = await res.json();
-      idStudent = result?.data?.idStudent ?? null;
-    } catch (err) {
-      console.error("Failed to decode token:", err);
-      return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
-    }
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+    const { payload } = await jwtVerify(token, secret);
+    const idStudent = payload.idStudent;
 
     // Validasi apakah ujian dan siswa valid
     const [{ data: isExamNone }, { data: isIdStudentNone }] = await Promise.all(
@@ -70,11 +65,6 @@ export async function middleware(req: NextRequest) {
         httpOnly: true,
         sameSite: "strict",
       });
-      response.cookies.set("token", token, {
-        path: "/",
-        httpOnly: true,
-        sameSite: "strict",
-      });
       return response;
     }
 
@@ -86,14 +76,6 @@ export async function middleware(req: NextRequest) {
     ) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
-    // if (
-    //   (examHistory?.status_exam === true && examHistory?.student_id === idStudent) ||
-    //   (examHistory?.status_exam === true &&
-    //     examHistory?.student_id === idStudent &&
-    //     examHistory?.hasil_ujian === "telat")
-    // ) {
-    //   return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
-    // }
 
     // Jika belum startExam set cookie
     if (isStartExam !== "true") {
@@ -107,7 +89,7 @@ export async function middleware(req: NextRequest) {
     }
 
     // Pastikan URL konsisten
-    const expectedUrl = `/Student/Exams/StartExam?idExams=${examId}&token=${token}`;
+    const expectedUrl = `/Student/Exams/StartExam?idExams=${examId}`;
     const currentUrl = pathname + req.nextUrl.search;
     if (isStartExam === "true" && currentUrl !== expectedUrl) {
       return NextResponse.redirect(new URL(expectedUrl, req.url));
@@ -123,14 +105,10 @@ export async function middleware(req: NextRequest) {
     !pathname.startsWith("/Student/Exams/StartExam")
   ) {
     const examId = req.cookies.get("examId")?.value;
-    const token = req.cookies.get("token")?.value;
 
-    if (examId && token) {
+    if (examId) {
       return NextResponse.redirect(
-        new URL(
-          `/Student/Exams/StartExam?idExams=${examId}&token=${token}`,
-          req.url
-        )
+        new URL(`/Student/Exams/StartExam?idExams=${examId}`, req.url)
       );
     }
 
