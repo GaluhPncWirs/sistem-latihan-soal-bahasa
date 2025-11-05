@@ -27,13 +27,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { SoalUjian } from "@/types/halamanUjian";
 import SkeletonExam from "./skeleton";
+import { useGetIdStudent } from "@/app/hooks/getIdStudent";
 
 export default function ExamsComponent() {
   const router = useRouter();
   const searchParam = useSearchParams();
   const idExams = searchParam.get("idExams");
-  const idStudent = searchParam.get("idStudent");
-  const [questions, setQuestionsExam] = useState<SoalUjian | null>(null);
+  const token = searchParam.get("token");
+  const getIdStudent = useGetIdStudent(token);
+  const [questionsExam, setQuestionsExam] = useState<SoalUjian | null>(null);
   const [dataStudent, setDataStudent] = useState<any>(null);
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{
     [questions: string]: string;
@@ -54,12 +56,12 @@ export default function ExamsComponent() {
   const clickedAnswerQuestions = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (!idExams || !idStudent) return;
+    if (!idExams || !getIdStudent) return;
 
     async function getDataExams() {
       try {
         const response = await fetch(
-          `/api/getQuestions?idExams=${idExams}&idStudent=${idStudent}`
+          `/api/getQuestions?idExams=${idExams}&idStudent=${getIdStudent}`
         )
           .then((val: any) => val.json())
           .then((data: any) => {
@@ -73,7 +75,7 @@ export default function ExamsComponent() {
       }
     }
     getDataExams();
-  }, [idExams, idStudent]);
+  }, [idExams, getIdStudent]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -87,7 +89,7 @@ export default function ExamsComponent() {
   }, []);
 
   useEffect(() => {
-    if (questions?.tipe_ujian === "pg") {
+    if (questionsExam?.tipe_ujian === "pg") {
       const savedMark = localStorage.getItem("markQuestions");
       const savedAnswerPg = localStorage.getItem("exam-answer-pg");
       if (savedAnswerPg && savedMark) {
@@ -96,7 +98,7 @@ export default function ExamsComponent() {
       }
     }
 
-    if (questions?.tipe_ujian === "essay") {
+    if (questionsExam?.tipe_ujian === "essay") {
       const savedMark = localStorage.getItem("markQuestions");
       const savedAnswerEssay = localStorage.getItem("exam-answer-essay");
       if (savedAnswerEssay && savedMark) {
@@ -104,49 +106,54 @@ export default function ExamsComponent() {
         setMarkQuestions(JSON.parse(savedMark));
       }
     }
-  }, [questions?.tipe_ujian]);
+  }, [questionsExam?.tipe_ujian]);
 
   useEffect(() => {
-    if (questions?.tipe_ujian === "pg") {
+    if (questionsExam?.tipe_ujian === "pg") {
       localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
       localStorage.setItem("exam-answer-pg", JSON.stringify(clickedAnswerPg));
     }
 
-    if (questions?.tipe_ujian === "essay") {
+    if (questionsExam?.tipe_ujian === "essay") {
       localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
       localStorage.setItem(
         "exam-answer-essay",
         JSON.stringify(answerEssayExams)
       );
     }
-  }, [questions?.tipe_ujian, clickedAnswerPg, markQuestions, answerEssayExams]);
+  }, [
+    questionsExam?.tipe_ujian,
+    clickedAnswerPg,
+    markQuestions,
+    answerEssayExams,
+  ]);
 
   useEffect(() => {
-    if (questions?.exams?.questions_exam) {
+    if (questionsExam?.exams?.questions_exam) {
       const savedQuestions = localStorage.getItem("random-number-exam");
       if (savedQuestions) {
         setDataUjianRandom(JSON.parse(savedQuestions));
       } else {
-        const questionsExam = questions.exams?.questions_exam ?? [];
-        const dataExams = [...questionsExam].sort(() => 0.5 - Math.random());
+        const questions = questionsExam.exams?.questions_exam ?? [];
+        const dataExams = [...questions].sort(() => 0.5 - Math.random());
         setDataUjianRandom(dataExams);
         localStorage.setItem("random-number-exam", JSON.stringify(dataExams));
       }
     }
-  }, [questions]);
+  }, [questionsExam]);
 
   useEffect(() => {
     function initializedTime() {
       const savedTimer = localStorage.getItem("timer");
       if (savedTimer) {
         const initialTime = JSON.parse(savedTimer);
-        return initialTime > 0 ? initialTime : questions?.exam_duration;
+        return initialTime > 0 ? initialTime : questionsExam?.exam_duration;
       }
-      return questions?.exam_duration;
+      return questionsExam?.exam_duration;
     }
 
     setTime(initializedTime());
-  }, [questions?.exam_duration]);
+  }, [questionsExam?.exam_duration]);
 
   useEffect(() => {
     if (time === undefined || time === null) return;
@@ -186,22 +193,22 @@ export default function ExamsComponent() {
 
   async function handleSendExam() {
     const pilihanSiswa = Object.values(clickedAnswerPg);
-    const jawabanYangBenar: any = questions?.exams?.questions_exam
+    const jawabanYangBenar: any = questionsExam?.exams?.questions_exam
       .flatMap((item: any) => item.correctAnswer)
       .filter((jawabanBenar: any) => pilihanSiswa.includes(jawabanBenar));
     const resultExam = Math.round(
       (jawabanYangBenar.length /
-        (questions?.exams?.questions_exam?.length ?? 0)) *
+        (questionsExam?.exams?.questions_exam?.length ?? 0)) *
         100
     );
 
     const payload = {
       created_at: new Date().toISOString(),
-      student_id: idStudent,
+      student_id: token,
       exam_id: Number(idExams),
       answer_student:
-        questions?.tipe_ujian === "pg" ? clickedAnswerPg : answerEssayExams,
-      hasil_ujian: questions?.tipe_ujian === "pg" ? resultExam : "pending",
+        questionsExam?.tipe_ujian === "pg" ? clickedAnswerPg : answerEssayExams,
+      hasil_ujian: questionsExam?.tipe_ujian === "pg" ? resultExam : "pending",
       status_exam: true,
       kelas: dataStudent?.classes,
     };
@@ -300,10 +307,10 @@ export default function ExamsComponent() {
 
   return (
     <div className="bg-[#A6E3E9] py-10">
-      {Object.values(questions ?? {}).length > 0 ? (
+      {Object.values(questionsExam ?? {}).length > 0 ? (
         <div className="bg-slate-50 w-11/12 mx-auto rounded-md py-8 px-10">
           <h1 className="text-3xl font-semibold mb-3">
-            Ujian {questions?.exams?.nama_ujian}
+            Ujian {questionsExam?.exams?.nama_ujian}
           </h1>
           <div className="h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="flex justify-between items-center flex-col md:items-baseline md:flex-row-reverse md:gap-5">
@@ -322,7 +329,9 @@ export default function ExamsComponent() {
               <h1 className="text-2xl font-semibold">Navigasi Soal</h1>
               <div className="flex items-center max-[640px]:justify-around sm:justify-around mt-3">
                 <h2 className="text-lg font-medium">
-                  {questions?.tipe_ujian === "pg" ? "Pilihan Ganda" : "Essay"}
+                  {questionsExam?.tipe_ujian === "pg"
+                    ? "Pilihan Ganda"
+                    : "Essay"}
                 </h2>
                 {formatedTime !== "NaN:NaN" && (
                   <div
@@ -360,8 +369,8 @@ export default function ExamsComponent() {
                       key={i}
                     >
                       {isMarking === true &&
-                        ((questions?.tipe_ujian === "pg" && !isAnswerPg) ||
-                          (questions?.tipe_ujian === "essay" &&
+                        ((questionsExam?.tipe_ujian === "pg" && !isAnswerPg) ||
+                          (questionsExam?.tipe_ujian === "essay" &&
                             !isAnswerEssay)) && (
                           <Image
                             src="/img/examsStudent/flag.png"
@@ -384,7 +393,7 @@ export default function ExamsComponent() {
                   <h1 className="text-lg font-semibold" id="pertannyaan">
                     {i + 1}. {item.questions}
                   </h1>
-                  {questions?.tipe_ujian === "pg" ? (
+                  {questionsExam?.tipe_ujian === "pg" ? (
                     <ul className="mt-3">
                       {["a", "b", "c", "d", "e"].map((opt) => {
                         const answerKey = `answer_${opt}`;

@@ -2,55 +2,75 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "./lib/supabase/data";
 
 export async function middleware(req: NextRequest) {
+  const { pathname, searchParams } = req.nextUrl;
   const role = req.cookies.get("role")?.value;
   const isStartExam = req.cookies.get("startExam")?.value;
 
-  if (req.nextUrl.pathname.startsWith("/Student/Exams/StartExam")) {
-    const examId = req.nextUrl.searchParams.get("idExams");
-    const idStudent = req.nextUrl.searchParams.get("idStudent");
+  // Proteksi Halaman StartExam
+  if (pathname.startsWith("/Student/Exams/StartExam")) {
+    const examId = searchParams.get("idExams");
+    const token = searchParams.get("token");
 
-    if (!examId || !idStudent) {
+    if (!examId || !token) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
 
-    const { data: isExamNone }: any = await supabase
-      .from("exams")
-      .select("id,nama_ujian")
-      .eq("id", examId)
-      .single();
+    let idStudent: string | null = null;
 
-    const { data: isIdStudentNone }: any = await supabase
-      .from("account-student")
-      .select("fullName, idStudent")
-      .eq("idStudent", idStudent)
-      .single();
+    try {
+      const res = await fetch(
+        `${req.nextUrl.origin}/api/decodeToken?token=${token}`
+      );
+      if (!res.ok) throw new Error("Invalid response from decodeToken API");
+      const result = await res.json();
+      idStudent = result?.data?.idStudent ?? null;
+    } catch (err) {
+      console.error("Failed to decode token:", err);
+      return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
+    }
+
+    // Validasi apakah ujian dan siswa valid
+    const [{ data: isExamNone }, { data: isIdStudentNone }] = await Promise.all(
+      [
+        supabase
+          .from("exams")
+          .select("id,nama_ujian")
+          .eq("id", examId)
+          .single(),
+        supabase
+          .from("account-student")
+          .select("fullName, idStudent")
+          .eq("idStudent", idStudent)
+          .single(),
+      ]
+    );
 
     if (isExamNone === null || isIdStudentNone === null) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
 
-    // /Student/Exams/StartExam?idExams=2&idStudent=STD-aMClguF
-
-    const { data: isDone }: any = await supabase
+    // Cek apakah siswa sudah pernah ujian
+    const { data: examHistory }: any = await supabase
       .from("history-exam-student")
-      .select("status_exam,student_id,hasil_ujian,exams(id)")
+      .select("status_exam,student_id,hasil_ujian")
       .eq("exam_id", examId)
       .eq("student_id", idStudent)
       .single();
 
-    if (isDone?.status_exam === undefined && isDone?.student_id === undefined) {
+    // Jika belum ada history ujian maka set cookie untuk mulai
+    if (!examHistory?.status_exam && !examHistory?.student_id) {
       const response = NextResponse.next();
       response.cookies.set("startExam", "true", {
         path: "/",
         httpOnly: true,
         sameSite: "strict",
       });
-      response.cookies.set("examId", examId!, {
+      response.cookies.set("examId", examId, {
         path: "/",
         httpOnly: true,
         sameSite: "strict",
       });
-      response.cookies.set("idStudent", idStudent!, {
+      response.cookies.set("token", token, {
         path: "/",
         httpOnly: true,
         sameSite: "strict",
@@ -58,15 +78,24 @@ export async function middleware(req: NextRequest) {
       return response;
     }
 
+    // Jika ujian sudah selesai atau telat
     if (
-      (isDone?.status_exam === true && isDone?.student_id === idStudent) ||
-      (isDone?.status_exam === true &&
-        isDone?.student_id === idStudent &&
-        isDone?.hasil_ujian === "telat")
+      examHistory.status_exam === true &&
+      examHistory.student_id === idStudent &&
+      (examHistory.hasil_ujian === "telat" || true)
     ) {
       return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
+    // if (
+    //   (examHistory?.status_exam === true && examHistory?.student_id === idStudent) ||
+    //   (examHistory?.status_exam === true &&
+    //     examHistory?.student_id === idStudent &&
+    //     examHistory?.hasil_ujian === "telat")
+    // ) {
+    //   return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
+    // }
 
+    // Jika belum startExam set cookie
     if (isStartExam !== "true") {
       const response = NextResponse.next();
       response.cookies.set("startExam", "true", {
@@ -77,9 +106,9 @@ export async function middleware(req: NextRequest) {
       return response;
     }
 
-    const expectedUrl = `/Student/Exams/StartExam?idExams=${examId}&idStudent=${idStudent}`;
-    const currentUrl = req.nextUrl.pathname + req.nextUrl.search;
-
+    // Pastikan URL konsisten
+    const expectedUrl = `/Student/Exams/StartExam?idExams=${examId}&token=${token}`;
+    const currentUrl = pathname + req.nextUrl.search;
     if (isStartExam === "true" && currentUrl !== expectedUrl) {
       return NextResponse.redirect(new URL(expectedUrl, req.url));
     }
@@ -87,28 +116,30 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  if (req.nextUrl.pathname.startsWith("/Teacher") && role !== "pengajar") {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
-
+  // Blokir Navigasi Saat Ujian Sedang Berlangsung
   if (
     isStartExam === "true" &&
-    req.nextUrl.pathname.startsWith("/Student") &&
-    !req.nextUrl.pathname.startsWith("/Student/Exams/StartExam")
+    pathname.startsWith("/Student") &&
+    !pathname.startsWith("/Student/Exams/StartExam")
   ) {
     const examId = req.cookies.get("examId")?.value;
-    const idStudent = req.cookies.get("idStudent")?.value;
+    const token = req.cookies.get("token")?.value;
 
-    if (examId && idStudent) {
+    if (examId && token) {
       return NextResponse.redirect(
         new URL(
-          `/Student/Exams/StartExam?idExams=${examId}&idStudent=${idStudent}`,
+          `/Student/Exams/StartExam?idExams=${examId}&token=${token}`,
           req.url
         )
       );
-    } else {
-      return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
     }
+
+    return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
+  }
+
+  // proteksi halaman guru
+  if (pathname.startsWith("/Teacher") && role !== "pengajar") {
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   return NextResponse.next();

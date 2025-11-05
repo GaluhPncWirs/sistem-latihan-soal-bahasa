@@ -34,10 +34,12 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
+import { useGetToken } from "@/app/hooks/getToken";
 
 export default function DashboardStudent() {
   const scheduleExams = useDataScheduleExams();
-  const getIdStudent = useGetIdStudent();
+  const getToken = useGetToken();
+  const getIdStudent = useGetIdStudent(getToken);
   const getDataStudent = useGetDataStudent(getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());
@@ -191,7 +193,7 @@ export default function DashboardStudent() {
                   <Button
                     onClick={() =>
                       push(
-                        `/Student/Exams/StartExam?idExams=${idUjian}&idStudent=${getIdStudent}`
+                        `/Student/Exams/StartExam?idExams=${idUjian}&token=${getToken}`
                       )
                     }
                     className="cursor-pointer"
@@ -259,7 +261,7 @@ export default function DashboardStudent() {
 
   return (
     <LayoutBodyContent isLocationPage={isLocationPage}>
-      {scheduleExams.length > 0 ? (
+      {getDataStudent !== null ? (
         <>
           <HeaderDasboard
             user="Siswa"
@@ -376,7 +378,7 @@ export default function DashboardStudent() {
                                   push(
                                     `/Student/Exams/StartExam?idExams=${
                                       deadlineUjianTercepatHariIni().idExams
-                                    }&idStudent=${getIdStudent}`
+                                    }&token=${getToken}`
                                   )
                                 }
                                 className="cursor-pointer"

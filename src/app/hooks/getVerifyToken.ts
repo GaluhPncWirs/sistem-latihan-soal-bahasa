@@ -11,7 +11,7 @@ export function useVerifyToken() {
       const getToken = localStorage.getItem("sessionTokenLoginStudent");
       if (!getToken) {
         toast("❌ Gagal", {
-          description: "Belum Ada Sesi Token, SIlahkan Login Terlebih Dahulu",
+          description: "Belum Ada Sesi Token, Silahkan Login Terlebih Dahulu",
         });
         push("/Autentikasi/Login");
         return;

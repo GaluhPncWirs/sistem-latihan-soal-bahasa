@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         name: dataStudent.fullName,
       },
       process.env.JWT_SECRET || "mySecretKey123",
-      { expiresIn: "2h" }
+      { expiresIn: "3h" }
     );
 
     const res = NextResponse.json({

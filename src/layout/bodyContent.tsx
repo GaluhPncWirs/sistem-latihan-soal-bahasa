@@ -7,7 +7,7 @@ export default function LayoutBodyContent({ children, isLocationPage }: any) {
     <div className="bg-black">
       <div
         className={`bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] flex ${
-          loadingSession && `opacity-50`
+          loadingSession && `opacity-50 animate-pulse`
         }`}
       >
         <div className="md:w-1/4 lg:w-1/5 hidden md:block">
