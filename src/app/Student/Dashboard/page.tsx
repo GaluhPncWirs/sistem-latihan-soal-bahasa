@@ -100,7 +100,6 @@ export default function DashboardStudent() {
       toast("❌ Gagal Simpan Data", {
         description: "Data Hasil Ujian Sudah Ada",
       });
-      console.log("");
     } else {
       const payload = {
         created_at: new Date().toISOString(),
@@ -506,7 +505,7 @@ export default function DashboardStudent() {
                                   >
                                     <HoverCardTrigger asChild>
                                       <Link
-                                        href={`/Student/Dashboard/ResultExam/?id=${item.idExams}&idStudent=${getIdStudent}`}
+                                        href={`/Student/Dashboard/ResultExam?id=${item.idExams}`}
                                         className="hover:underline hover:text-blue-700"
                                       >
                                         {item.exams.nama_ujian}

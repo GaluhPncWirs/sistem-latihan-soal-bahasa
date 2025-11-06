@@ -21,12 +21,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useRandomId } from "@/app/hooks/getRandomId";
-import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { useManageExamsData } from "@/app/hooks/getDataManageExams";
 import { Textarea } from "@/components/ui/textarea";
 import { useHandleInput } from "@/app/hooks/getHandleInput";
 
-export default function CreateNewQuestions() {
+export default function CreateNewQuestions({ idTeacher }: any) {
   const [answer, setAnswer] = useState<any>({
     answer_a: "",
     answer_b: "",
@@ -41,7 +40,6 @@ export default function CreateNewQuestions() {
   const [selectedValueNameExam, setSelectedValueNameExam] =
     useState<string>("");
   const [clearInput, setClearInput] = useState<boolean>(false);
-  const idTeacher = useGetIdTeacher();
   const dataNameExam = useManageExamsData(idTeacher);
   const [chooseInputObject, setChooseInputObject] = useState<any>({});
   const { handleValueInput } = useHandleInput(chooseInputObject);
@@ -101,7 +99,6 @@ export default function CreateNewQuestions() {
       // const someAnswer = prev.some((a: any) => a.value === value);
       // if (someAnswer) return prev;
       // return [...prev, { id, value }];
-
       return {
         ...prev,
         [id]: value,

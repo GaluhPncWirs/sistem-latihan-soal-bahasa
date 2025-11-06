@@ -1,5 +1,4 @@
 import { useManageExamsData } from "@/app/hooks/getDataManageExams";
-import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -39,13 +38,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function ViewQuestions() {
+export default function ViewQuestions({ idTeacher }: any) {
   const [chooseClass, setChooseClass] = useState<string[]>([]);
   const [chooseTimeExam, setChooseTimeExam] = useState<string[]>([]);
   const [dates, setDates] = useState<(Date | undefined)[]>([]);
   const [fromTimes, setFromTimes] = useState<string[]>([]);
   const [toTimes, setToTimes] = useState<string[]>([]);
-  const idTeacher = useGetIdTeacher();
   const viewManageQuestionsExam = useManageExamsData(idTeacher);
   const tenggatWaktu = fromTimes.map(
     (time: any, i: number) => `${time} - ${toTimes[i]}`
@@ -92,10 +90,11 @@ export default function ViewQuestions() {
           description: "Soal Berhasil Dikirimkan",
         });
       }
-    } else
+    } else {
       toast("Gagal ❌", {
         description: "Ada Soal Yang Belum di Kelola, Dicek Kembali",
       });
+    }
   }
 
   async function handleDeleteExam(idExams: number) {
@@ -294,6 +293,10 @@ export default function ViewQuestions() {
           )}
         </TableBody>
       </Table>
+      <h1 className="text-sm text-right text-red-600 font-semibold tracking-wide mt-3">
+        *Jika ingin kirim soal hanya salah satu maka, biarkan yang lainnya
+        kosong
+      </h1>
       <div className="mt-7">
         <Dialog>
           <DialogTrigger asChild>

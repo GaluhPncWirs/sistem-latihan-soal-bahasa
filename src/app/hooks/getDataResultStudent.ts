@@ -9,14 +9,18 @@ export function getResultExamDataStudent() {
   useEffect(() => {
     if (!idTeacher) return;
     async function getDataStudent() {
-      const { data: student, error: errorStudent } = await supabase
-        .from("account-student")
-        .select("fullName,classes,idStudent,email");
-      const { data: historyStudent, error: errorHistoryStudent } =
-        await supabase
+      const [
+        { data: student, error: errorStudent },
+        { data: historyStudent, error: errorHistoryStudent },
+      ] = await Promise.all([
+        supabase
+          .from("account-student")
+          .select("fullName,classes,idStudent,email"),
+        supabase
           .from("history-exam-student")
           .select("*,exams(id,nama_ujian,tipeUjian,idTeacher)")
-          .eq("exams.idTeacher", idTeacher);
+          .eq("exams.idTeacher", idTeacher),
+      ]);
 
       if (errorStudent || errorHistoryStudent) {
         console.log("data gagal diambil");

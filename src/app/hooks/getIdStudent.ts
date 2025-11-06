@@ -14,7 +14,8 @@ export function useGetIdStudent() {
           setGetId(response.data.idStudent);
         }
       } catch (err) {
-        console.error("Gagal mengambil ID student :");
+        setGetId("");
+        console.error("Gagal mengambil ID student");
       }
     }
     getIdStudent();

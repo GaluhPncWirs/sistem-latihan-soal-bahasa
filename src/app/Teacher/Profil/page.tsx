@@ -44,18 +44,21 @@ export default function TeacherProfile() {
   useEffect(() => {
     if (!idTeacher) return;
     async function historyExams() {
-      const { data: dataManageExams, error: errorDataManageExams }: any =
-        await supabase
+      const [
+        { data: dataManageExams, error: errorDataManageExams },
+        { data: dataHistoryExams, error: errorDataHistoryExams },
+      ]: any = await Promise.all([
+        supabase
           .from("managed_exams")
           .select("kelas,dibuat_tgl,id_Teacher,idExams")
-          .eq("id_Teacher", idTeacher);
-      const { data: dataHistoryExams, error: errorDataHistoryExams }: any =
-        await supabase
+          .eq("id_Teacher", idTeacher),
+        supabase
           .from("history-exam-student")
           .select(
             "exam_id,hasil_ujian,student_id,kelas,exams(nama_ujian,tipeUjian,idTeacher)"
           )
-          .eq("exams.idTeacher", idTeacher);
+          .eq("exams.idTeacher", idTeacher),
+      ]);
 
       if (errorDataManageExams || errorDataHistoryExams) {
         toast("Gagal ❌", {

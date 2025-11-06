@@ -45,7 +45,6 @@ export default function LoginAccount() {
             description: dataLogin.message,
           });
         } else {
-          localStorage.setItem("idLoginGuru", dataLogin.id);
           push("/Teacher/dashboard");
           toast("Berhasil ✅", {
             description: dataLogin.message,

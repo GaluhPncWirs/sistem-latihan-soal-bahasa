@@ -77,21 +77,23 @@ export default function Teacher() {
   useEffect(() => {
     if (!idTeacher) return;
     async function getDataManageExams() {
-      const { data: datasManageExams, error: errorDatasManageExams }: any =
-        await supabase
+      const [
+        { data: datasManageExams, error: errorDatasManageExams },
+        { data: isCompleteExam, error: errorIsCompleteExam },
+        { data: lengthStudent, error: errorLengthStudent },
+      ] = await Promise.all([
+        supabase
           .from("managed_exams")
           .select("*, exams(nama_ujian)")
-          .eq("id_Teacher", idTeacher);
-
-      const { data: isCompleteExam, error: errorIsCompleteExam }: any =
-        await supabase
+          .eq("id_Teacher", idTeacher),
+        supabase
           .from("history-exam-student")
           .select(
             "exam_id,student_id,kelas,hasil_ujian,status_exam,exams(idTeacher)"
           )
-          .eq("exams.idTeacher", idTeacher);
-      const { data: lengthStudent, error: errorLengthStudent }: any =
-        await supabase.from("account-student").select("classes,idStudent");
+          .eq("exams.idTeacher", idTeacher),
+        supabase.from("account-student").select("classes,idStudent"),
+      ]);
 
       if (errorDatasManageExams || errorIsCompleteExam || errorLengthStudent) {
         console.log("data error ditampilkan");
@@ -267,12 +269,12 @@ export default function Teacher() {
                     </TableBody>
                   </Table>
                 </div>
+              ) : dashboardButton.createQuestions === true ? (
+                <CreateNewQuestions idTeacher={idTeacher} />
               ) : dashboardButton.viewResult === true ? (
-                <ViewQuestions />
+                <ViewQuestions idTeacher={idTeacher} />
               ) : dashboardButton.manageStudent === true ? (
                 <ManageStudent />
-              ) : dashboardButton.createQuestions === true ? (
-                <CreateNewQuestions />
               ) : null}
             </div>
           </div>
