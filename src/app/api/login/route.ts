@@ -13,7 +13,11 @@ export async function POST(req: Request) {
       .eq("password", valuePassword)
       .single();
     if (error) {
-      return NextResponse.json({ success: false, status: 401 });
+      return NextResponse.json({
+        success: false,
+        status: 401,
+        message: "Email dan Password Salah Input Kembali",
+      });
     }
     const token = jwt.sign(
       {
@@ -28,6 +32,7 @@ export async function POST(req: Request) {
     const res = NextResponse.json({
       success: true,
       tipe: valueTypeAccount,
+      message: "Masuk Akun Berhasil",
     });
     res.cookies.set("role", "pelajar", {
       path: "/",
@@ -49,12 +54,17 @@ export async function POST(req: Request) {
       .eq("password", valuePassword)
       .single();
     if (error) {
-      return NextResponse.json({ success: false, status: 401 });
+      return NextResponse.json({
+        success: false,
+        status: 401,
+        message: "Email dan Password Salah Input Kembali",
+      });
     }
     const res = NextResponse.json({
       success: true,
       id: dataTeacher.id_teacher,
       tipe: valueTypeAccount,
+      message: "Masuk Akun Berhasil",
     });
     res.cookies.set("role", "pengajar", {
       path: "/",
@@ -63,5 +73,9 @@ export async function POST(req: Request) {
     });
     return res;
   }
-  return NextResponse.json({ success: false, status: 401 });
+  return NextResponse.json({
+    success: false,
+    status: 401,
+    message: "Gagal Fetch Api Autentikasi",
+  });
 }

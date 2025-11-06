@@ -34,6 +34,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
+import { toast } from "sonner";
 
 export default function DashboardStudent() {
   const getIdStudent = useGetIdStudent();
@@ -96,7 +97,10 @@ export default function DashboardStudent() {
     if (historyExams?.length > 0) {
       return;
     } else if (errHistoryExams) {
-      console.log("Gagal Simpan Data");
+      toast("❌ Gagal Simpan Data", {
+        description: "Data Hasil Ujian Sudah Ada",
+      });
+      console.log("");
     } else {
       const payload = {
         created_at: new Date().toISOString(),
@@ -111,7 +115,9 @@ export default function DashboardStudent() {
         .from("history-exam-student")
         .insert(payload);
       if (error) {
-        console.log("Gagal Simpan Data");
+        toast("❌ Gagal Simpan Data", {
+          description: "Data Hasil Ujian Sudah Ada",
+        });
       }
     }
   }
@@ -255,7 +261,10 @@ export default function DashboardStudent() {
   }, [accepted]);
 
   return (
-    <LayoutBodyContent isLocationPage={isLocationPage}>
+    <LayoutBodyContent
+      isLocationPage={isLocationPage}
+      getIdStudent={getIdStudent}
+    >
       {getDataStudent !== null ? (
         <>
           <HeaderDasboard

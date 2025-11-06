@@ -17,7 +17,7 @@ export function useVerifyToken() {
         setStatusToken(false);
         setTimeout(() => {
           push("/Autentikasi/Login");
-        }, 5000);
+        }, 3000);
       }
       setStatusToken(true);
       setLoadingSesion(false);

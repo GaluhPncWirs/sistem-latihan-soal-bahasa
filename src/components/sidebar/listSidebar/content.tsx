@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
@@ -8,29 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Dialog } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function ListSidebar({ isLocationPage }: any) {
-  const [isUserThereStudent, setIsUserThereStudent] = useState<boolean>(false);
-  const [isUserThereTeacher, setIsUserThereTeacher] = useState<boolean>(false);
+export default function ListSidebar({ isLocationPage, getIdStudent }: any) {
   const { push } = useRouter();
-
-  useEffect(() => {
-    const isUserDataSiswa = localStorage.getItem("idLoginSiswa");
-    const isUserDataGuru = localStorage.getItem("idLoginGuru");
-    if (isUserDataSiswa) {
-      const isObjectTrue = Object.keys(isUserDataSiswa).length > 0;
-      setIsUserThereStudent(isObjectTrue);
-    } else if (isUserDataGuru) {
-      const isObjectTrue = Object.keys(isUserDataGuru).length > 0;
-      setIsUserThereTeacher(isObjectTrue);
-    }
-  }, []);
 
   async function handleLogout() {
     const responseDelCookies = await fetch("/api/delCookies", {
@@ -40,7 +25,6 @@ export default function ListSidebar({ isLocationPage }: any) {
     const messageRespons = await responseDelCookies.json();
     localStorage.removeItem("idLoginGuru");
     localStorage.removeItem("idLoginGuru");
-    localStorage.removeItem("random-number-exam");
     push("/Autentikasi/Login");
     toast("Berhasil ✅", { description: messageRespons.message });
   }
@@ -52,11 +36,7 @@ export default function ListSidebar({ isLocationPage }: any) {
       </div>
       <div className="flex flex-col justify-evenly h-96">
         <Link
-          href={
-            isUserThereTeacher === true
-              ? "/Teacher/dashboard"
-              : "/Student/Dashboard"
-          }
+          href={getIdStudent ? "/Student/Dashboard" : "/Teacher/dashboard"}
           className="cursor-pointer flex items-center gap-x-3"
         >
           <Image
@@ -74,9 +54,7 @@ export default function ListSidebar({ isLocationPage }: any) {
           <span className="text-slate-200">Dashboard</span>
         </Link>
         <Link
-          href={
-            isUserThereTeacher === true ? "/Teacher/Profil" : "/Student/Profile"
-          }
+          href={getIdStudent ? "/Student/Profile" : "/Teacher/Profil"}
           className="cursor-pointer flex items-center gap-x-3"
         >
           <Image

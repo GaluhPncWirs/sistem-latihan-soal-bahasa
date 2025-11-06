@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
     });
     res.cookies.delete("startExam");
     res.cookies.delete("examId");
-    res.cookies.delete("idStudent");
     return res;
   }
 }

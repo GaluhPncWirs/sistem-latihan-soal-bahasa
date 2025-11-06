@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 export function useGetIdStudent() {
   const [getId, setGetId] = useState<string>("");
+
   useEffect(() => {
     async function getIdStudent() {
       try {
@@ -9,7 +10,7 @@ export function useGetIdStudent() {
           credentials: "include",
         });
         const response = await request.json();
-        if (response.data.idStudent) {
+        if (response.status) {
           setGetId(response.data.idStudent);
         }
       } catch (err) {

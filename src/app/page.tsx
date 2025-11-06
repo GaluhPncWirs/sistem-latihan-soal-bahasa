@@ -16,7 +16,11 @@ import CompFiturUnggulan from "@/components/beranda/fiturUnggulan/content";
 import CompAlurUjian from "@/components/beranda/alurUjian/content";
 
 export default function Home() {
-  const isLoginStudent = useGetIdStudent();
+  // const isLoginStudent = useGetIdStudent();
+  // console.log(isLoginStudent);
+
+  // console.log(document.cookie);
+  // console.log(isLoginStudent);
   const isLoginTeacher = useGetIdTeacher();
   const [isSizeMobile, setIsSizeMobile] = useState(false);
 
@@ -48,11 +52,12 @@ export default function Home() {
             </p>
             <Link
               href={
-                isLoginStudent
-                  ? "/Student/Dashboard"
-                  : isLoginTeacher
-                  ? "/Teacher/dashboard"
-                  : "/Autentikasi/Login"
+                // isLoginStudent
+                //   ? "/Student/Dashboard"
+                //   : isLoginTeacher
+                //   ? "/Teacher/dashboard"
+                //   : "/Autentikasi/Login"
+                "#"
               }
               className="text-center bg-blue-400 hover:bg-blue-500 rounded-md py-2 text-lg font-semibold cursor-pointer px-8 mt-6 inline-block shadow-md shadow-slate-600"
             >

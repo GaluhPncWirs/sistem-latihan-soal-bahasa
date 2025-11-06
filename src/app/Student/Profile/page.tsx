@@ -15,8 +15,8 @@ import {
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
 import { useConvertDate } from "../../hooks/getConvertDate";
-import { Dialog } from "@radix-ui/react-dialog";
 import {
+  Dialog,
   DialogClose,
   DialogContent,
   DialogDescription,
@@ -178,7 +178,7 @@ export default function Profil() {
   }
 
   return (
-    <LayoutBodyContent isLocationPage={isLocationPage}>
+    <LayoutBodyContent isLocationPage={isLocationPage} getIdStudent={idSiswa}>
       {historyStudent.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">

@@ -11,8 +11,5 @@ export async function DELETE() {
     message: "Logout Telah Berhasil",
   });
 
-  res.cookies.set("role", "", { maxAge: 0, path: "/" });
-  res.cookies.set("token", "", { maxAge: 0, path: "/" });
-
   return res;
 }

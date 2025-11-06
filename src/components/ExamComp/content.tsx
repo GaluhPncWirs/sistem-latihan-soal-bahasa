@@ -222,14 +222,14 @@ export default function ExamsComponent() {
 
     if (res.success) {
       toast("Berhasil ✅", { description: "Ujian Telah Selesai" });
-      localStorage.removeItem("exam-answer");
       localStorage.removeItem("timer");
       localStorage.removeItem("exam-answer-pg");
+      localStorage.removeItem("exam-answer-essay");
       localStorage.removeItem("markQuestions");
       localStorage.removeItem("random-number-exam");
       router.push("/Student/Dashboard");
     } else {
-      toast("Gagal ❌", { description: "Gagal menyimpan data" });
+      toast("❌ Gagal", { description: "Gagal menyimpan data" });
     }
   }
 
@@ -267,7 +267,7 @@ export default function ExamsComponent() {
     window.history.pushState(null, "", window.location.href);
     const handlePopState = () => {
       window.history.pushState(null, "", window.location.href);
-      toast("Tidak Bisa Kembali ❌", {
+      toast("❌ Tidak Bisa Kembali", {
         description: "Tombol dinonaktifkan selama ujian!",
       });
     };
@@ -309,7 +309,7 @@ export default function ExamsComponent() {
       {Object.values(questionsExam ?? {}).length > 0 ? (
         <div className="bg-slate-50 w-11/12 mx-auto rounded-md py-8 px-10">
           <h1 className="text-3xl font-semibold mb-3">
-            Ujian {questionsExam?.exams?.nama_ujian}
+            Ujian Pelajaran Sejarah
           </h1>
           <div className="h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="flex justify-between items-center flex-col md:items-baseline md:flex-row-reverse md:gap-5">
@@ -487,15 +487,15 @@ export default function ExamsComponent() {
           </AlertDialog>
           <div className="mt-5">
             <Dialog>
-              {handleAnswerEmpty() === false ? (
-                <>
-                  <DialogTrigger asChild>
-                    <button className="cursor-pointer px-6 py-2 rounded-md font-semibold text-lg border-2 border-slate-800 hover:opacity-60">
-                      Selesai
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
+              <DialogTrigger asChild>
+                <button className="cursor-pointer px-6 py-2 rounded-md font-semibold text-lg border-2 border-slate-800 hover:opacity-60">
+                  Selesai
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  {handleAnswerEmpty() === false ? (
+                    <>
                       <DialogTitle className="mb-2">
                         Jawaban Kamu Belum Selesai
                       </DialogTitle>
@@ -503,52 +503,27 @@ export default function ExamsComponent() {
                         Terindikasi Bahwa Jawaban Belum Terisi Semua Apakah
                         Yakin Ingin Mengakhiri Sesi Ujian Ini ?
                       </DialogDescription>
-                    </DialogHeader>
-
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button variant="secondary">Kembali</Button>
-                      </DialogClose>
-                      <DialogClose asChild>
-                        <Button onClick={handleSendExam}>
-                          Akhiri Sekarang
-                        </Button>
-                      </DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </>
-              ) : (
-                <>
-                  <DialogTrigger asChild>
-                    <Button className="cursor-pointer px-6 py-1.5 rounded-lg font-semibold text-lg bg-[#A6E3E9] text-slate-800 hover:bg-[#CBF1F5]">
-                      Selesai
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
+                    </>
+                  ) : (
+                    <>
                       <DialogTitle className="mb-2">
                         Konfirmasi Ujian
                       </DialogTitle>
                       <DialogDescription>
                         Apakah Anda Yakin Ingin Menyelesaikan Ujian ini?
                       </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button variant="outline">Batal</Button>
-                      </DialogClose>
-                      <DialogClose asChild>
-                        <Button
-                          className="cursor-pointer"
-                          onClick={handleSendExam}
-                        >
-                          Oke
-                        </Button>
-                      </DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </>
-              )}
+                    </>
+                  )}
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="secondary">Kembali</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button onClick={handleSendExam}>Akhiri Sekarang</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
             </Dialog>
           </div>
           <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">

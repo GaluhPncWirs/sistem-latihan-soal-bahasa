@@ -42,19 +42,19 @@ export default function LoginAccount() {
         if (dataLogin.tipe === "siswa") {
           push("/Student/Dashboard");
           toast("Berhasil ✅", {
-            description: "Masuk Akun Berhasil",
+            description: dataLogin.message,
           });
         } else {
           localStorage.setItem("idLoginGuru", dataLogin.id);
           push("/Teacher/dashboard");
           toast("Berhasil ✅", {
-            description: "Masuk Akun Berhasil",
+            description: dataLogin.message,
           });
         }
         setIsLoading(true);
       } else {
         toast("Gagal ❌", {
-          description: "Email dan Password Salah Input Kembali",
+          description: dataLogin.message,
         });
       }
     } else {
