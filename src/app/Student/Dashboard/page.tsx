@@ -7,9 +7,7 @@ import {
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
-import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
-import { useGetDataStudent } from "../../hooks/getDataStudent";
 import {
   Table,
   TableBody,
@@ -35,11 +33,13 @@ import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
 import { toast } from "sonner";
+import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
+import { useGetDataStudentStore } from "@/app/stateManagement/dataStudent/state";
 
 export default function DashboardStudent() {
-  const getIdStudent = useGetIdStudent();
-  const scheduleExams = useDataScheduleExams();
-  const getDataStudent = useGetDataStudent(getIdStudent);
+  const getIdStudent = useIdUserStore((state: any) => state.idStudent);
+  const dataStudent = useGetDataStudentStore((state: any) => state.dataStudent);
+  const scheduleExams = useDataScheduleExams(dataStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
@@ -108,7 +108,7 @@ export default function DashboardStudent() {
         answer_student: null,
         hasil_ujian: "telat",
         status_exam: true,
-        kelas: getDataStudent?.classes,
+        kelas: dataStudent?.classes,
       };
       const { error } = await supabase
         .from("history-exam-student")
@@ -261,11 +261,11 @@ export default function DashboardStudent() {
 
   return (
     <LayoutBodyContent isLocationPage={isLocationPage}>
-      {getDataStudent !== null ? (
+      {dataStudent !== null ? (
         <>
           <HeaderDasboard
             user="Siswa"
-            fullName={getDataStudent?.fullName}
+            fullName={dataStudent?.fullName}
             isLocationPage={isLocationPage}
           />
           <div className="mt-5">

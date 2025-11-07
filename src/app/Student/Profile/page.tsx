@@ -1,7 +1,5 @@
 "use client";
 import Image from "next/image";
-import { useGetDataStudent } from "../../hooks/getDataStudent";
-import { useGetIdStudent } from "../../hooks/getIdStudent";
 import LayoutBodyContent from "@/layout/bodyContent";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,10 +28,12 @@ import { toast } from "sonner";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { usePathname } from "next/navigation";
+import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
+import { useGetDataStudentStore } from "@/app/stateManagement/dataStudent/state";
 
 export default function Profil() {
-  const idSiswa = useGetIdStudent();
-  const dataStudent = useGetDataStudent(idSiswa);
+  const getIdStudent = useIdUserStore((state: any) => state.idStudent);
+  const dataStudent = useGetDataStudentStore((state: any) => state.dataStudent);
   const [historyStudent, setHistoryStudent] = useState<any>([]);
   const [rankingClass, setRankingClass] = useState<any>([]);
   const isLocationPage = usePathname();
@@ -109,16 +109,16 @@ export default function Profil() {
   });
 
   const resultChooseRanking = addRanking?.filter(
-    (fil: any) => fil.student_id === idSiswa
+    (fil: any) => fil.student_id === getIdStudent
   );
 
   useEffect(() => {
-    if (!idSiswa) return;
+    if (!getIdStudent) return;
     async function getHistoryStudent() {
       const { data, error }: any = await supabase
         .from("history-exam-student")
         .select("*, exams(nama_ujian)")
-        .eq("student_id", idSiswa);
+        .eq("student_id", getIdStudent);
       if (error) {
         console.log("gagal di tampilkan");
       }
@@ -126,7 +126,7 @@ export default function Profil() {
     }
 
     getHistoryStudent();
-  }, [idSiswa]);
+  }, [getIdStudent]);
 
   useEffect(() => {
     async function getRankings() {
@@ -164,7 +164,7 @@ export default function Profil() {
     const { error } = await supabase
       .from("account-student")
       .update(resultPayload)
-      .eq("idStudent", idSiswa);
+      .eq("idStudent", getIdStudent);
 
     if (error) {
       toast("Gagal ❌", {
@@ -178,7 +178,10 @@ export default function Profil() {
   }
 
   return (
-    <LayoutBodyContent isLocationPage={isLocationPage} getIdStudent={idSiswa}>
+    <LayoutBodyContent
+      isLocationPage={isLocationPage}
+      getIdStudent={getIdStudent}
+    >
       {historyStudent.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">

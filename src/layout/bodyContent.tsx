@@ -1,8 +1,23 @@
 import { useVerifyToken } from "@/app/hooks/getVerifyToken";
+import { useGetDataStudentStore } from "@/app/stateManagement/dataStudent/state";
+import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
 import ListSidebar from "@/components/sidebar/listSidebar/content";
+import { useEffect } from "react";
 
 export default function LayoutBodyContent({ children, isLocationPage }: any) {
   const { loadingSession, statusToken } = useVerifyToken();
+  const fetchIdUser = useIdUserStore((func: any) => func.fetchIdStudent);
+  const getIdStudent = useIdUserStore((state: any) => state.idStudent);
+  const fetchDataUser = useGetDataStudentStore(
+    (func: any) => func.fetchDataStudent
+  );
+  useEffect(() => {
+    fetchIdUser();
+  }, []);
+
+  useEffect(() => {
+    fetchDataUser(getIdStudent);
+  }, [getIdStudent]);
 
   return (
     <div className="bg-black">

@@ -1,5 +1,5 @@
 import { useHandleLogout } from "@/app/hooks/getHandleLogout";
-import { useGetIdStudent } from "@/app/hooks/getIdStudent";
+import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function ListSidebar({ isLocationPage }: any) {
-  const getIdStudent = useGetIdStudent();
+  const getIdStudent = useIdUserStore((state: any) => state.idStudent);
   const logout = useHandleLogout();
   return (
     <>

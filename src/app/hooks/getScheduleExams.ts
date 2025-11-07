@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 import { useGetIdStudent } from "./getIdStudent";
-import { useGetDataStudent } from "./getDataStudent";
 import { supabase } from "@/lib/supabase/data";
 import { toast } from "sonner";
 
-export function useDataScheduleExams() {
+export function useDataScheduleExams(dataStudent: any) {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
   const getIdStudent = useGetIdStudent();
-  const getDataStudent = useGetDataStudent(getIdStudent);
 
   useEffect(() => {
-    if (!getDataStudent?.classes || !getIdStudent) return;
+    if (!dataStudent?.classes || !getIdStudent) return;
     async function getDataExamResult() {
       const { data: examsData, error: examsError } = await supabase
         .from("managed_exams")
         .select("*,account_teacher(fullName),exams(nama_ujian,questions_exam)")
-        .eq("kelas", getDataStudent?.classes);
+        .eq("kelas", dataStudent?.classes);
 
       const { data: historyDataExams, error: historyDataError }: any =
         await supabase
@@ -43,7 +41,7 @@ export function useDataScheduleExams() {
       setScheduleExams(mergedDataScheduleExams);
     }
     getDataExamResult();
-  }, [getDataStudent?.classes, getIdStudent]);
+  }, [dataStudent?.classes, getIdStudent]);
 
   return scheduleExams;
 }

@@ -1,11 +1,11 @@
 import { useHandleLogout } from "@/app/hooks/getHandleLogout";
-import { useGetIdStudent } from "@/app/hooks/getIdStudent";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
+import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
 import Link from "next/link";
 
 export default function ButtonAutentications() {
   const logout = useHandleLogout();
-  const isUserThereStudent = useGetIdStudent();
+  const isUserThereStudent = useIdUserStore((state: any) => state.idStudent);
   const isUserThereTeacher = useGetIdTeacher();
   return (
     <>
