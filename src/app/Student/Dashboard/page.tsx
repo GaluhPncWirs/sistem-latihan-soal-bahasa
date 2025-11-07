@@ -260,10 +260,7 @@ export default function DashboardStudent() {
   }, [accepted]);
 
   return (
-    <LayoutBodyContent
-      isLocationPage={isLocationPage}
-      getIdStudent={getIdStudent}
-    >
+    <LayoutBodyContent isLocationPage={isLocationPage}>
       {getDataStudent !== null ? (
         <>
           <HeaderDasboard

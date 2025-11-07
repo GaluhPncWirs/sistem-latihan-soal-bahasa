@@ -9,10 +9,12 @@ export function useGetIdTeacher() {
           credentials: "include",
         });
         const response = await request.json();
-        setGetId(response.data.idTeacher);
+        if (response.status) {
+          setGetId(response.data.idTeacher);
+        }
       } catch (err) {
         setGetId("");
-        console.error("Gagal decode token");
+        console.error("Gagal decode token fg");
       }
     }
     getIdTeacher();

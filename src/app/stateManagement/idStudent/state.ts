@@ -1,5 +1,6 @@
+import { useGetIdStudent } from "@/app/hooks/getIdStudent";
 import { create } from "zustand";
 
-const useIdStudent = create((set) => ({
-  getIdStudent: "",
+export const useIdStudent = create(() => ({
+  getIdStudent1: useGetIdStudent(),
 }));

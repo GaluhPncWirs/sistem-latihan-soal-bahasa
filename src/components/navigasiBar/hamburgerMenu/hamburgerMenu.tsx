@@ -1,44 +1,16 @@
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import ButtonAutentications from "../buttonAuth/content";
 import ListContent from "../listContent/content";
+import { useHandleClickedHamburgerMenu } from "@/app/hooks/getHandleHamMenu";
 
-export default function HamburgerMenu({
-  isUserThereTeacher,
-  isUserThereStudent,
-  handleLogout,
-}: any) {
-  const [isCheked, setIsCheked] = useState<boolean>(false);
-  const [isTrue, setIsTrue] = useState<boolean>(false);
-  const clickOutsideHamburgerMenu = useRef<HTMLInputElement | null>(null);
-  const clickOutsidePath = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    function handleClickOutsideNavbar(event: any) {
-      if (
-        clickOutsidePath.current &&
-        !clickOutsidePath.current.contains(event.target) &&
-        clickOutsideHamburgerMenu.current &&
-        !clickOutsideHamburgerMenu.current.contains(event.target)
-      ) {
-        setIsTrue(true);
-      }
-    }
-
-    window.addEventListener("click", handleClickOutsideNavbar);
-
-    return () => {
-      window.removeEventListener("click", handleClickOutsideNavbar);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isTrue) {
-      setIsCheked(false);
-      setIsTrue(false);
-    }
-  }, [isTrue]);
+export default function HamburgerMenu() {
+  const {
+    isCheked,
+    clickOutsideHamburgerMenu,
+    clickOutsidePath,
+    setIsCheked,
+    setIsTrue,
+  } = useHandleClickedHamburgerMenu();
 
   return (
     <div className="md:hidden">
@@ -63,11 +35,7 @@ export default function HamburgerMenu({
         ref={clickOutsidePath}
       >
         <ListContent />
-        <ButtonAutentications
-          isUserThereStudent={isUserThereStudent}
-          isUserThereTeacher={isUserThereTeacher}
-          handleLogout={handleLogout}
-        />
+        <ButtonAutentications />
       </div>
     </div>
   );

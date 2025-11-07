@@ -1,3 +1,5 @@
+import { useHandleLogout } from "@/app/hooks/getHandleLogout";
+import { useGetIdStudent } from "@/app/hooks/getIdStudent";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,24 +13,10 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
-export default function ListSidebar({ isLocationPage, getIdStudent }: any) {
-  const { push } = useRouter();
-
-  async function handleLogout() {
-    const responseDelCookies = await fetch("/api/delCookies", {
-      method: "DELETE",
-      credentials: "include",
-    });
-    const messageRespons = await responseDelCookies.json();
-    localStorage.removeItem("idLoginGuru");
-    localStorage.removeItem("idLoginGuru");
-    push("/Autentikasi/Login");
-    toast("Berhasil ✅", { description: messageRespons.message });
-  }
-
+export default function ListSidebar({ isLocationPage }: any) {
+  const getIdStudent = useGetIdStudent();
+  const logout = useHandleLogout();
   return (
     <>
       <div className="bg-slate-200 rounded-md w-52 mx-auto flex items-center shadow-lg shadow-slate-700 md:w-10/12 p-2">
@@ -106,7 +94,7 @@ export default function ListSidebar({ isLocationPage, getIdStudent }: any) {
                   <Button variant="secondary">Batal</Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button onClick={handleLogout}>Oke</Button>
+                  <Button onClick={logout}>Oke</Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
