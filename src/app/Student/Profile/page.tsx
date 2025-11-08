@@ -29,119 +29,109 @@ import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { usePathname } from "next/navigation";
 import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
-import { useGetDataStudentStore } from "@/app/stateManagement/dataStudent/state";
+import { useDataExams } from "@/app/hooks/getDataExams";
+import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 
 export default function Profil() {
   const getIdStudent = useIdUserStore((state: any) => state.idStudent);
-  const dataStudent = useGetDataStudentStore((state: any) => state.dataStudent);
-  const [historyStudent, setHistoryStudent] = useState<any>([]);
-  const [rankingClass, setRankingClass] = useState<any>([]);
+  const dataStudent = useGetDataStudent(getIdStudent);
+  const getHistoryStudent = useDataExams(dataStudent, getIdStudent);
+  const [resultExamPerClass, setResultExamPerClass] = useState<any>([]);
   const isLocationPage = usePathname();
 
-  const forRankingClasses = rankingClass.map((fil: any) => {
-    return {
-      ...fil,
-      hasil_ujian:
-        fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
-          ? fil.hasil_ujian
-          : "0",
-    };
-  });
-
-  const rankingPerKelas = forRankingClasses.reduce((acc: any, cur: any) => {
-    const kelasItem = acc.find((data: any) => data.kelas === cur.kelas);
-    const toNum = Number(cur.hasil_ujian);
-    if (!kelasItem) {
-      acc.push({
-        kelas: cur.kelas,
-        resultExam: [
-          {
-            student_id: cur.student_id,
-            pointExams: [toNum],
-          },
-        ],
-      });
-    } else {
-      const studentItem = kelasItem.resultExam.find(
-        (item: any) => item.student_id === cur.student_id
-      );
-      if (!studentItem) {
-        kelasItem.resultExam.push({
-          student_id: cur.student_id,
-          pointExams: [toNum],
-        });
-      } else {
-        studentItem.pointExams.push(toNum);
-      }
-    }
-    return acc;
-  }, []);
-
-  const calculateTotalEveryScoreExams =
-    rankingPerKelas
-      .filter((fil: any) => fil.kelas === dataStudent?.classes)[0]
-      ?.resultExam?.map((item: any) => {
-        return {
-          ...item,
-          pointExams: item.pointExams.reduce(
-            (acc: any, cur: any) => acc + cur,
-            0
-          ),
-        };
-      }) ?? [];
-
-  const sortRanking = calculateTotalEveryScoreExams?.sort(
-    (low: any, high: any) => high.pointExams - low.pointExams
-  );
-
-  let lastScore: number | null = null;
-  let lastRank: number = 0;
-  let index: number = 0;
-
-  const addRanking = sortRanking?.map((siswa: any) => {
-    index++;
-    if (siswa.pointExams !== lastScore) {
-      lastRank = index;
-      lastScore = siswa.pointExams;
-    }
-
-    return { ...siswa, ranking: lastRank };
-  });
-
-  const resultChooseRanking = addRanking?.filter(
-    (fil: any) => fil.student_id === getIdStudent
-  );
-
   useEffect(() => {
-    if (!getIdStudent) return;
-    async function getHistoryStudent() {
-      const { data, error }: any = await supabase
-        .from("history-exam-student")
-        .select("*, exams(nama_ujian)")
-        .eq("student_id", getIdStudent);
-      if (error) {
-        console.log("gagal di tampilkan");
-      }
-      setHistoryStudent(data);
-    }
-
-    getHistoryStudent();
-  }, [getIdStudent]);
-
-  useEffect(() => {
-    async function getRankings() {
-      const { data, error }: any = await supabase
+    async function getHistoryResultExams() {
+      const { data, error } = await supabase
         .from("history-exam-student")
         .select("student_id,exam_id,hasil_ujian,kelas");
 
       if (error) {
         console.log("gagal memuat data");
       }
-      setRankingClass(data);
+      setResultExamPerClass(data);
     }
-
-    getRankings();
+    getHistoryResultExams();
   }, []);
+
+  function rankingClasses() {
+    const filterResultExams = resultExamPerClass?.map((fil: any) => {
+      return {
+        ...fil,
+        hasil_ujian:
+          fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
+            ? fil.hasil_ujian
+            : "0",
+      };
+    });
+    const rankClass = filterResultExams?.reduce((acc: any, cur: any) => {
+      const classes = acc.find((data: any) => data.kelas === cur.kelas);
+      const toNumber = Number(cur.hasil_ujian);
+      if (!classes) {
+        acc.push({
+          kelas: cur.kelas,
+          resultExam: [
+            {
+              student_id: cur.student_id,
+              pointExams: [toNumber],
+            },
+          ],
+        });
+      } else {
+        const studentItem = classes.resultExam.find(
+          (item: any) => item.student_id === cur.student_id
+        );
+        if (!studentItem) {
+          classes.resultExam.push({
+            student_id: cur.student_id,
+            pointExams: [toNumber],
+          });
+        } else {
+          studentItem.pointExams.push(toNumber);
+        }
+      }
+      return acc;
+    }, []);
+
+    const calculateTotalEveryScoreExams =
+      rankClass
+        .filter((fil: any) => fil.kelas === dataStudent?.classes)[0]
+        ?.resultExam?.map((item: any) => {
+          return {
+            ...item,
+            pointExams: item.pointExams.reduce(
+              (acc: any, cur: any) => acc + cur,
+              0
+            ),
+          };
+        }) ?? [];
+
+    const sortRanking = calculateTotalEveryScoreExams.sort(
+      (low: any, high: any) => high.pointExams - low.pointExams
+    );
+
+    let lastScore: number | null = null;
+    let lastRank: number = 0;
+    let index: number = 0;
+
+    const addRanking = sortRanking?.map((siswa: any) => {
+      index++;
+      if (siswa.pointExams !== lastScore) {
+        lastRank = index;
+        lastScore = siswa.pointExams;
+      }
+
+      return { ...siswa, ranking: lastRank };
+    });
+
+    const resultChooseRanking = addRanking?.filter(
+      (fil: any) => fil.student_id === getIdStudent
+    );
+
+    return {
+      ranking: resultChooseRanking[0]?.ranking,
+      lenStudentPerClass: calculateTotalEveryScoreExams.length,
+    };
+  }
 
   async function handleEditProfileStudent(event: any) {
     event.preventDefault();
@@ -182,7 +172,7 @@ export default function Profil() {
       isLocationPage={isLocationPage}
       getIdStudent={getIdStudent}
     >
-      {historyStudent.length > 0 ? (
+      {getHistoryStudent.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-4xl font-bold">Profil Siswa</h1>
@@ -279,7 +269,7 @@ export default function Profil() {
                   />
                   <h1 className="text-lg">Ujian Selesai</h1>
                   <p className="text-2xl font-bold">
-                    {historyStudent.length || "0"}
+                    {getHistoryStudent.length || "0"}
                   </p>
                 </div>
                 <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
@@ -292,8 +282,8 @@ export default function Profil() {
                   />
                   <h1 className="text-lg">Peringkat Kelas</h1>
                   <p className="text-2xl font-bold">
-                    {`${resultChooseRanking[0]?.ranking || "0"} / ${
-                      calculateTotalEveryScoreExams.length
+                    {`${rankingClasses().ranking || "0"} / ${
+                      rankingClasses().lenStudentPerClass
                     }` || "0"}
                   </p>
                 </div>
@@ -309,8 +299,8 @@ export default function Profil() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {historyStudent.length > 0 ? (
-                    historyStudent.map((item: any, i: number) => (
+                  {getHistoryStudent.length > 0 ? (
+                    getHistoryStudent.map((item: any, i: number) => (
                       <TableRow key={i}>
                         <TableCell>{i + 1}</TableCell>
                         <TableCell>{item.exams?.nama_ujian}</TableCell>

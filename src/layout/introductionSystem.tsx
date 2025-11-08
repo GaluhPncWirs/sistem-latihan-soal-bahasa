@@ -1,3 +1,4 @@
+"use client";
 import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
 import FooterComponent from "@/components/footer/footerComp";
 import NavigasiBar from "@/components/navigasiBar/navbar";

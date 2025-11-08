@@ -1,25 +1,30 @@
 import { useEffect, useState } from "react";
-import { useGetIdStudent } from "./getIdStudent";
 import { supabase } from "@/lib/supabase/data";
 import { toast } from "sonner";
 
-export function useDataScheduleExams(dataStudent: any) {
+export function useDataExams(dataStudent: any, getIdStudent: string) {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
-  const getIdStudent = useGetIdStudent();
 
   useEffect(() => {
     if (!dataStudent?.classes || !getIdStudent) return;
     async function getDataExamResult() {
-      const { data: examsData, error: examsError } = await supabase
-        .from("managed_exams")
-        .select("*,account_teacher(fullName),exams(nama_ujian,questions_exam)")
-        .eq("kelas", dataStudent?.classes);
-
-      const { data: historyDataExams, error: historyDataError }: any =
-        await supabase
+      const [
+        { data: examsData, error: examsError },
+        { data: historyDataExams, error: historyDataError },
+      ] = await Promise.all([
+        supabase
+          .from("managed_exams")
+          .select(
+            "*,account_teacher(fullName),exams(nama_ujian,questions_exam)"
+          )
+          .eq("kelas", dataStudent?.classes),
+        supabase
           .from("history-exam-student")
-          .select("exam_id,status_exam,created_at,hasil_ujian")
-          .eq("student_id", getIdStudent);
+          .select(
+            "student_id,exam_id,status_exam,created_at,hasil_ujian,exams(nama_ujian)"
+          )
+          .eq("student_id", getIdStudent),
+      ]);
 
       if (examsError || historyDataError) {
         toast("data tidak bisa ditampilkan, error");

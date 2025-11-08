@@ -27,13 +27,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { SoalUjian } from "@/types/halamanUjian";
 import SkeletonExam from "./skeleton";
-import { useGetIdStudent } from "@/app/hooks/getIdStudent";
+import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
 
 export default function ExamsComponent() {
   const router = useRouter();
-  const searchParam = useSearchParams();
-  const idExams = searchParam.get("idExams");
-  const getIdStudent = useGetIdStudent();
+  const idExams = useSearchParams().get("idExams");
+  const fetchIdUser = useIdUserStore((func: any) => func.fetchIdStudent);
+  useEffect(() => {
+    fetchIdUser();
+  }, []);
+  const getIdStudent = useIdUserStore((state: any) => state.idStudent);
   const [questionsExam, setQuestionsExam] = useState<SoalUjian | null>(null);
   const [dataStudent, setDataStudent] = useState<any>(null);
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{

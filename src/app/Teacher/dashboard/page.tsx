@@ -163,11 +163,11 @@ export default function Teacher() {
     <LayoutBodyContent isLocationPage={isLocationPage}>
       {dataManageExams.length > 0 ? (
         <>
-          <HeaderDasboard
+          {/* <HeaderDasboard
             user="Pengajar"
             fullName={dataUserTeacher.fullName}
             isLocationPage={isLocationPage}
-          />
+          /> */}
           <div className="mt-5">
             <h1 className="text-2xl font-semibold">
               Ringkasan Aktifitas Ujian

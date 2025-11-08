@@ -1,14 +1,14 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
-import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
+import { useDataExams } from "@/app/hooks/getDataExams";
 import HeaderDashboard from "../headerDashboard/content";
 
 export default function HeaderDasboard(props: any) {
-  const { user, fullName, isLocationPage } = props;
+  const { user, fullName, isLocationPage, dataStudent, getIdStudent } = props;
   const urlPathName = usePathname();
   const dataStudentExams = getResultExamDataStudent();
-  const scheduleExams = useDataScheduleExams();
+  const scheduleExams = useDataExams(dataStudent, getIdStudent);
   function informExams() {
     if (urlPathName === "/Student/Dashboard") {
       const filterSisaUjian = scheduleExams.filter(

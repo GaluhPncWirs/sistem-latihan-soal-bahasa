@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useGetIdStudent } from "./hooks/getIdStudent";
 import {
   Carousel,
   CarouselContent,
@@ -14,9 +13,10 @@ import LayoutIntroductionsSystem from "@/layout/introductionSystem";
 import { useEffect, useState } from "react";
 import CompFiturUnggulan from "@/components/beranda/fiturUnggulan/content";
 import CompAlurUjian from "@/components/beranda/alurUjian/content";
+import { useIdUserStore } from "./stateManagement/idStudent/state";
 
 export default function Home() {
-  const isLoginStudent = useGetIdStudent();
+  const isLoginStudent = useIdUserStore((state: any) => state.idStudent);
   const isLoginTeacher = useGetIdTeacher();
   const [isSizeMobile, setIsSizeMobile] = useState(false);
 

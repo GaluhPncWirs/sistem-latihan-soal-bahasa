@@ -31,15 +31,15 @@ import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
-import { useDataScheduleExams } from "@/app/hooks/getScheduleExams";
+import { useDataExams } from "@/app/hooks/getDataExams";
 import { toast } from "sonner";
 import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
-import { useGetDataStudentStore } from "@/app/stateManagement/dataStudent/state";
+import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 
 export default function DashboardStudent() {
   const getIdStudent = useIdUserStore((state: any) => state.idStudent);
-  const dataStudent = useGetDataStudentStore((state: any) => state.dataStudent);
-  const scheduleExams = useDataScheduleExams(dataStudent);
+  const dataStudent = useGetDataStudent(getIdStudent);
+  const scheduleExams = useDataExams(dataStudent, getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
@@ -267,6 +267,8 @@ export default function DashboardStudent() {
             user="Siswa"
             fullName={dataStudent?.fullName}
             isLocationPage={isLocationPage}
+            dataStudent={dataStudent}
+            getIdStudent={getIdStudent}
           />
           <div className="mt-5">
             <p className="text-2xl font-semibold">
