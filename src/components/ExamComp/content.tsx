@@ -59,21 +59,20 @@ export default function ExamsComponent() {
 
   useEffect(() => {
     if (!idExams || !getIdStudent) return;
-
     async function getDataExams() {
       try {
-        const response = await fetch(
+        const request = await fetch(
           `/api/getQuestions?idExams=${idExams}&idStudent=${getIdStudent}`
-        )
-          .then((val: any) => val.json())
-          .then((data: any) => {
-            setQuestionsExam(data.dataExams);
-            setDataStudent(data.dataStudent);
-          });
-
-        return response;
-      } catch (err) {
-        return err;
+        );
+        const response = await request.json();
+        if (response.success) {
+          setQuestionsExam(response.dataExams);
+          setDataStudent(response.dataStudent);
+        }
+      } catch {
+        toast("❌ Error", {
+          description: "Data Ujian Gagal Diambil",
+        });
       }
     }
     getDataExams();
@@ -232,7 +231,7 @@ export default function ExamsComponent() {
       localStorage.removeItem("random-number-exam");
       router.push("/Student/Dashboard");
     } else {
-      toast("❌ Gagal", { description: "Gagal menyimpan data" });
+      toast("❌ Gagal", { description: "Gagal menyimpan data hasil ujian" });
     }
   }
 
@@ -309,13 +308,13 @@ export default function ExamsComponent() {
 
   return (
     <div className="bg-[#A6E3E9] py-10">
-      {Object.values(questionsExam ?? {}).length > 0 ? (
+      {questionsExam ? (
         <div className="bg-slate-50 w-11/12 mx-auto rounded-md py-8 px-10">
           <h1 className="text-3xl font-semibold mb-3">
-            Ujian Pelajaran Sejarah
+            Ujian {questionsExam.exams.nama_ujian}
           </h1>
-          <div className="h-1 bg-slate-700 rounded-lg mt-3" />
-          <div className="flex justify-between items-center flex-col md:items-baseline md:flex-row-reverse md:gap-5">
+          <div className="h-1 bg-slate-700 rounded-lg mt-3 mb-7" />
+          <div className="flex justify-between items-center flex-col md:items-start md:flex-row-reverse md:gap-x-5">
             <div
               className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed md:sticky p-6 rounded-md ${
                 isSizeMobile
@@ -324,7 +323,7 @@ export default function ExamsComponent() {
                         ? `translate-y-0`
                         : `-translate-y-full shadow-none`
                     }`
-                  : `md:basis-sm md:top-36`
+                  : `md:basis-sm md:top-5`
               }`}
               ref={handleClickedOutsideContent}
             >

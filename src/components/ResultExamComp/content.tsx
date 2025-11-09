@@ -7,17 +7,7 @@ import SkeletonResultExams from "./skeleton";
 
 export default function ResultExamComponent() {
   const [getDataStudentAnswer, setGetDataStudentAnswer] = useState<any>(null);
-  const searchParam = useSearchParams();
-  const paramIdExam = searchParam.get("id");
-
-  function correctAnswer(questionsId: any, pg: any) {
-    if (!getDataStudentAnswer) return null;
-    const answerStudentObj = getDataStudentAnswer?.answer_student;
-    const studentAnswer = answerStudentObj[questionsId];
-    return studentAnswer === pg
-      ? "bg-blue-400 rounded-sm py-1 font-semibold"
-      : "";
-  }
+  const paramIdExam = useSearchParams().get("id");
 
   useEffect(() => {
     if (!paramIdExam) return;
@@ -32,6 +22,13 @@ export default function ResultExamComponent() {
     }
     getDataAnswer();
   }, [paramIdExam]);
+
+  function correctAnswer(questionsId: any, pg: any) {
+    if (!getDataStudentAnswer) return null;
+    const answerStudentObj = getDataStudentAnswer?.answer_student;
+    const studentAnswer = answerStudentObj[questionsId];
+    return studentAnswer === pg && "bg-blue-400 rounded-sm py-1 font-semibold";
+  }
 
   return (
     <LayoutBodyContent>

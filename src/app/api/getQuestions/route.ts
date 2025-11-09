@@ -30,6 +30,8 @@ export async function GET(req: NextRequest) {
         status: 401,
         success: false,
         message: "Data Gagal di Ambil",
+        dataExams: [],
+        dataStudent: [],
       });
     } else {
       return NextResponse.json({

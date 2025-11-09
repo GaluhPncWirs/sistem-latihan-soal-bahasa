@@ -50,9 +50,8 @@ export default function Profil() {
       const { data, error } = await supabase
         .from("history-exam-student")
         .select("student_id,exam_id,hasil_ujian,kelas");
-
       if (error) {
-        console.log("gagal memuat data");
+        console.log("Gagal mengambil data");
       }
       setResultExamPerClass(data);
     }
@@ -308,7 +307,7 @@ export default function Profil() {
                         <TableCell>{i + 1}</TableCell>
                         <TableCell>{item.exams?.nama_ujian}</TableCell>
                         <TableCell>
-                          {useConvertDate(item.created_at, {
+                          {useConvertDate(item.created_at_historyExams, {
                             minute: "numeric",
                             hour: "numeric",
                             day: "numeric",
