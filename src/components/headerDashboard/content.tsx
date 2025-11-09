@@ -23,7 +23,10 @@ export default function HeaderDashboard({ remainder, isLocationPage }: any) {
           </PopoverTrigger>
           <PopoverContent className="w-fit p-3">
             <h1 className="font-semibold text-xs">
-              Ada {remainder.length} Ujian Yang Belum Dikerjakan
+              Ada {remainder.length} Ujian Yang Belum{" "}
+              {isLocationPage === "/Student/Dashboard"
+                ? "Dikerjakan"
+                : "Dinilai"}
             </h1>
           </PopoverContent>
         </Popover>
@@ -36,7 +39,7 @@ export default function HeaderDashboard({ remainder, isLocationPage }: any) {
           className="size-8"
         />
       )}
-      <HamburgerMenuBar isLocationPage={isLocationPage} />
+      <HamburgerMenuBar />
     </div>
   );
 }

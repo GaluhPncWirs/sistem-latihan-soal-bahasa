@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
-export default function ManageStudent() {
-  const dataStudentExams = getResultExamDataStudent();
+export default function ManageStudent({ idStudent }: any) {
+  const dataStudentExams = getResultExamDataStudent(idStudent);
   return (
     <div>
       <h1 className="mb-7 text-2xl font-semibold">Hasil Ujian Siswa</h1>

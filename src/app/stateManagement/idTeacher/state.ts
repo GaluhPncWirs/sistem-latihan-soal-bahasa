@@ -1,29 +1,29 @@
 import { create } from "zustand";
 
-export const useIdStudentStore = create((set) => ({
-  idStudent: "",
+export const useIdTeacherStore = create((set) => ({
+  idTeacher: "",
   loading: false,
   message: "",
 
-  fetchIdStudent: async () => {
+  fetchIdTeacher: async () => {
     try {
       set({ loading: true });
-      const request = await fetch(`/api/decodeToken`, {
+      const request = await fetch("/api/decodeToken", {
         credentials: "include",
       });
       const response = await request.json();
       if (response.status) {
         set({
-          idStudent: response.data.idStudent,
+          idTeacher: response.data.idTeacher,
           loading: false,
           message: "ID berhasil di ambil",
         });
       } else {
-        set({ idStudent: "", loading: false, message: "ID gagal di ambil" });
+        set({ idTeacher: "", loading: false, message: "ID Gagal di ambil" });
       }
     } catch {
       set({
-        idStudent: "",
+        idTeacher: "",
         loading: false,
         message: "Gagal decode token / token tidak valid",
       });

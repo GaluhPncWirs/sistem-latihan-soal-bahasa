@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { useGetIdTeacher } from "./getIdTeacher";
 import { supabase } from "@/lib/supabase/data";
 
-export function getResultExamDataStudent() {
+export function getResultExamDataStudent(idTeacher: any) {
   const [resultExamsStudent, setResultExamsStudent] = useState<any>([]);
-  const idTeacher = useGetIdTeacher();
 
   useEffect(() => {
     if (!idTeacher) return;

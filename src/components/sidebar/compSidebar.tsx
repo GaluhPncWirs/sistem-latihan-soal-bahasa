@@ -2,7 +2,7 @@ import { Input } from "../ui/input";
 import ListSidebar from "./listSidebar/content";
 import { useHandleClickedHamburgerMenu } from "@/app/hooks/getHandleHamMenu";
 
-export default function HamburgerMenuBar({ isLocationPage }: any) {
+export default function HamburgerMenuBar() {
   const {
     isCheked,
     clickOutsideHamburgerMenu,
@@ -34,7 +34,7 @@ export default function HamburgerMenuBar({ isLocationPage }: any) {
       ${isCheked ? `translate-x-0` : `-translate-x-full`}`}
         ref={clickOutsidePath}
       >
-        <ListSidebar isLocationPage={isLocationPage} />
+        <ListSidebar />
       </ul>
     </div>
   );

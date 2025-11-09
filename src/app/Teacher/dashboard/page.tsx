@@ -1,6 +1,5 @@
 "use client";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
-import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import CreateNewQuestions from "@/components/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/components/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/components/khususGuru/kelolaSiswa/manageStudent";
@@ -19,6 +18,9 @@ import { useEffect, useState } from "react";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import FloatingBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
 import { usePathname } from "next/navigation";
+import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
+import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
+import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -27,10 +29,16 @@ export default function Teacher() {
     viewResult: false,
     manageStudent: false,
   });
-  const idTeacher = useGetIdTeacher();
+  const pathName = usePathname();
+  const idTeacher = useIdTeacherStore((state: any) => state.idTeacher);
   const dataUserTeacher = useGetDataTeacher(idTeacher);
   const [dataManageExams, setDataManageExams] = useState<any>([]);
-  const isLocationPage = usePathname();
+  const dataStudentExams = getResultExamDataStudent(idTeacher);
+  const isLocationPage = useLocationPage((func: any) => func.setLocationPage);
+
+  useEffect(() => {
+    isLocationPage(pathName);
+  }, [pathName]);
 
   function handleClickItem(event: any) {
     if (event === "scheduleExams") {
@@ -160,14 +168,14 @@ export default function Teacher() {
   }, [idTeacher]);
 
   return (
-    <LayoutBodyContent isLocationPage={isLocationPage}>
+    <LayoutBodyContent>
       {dataManageExams.length > 0 ? (
-        <>
-          {/* <HeaderDasboard
+        <div>
+          <HeaderDasboard
             user="Pengajar"
             fullName={dataUserTeacher.fullName}
-            isLocationPage={isLocationPage}
-          /> */}
+            exams={dataStudentExams}
+          />
           <div className="mt-5">
             <h1 className="text-2xl font-semibold">
               Ringkasan Aktifitas Ujian
@@ -274,11 +282,11 @@ export default function Teacher() {
               ) : dashboardButton.viewResult === true ? (
                 <ViewQuestions idTeacher={idTeacher} />
               ) : dashboardButton.manageStudent === true ? (
-                <ManageStudent />
+                <ManageStudent idTeacher={idTeacher} />
               ) : null}
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <>
           <div className="flex justify-between items-center">

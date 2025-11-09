@@ -84,7 +84,9 @@ export default function ViewQuestions({ idTeacher }: any) {
         .from("managed_exams")
         .insert(dataPayload);
       if (error) {
-        console.log("tidak bisa ditambahkan");
+        toast("Gagal ❌", {
+          description: "Error tidak bisa ditambahkan",
+        });
       } else {
         toast("Berhasil ✅", {
           description: "Soal Berhasil Dikirimkan",

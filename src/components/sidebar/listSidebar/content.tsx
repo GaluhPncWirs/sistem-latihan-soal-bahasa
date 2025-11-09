@@ -1,5 +1,6 @@
 import { useHandleLogout } from "@/app/hooks/getHandleLogout";
-import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
+import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
+import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,8 +15,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ListSidebar({ isLocationPage }: any) {
-  const getIdStudent = useIdUserStore((state: any) => state.idStudent);
+export default function ListSidebar() {
+  const getIdStudent = useIdStudentStore((state: any) => state.idStudent);
+  const isLocationPage = useLocationPage(
+    (state: any) => state.curentLocationPage
+  );
   const logout = useHandleLogout();
   return (
     <>

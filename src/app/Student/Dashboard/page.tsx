@@ -33,18 +33,24 @@ import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { toast } from "sonner";
-import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
+import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
 import { useGetDataStudent } from "@/app/hooks/getDataStudent";
+import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 
 export default function DashboardStudent() {
-  const getIdStudent = useIdUserStore((state: any) => state.idStudent);
+  const getIdStudent = useIdStudentStore((state: any) => state.idStudent);
   const dataStudent = useGetDataStudent(getIdStudent);
   const scheduleExams = useDataExams(dataStudent, getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(false);
-  const isLocationPage = usePathname();
+  const pathName = usePathname();
+  const isLocationPage = useLocationPage((func: any) => func.setLocationPage);
+
+  useEffect(() => {
+    isLocationPage(pathName);
+  }, [pathName]);
 
   const filterScoreExams = scheduleExams.filter(
     (avg: any) =>
@@ -260,15 +266,13 @@ export default function DashboardStudent() {
   }, [accepted]);
 
   return (
-    <LayoutBodyContent isLocationPage={isLocationPage}>
+    <LayoutBodyContent>
       {dataStudent !== null ? (
         <>
           <HeaderDasboard
             user="Siswa"
             fullName={dataStudent?.fullName}
-            isLocationPage={isLocationPage}
-            dataStudent={dataStudent}
-            getIdStudent={getIdStudent}
+            exams={scheduleExams}
           />
           <div className="mt-5">
             <p className="text-2xl font-semibold">

@@ -1,4 +1,3 @@
-import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -34,6 +33,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SkeletonManageExams from "./skeleton";
+import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
 
 export default function ManageExamComponent() {
   const [viewQuestions, setViewQuestions] = useState<any>({});
@@ -49,7 +49,7 @@ export default function ManageExamComponent() {
   const [updateQuestion, setUpdateQuestion] = useState<string>("");
   const searchParams = useSearchParams();
   const getParamId = searchParams.get("id");
-  const idTeacher = useGetIdTeacher();
+  const idTeacher = useIdTeacherStore((state: any) => state.idTeacher);
 
   useEffect(() => {
     if (!idTeacher) return;

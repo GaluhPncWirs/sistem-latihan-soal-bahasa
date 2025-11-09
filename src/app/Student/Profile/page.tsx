@@ -28,16 +28,22 @@ import { toast } from "sonner";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { usePathname } from "next/navigation";
-import { useIdUserStore } from "@/app/stateManagement/idStudent/state";
+import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { useGetDataStudent } from "@/app/hooks/getDataStudent";
+import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 
 export default function Profil() {
-  const getIdStudent = useIdUserStore((state: any) => state.idStudent);
+  const getIdStudent = useIdStudentStore((state: any) => state.idStudent);
   const dataStudent = useGetDataStudent(getIdStudent);
   const getHistoryStudent = useDataExams(dataStudent, getIdStudent);
   const [resultExamPerClass, setResultExamPerClass] = useState<any>([]);
-  const isLocationPage = usePathname();
+  const pathName = usePathname();
+  const isLocationPage = useLocationPage((func: any) => func.setLocationPage);
+
+  useEffect(() => {
+    isLocationPage(pathName);
+  }, [pathName]);
 
   useEffect(() => {
     async function getHistoryResultExams() {
@@ -168,15 +174,12 @@ export default function Profil() {
   }
 
   return (
-    <LayoutBodyContent
-      isLocationPage={isLocationPage}
-      getIdStudent={getIdStudent}
-    >
+    <LayoutBodyContent>
       {getHistoryStudent.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-4xl font-bold">Profil Siswa</h1>
-            <HamburgerMenuBar isLocationPage={isLocationPage} />
+            <HamburgerMenuBar />
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">

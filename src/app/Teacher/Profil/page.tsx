@@ -1,6 +1,7 @@
 "use client";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
+import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,7 +40,12 @@ export default function TeacherProfile() {
   const idTeacher = useGetIdTeacher();
   const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
   const getProfileTeacher = useGetDataTeacher(idTeacher);
-  const isLocationPage = usePathname();
+  const pathName = usePathname();
+  const isLocationPage = useLocationPage((func: any) => func.setLocationPage);
+
+  useEffect(() => {
+    isLocationPage(pathName);
+  }, [pathName]);
 
   useEffect(() => {
     if (!idTeacher) return;
@@ -186,12 +192,12 @@ export default function TeacherProfile() {
   }
 
   return (
-    <LayoutBodyContent isLocationPage={isLocationPage}>
+    <LayoutBodyContent>
       {getHistoryExams.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-4xl font-bold">Profil Guru</h1>
-            <HamburgerMenuBar isLocationPage={isLocationPage} />
+            <HamburgerMenuBar />
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">

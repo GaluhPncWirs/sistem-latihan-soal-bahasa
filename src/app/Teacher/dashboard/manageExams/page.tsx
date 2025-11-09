@@ -1,5 +1,5 @@
 "use client";
-import ManageExamComponent from "@/components/ManageExamComp/content";
+import ManageExamComponent from "@/components/khususGuru/ManageExamComp/content";
 import { Suspense } from "react";
 
 export default function ViewQuestions() {

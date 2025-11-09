@@ -1,33 +1,31 @@
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
-import { useDataExams } from "@/app/hooks/getDataExams";
 import HeaderDashboard from "../headerDashboard/content";
+import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 
 export default function HeaderDasboard(props: any) {
-  const { user, fullName, isLocationPage, dataStudent, getIdStudent } = props;
-  const urlPathName = usePathname();
-  const dataStudentExams = getResultExamDataStudent();
-  const scheduleExams = useDataExams(dataStudent, getIdStudent);
+  const { user, fullName, exams } = props;
+  const locationPage = useLocationPage(
+    (state: any) => state.curentLocationPage
+  );
   function informExams() {
-    if (urlPathName === "/Student/Dashboard") {
-      const filterSisaUjian = scheduleExams.filter(
+    if (locationPage === "/Student/Dashboard") {
+      const filterSisaUjian = exams.filter(
         (done: any) => done.status_exam !== true
       );
       return (
         <HeaderDashboard
           remainder={filterSisaUjian}
-          isLocationPage={isLocationPage}
+          isLocationPage={locationPage}
         />
       );
     } else {
-      const filterNilaiSiswa = dataStudentExams
+      const filterNilaiSiswa = exams
         .flatMap((fm: any) => fm.resultUjian)
         .filter((fil: any) => fil.hasil_ujian === "pending");
       return (
         <HeaderDashboard
           remainder={filterNilaiSiswa}
-          isLocationPage={isLocationPage}
+          isLocationPage={locationPage}
         />
       );
     }
