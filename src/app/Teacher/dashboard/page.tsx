@@ -177,7 +177,7 @@ export default function Teacher() {
             exams={dataStudentExams}
           />
           <div className="mt-5">
-            <h1 className="text-2xl font-semibold">
+            <h1 className="text-2xl font-semibold tracking-wider">
               Ringkasan Aktifitas Ujian
             </h1>
             <div className="flex justify-evenly my-7 text-slate-800">
@@ -228,7 +228,7 @@ export default function Teacher() {
             <div className="mt-5">
               {dashboardButton.scheduleExams === true ? (
                 <div>
-                  <h1 className="mb-5 text-2xl font-semibold">
+                  <h1 className="mb-5 text-2xl font-semibold tracking-wide">
                     Jadwal Ujian Hari ini
                   </h1>
                   <Table>

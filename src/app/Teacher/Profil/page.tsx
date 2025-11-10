@@ -148,47 +148,51 @@ export default function TeacherProfile() {
     }
   }
 
-  function nilaiRataRata(data: any) {
-    const filterResultExamScore = data.hasil_ujian.filter(
-      (fil: any) => fil !== "pending" && fil !== "telat"
-    );
-    const filterResultExamPendingAndLate = data.hasil_ujian.filter(
-      (fil: any) => fil === "pending" || fil === "telat"
-    );
-    const filterResultExamPending = data.hasil_ujian.filter(
-      (fil: any) => fil === "pending"
-    );
-    const filterResultExamTelat = data.hasil_ujian.filter(
-      (fil: any) => fil === "telat"
-    );
+  function resultNilaiRataRata(data: any) {
+    const hasilUjian = data.hasil_ujian;
 
-    const resultExams =
-      filterResultExamScore
-        .map(Number)
-        .reduce((acc: any, cur: any) => acc + cur, 0) /
-      filterResultExamScore.length;
+    const nilaiUjian = hasilUjian
+      .filter((fil: any) => fil !== "pending" && fil !== "telat")
+      .map(Number);
+    const nilaiPending = hasilUjian.filter((fil: any) => fil === "pending");
+    const nilaiTelat = hasilUjian.filter((fil: any) => fil === "telat");
 
-    if (filterResultExamPendingAndLate.length > 0) {
+    const nilaiYangPendingAtauTelat =
+      nilaiPending.length > 0 || nilaiTelat.length > 0;
+
+    const nilaiRataRata =
+      nilaiUjian.length > 0
+        ? Math.round(
+            nilaiUjian.reduce((acc: any, cur: any) => acc + cur, 0) /
+              nilaiUjian.length
+          )
+        : 0;
+
+    function getMessage() {
+      if (nilaiPending.length > 0 && nilaiTelat.length > 0) {
+        return `Ada ${nilaiTelat.length} siswa telat dan ${nilaiPending.length} belum dinilai`;
+      }
+
+      if (nilaiTelat.length > 0) {
+        return `Ada ${nilaiTelat.length} Siswa Yang Telat Mengerjakan`;
+      }
+
+      return `Ada ${nilaiPending.length} siswa yang belum dinilai`;
+    }
+
+    if (nilaiYangPendingAtauTelat) {
       return (
         <Popover>
           <PopoverTrigger asChild>
-            <h1>{Math.round(resultExams) || "0"}</h1>
+            <h1>{nilaiRataRata}</h1>
           </PopoverTrigger>
           <PopoverContent className="w-fit p-2">
-            <h1 className="font-semibold text-xs">
-              {filterResultExamTelat[0] === "telat" &&
-              filterResultExamPending[0] === "pending"
-                ? `Ada ${filterResultExamTelat.length} Siswa Telat Dan ${filterResultExamPending.length} Belum Dinilai`
-                : filterResultExamTelat[0] === "telat"
-                ? `Ada ${filterResultExamTelat.length} Siswa Yang Telat Mengerjakan`
-                : `Ada ${filterResultExamPending.length} Siswa Yang Belum Dinilai`}
-            </h1>
+            <h1 className="font-semibold text-xs">{getMessage()}</h1>
           </PopoverContent>
         </Popover>
       );
-    } else {
-      return Math.round(resultExams);
     }
+    return nilaiRataRata;
   }
 
   return (
@@ -330,7 +334,7 @@ export default function TeacherProfile() {
                           {item.student_id?.length}
                         </TableCell>
                         <TableCell className="text-center">
-                          {nilaiRataRata(item)}
+                          {resultNilaiRataRata(item)}
                         </TableCell>
                         <TableCell className="text-center">
                           {item.kelas}
@@ -401,204 +405,3 @@ export default function TeacherProfile() {
     </LayoutBodyContent>
   );
 }
-
-// <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
-//   <Dialog>
-//     <DialogTrigger asChild className="cursor-pointer">
-//       {previewImgProfil !== null ? (
-//         <Image
-//           src={previewImgProfil}
-//           alt="Profile User"
-//           width={300}
-//           height={300}
-//           className="rounded-full w-1/6 max-[640px]:w-1/3"
-//         />
-//       ) : (
-//         <Image
-//           src="/img/profileStudent/userProfile.png"
-//           alt="Profile User"
-//           width={300}
-//           height={300}
-//           className="rounded-full w-1/6 max-[640px]:w-1/3"
-//         />
-//       )}
-//     </DialogTrigger>
-//     <DialogContent>
-//       <DialogHeader>
-//         <DialogTitle>Ubah Foto Profil</DialogTitle>
-//         <div className="mt-3">
-//           <Input
-//             type="file"
-//             accept="image/*"
-//             id="imgProfil"
-//             onChange={handleChangeImgProfile}
-//           />
-//         </div>
-//       </DialogHeader>
-//       <DialogFooter>
-//         <DialogClose asChild>
-//           <Button variant="outline">Cancel</Button>
-//         </DialogClose>
-//         <DialogClose asChild>
-//           <Button>Oke</Button>
-//         </DialogClose>
-//       </DialogFooter>
-//     </DialogContent>
-//   </Dialog>
-//   <div className="basis-3/4">
-//     <h1 className="capitalize mb-2 font-semibold max-[640px]:text-4xl sm:text-3xl md:text-4xl xl:text-5xl">
-//       {getProfileTeacher?.fullName || ""}
-//     </h1>
-//     <p className="font-medium">
-//       {getProfileTeacher?.pengajarMapel || ""}
-//     </p>
-//   </div>
-//   <Dialog>
-//     <DialogTrigger asChild>
-//       <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-lg p-5">
-//         Edit Profil
-//       </Button>
-//     </DialogTrigger>
-//     <DialogContent>
-//       <form
-//         className="grid gap-5"
-//         onSubmit={(event) => handleEditProfileTeacher(event)}
-//       >
-//         <DialogHeader className="text-start">
-//           <DialogTitle>Edit Profile</DialogTitle>
-//           <DialogDescription className="mt-1 text-base">
-//             Edit Seluruh Informasi Profil Kamu Disini
-//           </DialogDescription>
-//           <div>
-//             <label htmlFor="fullName" className="mb-2 block">
-//               Nama
-//             </label>
-//             <Input id="fullName" placeholder="Jhon Doe" />
-//           </div>
-//           <div>
-//             <label htmlFor="pengajarMapel" className="mb-2 block">
-//               Ubah Pengajar Mata Pelajaran
-//             </label>
-//             <Input
-//               id="pengajarMapel"
-//               placeholder="Matematika - Bahasa Indonesia - dst"
-//             />
-//           </div>
-//           <div>
-//             <label htmlFor="noTlp" className="mb-2 block">
-//               Ubah No Telepon
-//             </label>
-//             <Input id="noTlp" placeholder="089276361434" />
-//           </div>
-//           <div>
-//             <label htmlFor="email" className="mb-2 block">
-//               Email
-//             </label>
-//             <Input
-//               type="email"
-//               id="email"
-//               placeholder="jhondoe56@gmail.com"
-//             />
-//           </div>
-//           <div>
-//             <label htmlFor="password" className="mb-2 block">
-//               Ubah Password
-//             </label>
-//             <Input
-//               type="password"
-//               id="password"
-//               placeholder="**********"
-//             />
-//           </div>
-
-//           <span className="font-semibold block text-xs text-red-500 text-end">
-//             *Jika Ingin Diubah Hanya Salah Satu Maka Sisanya
-//             Dikosongkan Saja
-//           </span>
-//         </DialogHeader>
-//         <DialogFooter className="mt-3">
-//           <DialogClose asChild>
-//             <Button className="cursor-pointer" variant="outline">
-//               Cancel
-//             </Button>
-//           </DialogClose>
-//           <DialogClose asChild>
-//             <Button type="submit" className="cursor-pointer">
-//               Confirm
-//             </Button>
-//           </DialogClose>
-//         </DialogFooter>
-//       </form>
-//     </DialogContent>
-//   </Dialog>
-// </div>
-
-// <div className="mb-5">
-//   <div className="flex items-center mb-5 gap-3">
-//     <Image
-//       src="/img/profileTeacher/account.png"
-//       alt="Informasi Akun"
-//       width={200}
-//       height={200}
-//       className="max-[640px]:w-[7%] sm:w-[6%] md:w-[5%] lg:w-[4%]"
-//     />
-//     <h1 className="text-2xl font-semibold">Informasi Akun</h1>
-//   </div>
-//   <Table>
-//     <TableBody>
-//       <TableRow className="border-black">
-//         <TableCell className="text-base font-semibold">
-//           Email
-//         </TableCell>
-//         <TableCell className="text-base font-medium">
-//           {getProfileTeacher?.email || ""}
-//         </TableCell>
-//       </TableRow>
-//       {/* <TableRow className="border-black">
-//         <TableCell className="text-base font-semibold">
-//           NISN
-//         </TableCell>
-//         <TableCell className="text-base font-medium">
-//           {getProfileTeacher?.nisn}
-//         </TableCell>
-//       </TableRow> */}
-//       <TableRow className="border-black">
-//         <TableCell className="text-base font-semibold">
-//           No Telepon
-//         </TableCell>
-//         <TableCell className="text-base font-medium">
-//           {getProfileTeacher?.noTlp.match(/.{1,4}/g).join("-") ||
-//             ""}
-//         </TableCell>
-//       </TableRow>
-//       <TableRow className="border-black">
-//         <TableCell className="text-base font-semibold">
-//           Bergabung
-//         </TableCell>
-//         <TableCell className="text-base font-medium">
-//           {useConvertDate(getProfileTeacher?.created_at, {
-//             day: "numeric",
-//             month: "long",
-//             year: "numeric",
-//           }) || ""}
-//         </TableCell>
-//       </TableRow>
-//       <TableRow className="border-black">
-//         <TableCell className="text-base font-semibold">
-//           Peran
-//         </TableCell>
-//         <TableCell className="text-base font-medium">
-//           {getProfileTeacher?.role || ""}
-//         </TableCell>
-//       </TableRow>
-//       <TableRow className="border-black">
-//         <TableCell className="text-base font-semibold">
-//           Status Akun
-//         </TableCell>
-//         <TableCell className="text-base font-medium">
-//           Aktif
-//         </TableCell>
-//       </TableRow>
-//     </TableBody>
-//   </Table>
-// </div>

@@ -14,11 +14,13 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 
-export default function ManageStudent({ idStudent }: any) {
-  const dataStudentExams = getResultExamDataStudent(idStudent);
+export default function ManageStudent({ idTeacher }: any) {
+  const dataStudentExams = getResultExamDataStudent(idTeacher);
   return (
     <div>
-      <h1 className="mb-7 text-2xl font-semibold">Hasil Ujian Siswa</h1>
+      <h1 className="mb-7 text-2xl font-semibold tracking-wide">
+        Hasil Ujian Siswa
+      </h1>
       <Table>
         <TableHeader>
           <TableRow className="bg-[#3282B8]">

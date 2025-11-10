@@ -117,6 +117,16 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
+  //proteksi halaman pelajar
+  if (pathname.startsWith("/Student") && role !== "pelajar") {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // //proteksi jika belum login
+  // if (pathname.startsWith("/Teacher") && !token) {
+  //   return NextResponse.redirect(new URL("/", req.url));
+  // }
+
   return NextResponse.next();
 }
 
