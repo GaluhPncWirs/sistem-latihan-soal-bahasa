@@ -32,11 +32,11 @@ import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
 export default function ExamsComponent() {
   const router = useRouter();
   const idExams = useSearchParams().get("idExams");
-  const fetchIdUser = useIdStudentStore((func: any) => func.fetchIdStudent);
+  const fetchIdUser = useIdStudentStore((func) => func.fetchIdStudent);
   useEffect(() => {
     fetchIdUser();
   }, []);
-  const getIdStudent = useIdStudentStore((state: any) => state.idStudent);
+  const getIdStudent = useIdStudentStore((state) => state.idStudent);
   const [questionsExam, setQuestionsExam] = useState<SoalUjian | null>(null);
   const [dataStudent, setDataStudent] = useState<any>(null);
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{

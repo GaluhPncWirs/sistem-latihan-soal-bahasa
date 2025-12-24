@@ -284,7 +284,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
       <h1 className="text-2xl font-semibold mb-5 tracking-wide">
         Buat Soal Ujian
       </h1>
-      <div className="bg-[#F3F8FF] p-7 rounded-md">
+      <div className="bg-sky-200 p-7 rounded-md">
         <form className="flex flex-col gap-5">
           <div className="flex justify-around">
             <div className="w-1/2">
@@ -437,7 +437,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
         <Dialog>
           <DialogTrigger asChild>
             <button
-              className="cursor-pointer px-6 py-2 rounded-md font-semibold text-lg border-2 border-slate-800 hover:opacity-60 mt-5"
+              className="cursor-pointer px-6 py-1 rounded-md font-semibold text-lg border border-slate-800 hover:opacity-60 mt-5"
               disabled={!isFormFilled()}
             >
               Buat

@@ -1,6 +1,13 @@
 import { create } from "zustand";
 
-export const useIdTeacherStore = create((set) => ({
+type fetchIdTeacher = {
+  idTeacher: string;
+  loading: boolean;
+  message: string;
+  fetchIdTeacher: () => void;
+};
+
+export const useIdTeacherStore = create<fetchIdTeacher>((set) => ({
   idTeacher: "",
   loading: false,
   message: "",

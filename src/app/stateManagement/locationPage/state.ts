@@ -1,6 +1,11 @@
 import { create } from "zustand";
 
-export const useLocationPage = create((set) => ({
+type locationPage = {
+  curentLocationPage: string;
+  setLocationPage: (page: string) => void;
+};
+
+export const useLocationPage = create<locationPage>((set) => ({
   curentLocationPage: "",
   setLocationPage: (page: string) => set({ curentLocationPage: page }),
 }));

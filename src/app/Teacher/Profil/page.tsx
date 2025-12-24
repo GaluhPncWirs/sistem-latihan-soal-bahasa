@@ -1,6 +1,6 @@
 "use client";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
-import { useGetIdTeacher } from "@/app/hooks/getIdTeacher";
+import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
 import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import { Button } from "@/components/ui/button";
@@ -37,11 +37,11 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function TeacherProfile() {
-  const idTeacher = useGetIdTeacher();
-  const [getHistoryExams, setGetHistoryExams] = useState<any>([]);
+  const idTeacher = useIdTeacherStore((state) => state.idTeacher);
+  const [getHistoryExams, setGetHistoryExams] = useState<string[]>([]);
   const getProfileTeacher = useGetDataTeacher(idTeacher);
   const pathName = usePathname();
-  const isLocationPage = useLocationPage((func: any) => func.setLocationPage);
+  const isLocationPage = useLocationPage((func) => func.setLocationPage);
 
   useEffect(() => {
     isLocationPage(pathName);

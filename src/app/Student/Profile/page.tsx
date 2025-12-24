@@ -34,12 +34,12 @@ import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 
 export default function Profil() {
-  const getIdStudent = useIdStudentStore((state: any) => state.idStudent);
+  const getIdStudent = useIdStudentStore((state) => state.idStudent);
   const dataStudent = useGetDataStudent(getIdStudent);
   const getHistoryStudent = useDataExams(dataStudent, getIdStudent);
   const [resultExamPerClass, setResultExamPerClass] = useState<any>([]);
   const pathName = usePathname();
-  const isLocationPage = useLocationPage((func: any) => func.setLocationPage);
+  const isLocationPage = useLocationPage((func) => func.setLocationPage);
 
   useEffect(() => {
     isLocationPage(pathName);

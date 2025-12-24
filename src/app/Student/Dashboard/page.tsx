@@ -38,7 +38,7 @@ import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 import { useLocationPage } from "@/app/stateManagement/locationPage/state";
 
 export default function DashboardStudent() {
-  const getIdStudent = useIdStudentStore((state: any) => state.idStudent);
+  const getIdStudent = useIdStudentStore((state) => state.idStudent);
   const dataStudent = useGetDataStudent(getIdStudent);
   const scheduleExams = useDataExams(dataStudent, getIdStudent);
   const { push } = useRouter();
@@ -46,7 +46,7 @@ export default function DashboardStudent() {
   const [confirm, setConfirm] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(false);
   const pathName = usePathname();
-  const isLocationPage = useLocationPage((func: any) => func.setLocationPage);
+  const isLocationPage = useLocationPage((func) => func.setLocationPage);
 
   useEffect(() => {
     isLocationPage(pathName);

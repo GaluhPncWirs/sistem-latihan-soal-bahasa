@@ -8,8 +8,8 @@ export default function LayoutBodyContent({
   children,
 }: React.PropsWithChildren) {
   const { loadingSession, statusToken } = useVerifyToken();
-  const fetchIdStudent = useIdStudentStore((func: any) => func.fetchIdStudent);
-  const fetchIdTeacher = useIdTeacherStore((func: any) => func.fetchIdTeacher);
+  const fetchIdStudent = useIdStudentStore((func) => func.fetchIdStudent);
+  const fetchIdTeacher = useIdTeacherStore((func) => func.fetchIdTeacher);
   useEffect(() => {
     fetchIdStudent();
   }, []);

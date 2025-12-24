@@ -30,11 +30,11 @@ export default function Teacher() {
     manageStudent: false,
   });
   const pathName = usePathname();
-  const idTeacher = useIdTeacherStore((state: any) => state.idTeacher);
+  const idTeacher = useIdTeacherStore((state) => state.idTeacher);
   const dataUserTeacher = useGetDataTeacher(idTeacher);
-  const [dataManageExams, setDataManageExams] = useState<any>([]);
+  const [dataManageExams, setDataManageExams] = useState<string[]>([]);
   const dataStudentExams = getResultExamDataStudent(idTeacher);
-  const isLocationPage = useLocationPage((func: any) => func.setLocationPage);
+  const isLocationPage = useLocationPage((func) => func.setLocationPage);
 
   useEffect(() => {
     isLocationPage(pathName);
