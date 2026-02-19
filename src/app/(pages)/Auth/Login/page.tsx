@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import LayoutFormAccount from "@/layout/formAccount";
-import Image from "next/image";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -24,42 +24,48 @@ export default function LoginAccount() {
 
   async function handleLogin(e: any) {
     e.preventDefault();
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          valueEmail: e.currentTarget.email.value,
+          valuePassword: e.currentTarget.password.value,
+          valueTypeAccount: valueTypeAccount,
+        }),
+      });
 
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        valueEmail: e.currentTarget.email.value,
-        valuePassword: e.currentTarget.password.value,
-        valueTypeAccount: valueTypeAccount,
-      }),
-    });
+      const dataLogin = await response.json();
 
-    const dataLogin = await response.json();
-
-    if (valueTypeAccount !== "") {
-      if (dataLogin.success) {
-        if (dataLogin.tipe === "siswa") {
-          push("/Student/Dashboard");
-          toast("Berhasil ✅", {
-            description: dataLogin.message,
-          });
+      if (valueTypeAccount !== "") {
+        if (dataLogin.success) {
+          if (dataLogin.tipe === "siswa") {
+            push("/Student/Dashboard");
+            toast("Berhasil ✅", {
+              description: dataLogin.message,
+            });
+          } else {
+            push("/Teacher/dashboard");
+            toast("Berhasil ✅", {
+              description: dataLogin.message,
+            });
+          }
         } else {
-          push("/Teacher/dashboard");
-          toast("Berhasil ✅", {
+          toast("Gagal ❌", {
             description: dataLogin.message,
           });
         }
-        setIsLoading(true);
       } else {
         toast("Gagal ❌", {
-          description: dataLogin.message,
+          description: "Jenis Akun Belum Dipilih",
         });
       }
-    } else {
-      toast("Gagal ❌", {
-        description: "Jenis Akun Belum Dipilih",
-      });
+    } catch (err) {
+      setIsLoading(false);
+      console.error("gagal login", err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -123,17 +129,7 @@ export default function LoginAccount() {
           type="submit"
           disabled={!isFormFilled()}
         >
-          {isLoading ? (
-            <Image
-              src="/img/autentikasi/icon_loading.png"
-              alt="Loading"
-              width={200}
-              height={200}
-              className="w-1/12 animate-spin"
-            />
-          ) : (
-            "Login"
-          )}
+          {isLoading ? <Loader2 className="animate-spin size-7" /> : "Login"}
         </button>
       </form>
     </LayoutFormAccount>

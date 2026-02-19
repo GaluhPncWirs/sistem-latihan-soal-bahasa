@@ -1,13 +1,12 @@
 "use client";
-
 import { useRandomId } from "@/app/hooks/getRandomId";
 import { useHandleInput } from "@/app/hooks/getHandleInput";
 import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 export default function RegisterAccount() {
   const [clearForm, setClearForm] = useState(false);
@@ -31,32 +30,40 @@ export default function RegisterAccount() {
       role: "pelajar",
       idStudent: useRandomId(7, "STD"),
     };
-    const { data, error }: any = await supabase
-      .from("account-student")
-      .select("email")
-      .eq("email", e.target.email.value);
-    if (data.length > 0) {
-      toast("Gagal ❌", {
-        description: "Nama Email Sudah Ada. Buat kembali Yang Berbeda",
-      });
-      setClearForm(true);
-    } else if (error) {
-      toast("Data Gagal Diload");
-    } else {
-      const { error }: any = await supabase
+    try {
+      setIsLoading(true);
+      const { data, error }: any = await supabase
         .from("account-student")
-        .insert(dataRegister);
-      if (error) {
+        .select("email")
+        .eq("email", e.target.email.value);
+      if (data.length > 0) {
         toast("Gagal ❌", {
-          description: "Gagal Membuat Akun",
+          description: "Nama Email Sudah Ada. Buat kembali Yang Berbeda",
         });
+        setClearForm(true);
+      } else if (error) {
+        toast("Data Gagal Diload");
       } else {
-        setIsLoading(true);
-        push("/Autentikasi/Login");
-        toast("Berhasil ✅", {
-          description: "Berhasil Membuat Akun Silahkan Kembali Ke Form Login",
-        });
+        const { error }: any = await supabase
+          .from("account-student")
+          .insert(dataRegister);
+        if (error) {
+          toast("Gagal ❌", {
+            description: "Gagal Membuat Akun",
+          });
+        } else {
+          setIsLoading(true);
+          push("/Autentikasi/Login");
+          toast("Berhasil ✅", {
+            description: "Berhasil Membuat Akun Silahkan Kembali Ke Form Login",
+          });
+        }
       }
+    } catch (err) {
+      setIsLoading(false);
+      console.error("gagal register", err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -147,17 +154,7 @@ export default function RegisterAccount() {
           type="submit"
           disabled={!isFormFilled()}
         >
-          {isLoading ? (
-            <Image
-              src="/img/autentikasi/icon_loading.png"
-              alt="Loading"
-              width={200}
-              height={200}
-              className="w-1/12 animate-spin"
-            />
-          ) : (
-            "Register"
-          )}
+          {isLoading ? <Loader2 className="animate-spin size-7" /> : "Register"}
         </button>
       </form>
     </LayoutFormAccount>

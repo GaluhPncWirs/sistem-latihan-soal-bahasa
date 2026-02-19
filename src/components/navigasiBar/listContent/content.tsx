@@ -4,7 +4,7 @@ export default function ListContent() {
   return (
     <>
       <Link
-        href="/"
+        href="/Introduction"
         className="cursor-pointer font-semibold hover:text-slate-600"
       >
         <span className="text-xl">Beranda</span>

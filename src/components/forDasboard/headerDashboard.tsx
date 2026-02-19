@@ -1,16 +1,16 @@
 import Image from "next/image";
 import HeaderDashboard from "../headerDashboard/content";
-import { useLocationPage } from "@/app/stateManagement/locationPage/state";
+import { useLocationPage } from "@/store/locationPage/state";
 
 export default function HeaderDasboard(props: any) {
   const { user, fullName, exams } = props;
   const locationPage = useLocationPage(
-    (state: any) => state.curentLocationPage
+    (state: any) => state.curentLocationPage,
   );
   function informExams() {
     if (locationPage === "/Student/Dashboard") {
       const filterSisaUjian = exams.filter(
-        (done: any) => done.status_exam !== true
+        (done: any) => done.status_exam !== true,
       );
       return (
         <HeaderDashboard
@@ -44,9 +44,9 @@ export default function HeaderDasboard(props: any) {
           alt="Img Profile"
           height={500}
           width={500}
-          className="rounded-full max-[640px]:w-32 sm:w-40"
+          className="rounded-full w-32 sm:w-40"
         />
-        <h1 className="text-3xl max-[640px]:text-2xl font-bold">
+        <h1 className="text-2xl font-bold sm:text-3xl">
           Halo Selamat Datang{" "}
           <span className="block capitalize mt-1.5">{fullName}</span>
         </h1>

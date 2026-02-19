@@ -2,7 +2,7 @@
 import { useRandomId } from "@/app/hooks/getRandomId";
 import { useHandleInput } from "@/app/hooks/getHandleInput";
 import { supabase } from "@/lib/supabase/data";
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ export default function RegisterAccountTeacher() {
       email: "",
       password: "",
     });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function handleCreateAccountTeacher(e: any) {
     e.preventDefault();
@@ -26,33 +27,42 @@ export default function RegisterAccountTeacher() {
       id_teacher: useRandomId(7, "TCR"),
     };
 
-    const { data, error } = await supabase
-      .from("account_teacher")
-      .select("email")
-      .eq("email", e.target.email.value);
-    if (error) {
-      toast("Gagal ❌", {
-        description: "Data Gagal Diload",
-      });
-    } else if (data.length > 0) {
-      setClearForm(true);
-      toast("Gagal ❌", {
-        description: "Nama Email Sudah Ada. Buat kembali Yang Berbeda",
-      });
-    } else {
-      const { error } = await supabase
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
         .from("account_teacher")
-        .insert(payloadDataRegiterAccountTeacher);
+        .select("email")
+        .eq("email", e.target.email.value);
       if (error) {
         toast("Gagal ❌", {
-          description: "Gagal Membuat Akun",
+          description: "Data Gagal Diload",
+        });
+      } else if (data.length > 0) {
+        setClearForm(true);
+        toast("Gagal ❌", {
+          description: "Nama Email Sudah Ada. Buat kembali Yang Berbeda",
         });
       } else {
-        toast("Berhasil ✅", {
-          description: "Berhasil Membuat Akun, Silahkan Kembali Ke Form Login",
-        });
-        setClearForm(true);
+        const { error } = await supabase
+          .from("account_teacher")
+          .insert(payloadDataRegiterAccountTeacher);
+        if (error) {
+          toast("Gagal ❌", {
+            description: "Gagal Membuat Akun",
+          });
+        } else {
+          toast("Berhasil ✅", {
+            description:
+              "Berhasil Membuat Akun, Silahkan Kembali Ke Form Login",
+          });
+          setClearForm(true);
+        }
       }
+    } catch (err) {
+      setIsLoading(false);
+      console.error("gagal register", err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -70,19 +80,19 @@ export default function RegisterAccountTeacher() {
     <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] h-screen flex justify-center items-center relative">
       <div className="absolute top-5 left-5">
         <Link
-          href="/Autentikasi/Login"
+          href="/Auth/Login"
           className="cursor-pointer bg-blue-300 py-2 pl-3 pr-5 flex justify-center items-center rounded-lg hover:bg-blue-400"
         >
           <ChevronLeftIcon />
           <span className="text-base">Kembali</span>
         </Link>
       </div>
-      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] rounded-xl shadow-xl shadow-slate-500 max-[640px]:w-10/12 sm:w-2/3 sm:py-5 md:w-1/2 lg:w-2/5 max-[640px]:py-5">
+      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] rounded-xl shadow-xl shadow-slate-500 py-5 w-10/12 sm:w-2/3 md:w-1/2 lg:w-2/5">
         <h1 className="text-3xl font-bold text-blue-500 text-center mb-5">
           Daftar Akun Guru
         </h1>
         <form
-          className="flex justify-center flex-col w-3/4 gap-3 mx-auto max-[640px]:gap-2"
+          className="flex justify-center flex-col w-3/4 gap-3 mx-auto"
           onSubmit={(e) => handleCreateAccountTeacher(e)}
         >
           <label
@@ -130,11 +140,15 @@ export default function RegisterAccountTeacher() {
           />
 
           <button
-            className="bg-blue-300 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
+            className="bg-blue-400 font-semibold rounded-md w-full py-2 mt-3 hover:bg-blue-500 hover:text-slate-200 disabled:cursor-not-allowed cursor-pointer flex justify-center text-lg"
             type="submit"
             disabled={!isFormFilled()}
           >
-            Register
+            {!isLoading ? (
+              <Loader2 className="animate-spin size-7" />
+            ) : (
+              "Register"
+            )}
           </button>
         </form>
       </div>

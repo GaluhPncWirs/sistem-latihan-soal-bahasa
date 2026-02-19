@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useConvertDate } from "../../hooks/getConvertDate";
+import { useConvertDate } from "../../../hooks/getConvertDate";
 import {
   Dialog,
   DialogClose,
@@ -33,9 +33,9 @@ import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { toast } from "sonner";
-import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
+import { useIdStudentStore } from "@/store/idStudent/state";
 import { useGetDataStudent } from "@/app/hooks/getDataStudent";
-import { useLocationPage } from "@/app/stateManagement/locationPage/state";
+import { useLocationPage } from "@/store/locationPage/state";
 
 export default function DashboardStudent() {
   const getIdStudent = useIdStudentStore((state) => state.idStudent);
@@ -56,7 +56,7 @@ export default function DashboardStudent() {
     (avg: any) =>
       avg.status_exam === true &&
       avg.hasil_ujian !== "pending" &&
-      avg.hasil_ujian !== "telat"
+      avg.hasil_ujian !== "telat",
   );
 
   const averageValue =
@@ -155,7 +155,7 @@ export default function DashboardStudent() {
     tenggat_waktu: string,
     nama_ujian: string,
     idUjian: number,
-    tgl_ujian: string
+    tgl_ujian: string,
   ) {
     const startAndEndExams = convertToNumber(tenggat_waktu);
 
@@ -226,7 +226,7 @@ export default function DashboardStudent() {
   function deadlineUjianTercepatHariIni() {
     const hariIni = toMinute(waktuDurasiIni);
     const isComingSoonExams = scheduleExams.filter(
-      (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni
+      (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni,
     );
     const validExams = isComingSoonExams.filter((exam: any) => {
       const filterScheduleExam = convertToNumber(exam.tenggat_waktu);
@@ -291,7 +291,7 @@ export default function DashboardStudent() {
                   <h1 className="text-lg">Ujian Terjadwal</h1>
                   <span className="text-xl">
                     {scheduleExams.filter(
-                      (done: any) => done.status_exam !== true
+                      (done: any) => done.status_exam !== true,
                     ).length || "0"}
                   </span>
                 </div>
@@ -310,7 +310,7 @@ export default function DashboardStudent() {
                 </div>
               </div>
               <div className="mt-10">
-                {deadlineUjianTercepatHariIni() !== null && (
+                {deadlineUjianTercepatHariIni() && (
                   <div>
                     <h1 className="text-2xl font-semibold mb-4">
                       Ujian Yang Waktu Tenggatnya Akan Habis
@@ -322,7 +322,7 @@ export default function DashboardStudent() {
                           alt="Notifikasi"
                           width={300}
                           height={300}
-                          className="w-[12%]"
+                          className="size-9"
                         />
                         <div>
                           <h1 className="text-xl font-semibold mb-1.5">
@@ -384,7 +384,7 @@ export default function DashboardStudent() {
                                   push(
                                     `/Student/Exams/StartExam?idExams=${
                                       deadlineUjianTercepatHariIni().idExams
-                                    }`
+                                    }`,
                                   )
                                 }
                                 className="cursor-pointer"
@@ -443,14 +443,14 @@ export default function DashboardStudent() {
                                 data.hasil_ujian !== "telat"
                                   ? "Selesai"
                                   : data.status_exam === true &&
-                                    data.hasil_ujian === "telat"
-                                  ? "Telat"
-                                  : getExamsStatusAndHandleLateExam(
-                                      data.tenggat_waktu,
-                                      data.exams.nama_ujian,
-                                      data.idExams,
-                                      data.dibuat_tgl
-                                    )}
+                                      data.hasil_ujian === "telat"
+                                    ? "Telat"
+                                    : getExamsStatusAndHandleLateExam(
+                                        data.tenggat_waktu,
+                                        data.exams.nama_ujian,
+                                        data.idExams,
+                                        data.dibuat_tgl,
+                                      )}
                               </TableCell>
                             </TableRow>
                           ))
@@ -530,7 +530,7 @@ export default function DashboardStudent() {
                                       day: "numeric",
                                       month: "long",
                                       year: "numeric",
-                                    }
+                                    },
                                   )}
                                 </TableCell>
                                 <TableCell>
@@ -549,7 +549,7 @@ export default function DashboardStudent() {
                                 item.tenggat_waktu,
                                 item.exams.nama_ujian,
                                 item.idExams,
-                                item.dibuat_tgl
+                                item.dibuat_tgl,
                               ) === "Ujian Telah Lewat Batas Waktu" ? (
                               <TableRow key={i}>
                                 <TableCell
@@ -568,7 +568,7 @@ export default function DashboardStudent() {
                                   Belum Ada Nilai
                                 </TableCell>
                               </TableRow>
-                            )
+                            ),
                           )
                         ) : (
                           <TableRow>

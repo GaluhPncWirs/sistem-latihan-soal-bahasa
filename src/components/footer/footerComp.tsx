@@ -16,7 +16,7 @@ export default function FooterComponent() {
         ></path>
       </svg>
 
-      <div className="max-[640px]:pt-36 sm:pt-44 md:pt-52 lg:pt-64 grid pb-10 w-10/12 gap-10 mx-auto max-[640px]:grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+      <div className="pt-36 sm:pt-44 md:pt-52 lg:pt-64 grid pb-10 w-10/12 gap-10 mx-auto grid-cols-1 md:grid-cols-2">
         <div>
           <Image
             src="/img/global/logo.png"

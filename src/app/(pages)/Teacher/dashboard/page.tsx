@@ -18,9 +18,9 @@ import { useEffect, useState } from "react";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import FloatingBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
 import { usePathname } from "next/navigation";
-import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
+import { useIdTeacherStore } from "@/store/idTeacher/state";
 import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
-import { useLocationPage } from "@/app/stateManagement/locationPage/state";
+import { useLocationPage } from "@/store/locationPage/state";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -73,7 +73,7 @@ export default function Teacher() {
   }
 
   const jumlahSiswa = new Set(
-    dataManageExams.flatMap((a: any) => a.lengthStudent)
+    dataManageExams.flatMap((a: any) => a.lengthStudent),
   );
 
   const averageValueExam = dataManageExams
@@ -97,7 +97,7 @@ export default function Teacher() {
         supabase
           .from("history-exam-student")
           .select(
-            "exam_id,student_id,kelas,hasil_ujian,status_exam,exams(idTeacher)"
+            "exam_id,student_id,kelas,hasil_ujian,status_exam,exams(idTeacher)",
           )
           .eq("exams.idTeacher", idTeacher),
         supabase.from("account-student").select("classes,idStudent"),
@@ -107,7 +107,7 @@ export default function Teacher() {
         console.log("data error ditampilkan");
       } else {
         const filterNull = isCompleteExam?.filter(
-          (isNull: any) => isNull.exams !== null
+          (isNull: any) => isNull.exams !== null,
         );
         const completeExams = filterNull.reduce((acc: any, cur: any) => {
           const found = acc.find((item: any) => item.kelas === cur.kelas);
@@ -128,7 +128,7 @@ export default function Teacher() {
 
         const totalStudent = lengthStudent.reduce((acc: any, cur: any) => {
           const foundClass = acc.find(
-            (item: any) => item.classes === cur.classes
+            (item: any) => item.classes === cur.classes,
           );
           if (!foundClass) {
             acc.push({
@@ -144,15 +144,15 @@ export default function Teacher() {
         const mergedData = datasManageExams?.map((item: any) => {
           const findsExams = completeExams.find(
             (f: any) =>
-              f.kelas === item.kelas && f.exam_id.includes(item.idExams)
+              f.kelas === item.kelas && f.exam_id.includes(item.idExams),
           );
 
           const studentCompleteExams = findsExams?.student_id.filter(
-            (_: any, i: number) => findsExams.exam_id[i] === item.idExams
+            (_: any, i: number) => findsExams.exam_id[i] === item.idExams,
           );
 
           const findStudent = totalStudent.find(
-            (f: any) => f.classes === item.kelas
+            (f: any) => f.classes === item.kelas,
           );
           return {
             ...item,

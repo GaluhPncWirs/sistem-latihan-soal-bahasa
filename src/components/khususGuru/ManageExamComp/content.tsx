@@ -33,7 +33,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SkeletonManageExams from "./skeleton";
-import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
+import { useIdTeacherStore } from "@/store/idTeacher/state";
 
 export default function ManageExamComponent() {
   const [viewQuestions, setViewQuestions] = useState<any>({});
@@ -98,7 +98,7 @@ export default function ManageExamComponent() {
           } else {
             return q;
           }
-        }
+        },
       );
       const { error } = await supabase
         .from("exams")
@@ -125,7 +125,7 @@ export default function ManageExamComponent() {
       .single();
 
     const updatedQuestions = data.questions_exam.filter(
-      (q: any) => q.id !== idQuestion
+      (q: any) => q.id !== idQuestion,
     );
 
     if (error) {
@@ -248,7 +248,7 @@ export default function ManageExamComponent() {
                                 onClick={() =>
                                   getDataBeforeUpdate(
                                     data.questions,
-                                    data.answerPg
+                                    data.answerPg,
                                   )
                                 }
                                 className="cursor-pointer hover:bg-blue-500 bg-blue-400"

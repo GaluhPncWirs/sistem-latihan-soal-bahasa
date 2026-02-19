@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { SoalUjian } from "@/types/halamanUjian";
 import SkeletonExam from "./skeleton";
-import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
+import { useIdStudentStore } from "@/store/idStudent/state";
 
 export default function ExamsComponent() {
   const router = useRouter();
@@ -62,7 +62,7 @@ export default function ExamsComponent() {
     async function getDataExams() {
       try {
         const request = await fetch(
-          `/api/getQuestions?idExams=${idExams}&idStudent=${getIdStudent}`
+          `/api/getQuestions?idExams=${idExams}&idStudent=${getIdStudent}`,
         );
         const response = await request.json();
         if (response.success) {
@@ -119,7 +119,7 @@ export default function ExamsComponent() {
       localStorage.setItem("markQuestions", JSON.stringify(markQuestions));
       localStorage.setItem(
         "exam-answer-essay",
-        JSON.stringify(answerEssayExams)
+        JSON.stringify(answerEssayExams),
       );
     }
   }, [
@@ -187,7 +187,7 @@ export default function ExamsComponent() {
   function handleAnswerEmpty() {
     const idSoalYangSudah = Object.keys(clickedAnswerPg);
     const dataUjian = dataUjianRandom.filter(
-      (data: any) => !idSoalYangSudah.includes(data.id)
+      (data: any) => !idSoalYangSudah.includes(data.id),
     );
     return dataUjian.length === 0;
   }
@@ -200,7 +200,7 @@ export default function ExamsComponent() {
     const resultExam = Math.round(
       (jawabanYangBenar.length /
         (questionsExam?.exams?.questions_exam?.length ?? 0)) *
-        100
+        100,
     );
 
     const payload = {

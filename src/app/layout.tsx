@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { Ubuntu, Open_Sans } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 
 const fontStyle = Open_Sans({
   subsets: ["latin"],

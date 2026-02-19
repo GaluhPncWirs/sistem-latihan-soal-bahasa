@@ -6,19 +6,19 @@ export default function LayoutFormAccount({ formTitle, children }: any) {
   const pathName = usePathname();
   return (
     <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] h-screen flex justify-center items-center flex-col">
-      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] rounded-xl shadow-xl shadow-slate-500 max-[640px]:w-10/12 sm:w-2/3 sm:py-5 md:w-lg max-[640px]:py-5">
+      <div className="to-[#A6E3E9] rounded-md shadow-xl shadow-slate-500 py-5 w-10/12 sm:w-2/3 md:w-lg">
         <h1 className="text-3xl font-bold text-blue-500 text-center mb-3">
           {formTitle}
         </h1>
         {children}
       </div>
       <div className="mt-7 text-lg">
-        {pathName === "/Autentikasi/Login" ? (
+        {pathName === "/Auth/Login" ? (
           <h1>
             <span>Belum Punya Akun ? </span>
             <Link
               className="font-semibold text-blue-700 hover:underline"
-              href="/Autentikasi/Daftar"
+              href="/Auth/Daftar"
             >
               Daftar
             </Link>
@@ -28,7 +28,7 @@ export default function LayoutFormAccount({ formTitle, children }: any) {
             <span>Sudah Punya Akun ? </span>
             <Link
               className="font-semibold text-blue-700 hover:underline"
-              href="/Autentikasi/Login"
+              href="/Auth/Login"
             >
               Login
             </Link>

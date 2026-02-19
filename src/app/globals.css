@@ -211,81 +211,105 @@ tbody > tr > td {
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;}
-  body {
-    @apply bg-background text-foreground;}}
+    @apply border-border outline-ring/50;
+  }
 
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities{
   .scrollBarDesign{
     @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-[#CBF1F5] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[#3282B8]
   }
 
+  .heroSectionImg{
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .heroSectionImg::before{
+    content: "";
+    inset: 0;
+    position: absolute;
+    background-image: url("/img/beranda/heroSectionUjian.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 40%;
+    transform: scale(1.1);
+  }
+
   /* hamburger menu */
-.menu span:nth-child(2){
-    transform-origin: 0 0;
-}
+  .menu span:nth-child(2){
+      transform-origin: 0 0;
+  }
 
-.menu span:nth-child(4){
-    transform-origin: 0 100%;
-}
+  .menu span:nth-child(4){
+      transform-origin: 0 100%;
+  }
 
-.menu input:checked ~ span:nth-child(2){
-    background-color: red;
-    transform: rotate(45deg);
-    translate: 1px 1px;
-}
+  .menu input:checked ~ span:nth-child(2){
+      background-color: red;
+      transform: rotate(45deg);
+      translate: 1px 1px;
+  }
 
-.menu input:checked ~ span:nth-child(4){
-    background-color: red;
-    transform: rotate(-45deg);
-    translate: -1px 1px;
-}
+  .menu input:checked ~ span:nth-child(4){
+      background-color: red;
+      transform: rotate(-45deg);
+      translate: -1px 1px;
+  }
 
-.menu input:checked ~ span:nth-child(3){
-    transform: scale(0);
-    opacity: 0;
-}
-/* hamburger menu end */
+  .menu input:checked ~ span:nth-child(3){
+      transform: scale(0);
+      opacity: 0;
+  }
+  /* hamburger menu end */
 
 
-.informExam input:checked ~ span:nth-child(2){
-   background-color: #e2e8f0;
-   transform: rotate(12deg);
-   translate: -7px 8px;
-   width: 17px;
-}
+  .informExam input:checked ~ span:nth-child(2){
+    background-color: #e2e8f0;
+    transform: rotate(12deg);
+    translate: -7px 8px;
+    width: 17px;
+  }
 
-.informExam input:checked ~ span:nth-child(3){
-   background-color: #e2e8f0;
-   transform: rotate(-12deg);
-   translate: 4px -4px;
-}
+  .informExam input:checked ~ span:nth-child(3){
+    background-color: #e2e8f0;
+    transform: rotate(-12deg);
+    translate: 4px -4px;
+  }
 
-/* Hilangkan icon di Chrome, Safari, Edge */
-input[type="time"]::-webkit-calendar-picker-indicator {
-  /* display: none;
-  -webkit-appearance: none; */
-  margin-left: 3px;
-  padding: 0px;
-}
+  /* Hilangkan icon di Chrome, Safari, Edge */
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    /* display: none;
+    -webkit-appearance: none; */
+    margin-left: 3px;
+    padding: 0px;
+  }
 
-/* Hilangkan spinner (panah atas bawah) di Chrome, Safari, Edge */
-input[type="time"]::-webkit-inner-spin-button,
-input[type="time"]::-webkit-clear-button {
-  /* display: none;
-  -webkit-appearance: none; */
-  margin: 0px;
-  padding: 0px;
-}
+  /* Hilangkan spinner (panah atas bawah) di Chrome, Safari, Edge */
+  input[type="time"]::-webkit-inner-spin-button,
+  input[type="time"]::-webkit-clear-button {
+    /* display: none;
+    -webkit-appearance: none; */
+    margin: 0px;
+    padding: 0px;
+  }
 
-/* Untuk Firefox */
-input[type="time"] {
-  -moz-appearance: textfield;
-}
+  /* Untuk Firefox */
+  input[type="time"] {
+    -moz-appearance: textfield;
+  }
 
-.no-select {
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none;    /* Firefox */
-  -ms-user-select: none;     /* IE10+/Edge */
-  user-select: none;         /* Standard */
-  -webkit-touch-callout: none; /* iOS Safari */
+  .no-select {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+/Edge */
+    user-select: none;         /* Standard */
+    -webkit-touch-callout: none; /* iOS Safari */
+  }
 }

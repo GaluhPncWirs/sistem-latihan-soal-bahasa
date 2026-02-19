@@ -1,6 +1,6 @@
 import { useVerifyToken } from "@/app/hooks/getVerifyToken";
-import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
-import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
+import { useIdStudentStore } from "@/store/idStudent/state";
+import { useIdTeacherStore } from "@/store/idTeacher/state";
 import ListSidebar from "@/components/sidebar/listSidebar/content";
 import React, { useEffect } from "react";
 
@@ -12,9 +12,6 @@ export default function LayoutBodyContent({
   const fetchIdTeacher = useIdTeacherStore((func) => func.fetchIdTeacher);
   useEffect(() => {
     fetchIdStudent();
-  }, []);
-
-  useEffect(() => {
     fetchIdTeacher();
   }, []);
 

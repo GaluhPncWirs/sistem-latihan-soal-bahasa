@@ -1,7 +1,7 @@
 "use client";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
-import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
-import { useLocationPage } from "@/app/stateManagement/locationPage/state";
+import { useIdTeacherStore } from "@/store/idTeacher/state";
+import { useLocationPage } from "@/store/locationPage/state";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import { Button } from "@/components/ui/button";
 import {
@@ -61,7 +61,7 @@ export default function TeacherProfile() {
         supabase
           .from("history-exam-student")
           .select(
-            "exam_id,hasil_ujian,student_id,kelas,exams(nama_ujian,tipeUjian,idTeacher)"
+            "exam_id,hasil_ujian,student_id,kelas,exams(nama_ujian,tipeUjian,idTeacher)",
           )
           .eq("exams.idTeacher", idTeacher),
       ]);
@@ -73,13 +73,13 @@ export default function TeacherProfile() {
       }
 
       const fillterNotNull = dataHistoryExams.filter(
-        (data: any) => data.exams !== null
+        (data: any) => data.exams !== null,
       );
 
       const result = fillterNotNull?.reduce((acc: any, cur: any) => {
         const found = acc.find(
           (item: any) =>
-            item.kelas === cur.kelas && item.exam_id === cur.exam_id
+            item.kelas === cur.kelas && item.exam_id === cur.exam_id,
         );
         if (!found) {
           acc.push({
@@ -99,7 +99,7 @@ export default function TeacherProfile() {
 
       const mergedData = result?.map((item: any) => {
         const findDetail = dataManageExams.find(
-          (f: any) => f.kelas === item.kelas && f.idExams === item.exam_id
+          (f: any) => f.kelas === item.kelas && f.idExams === item.exam_id,
         );
         return {
           ...item,
@@ -122,7 +122,7 @@ export default function TeacherProfile() {
       "password",
     ];
     const payloadString = fieldNames.map(
-      (id: any) => event.target[id].value || ""
+      (id: any) => event.target[id].value || "",
     );
     const payload = fieldNames.reduce((acc: any, key: any, i: number) => {
       const val = payloadString[i];
@@ -164,7 +164,7 @@ export default function TeacherProfile() {
       nilaiUjian.length > 0
         ? Math.round(
             nilaiUjian.reduce((acc: any, cur: any) => acc + cur, 0) /
-              nilaiUjian.length
+              nilaiUjian.length,
           )
         : 0;
 

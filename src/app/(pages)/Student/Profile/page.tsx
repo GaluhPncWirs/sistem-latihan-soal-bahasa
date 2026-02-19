@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
-import { useConvertDate } from "../../hooks/getConvertDate";
+import { useConvertDate } from "../../../hooks/getConvertDate";
 import {
   Dialog,
   DialogClose,
@@ -28,10 +28,10 @@ import { toast } from "sonner";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { usePathname } from "next/navigation";
-import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
+import { useIdStudentStore } from "@/store/idStudent/state";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { useGetDataStudent } from "@/app/hooks/getDataStudent";
-import { useLocationPage } from "@/app/stateManagement/locationPage/state";
+import { useLocationPage } from "@/store/locationPage/state";
 
 export default function Profil() {
   const getIdStudent = useIdStudentStore((state) => state.idStudent);
@@ -83,7 +83,7 @@ export default function Profil() {
         });
       } else {
         const studentItem = classes.resultExam.find(
-          (item: any) => item.student_id === cur.student_id
+          (item: any) => item.student_id === cur.student_id,
         );
         if (!studentItem) {
           classes.resultExam.push({
@@ -105,13 +105,13 @@ export default function Profil() {
             ...item,
             pointExams: item.pointExams.reduce(
               (acc: any, cur: any) => acc + cur,
-              0
+              0,
             ),
           };
         }) ?? [];
 
     const sortRanking = calculateTotalEveryScoreExams.sort(
-      (low: any, high: any) => high.pointExams - low.pointExams
+      (low: any, high: any) => high.pointExams - low.pointExams,
     );
 
     let lastScore: number | null = null;
@@ -129,7 +129,7 @@ export default function Profil() {
     });
 
     const resultChooseRanking = addRanking?.filter(
-      (fil: any) => fil.student_id === getIdStudent
+      (fil: any) => fil.student_id === getIdStudent,
     );
 
     return {
@@ -142,7 +142,7 @@ export default function Profil() {
     event.preventDefault();
     const idInputPayload = ["email", "password"];
     const payloadUser = idInputPayload.map(
-      (id: any) => event.target[id].value || ""
+      (id: any) => event.target[id].value || "",
     );
 
     const resultPayload = idInputPayload.reduce(
@@ -153,7 +153,7 @@ export default function Profil() {
         }
         return acc;
       },
-      {}
+      {},
     );
 
     const { error } = await supabase

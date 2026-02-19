@@ -1,6 +1,6 @@
 import { useHandleLogout } from "@/app/hooks/getHandleLogout";
-import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
-import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
+import { useIdStudentStore } from "@/store/idStudent/state";
+import { useIdTeacherStore } from "@/store/idTeacher/state";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -48,13 +48,13 @@ export default function ButtonAutentications() {
       ) : (
         <>
           <Link
-            href="/Autentikasi/Daftar"
+            href="/Auth/Daftar"
             className="bg-blue-400 hover:bg-blue-500 hover:text-slate-200 py-1.5 px-5 rounded-lg cursor-pointer font-semibold text-lg"
           >
             Daftar
           </Link>
           <Link
-            href="/Autentikasi/Login"
+            href="/Auth/Login"
             className="border-2 border-slate-700 hover:opacity-70 py-1.5 px-5 rounded-lg cursor-pointer font-semibold text-lg"
           >
             Login

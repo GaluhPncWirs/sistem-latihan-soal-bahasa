@@ -9,7 +9,7 @@ export function useHandleLogout() {
       credentials: "include",
     });
     const messageRespons = await responseDelCookies.json();
-    push("/Autentikasi/Login");
+    push("/Auth/Login");
     toast("Berhasil ✅", { description: messageRespons.message });
   }
 

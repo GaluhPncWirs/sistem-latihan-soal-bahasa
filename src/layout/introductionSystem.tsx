@@ -1,6 +1,6 @@
 "use client";
-import { useIdStudentStore } from "@/app/stateManagement/idStudent/state";
-import { useIdTeacherStore } from "@/app/stateManagement/idTeacher/state";
+import { useIdStudentStore } from "@/store/idStudent/state";
+import { useIdTeacherStore } from "@/store/idTeacher/state";
 import FooterComponent from "@/components/footer/footerComp";
 import NavigasiBar from "@/components/navigasiBar/navbar";
 import { useEffect } from "react";
