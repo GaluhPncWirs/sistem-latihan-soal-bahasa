@@ -1,5 +1,4 @@
 "use client";
-import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
 import CreateNewQuestions from "@/components/khususGuru/buatSoal/createQuestions";
 import ViewQuestions from "@/components/khususGuru/hasilPertanyaan/pertanyaan";
 import ManageStudent from "@/components/khususGuru/kelolaSiswa/manageStudent";
@@ -18,9 +17,10 @@ import { useEffect, useState } from "react";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import FloatingBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
 import { usePathname } from "next/navigation";
-import { useIdTeacherStore } from "@/store/idTeacher/state";
 import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
 import { useLocationPage } from "@/store/locationPage/state";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -30,10 +30,10 @@ export default function Teacher() {
     manageStudent: false,
   });
   const pathName = usePathname();
-  const idTeacher = useIdTeacherStore((state) => state.idTeacher);
-  const dataUserTeacher = useGetDataTeacher(idTeacher);
+  const getidTeacher = useGetIdUsers((state) => state.idUsers);
+  const dataUserTeacher = useGetDataUsers((state) => state.dataUsers);
   const [dataManageExams, setDataManageExams] = useState<string[]>([]);
-  const dataStudentExams = getResultExamDataStudent(idTeacher);
+  const dataStudentExams = getResultExamDataStudent(getidTeacher);
   const isLocationPage = useLocationPage((func) => func.setLocationPage);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function Teacher() {
     .reduce((acc: any, cur: any) => acc + cur, 0);
 
   useEffect(() => {
-    if (!idTeacher) return;
+    if (!getidTeacher) return;
     async function getDataManageExams() {
       const [
         { data: datasManageExams, error: errorDatasManageExams },
@@ -93,13 +93,13 @@ export default function Teacher() {
         supabase
           .from("managed_exams")
           .select("*, exams(nama_ujian)")
-          .eq("id_Teacher", idTeacher),
+          .eq("id_Teacher", getidTeacher),
         supabase
           .from("history-exam-student")
           .select(
             "exam_id,student_id,kelas,hasil_ujian,status_exam,exams(idTeacher)",
           )
-          .eq("exams.idTeacher", idTeacher),
+          .eq("exams.idTeacher", getidTeacher),
         supabase.from("account-student").select("classes,idStudent"),
       ]);
 
@@ -165,7 +165,7 @@ export default function Teacher() {
       }
     }
     getDataManageExams();
-  }, [idTeacher]);
+  }, [getidTeacher]);
 
   return (
     <LayoutBodyContent>
@@ -173,7 +173,7 @@ export default function Teacher() {
         <div>
           <HeaderDasboard
             user="Pengajar"
-            fullName={dataUserTeacher.fullName}
+            fullName={dataUserTeacher?.fullName}
             exams={dataStudentExams}
           />
           <div className="mt-5">
@@ -189,7 +189,7 @@ export default function Teacher() {
                   height={200}
                   className="mx-auto size-10"
                 />
-                <span className="text-4xl font-bold block py-2 max-[640px]:text-3xl">
+                <span className="text-3xl font-bold block py-2 sm:text-4xl">
                   {dataManageExams.length || "0"}
                 </span>
                 <h1 className="font-semibold">Ujian Dibuat</h1>
@@ -202,7 +202,7 @@ export default function Teacher() {
                   height={200}
                   className="mx-auto size-10"
                 />
-                <span className="text-4xl font-bold block my-1.5 max-[640px]:text-3xl">
+                <span className="text-3xl font-bold block my-1.5 sm:text-4xl">
                   {jumlahSiswa.size || "0"}
                 </span>
                 <h1 className="font-semibold">Jumlah Siswa</h1>
@@ -215,7 +215,7 @@ export default function Teacher() {
                   height={200}
                   className="mx-auto size-10"
                 />
-                <span className="text-4xl font-bold block my-2 max-[640px]:text-3xl">
+                <span className="text-3xl font-bold block my-2 sm:text-4xl">
                   {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
                 </span>
                 <h1 className="font-semibold">Nilai Rata-Rata</h1>
@@ -278,11 +278,11 @@ export default function Teacher() {
                   </Table>
                 </div>
               ) : dashboardButton.createQuestions === true ? (
-                <CreateNewQuestions idTeacher={idTeacher} />
+                <CreateNewQuestions idTeacher={getidTeacher} />
               ) : dashboardButton.viewResult === true ? (
-                <ViewQuestions idTeacher={idTeacher} />
+                <ViewQuestions idTeacher={getidTeacher} />
               ) : dashboardButton.manageStudent === true ? (
-                <ManageStudent idTeacher={idTeacher} />
+                <ManageStudent idTeacher={getidTeacher} />
               ) : null}
             </div>
           </div>

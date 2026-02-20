@@ -28,14 +28,14 @@ import { toast } from "sonner";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { usePathname } from "next/navigation";
-import { useIdStudentStore } from "@/store/idStudent/state";
 import { useDataExams } from "@/app/hooks/getDataExams";
-import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 import { useLocationPage } from "@/store/locationPage/state";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 
 export default function Profil() {
-  const getIdStudent = useIdStudentStore((state) => state.idStudent);
-  const dataStudent = useGetDataStudent(getIdStudent);
+  const getIdStudent = useGetIdUsers((state) => state.idUsers);
+  const dataStudent = useGetDataUsers((state) => state.dataUsers);
   const getHistoryStudent = useDataExams(dataStudent, getIdStudent);
   const [resultExamPerClass, setResultExamPerClass] = useState<any>([]);
   const pathName = usePathname();

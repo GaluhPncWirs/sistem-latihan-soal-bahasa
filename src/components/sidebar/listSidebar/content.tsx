@@ -1,5 +1,4 @@
 import { useHandleLogout } from "@/app/hooks/getHandleLogout";
-import { useIdStudentStore } from "@/store/idStudent/state";
 import { useLocationPage } from "@/store/locationPage/state";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,13 +13,13 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import Link from "next/link";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function ListSidebar() {
-  const getIdStudent = useIdStudentStore((state: any) => state.idStudent);
+  const getIdUsers = useGetIdUsers((state) => state.role);
   const isLocationPage = useLocationPage(
     (state: any) => state.curentLocationPage,
   );
-  const logout = useHandleLogout();
   return (
     <>
       <div className="bg-slate-200 rounded-md w-52 mx-auto flex items-center shadow-lg shadow-slate-700 md:w-10/12 p-2">
@@ -28,7 +27,13 @@ export default function ListSidebar() {
       </div>
       <div className="flex flex-col justify-evenly h-96">
         <Link
-          href={getIdStudent ? "/Student/Dashboard" : "/Teacher/dashboard"}
+          href={
+            getIdUsers.includes("pelajar")
+              ? "/Student/Dashboard"
+              : getIdUsers.includes("pengajar")
+                ? "/Teacher/dashboard"
+                : "/"
+          }
           className="cursor-pointer flex items-center gap-x-3"
         >
           <Image
@@ -46,13 +51,19 @@ export default function ListSidebar() {
           <span className="text-slate-200">Dashboard</span>
         </Link>
         <Link
-          href={getIdStudent ? "/Student/Profile" : "/Teacher/Profil"}
+          href={
+            getIdUsers.includes("pelajar")
+              ? "/Student/Profile"
+              : getIdUsers.includes("pengajar")
+                ? "/Teacher/Profile"
+                : "/"
+          }
           className="cursor-pointer flex items-center gap-x-3"
         >
           <Image
             src={`/img/global/${
               isLocationPage === "/Student/Profile" ||
-              isLocationPage === "/Teacher/Profil"
+              isLocationPage === "/Teacher/Profile"
                 ? "user-full"
                 : "user-outline"
             }.png`}
@@ -98,7 +109,7 @@ export default function ListSidebar() {
                   <Button variant="secondary">Batal</Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button onClick={logout}>Oke</Button>
+                  <Button onClick={useHandleLogout()}>Oke</Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>

@@ -32,7 +32,7 @@ export default function CorrectionEssayComponent() {
       const { data, error } = await supabase
         .from("history-exam-student")
         .select(
-          "student_id,exam_id,answer_student,exams(questions_exam,nama_ujian)"
+          "student_id,exam_id,answer_student,exams(questions_exam,nama_ujian)",
         )
         .eq("exam_id", Number(searchParamsId))
         .eq("student_id", searchParamsIdStudent)
@@ -61,10 +61,10 @@ export default function CorrectionEssayComponent() {
     const totalMaxNilai = toNumberValue.reduce((sum: any) => sum + 100, 0);
     const resultAssesment = toNumberValue.reduce(
       (sum: any, q: any) => sum + q,
-      0
+      0,
     );
     setFinalResultAssesment(
-      Math.round((resultAssesment / totalMaxNilai) * 100)
+      Math.round((resultAssesment / totalMaxNilai) * 100),
     );
   }
 
@@ -101,10 +101,10 @@ export default function CorrectionEssayComponent() {
             {viewQuestionsExams.exams?.questions_exam?.map(
               (item: any, i: number) => (
                 <div
-                  className="mt-5 rounded-lg p-5 mr-3 max-[640px]:w-full sm:w-full md:w-auto flex max-[640px]:gap-5 sm:gap-5 md:gap-10 items-center max-[640px]:flex-col sm:flex-col md:flex-row"
+                  className="mt-5 rounded-lg p-5 mr-3 w-full flex flex-col gap-5 md:w-auto md:gap-10 items-center md:flex-row"
                   key={i}
                 >
-                  <div className="max-[640px]:w-full sm:w-11/12 md:basis-1/2 lg:basis-2/3">
+                  <div className="w-full sm:w-11/12 md:basis-1/2 lg:basis-2/3">
                     <h1 className="text-xl font-semibold">
                       <span className="mr-0.5">{i + 1}.</span> {item.questions}
                     </h1>
@@ -122,7 +122,7 @@ export default function CorrectionEssayComponent() {
                     </div>
                   </div>
 
-                  <div className="max-[640px]:w-full sm:w-11/12 md:basis-1/2 lg:basis-2/5">
+                  <div className="w-full sm:w-11/12 md:basis-1/2 lg:basis-2/5">
                     <h1 className="text-lg font-semibold">Beri Penilaian</h1>
                     <div className="flex justify-evenly items-center my-3 gap-2 bg-slate-200 rounded-md p-1.5">
                       <div className="flex flex-col items-center">
@@ -203,7 +203,7 @@ export default function CorrectionEssayComponent() {
                     </div>
                   </div>
                 </div>
-              )
+              ),
             )}
             <div className="flex justify-between mt-7">
               <Dialog>
@@ -234,7 +234,7 @@ export default function CorrectionEssayComponent() {
                         onClick={() =>
                           giveAssesment(
                             viewQuestionsExams.exam_id,
-                            searchParamsIdStudent
+                            searchParamsIdStudent,
                           )
                         }
                       >

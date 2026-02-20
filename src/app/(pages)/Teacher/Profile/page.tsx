@@ -1,6 +1,5 @@
 "use client";
 import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
-import { useIdTeacherStore } from "@/store/idTeacher/state";
 import { useLocationPage } from "@/store/locationPage/state";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import { Button } from "@/components/ui/button";
@@ -35,11 +34,13 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 
 export default function TeacherProfile() {
-  const idTeacher = useIdTeacherStore((state) => state.idTeacher);
+  const getidTeacher = useGetIdUsers((state) => state.idUsers);
   const [getHistoryExams, setGetHistoryExams] = useState<string[]>([]);
-  const getProfileTeacher = useGetDataTeacher(idTeacher);
+  const getProfileTeacher = useGetDataUsers((state) => state.dataUsers);
   const pathName = usePathname();
   const isLocationPage = useLocationPage((func) => func.setLocationPage);
 
@@ -48,7 +49,7 @@ export default function TeacherProfile() {
   }, [pathName]);
 
   useEffect(() => {
-    if (!idTeacher) return;
+    if (!getidTeacher) return;
     async function historyExams() {
       const [
         { data: dataManageExams, error: errorDataManageExams },
@@ -57,13 +58,13 @@ export default function TeacherProfile() {
         supabase
           .from("managed_exams")
           .select("kelas,dibuat_tgl,id_Teacher,idExams")
-          .eq("id_Teacher", idTeacher),
+          .eq("id_Teacher", getidTeacher),
         supabase
           .from("history-exam-student")
           .select(
             "exam_id,hasil_ujian,student_id,kelas,exams(nama_ujian,tipeUjian,idTeacher)",
           )
-          .eq("exams.idTeacher", idTeacher),
+          .eq("exams.idTeacher", getidTeacher),
       ]);
 
       if (errorDataManageExams || errorDataHistoryExams) {
@@ -110,7 +111,7 @@ export default function TeacherProfile() {
       setGetHistoryExams(mergedData);
     }
     historyExams();
-  }, [idTeacher]);
+  }, [getidTeacher]);
 
   async function handleEditProfileTeacher(event: any) {
     event.preventDefault();
@@ -135,7 +136,7 @@ export default function TeacherProfile() {
     const { error } = await supabase
       .from("account_teacher")
       .update(payload)
-      .eq("id_teacher", idTeacher);
+      .eq("id_teacher", getidTeacher);
 
     if (error) {
       toast("Gagal ❌", {
@@ -364,7 +365,7 @@ export default function TeacherProfile() {
           <div className="w-1/3 h-10 bg-slate-500 animate-pulse rounded-md"></div>
           <div className="h-1 bg-slate-500 animate-pulse rounded-md my-3" />
           <div className="mt-7">
-            <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
+            <div className="flex justify-center items-center gap-7 mb-10 flex-col sm:flex-row sm:mb-5">
               <div className="w-28 h-28 rounded-full bg-slate-500 animate-pulse"></div>
 
               <div className="w-2/3">

@@ -1,18 +1,13 @@
 "use client";
-import { useIdStudentStore } from "@/store/idStudent/state";
-import { useIdTeacherStore } from "@/store/idTeacher/state";
 import FooterComponent from "@/components/footer/footerComp";
 import NavigasiBar from "@/components/navigasiBar/navbar";
 import { useEffect } from "react";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function LayoutIntroductionsSystem({ children }: any) {
-  const fetchIdStudent = useIdStudentStore((func: any) => func.fetchIdStudent);
-  const fetchIdTeacher = useIdTeacherStore((func: any) => func.fetchIdTeacher);
+  const getidUsers = useGetIdUsers((state) => state.setHandleGetIdUsers);
   useEffect(() => {
-    fetchIdStudent();
-  }, []);
-  useEffect(() => {
-    fetchIdTeacher();
+    getidUsers();
   }, []);
   return (
     <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">

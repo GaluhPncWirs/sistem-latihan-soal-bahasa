@@ -84,7 +84,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
   function isFormFilled() {
     if (chooseTypeExams === "pg") {
       const isArray = Object.values(chooseInputObject).filter(
-        (val: any) => typeof val === "string" && val !== null
+        (val: any) => typeof val === "string" && val !== null,
       );
       const isObject: string[] = Object.values(chooseInputObject.answer || {});
       const resultData = isArray.concat(isObject);
@@ -322,7 +322,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
                             >
                               {nameExam.nama_ujian || "Nama Ujian"}
                             </SelectItem>
-                          )
+                          ),
                       )
                     : dataNameExam.map(
                         (nameExam: any, i: number) =>
@@ -333,13 +333,13 @@ export default function CreateNewQuestions({ idTeacher }: any) {
                             >
                               {nameExam.nama_ujian || "Nama Ujian"}
                             </SelectItem>
-                          )
+                          ),
                       )}
                 </SelectContent>
               </Select>
             </div>
           </div>
-          <div className="w-3/4 max-[640px]:w-full">
+          <div className="w-full sm:w-3/4">
             {selectedValueNameExam === "buatUjianBaru" && (
               <>
                 <label
@@ -385,10 +385,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
                   {["a", "b", "c", "d", "e"].map((option: any) => {
                     const answerKey: any = `answer_${option}`;
                     return (
-                      <div
-                        key={`answer-option-${option}`}
-                        className="max-[640px]:w-2/3"
-                      >
+                      <div key={`answer-option-${option}`}>
                         <label
                           htmlFor={answerKey}
                           className="text-base font-semibold inline-block mb-2"
@@ -398,7 +395,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
                         <Input
                           id={answerKey}
                           type="text"
-                          className="border border-black rounded-sm p-1 px-2 max-[640px]:w-full"
+                          className="border border-black rounded-sm p-1 px-2 w-full sm:w-fit"
                           value={answer[answerKey]}
                           onChange={(e) => {
                             handleValueInput(e);
@@ -415,7 +412,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
                   Jawaban Yang Benar
                 </h1>
                 <Select onValueChange={(val) => setSelectCorrectAnswer(val)}>
-                  <SelectTrigger className="w-1/2 border border-black max-[640px]:w-full">
+                  <SelectTrigger className="border border-black w-full sm:w-1/2">
                     <SelectValue placeholder="Pilih Jawaban Yang Benar" />
                   </SelectTrigger>
                   <SelectContent>
@@ -454,7 +451,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
               </DialogDescription>
               {chooseTypeExams === "pg" && (
                 <>
-                  <div className="my-2 flex flex-col gap-y-2 ">
+                  <div className="my-2 flex flex-col gap-y-2">
                     <DialogDescription>
                       Jawaban A{" "}
                       <span className="font-bold"> : "{answer.answer_a}"</span>

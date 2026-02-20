@@ -4,7 +4,7 @@ export function useHandleClickedHamburgerMenu() {
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const [isTrue, setIsTrue] = useState<boolean>(false);
   const clickOutsideHamburgerMenu = useRef<HTMLInputElement | null>(null);
-  const clickOutsidePath = useRef<any>(null);
+  const clickOutsidePath = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function handleClickOutsideNavbar(event: any) {

@@ -33,13 +33,13 @@ import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { toast } from "sonner";
-import { useIdStudentStore } from "@/store/idStudent/state";
-import { useGetDataStudent } from "@/app/hooks/getDataStudent";
 import { useLocationPage } from "@/store/locationPage/state";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 
 export default function DashboardStudent() {
-  const getIdStudent = useIdStudentStore((state) => state.idStudent);
-  const dataStudent = useGetDataStudent(getIdStudent);
+  const getIdStudent = useGetIdUsers((state) => state.idUsers);
+  const dataStudent = useGetDataUsers((state) => state.dataUsers);
   const scheduleExams = useDataExams(dataStudent, getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());

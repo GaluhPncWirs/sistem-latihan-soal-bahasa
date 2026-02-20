@@ -23,7 +23,7 @@ export default function ResultExamComponent() {
     getDataAnswer();
   }, [paramIdExam]);
 
-  function correctAnswer(questionsId: any, pg: any) {
+  function correctAnswer(questionsId: string, pg: string) {
     if (!getDataStudentAnswer) return null;
     const answerStudentObj = getDataStudentAnswer?.answer_student;
     const studentAnswer = answerStudentObj[questionsId];
@@ -41,7 +41,7 @@ export default function ResultExamComponent() {
           </h2>
           <div className="mt-5 mb-10">
             {getDataStudentAnswer.exams?.tipeUjian === "pg" ? (
-              <div className="grid gap-5 max-[640px]:grid-cols-1 sm:grid-cols-1 lg:grid-cols-2">
+              <div className="grid gap-5 grid-cols-1 lg:grid-cols-2">
                 {getDataStudentAnswer.exams?.questions_exam.map(
                   (item: any, i: number) => (
                     <div className="p-5" key={item.id}>
@@ -57,7 +57,7 @@ export default function ResultExamComponent() {
                               key={opt}
                               className={`w-fit px-3 ${correctAnswer(
                                 item.id,
-                                answerText
+                                answerText,
                               )}`}
                             >
                               {opt.toUpperCase()}. {answerText}
@@ -66,11 +66,11 @@ export default function ResultExamComponent() {
                         })}
                       </ul>
                     </div>
-                  )
+                  ),
                 )}
               </div>
             ) : (
-              <div className="grid lg:grid-cols-2 gap-3 max-[640px]:grid-cols-1 sm:grid-cols-1">
+              <div className="grid gap-3 grid-cols-1 lg:grid-cols-2">
                 {getDataStudentAnswer.exams?.questions_exam.map(
                   (item: any, i: number) => (
                     <div className="p-5" key={i}>
@@ -91,7 +91,7 @@ export default function ResultExamComponent() {
                         />
                       </div>
                     </div>
-                  )
+                  ),
                 )}
               </div>
             )}

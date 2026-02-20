@@ -12,12 +12,10 @@ import LayoutIntroductionsSystem from "@/layout/introductionSystem";
 import { useEffect, useState } from "react";
 import CompFiturUnggulan from "@/components/beranda/fiturUnggulan/content";
 import CompAlurUjian from "@/components/beranda/alurUjian/content";
-import { useIdStudentStore } from "../../../store/idStudent/state";
-import { useIdTeacherStore } from "../../../store/idTeacher/state";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function Introduction() {
-  const isLoginStudent = useIdStudentStore((state: any) => state.idStudent);
-  const isLoginTeacher = useIdTeacherStore((state: any) => state.idTeacher);
+  const getidUsers = useGetIdUsers((state) => state.role);
   const [isSizeMobile, setIsSizeMobile] = useState(false);
 
   useEffect(() => {
@@ -44,9 +42,9 @@ export default function Introduction() {
             </p>
             <Link
               href={
-                isLoginStudent
+                getidUsers.includes("pelajar")
                   ? "/Student/Dashboard"
-                  : isLoginTeacher
+                  : getidUsers.includes("pengajar")
                     ? "/Teacher/dashboard"
                     : "/Autentikasi/Login"
               }

@@ -33,7 +33,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SkeletonManageExams from "./skeleton";
-import { useIdTeacherStore } from "@/store/idTeacher/state";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function ManageExamComponent() {
   const [viewQuestions, setViewQuestions] = useState<any>({});
@@ -49,16 +49,16 @@ export default function ManageExamComponent() {
   const [updateQuestion, setUpdateQuestion] = useState<string>("");
   const searchParams = useSearchParams();
   const getParamId = searchParams.get("id");
-  const idTeacher = useIdTeacherStore((state: any) => state.idTeacher);
+  const getidTeacher = useGetIdUsers((state) => state.idUsers);
 
   useEffect(() => {
-    if (!idTeacher) return;
+    if (!getidTeacher) return;
     async function handleViewQuestions() {
       const { data, error } = await supabase
         .from("exams")
         .select("*")
         .eq("id", Number(getParamId))
-        .eq("idTeacher", idTeacher)
+        .eq("idTeacher", getidTeacher)
         .single();
 
       if (error) {
@@ -69,7 +69,7 @@ export default function ManageExamComponent() {
       setViewQuestions(data);
     }
     handleViewQuestions();
-  }, [idTeacher]);
+  }, [getidTeacher]);
 
   async function handleUpdateQuestions(idQuestion: string) {
     const { data: examData, error: fetchError }: any = await supabase
@@ -263,7 +263,7 @@ export default function ManageExamComponent() {
                                   Input Dibawah ini Untuk Mengedit Soal
                                 </DialogDescription>
                               </DialogHeader>
-                              <div className="grid gap-2 max-[640px]:gap-1">
+                              <div className="grid gap-2">
                                 <div>
                                   <label htmlFor="questions">
                                     Edit Pertanyaan
@@ -280,7 +280,7 @@ export default function ManageExamComponent() {
 
                                 <div className="mt-2">
                                   <h1 className="mb-2">Edit Jawaban</h1>
-                                  <div className="grid grid-cols-2 gap-3 max-[640px]:gap-5 max-[640px]:grid-cols-3">
+                                  <div className="grid grid-cols-3 gap-5 sm:gap-5 sm:grid-cols-3">
                                     <div>
                                       <label
                                         htmlFor="answer_a"
@@ -485,7 +485,7 @@ export default function ManageExamComponent() {
                                   Input Dibawah ini Untuk Mengedit Soal Essay
                                 </DialogDescription>
                               </DialogHeader>
-                              <div className="grid gap-2 max-[640px]:gap-1">
+                              <div className="grid gap-2">
                                 <div>
                                   <label htmlFor="questions">
                                     Edit Pertanyaan

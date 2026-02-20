@@ -27,16 +27,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { SoalUjian } from "@/types/halamanUjian";
 import SkeletonExam from "./skeleton";
-import { useIdStudentStore } from "@/store/idStudent/state";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function ExamsComponent() {
   const router = useRouter();
   const idExams = useSearchParams().get("idExams");
-  const fetchIdUser = useIdStudentStore((func) => func.fetchIdStudent);
+  const fetchIdUser = useGetIdUsers((func) => func.setHandleGetIdUsers);
   useEffect(() => {
     fetchIdUser();
   }, []);
-  const getIdStudent = useIdStudentStore((state) => state.idStudent);
+  const getIdStudent = useGetIdUsers((state) => state.idUsers);
   const [questionsExam, setQuestionsExam] = useState<SoalUjian | null>(null);
   const [dataStudent, setDataStudent] = useState<any>(null);
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{
@@ -318,7 +318,7 @@ export default function ExamsComponent() {
             <div
               className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed md:sticky p-6 rounded-md ${
                 isSizeMobile
-                  ? `transition-all duration-300 max-[640px]:w-11/12 sm:w-10/12 top-0 ${
+                  ? `transition-all duration-300 w-11/12 sm:w-10/12 top-0 ${
                       showInformationExam
                         ? `translate-y-0`
                         : `-translate-y-full shadow-none`
@@ -328,7 +328,7 @@ export default function ExamsComponent() {
               ref={handleClickedOutsideContent}
             >
               <h1 className="text-2xl font-semibold">Navigasi Soal</h1>
-              <div className="flex items-center max-[640px]:justify-around sm:justify-around mt-3">
+              <div className="flex items-center justify-around mt-3">
                 <h2 className="text-lg font-medium">
                   {questionsExam?.tipe_ujian === "pg"
                     ? "Pilihan Ganda"

@@ -1,19 +1,27 @@
 import { useVerifyToken } from "@/app/hooks/getVerifyToken";
-import { useIdStudentStore } from "@/store/idStudent/state";
-import { useIdTeacherStore } from "@/store/idTeacher/state";
 import ListSidebar from "@/components/sidebar/listSidebar/content";
 import React, { useEffect } from "react";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 
 export default function LayoutBodyContent({
   children,
 }: React.PropsWithChildren) {
   const { loadingSession, statusToken } = useVerifyToken();
-  const fetchIdStudent = useIdStudentStore((func) => func.fetchIdStudent);
-  const fetchIdTeacher = useIdTeacherStore((func) => func.fetchIdTeacher);
+  const getDataUsers = useGetDataUsers((state) => state.setGetDataUsers);
+  const getidUsers = useGetIdUsers((state) => state.setHandleGetIdUsers);
   useEffect(() => {
-    fetchIdStudent();
-    fetchIdTeacher();
+    getidUsers();
   }, []);
+  const idUsers = useGetIdUsers((state) => state.idUsers);
+  const role = useGetIdUsers((state) => state.role);
+  useEffect(() => {
+    if (role === "pelajar") {
+      getDataUsers(idUsers, "account-student", "idStudent");
+    } else if (role === "pengajar") {
+      getDataUsers(idUsers, "account_teacher", "id_teacher");
+    }
+  }, [role, idUsers]);
 
   return (
     <div className="bg-black">
