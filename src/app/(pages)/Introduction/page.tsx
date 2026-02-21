@@ -46,7 +46,7 @@ export default function Introduction() {
                   ? "/Student/Dashboard"
                   : getidUsers.includes("pengajar")
                     ? "/Teacher/dashboard"
-                    : "/Autentikasi/Login"
+                    : "/Auth/Login"
               }
               className="text-center bg-blue-400 hover:bg-blue-500 rounded-md py-2 text-lg font-semibold cursor-pointer inline-block shadow-md shadow-slate-600 w-32"
             >

@@ -27,23 +27,24 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import LayoutProfileUser from "@/layout/layoutProfile";
-import { usePathname } from "next/navigation";
 import { useDataExams } from "@/app/hooks/getDataExams";
-import { useLocationPage } from "@/store/locationPage/state";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
+
+type DataHistoryExams = {
+  student_id: string;
+  exam_id: number;
+  hasil_ujian: string;
+  kelas: string;
+};
 
 export default function Profil() {
   const getIdStudent = useGetIdUsers((state) => state.idUsers);
   const dataStudent = useGetDataUsers((state) => state.dataUsers);
   const getHistoryStudent = useDataExams(dataStudent, getIdStudent);
-  const [resultExamPerClass, setResultExamPerClass] = useState<any>([]);
-  const pathName = usePathname();
-  const isLocationPage = useLocationPage((func) => func.setLocationPage);
-
-  useEffect(() => {
-    isLocationPage(pathName);
-  }, [pathName]);
+  const [resultExamPerClass, setResultExamPerClass] = useState<
+    DataHistoryExams[]
+  >([]);
 
   useEffect(() => {
     async function getHistoryResultExams() {
@@ -52,14 +53,16 @@ export default function Profil() {
         .select("student_id,exam_id,hasil_ujian,kelas");
       if (error) {
         console.log("Gagal mengambil data");
+        setResultExamPerClass([]);
+      } else {
+        setResultExamPerClass(data ?? []);
       }
-      setResultExamPerClass(data);
     }
     getHistoryResultExams();
   }, []);
 
   function rankingClasses() {
-    const filterResultExams = resultExamPerClass?.map((fil: any) => {
+    const filterResultExams = resultExamPerClass?.map((fil) => {
       return {
         ...fil,
         hasil_ujian:
@@ -68,8 +71,10 @@ export default function Profil() {
             : "0",
       };
     });
-    const rankClass = filterResultExams?.reduce((acc: any, cur: any) => {
-      const classes = acc.find((data: any) => data.kelas === cur.kelas);
+    const rankClass = filterResultExams?.reduce((acc: any[], cur) => {
+      const classes = acc.find(
+        (data: DataHistoryExams) => data.kelas === cur.kelas,
+      );
       const toNumber = Number(cur.hasil_ujian);
       if (!classes) {
         acc.push({
@@ -83,7 +88,7 @@ export default function Profil() {
         });
       } else {
         const studentItem = classes.resultExam.find(
-          (item: any) => item.student_id === cur.student_id,
+          (item: DataHistoryExams) => item.student_id === cur.student_id,
         );
         if (!studentItem) {
           classes.resultExam.push({
@@ -97,18 +102,17 @@ export default function Profil() {
       return acc;
     }, []);
 
-    const calculateTotalEveryScoreExams =
-      rankClass
-        .filter((fil: any) => fil.kelas === dataStudent?.classes)[0]
-        ?.resultExam?.map((item: any) => {
-          return {
-            ...item,
-            pointExams: item.pointExams.reduce(
-              (acc: any, cur: any) => acc + cur,
-              0,
-            ),
-          };
-        }) ?? [];
+    const calculateTotalEveryScoreExams = rankClass
+      .find((fil) => fil.kelas === dataStudent?.classes)
+      ?.resultExam?.map((item: any) => {
+        return {
+          ...item,
+          pointExams: item.pointExams.reduce(
+            (acc: number, cur: number) => acc + cur,
+            0,
+          ),
+        };
+      });
 
     const sortRanking = calculateTotalEveryScoreExams.sort(
       (low: any, high: any) => high.pointExams - low.pointExams,
@@ -129,7 +133,7 @@ export default function Profil() {
     });
 
     const resultChooseRanking = addRanking?.filter(
-      (fil: any) => fil.student_id === getIdStudent,
+      (fil: DataHistoryExams) => fil.student_id === getIdStudent,
     );
 
     return {
@@ -138,11 +142,13 @@ export default function Profil() {
     };
   }
 
-  async function handleEditProfileStudent(event: any) {
+  async function handleEditProfileStudent(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
     const idInputPayload = ["email", "password"];
     const payloadUser = idInputPayload.map(
-      (id: any) => event.target[id].value || "",
+      (id: string) => event.currentTarget[id].value || "",
     );
 
     const resultPayload = idInputPayload.reduce(
@@ -182,7 +188,7 @@ export default function Profil() {
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">
-            <LayoutProfileUser dataUser={dataStudent}>
+            <LayoutProfileUser>
               <div className="basis-3/4 flex flex-col gap-y-1.5">
                 <h1 className="capitalize font-semibold text-4xl xl:text-5xl">
                   {dataStudent?.fullName || ""}

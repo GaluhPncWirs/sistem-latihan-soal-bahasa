@@ -1,5 +1,5 @@
 import { useHandleLogout } from "@/app/hooks/getHandleLogout";
-import { useLocationPage } from "@/store/locationPage/state";
+import { useLocationPage } from "@/store/useLocationPage/state";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -17,9 +17,7 @@ import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function ListSidebar() {
   const getIdUsers = useGetIdUsers((state) => state.role);
-  const isLocationPage = useLocationPage(
-    (state: any) => state.curentLocationPage,
-  );
+  const isLocationPage = useLocationPage((state) => state.curentLocationPage);
   return (
     <>
       <div className="bg-slate-200 rounded-md w-52 mx-auto flex items-center shadow-lg shadow-slate-700 md:w-10/12 p-2">

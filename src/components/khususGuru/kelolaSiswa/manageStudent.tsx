@@ -12,9 +12,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import Link from "next/link";
 
-export default function ManageStudent({ idTeacher }: any) {
+export default function ManageStudent() {
+  const idTeacher = useGetIdUsers((state) => state.idUsers);
   const dataStudentExams = getResultExamDataStudent(idTeacher);
   return (
     <div>

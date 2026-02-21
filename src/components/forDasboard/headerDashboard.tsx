@@ -1,6 +1,6 @@
 import Image from "next/image";
 import HeaderDashboard from "../headerDashboard/content";
-import { useLocationPage } from "@/store/locationPage/state";
+import { useLocationPage } from "@/store/useLocationPage/state";
 
 export default function HeaderDasboard(props: any) {
   const { user, fullName, exams } = props;

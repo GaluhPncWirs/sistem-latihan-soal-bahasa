@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
 import { toast } from "sonner";
 
-export function useDataExams(dataStudent: any, getIdStudent: string) {
+export function useDataExams(
+  dataStudent: { classes: string } | null,
+  getIdStudent: string,
+) {
   const [scheduleExams, setScheduleExams] = useState<any>([]);
 
   useEffect(() => {
@@ -15,13 +18,13 @@ export function useDataExams(dataStudent: any, getIdStudent: string) {
         supabase
           .from("managed_exams")
           .select(
-            "*,account_teacher(fullName),exams(nama_ujian,questions_exam)"
+            "*,account_teacher(fullName),exams(nama_ujian,questions_exam)",
           )
           .eq("kelas", dataStudent?.classes),
         supabase
           .from("history-exam-student")
           .select(
-            "student_id,exam_id,status_exam,created_at,hasil_ujian,exams(nama_ujian)"
+            "student_id,exam_id,status_exam,created_at,hasil_ujian,exams(nama_ujian)",
           )
           .eq("student_id", getIdStudent),
       ]);
@@ -31,17 +34,19 @@ export function useDataExams(dataStudent: any, getIdStudent: string) {
         return;
       }
 
-      const mergedDataScheduleExams = examsData.map((item: any) => {
-        const finds = historyDataExams.find(
-          (f: any) => f.exam_id === item.idExams
-        );
-        return {
-          ...item,
-          status_exam: finds?.status_exam ?? null,
-          created_at_historyExams: finds?.created_at ?? null,
-          hasil_ujian: finds?.hasil_ujian ?? null,
-        };
-      });
+      const mergedDataScheduleExams = examsData.map(
+        (item: { idExams: number }) => {
+          const finds = historyDataExams.find(
+            (f: { exam_id: number }) => f.exam_id === item.idExams,
+          );
+          return {
+            ...item,
+            status_exam: finds?.status_exam ?? null,
+            created_at_historyExams: finds?.created_at ?? null,
+            hasil_ujian: finds?.hasil_ujian ?? null,
+          };
+        },
+      );
 
       setScheduleExams(mergedDataScheduleExams);
     }

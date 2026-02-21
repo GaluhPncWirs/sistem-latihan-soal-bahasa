@@ -16,9 +16,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import FloatingBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
-import { usePathname } from "next/navigation";
 import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
-import { useLocationPage } from "@/store/locationPage/state";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 
@@ -29,16 +27,10 @@ export default function Teacher() {
     viewResult: false,
     manageStudent: false,
   });
-  const pathName = usePathname();
   const getidTeacher = useGetIdUsers((state) => state.idUsers);
   const dataUserTeacher = useGetDataUsers((state) => state.dataUsers);
   const [dataManageExams, setDataManageExams] = useState<string[]>([]);
   const dataStudentExams = getResultExamDataStudent(getidTeacher);
-  const isLocationPage = useLocationPage((func) => func.setLocationPage);
-
-  useEffect(() => {
-    isLocationPage(pathName);
-  }, [pathName]);
 
   function handleClickItem(event: any) {
     if (event === "scheduleExams") {
@@ -78,9 +70,9 @@ export default function Teacher() {
 
   const averageValueExam = dataManageExams
     ?.flatMap((item: any) => item.hasil_ujian)
-    .filter((a: any) => a !== "pending" && a !== "telat")
+    .filter((a: string) => a !== "pending" && a !== "telat")
     .map(Number)
-    .reduce((acc: any, cur: any) => acc + cur, 0);
+    .reduce((acc: number, cur: number) => acc + cur, 0);
 
   useEffect(() => {
     if (!getidTeacher) return;
@@ -110,7 +102,9 @@ export default function Teacher() {
           (isNull: any) => isNull.exams !== null,
         );
         const completeExams = filterNull.reduce((acc: any, cur: any) => {
-          const found = acc.find((item: any) => item.kelas === cur.kelas);
+          const found = acc.find(
+            (item: { kelas: string }) => item.kelas === cur.kelas,
+          );
           if (!found) {
             acc.push({
               kelas: cur.kelas,
@@ -128,7 +122,7 @@ export default function Teacher() {
 
         const totalStudent = lengthStudent.reduce((acc: any, cur: any) => {
           const foundClass = acc.find(
-            (item: any) => item.classes === cur.classes,
+            (item: { classes: string }) => item.classes === cur.classes,
           );
           if (!foundClass) {
             acc.push({
@@ -180,8 +174,8 @@ export default function Teacher() {
             <h1 className="text-2xl font-semibold tracking-wider">
               Ringkasan Aktifitas Ujian
             </h1>
-            <div className="flex justify-evenly my-7 text-slate-800">
-              <div className="bg-[#48B3AF] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
+            <div className="flex justify-evenly my-7 text-slate-200">
+              <div className="bg-[#476EAE] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
                 <Image
                   src="/img/dashboardTeacher/complete.png"
                   alt="Complete"
@@ -194,7 +188,7 @@ export default function Teacher() {
                 </span>
                 <h1 className="font-semibold">Ujian Dibuat</h1>
               </div>
-              <div className="bg-[#48B3AF] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
+              <div className="bg-[#476EAE] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
                 <Image
                   src="/img/dashboardTeacher/count.png"
                   alt="Jumlah"
@@ -207,7 +201,7 @@ export default function Teacher() {
                 </span>
                 <h1 className="font-semibold">Jumlah Siswa</h1>
               </div>
-              <div className="bg-[#48B3AF] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
+              <div className="bg-[#476EAE] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
                 <Image
                   src="/img/dashboardTeacher/average.png"
                   alt="Rata-Rata"
@@ -278,11 +272,11 @@ export default function Teacher() {
                   </Table>
                 </div>
               ) : dashboardButton.createQuestions === true ? (
-                <CreateNewQuestions idTeacher={getidTeacher} />
+                <CreateNewQuestions />
               ) : dashboardButton.viewResult === true ? (
-                <ViewQuestions idTeacher={getidTeacher} />
+                <ViewQuestions />
               ) : dashboardButton.manageStudent === true ? (
-                <ManageStudent idTeacher={getidTeacher} />
+                <ManageStudent />
               ) : null}
             </div>
           </div>

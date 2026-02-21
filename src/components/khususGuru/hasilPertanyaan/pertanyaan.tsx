@@ -33,12 +33,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { supabase } from "@/lib/supabase/data";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export default function ViewQuestions({ idTeacher }: any) {
+export default function ViewQuestions() {
+  const idTeacher = useGetIdUsers((state) => state.idUsers);
   const [chooseClass, setChooseClass] = useState<string[]>([]);
   const [chooseTimeExam, setChooseTimeExam] = useState<string[]>([]);
   const [dates, setDates] = useState<(Date | undefined)[]>([]);
@@ -46,7 +48,7 @@ export default function ViewQuestions({ idTeacher }: any) {
   const [toTimes, setToTimes] = useState<string[]>([]);
   const viewManageQuestionsExam = useManageExamsData(idTeacher);
   const tenggatWaktu = fromTimes.map(
-    (time: any, i: number) => `${time} - ${toTimes[i]}`
+    (time: any, i: number) => `${time} - ${toTimes[i]}`,
   );
 
   const manipulateDate = dates.map((localDate: any) => {
@@ -76,7 +78,7 @@ export default function ViewQuestions({ idTeacher }: any) {
           item.kelas &&
           item.dibuat_tgl &&
           item.tenggat_waktu &&
-          item.exam_duration
+          item.exam_duration,
       );
 
     if (dataPayload.length > 0) {

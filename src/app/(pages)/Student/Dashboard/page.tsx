@@ -28,12 +28,11 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import HeaderDasboard from "@/components/forDasboard/headerDashboard";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { toast } from "sonner";
-import { useLocationPage } from "@/store/locationPage/state";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 
@@ -45,15 +44,9 @@ export default function DashboardStudent() {
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(false);
-  const pathName = usePathname();
-  const isLocationPage = useLocationPage((func) => func.setLocationPage);
-
-  useEffect(() => {
-    isLocationPage(pathName);
-  }, [pathName]);
 
   const filterScoreExams = scheduleExams.filter(
-    (avg: any) =>
+    (avg: { status_exam: boolean; hasil_ujian: string }) =>
       avg.status_exam === true &&
       avg.hasil_ujian !== "pending" &&
       avg.hasil_ujian !== "telat",
@@ -87,22 +80,20 @@ export default function DashboardStudent() {
     .slice(4, 5)
     .join(" ");
 
-  function toMinute(val: any) {
+  function toMinute(val: string) {
     const deleteDot = val.replace(/[:.]/g, "-");
-    const [hoursStr, minuteStr = "0"] = deleteDot.split("-").map(Number);
+    const [hoursStr, minuteStr] = deleteDot.split("-").map(Number);
     return hoursStr * 60 + minuteStr;
   }
 
   async function lateExams(idUjian: number) {
-    const { data: historyExams, error: errHistoryExams }: any = await supabase
+    const { error: errHistoryExams } = await supabase
       .from("history-exam-student")
       .select("hasil_ujian,exam_id")
       .eq("hasil_ujian", "telat")
       .eq("exam_id", idUjian);
 
-    if (historyExams?.length > 0) {
-      return;
-    } else if (errHistoryExams) {
+    if (errHistoryExams) {
       toast("❌ Gagal Simpan Data", {
         description: "Data Hasil Ujian Sudah Ada",
       });
@@ -147,7 +138,7 @@ export default function DashboardStudent() {
   function convertToNumber(tenggat_waktu: string) {
     const [startTimeExam, endTimeExams] = tenggat_waktu
       .split("-")
-      .map((item: any) => item.trim());
+      .map((item: string) => item.trim());
     return [toMinute(startTimeExam), toMinute(endTimeExams)];
   }
 
@@ -226,32 +217,42 @@ export default function DashboardStudent() {
   function deadlineUjianTercepatHariIni() {
     const hariIni = toMinute(waktuDurasiIni);
     const isComingSoonExams = scheduleExams.filter(
-      (fil: any) => fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni,
+      (fil: { status_exam: boolean; dibuat_tgl: string }) =>
+        fil.status_exam !== true && fil.dibuat_tgl === waktuHariIni,
     );
-    const validExams = isComingSoonExams.filter((exam: any) => {
-      const filterScheduleExam = convertToNumber(exam.tenggat_waktu);
-      return hariIni > filterScheduleExam[0] && hariIni < filterScheduleExam[1];
-    });
+    const validExams = isComingSoonExams.filter(
+      (exam: { tenggat_waktu: string }) => {
+        const filterScheduleExam = convertToNumber(exam.tenggat_waktu);
+        return (
+          hariIni > filterScheduleExam[0] && hariIni < filterScheduleExam[1]
+        );
+      },
+    );
 
     if (validExams.length === 0) {
       return null;
     }
 
-    return validExams.reduce((closestExam: any, currentExam: any) => {
-      const closestDeadline = convertToNumber(closestExam.tenggat_waktu)[0];
-      const currentDeadline = convertToNumber(currentExam.tenggat_waktu)[0];
-      return Math.abs(currentDeadline - toMinute(waktuDurasiIni)) <
-        Math.abs(closestDeadline - toMinute(waktuDurasiIni))
-        ? currentExam
-        : closestExam;
-    });
+    return validExams.reduce(
+      (
+        closestExam: { tenggat_waktu: string },
+        currentExam: { tenggat_waktu: string },
+      ) => {
+        const closestDeadline = convertToNumber(closestExam.tenggat_waktu)[0];
+        const currentDeadline = convertToNumber(currentExam.tenggat_waktu)[0];
+        return Math.abs(currentDeadline - toMinute(waktuDurasiIni)) <
+          Math.abs(closestDeadline - toMinute(waktuDurasiIni))
+          ? currentExam
+          : closestExam;
+      },
+    );
   }
 
   useEffect(() => {
     if (accepted) {
       setConfirm(5);
       const timer = setInterval(() => {
-        setConfirm((prev: any) => {
+        setConfirm((prev: number) => {
           if (prev <= 0) {
             clearInterval(timer);
             setAccepted(false);
@@ -291,7 +292,8 @@ export default function DashboardStudent() {
                   <h1 className="text-lg">Ujian Terjadwal</h1>
                   <span className="text-xl">
                     {scheduleExams.filter(
-                      (done: any) => done.status_exam !== true,
+                      (done: { status_exam: boolean }) =>
+                        done.status_exam !== true,
                     ).length || "0"}
                   </span>
                 </div>

@@ -8,7 +8,6 @@ export async function proxy(req: NextRequest) {
   const isStartExam = req.cookies.get("startExam")?.value;
   const token = req.cookies.get("token")?.value;
 
-  // Proteksi Halaman StartExam
   if (pathname.startsWith("/Student/Exams/StartExam")) {
     const examId = searchParams.get("idExams");
 
@@ -105,7 +104,7 @@ export async function proxy(req: NextRequest) {
 
     if (examId) {
       return NextResponse.redirect(
-        new URL(`/Student/Exams/StartExam?idExams=${examId}`, req.url)
+        new URL(`/Student/Exams/StartExam?idExams=${examId}`, req.url),
       );
     }
 

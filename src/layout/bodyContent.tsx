@@ -3,6 +3,8 @@ import ListSidebar from "@/components/sidebar/listSidebar/content";
 import React, { useEffect } from "react";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
+import { usePathname } from "next/navigation";
+import { useLocationPage } from "@/store/useLocationPage/state";
 
 export default function LayoutBodyContent({
   children,
@@ -22,6 +24,12 @@ export default function LayoutBodyContent({
       getDataUsers(idUsers, "account_teacher", "id_teacher");
     }
   }, [role, idUsers]);
+  const pathName = usePathname();
+  const isLocationPage = useLocationPage((state) => state.setLocationPage);
+
+  useEffect(() => {
+    isLocationPage(pathName);
+  }, [pathName]);
 
   return (
     <div className="bg-black">

@@ -6,7 +6,9 @@ import Link from "next/link";
 import SkeletonResultExams from "./skeleton";
 
 export default function ResultExamComponent() {
-  const [getDataStudentAnswer, setGetDataStudentAnswer] = useState<any>(null);
+  const [getDataStudentAnswer, setGetDataStudentAnswer] = useState<any | null>(
+    null,
+  );
   const paramIdExam = useSearchParams().get("id");
 
   useEffect(() => {

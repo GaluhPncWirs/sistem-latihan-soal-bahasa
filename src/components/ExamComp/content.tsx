@@ -32,7 +32,7 @@ import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 export default function ExamsComponent() {
   const router = useRouter();
   const idExams = useSearchParams().get("idExams");
-  const fetchIdUser = useGetIdUsers((func) => func.setHandleGetIdUsers);
+  const fetchIdUser = useGetIdUsers((state) => state.setHandleGetIdUsers);
   useEffect(() => {
     fetchIdUser();
   }, []);
@@ -278,25 +278,21 @@ export default function ExamsComponent() {
   }, []);
 
   useEffect(() => {
-    function handleOutsideContent(e: any) {
-      if (
-        clickedOutsideCheked.current &&
-        !clickedOutsideCheked.current.contains(e.target) &&
-        handleClickedOutsideContent.current &&
-        !handleClickedOutsideContent.current.contains(e.target) &&
-        clickedMarkQuestions.current &&
-        !clickedMarkQuestions.current.contains(e.target) &&
-        clickedAnswerQuestions.current &&
-        !clickedAnswerQuestions.current.contains(e.target)
-      ) {
+    const handleOutsideContent = (e: any) => {
+      const refs = [
+        clickedOutsideCheked.current,
+        handleClickedOutsideContent.current,
+        clickedMarkQuestions.current,
+        clickedAnswerQuestions.current,
+      ];
+      const isOutside = refs.every((ref) => ref && !ref.contains(e.target));
+      if (isOutside) {
         setIsClosedContent(true);
       }
-    }
+    };
 
     window.addEventListener("click", handleOutsideContent);
-    return () => {
-      window.removeEventListener("click", handleOutsideContent);
-    };
+    return () => window.removeEventListener("click", handleOutsideContent);
   }, []);
 
   useEffect(() => {

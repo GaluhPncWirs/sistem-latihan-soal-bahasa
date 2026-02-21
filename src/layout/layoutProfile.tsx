@@ -11,16 +11,16 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 import Image from "next/image";
 import { useState } from "react";
 
 export default function LayoutProfileUser({
   children,
-  dataUser,
 }: {
   children: React.ReactNode;
-  dataUser: any;
 }) {
+  const dataUser = useGetDataUsers((state) => state.dataUsers);
   const [previewImgProfil, setPreviewImgProfil] = useState<string | null>(null);
 
   function handleChangeImgProfile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -109,7 +109,7 @@ export default function LayoutProfileUser({
                 Bergabung
               </TableCell>
               <TableCell className="text-base font-medium">
-                {useConvertDate(dataUser?.created_at, {
+                {useConvertDate(dataUser!.created_at, {
                   day: "numeric",
                   month: "long",
                   year: "numeric",

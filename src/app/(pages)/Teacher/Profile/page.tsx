@@ -1,6 +1,4 @@
 "use client";
-import { useGetDataTeacher } from "@/app/hooks/getDataTeacher";
-import { useLocationPage } from "@/store/locationPage/state";
 import HamburgerMenuBar from "@/components/sidebar/compSidebar";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,7 +29,6 @@ import LayoutBodyContent from "@/layout/bodyContent";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
@@ -41,12 +38,6 @@ export default function TeacherProfile() {
   const getidTeacher = useGetIdUsers((state) => state.idUsers);
   const [getHistoryExams, setGetHistoryExams] = useState<string[]>([]);
   const getProfileTeacher = useGetDataUsers((state) => state.dataUsers);
-  const pathName = usePathname();
-  const isLocationPage = useLocationPage((func) => func.setLocationPage);
-
-  useEffect(() => {
-    isLocationPage(pathName);
-  }, [pathName]);
 
   useEffect(() => {
     if (!getidTeacher) return;
@@ -98,22 +89,27 @@ export default function TeacherProfile() {
         return acc;
       }, []);
 
-      const mergedData = result?.map((item: any) => {
-        const findDetail = dataManageExams.find(
-          (f: any) => f.kelas === item.kelas && f.idExams === item.exam_id,
-        );
-        return {
-          ...item,
-          ...findDetail,
-        };
-      });
+      const mergedData = result?.map(
+        (item: { kelas: string; exam_id: number }) => {
+          const findDetail = dataManageExams.find(
+            (f: { kelas: string; idExams: number }) =>
+              f.kelas === item.kelas && f.idExams === item.exam_id,
+          );
+          return {
+            ...item,
+            ...findDetail,
+          };
+        },
+      );
 
       setGetHistoryExams(mergedData);
     }
     historyExams();
   }, [getidTeacher]);
 
-  async function handleEditProfileTeacher(event: any) {
+  async function handleEditProfileTeacher(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
     const fieldNames = [
       "fullName",
@@ -123,9 +119,9 @@ export default function TeacherProfile() {
       "password",
     ];
     const payloadString = fieldNames.map(
-      (id: any) => event.target[id].value || "",
+      (id: string) => event.currentTarget[id].value || "",
     );
-    const payload = fieldNames.reduce((acc: any, key: any, i: number) => {
+    const payload = fieldNames.reduce((acc: any, key: string, i: number) => {
       const val = payloadString[i];
       if (val !== "") {
         acc[key] = val;
@@ -149,14 +145,14 @@ export default function TeacherProfile() {
     }
   }
 
-  function resultNilaiRataRata(data: any) {
+  function resultNilaiRataRata(data: { hasil_ujian: string[] }) {
     const hasilUjian = data.hasil_ujian;
 
     const nilaiUjian = hasilUjian
       .filter((fil: any) => fil !== "pending" && fil !== "telat")
       .map(Number);
-    const nilaiPending = hasilUjian.filter((fil: any) => fil === "pending");
-    const nilaiTelat = hasilUjian.filter((fil: any) => fil === "telat");
+    const nilaiPending = hasilUjian.filter((fil: string) => fil === "pending");
+    const nilaiTelat = hasilUjian.filter((fil: string) => fil === "telat");
 
     const nilaiYangPendingAtauTelat =
       nilaiPending.length > 0 || nilaiTelat.length > 0;
@@ -164,7 +160,7 @@ export default function TeacherProfile() {
     const nilaiRataRata =
       nilaiUjian.length > 0
         ? Math.round(
-            nilaiUjian.reduce((acc: any, cur: any) => acc + cur, 0) /
+            nilaiUjian.reduce((acc: number, cur: number) => acc + cur, 0) /
               nilaiUjian.length,
           )
         : 0;
@@ -206,7 +202,7 @@ export default function TeacherProfile() {
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">
-            <LayoutProfileUser dataUser={getProfileTeacher}>
+            <LayoutProfileUser>
               <div className="basis-3/4 flex flex-col gap-y-1.5">
                 <h1 className="capitalize font-semibold text-4xl xl:text-5xl">
                   {getProfileTeacher?.fullName || ""}

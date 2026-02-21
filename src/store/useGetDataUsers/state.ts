@@ -1,8 +1,9 @@
 import { supabase } from "@/lib/supabase/data";
+import { DataUser } from "@/types/dataUser";
 import { create } from "zustand";
 
 type GetDataUsersState = {
-  dataUsers: any[];
+  dataUsers: DataUser | null;
   isLoading: boolean;
   setGetDataUsers: (
     idUsers: string,
@@ -12,7 +13,7 @@ type GetDataUsersState = {
 };
 
 export const useGetDataUsers = create<GetDataUsersState>((set) => ({
-  dataUsers: [],
+  dataUsers: null,
   isLoading: false,
 
   setGetDataUsers: async (idUsers, selectDatabase, searchById) => {
@@ -24,13 +25,13 @@ export const useGetDataUsers = create<GetDataUsersState>((set) => ({
         .eq(searchById, idUsers)
         .single();
       if (error) {
-        set({ dataUsers: [] });
+        set({ dataUsers: null });
         console.log("Data gagal diambil", error);
       } else {
         set({ dataUsers: data });
       }
     } catch (error) {
-      set({ dataUsers: [] });
+      set({ dataUsers: null });
       console.log("Data gagal diambil, error pada database");
     } finally {
       set({ isLoading: false });

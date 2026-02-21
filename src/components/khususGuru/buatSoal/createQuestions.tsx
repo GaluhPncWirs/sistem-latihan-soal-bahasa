@@ -24,8 +24,10 @@ import { useRandomId } from "@/app/hooks/getRandomId";
 import { useManageExamsData } from "@/app/hooks/getDataManageExams";
 import { Textarea } from "@/components/ui/textarea";
 import { useHandleInput } from "@/app/hooks/getHandleInput";
+import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
-export default function CreateNewQuestions({ idTeacher }: any) {
+export default function CreateNewQuestions() {
+  const idTeacher = useGetIdUsers((state) => state.idUsers);
   const [answer, setAnswer] = useState<any>({
     answer_a: "",
     answer_b: "",
@@ -88,12 +90,12 @@ export default function CreateNewQuestions({ idTeacher }: any) {
       );
       const isObject: string[] = Object.values(chooseInputObject.answer || {});
       const resultData = isArray.concat(isObject);
-      return resultData.every((item: any) => item !== "");
+      return resultData.every((item: string) => item !== "");
     }
-    return Object.values(chooseInputObject).every((item: any) => item !== "");
+    return Object.values(chooseInputObject).every((item) => item !== "");
   }
 
-  function handleAddAnswer(event: any) {
+  function handleAddAnswer(event: React.ChangeEvent<HTMLInputElement>) {
     const { id, value } = event.target;
     setAnswer((prev: any) => {
       return {
@@ -281,10 +283,8 @@ export default function CreateNewQuestions({ idTeacher }: any) {
 
   return (
     <div className="w-11/12 mx-auto">
-      <h1 className="text-2xl font-semibold mb-5 tracking-wide">
-        Buat Soal Ujian
-      </h1>
-      <div className="bg-sky-200 p-7 rounded-md">
+      <h1 className="text-2xl font-semibold tracking-wide">Buat Soal Ujian</h1>
+      <div className="p-7 rounded-md">
         <form className="flex flex-col gap-5">
           <div className="flex justify-around">
             <div className="w-1/2">
@@ -351,7 +351,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
                 <Input
                   id="nama_ujian"
                   className="border border-black rounded-sm p-1 px-2"
-                  onChange={(e: any) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     handleValueInput(e);
                     setNameExams(e.currentTarget.value);
                   }}
@@ -368,7 +368,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
             <Textarea
               id="questions"
               className="border border-black rounded-sm p-1 px-2 h-20"
-              onChange={(e: any) => {
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 handleValueInput(e);
                 setQuestion(e.currentTarget.value);
               }}
@@ -383,7 +383,7 @@ export default function CreateNewQuestions({ idTeacher }: any) {
                 </h1>
                 <div className="flex gap-x-5 gap-y-3 flex-wrap">
                   {["a", "b", "c", "d", "e"].map((option: any) => {
-                    const answerKey: any = `answer_${option}`;
+                    const answerKey = `answer_${option}`;
                     return (
                       <div key={`answer-option-${option}`}>
                         <label
