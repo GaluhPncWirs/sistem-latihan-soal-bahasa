@@ -3,16 +3,13 @@ import { useEffect, useRef, useState } from "react";
 export function useHandleClickedHamburgerMenu() {
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const [isTrue, setIsTrue] = useState<boolean>(false);
-  const clickOutsideHamburgerMenu = useRef<HTMLInputElement | null>(null);
   const clickOutsidePath = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    function handleClickOutsideNavbar(event: any) {
+    function handleClickOutsideNavbar(event: MouseEvent) {
       if (
         clickOutsidePath.current &&
-        !clickOutsidePath.current.contains(event.target) &&
-        clickOutsideHamburgerMenu.current &&
-        !clickOutsideHamburgerMenu.current.contains(event.target)
+        !clickOutsidePath.current.contains(event.target as Node)
       ) {
         setIsTrue(true);
       }
@@ -34,7 +31,6 @@ export function useHandleClickedHamburgerMenu() {
 
   return {
     isCheked,
-    clickOutsideHamburgerMenu,
     clickOutsidePath,
     setIsCheked,
     setIsTrue,

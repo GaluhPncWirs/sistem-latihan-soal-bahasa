@@ -4,21 +4,15 @@ import ListContent from "../listContent/content";
 import { useHandleClickedHamburgerMenu } from "@/app/hooks/getHandleHamMenu";
 
 export default function HamburgerMenu() {
-  const {
-    isCheked,
-    clickOutsideHamburgerMenu,
-    clickOutsidePath,
-    setIsCheked,
-    setIsTrue,
-  } = useHandleClickedHamburgerMenu();
+  const { isCheked, clickOutsidePath, setIsCheked, setIsTrue } =
+    useHandleClickedHamburgerMenu();
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden" ref={clickOutsidePath}>
       <div className="menu flex flex-col h-5 justify-between absolute right-7 top-7">
         <Input
           type="checkbox"
           className="size-5 absolute z-20 cursor-pointer opacity-0"
-          ref={clickOutsideHamburgerMenu}
           checked={isCheked}
           onChange={() => {
             setIsCheked((prev) => !prev);
@@ -32,7 +26,6 @@ export default function HamburgerMenu() {
       <div
         className={`flex pt-24 gap-y-12 absolute right-0 top-16 h-screen flex-col bg-[#A6E3E9] bg-gradient-to-b to-sky-300 items-center w-60 transition-all duration-300 text-xl font-semibold rounded-bl-lg
       ${isCheked ? `translate-x-0` : `translate-x-full`}`}
-        ref={clickOutsidePath}
       >
         <ListContent />
         <ButtonAutentications />

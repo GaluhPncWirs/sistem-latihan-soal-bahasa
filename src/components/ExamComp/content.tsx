@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import {
   AlertDialog,
@@ -28,14 +27,12 @@ import {
 import { SoalUjian } from "@/types/halamanUjian";
 import SkeletonExam from "./skeleton";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import LayoutBodyContent from "@/layout/bodyContent";
+import { Flag, Timer } from "lucide-react";
 
 export default function ExamsComponent() {
   const router = useRouter();
   const idExams = useSearchParams().get("idExams");
-  const fetchIdUser = useGetIdUsers((state) => state.setHandleGetIdUsers);
-  useEffect(() => {
-    fetchIdUser();
-  }, []);
   const getIdStudent = useGetIdUsers((state) => state.idUsers);
   const [questionsExam, setQuestionsExam] = useState<SoalUjian | null>(null);
   const [dataStudent, setDataStudent] = useState<any>(null);
@@ -303,247 +300,244 @@ export default function ExamsComponent() {
   }, [isClosedContent]);
 
   return (
-    <div className="bg-[#A6E3E9] py-10">
+    <LayoutBodyContent>
       {questionsExam ? (
-        <div className="bg-slate-50 w-11/12 mx-auto rounded-md py-8 px-10">
-          <h1 className="text-3xl font-semibold mb-3">
-            Ujian {questionsExam.exams.nama_ujian}
-          </h1>
-          <div className="h-1 bg-slate-700 rounded-lg mt-3 mb-7" />
-          <div className="flex justify-between items-center flex-col md:items-start md:flex-row-reverse md:gap-x-5">
-            <div
-              className={`h-fit shadow-lg shadow-slate-800 bg-[#71C9CE] fixed md:sticky p-6 rounded-md ${
-                isSizeMobile
-                  ? `transition-all duration-300 w-11/12 sm:w-10/12 top-0 ${
-                      showInformationExam
-                        ? `translate-y-0`
-                        : `-translate-y-full shadow-none`
-                    }`
-                  : `md:basis-sm md:top-5`
-              }`}
-              ref={handleClickedOutsideContent}
-            >
-              <h1 className="text-2xl font-semibold">Navigasi Soal</h1>
-              <div className="flex items-center justify-around mt-3">
-                <h2 className="text-lg font-medium">
-                  {questionsExam?.tipe_ujian === "pg"
-                    ? "Pilihan Ganda"
-                    : "Essay"}
-                </h2>
-                {formatedTime !== "NaN:NaN" && (
-                  <div
-                    className={`px-5 py-2 rounded-md gap-x-2 flex items-center justify-evenly ${
-                      minute === 0 && second <= 20
-                        ? `bg-red-500 animate-pulse`
-                        : "bg-green-400 shadow-md shadow-slate-700"
-                    }`}
-                  >
-                    <Image
-                      src="/img/examsStudent/stopwatch.png"
-                      alt="Timer"
-                      width={200}
-                      height={200}
-                      className="size-7"
-                    />
-                    <span className="text-xl font-semibold">
-                      {formatedTime}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="bg-[#A6E3E9] mt-5 flex flex-wrap gap-2 justify-center p-4 rounded-md">
-                {dataUjianRandom.map((item: any, i: number) => {
-                  const isAnswerPg = clickedAnswerPg[item.id];
-                  const isAnswerEssay = answerEssayExams[item.id];
-                  const isMarking = markQuestions[item.id];
-                  return (
+        <>
+          <div
+            ref={handleClickedOutsideContent}
+            className={`fixed w-full md:static md:w-1/3 ${
+              isSizeMobile &&
+              `transition-all duration-300 top-0 ${
+                showInformationExam
+                  ? `translate-x-0`
+                  : `-translate-x-full shadow-none`
+              }`
+            } `}
+          >
+            <div className="bg-[#476EAE] fixed h-screen shadow-xl shadow-slate-700 flex flex-col items-center text-slate-200 font-medium text-xl md:w-1/3">
+              <div className="mt-3 p-5">
+                <h1 className="text-2xl font-semibold">Navigasi Soal</h1>
+                <div className="flex items-center justify-around mt-3">
+                  <h2 className="text-lg font-medium">
+                    {questionsExam?.tipe_ujian === "pg"
+                      ? "Pilihan Ganda"
+                      : "Essay"}
+                  </h2>
+                  {formatedTime !== "NaN:NaN" && (
                     <div
-                      className={`size-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
-                        isAnswerPg || isAnswerEssay
-                          ? "bg-green-400"
-                          : "bg-[#E3FDFD]"
+                      className={`px-5 py-2 rounded-md text-slate-700 gap-x-2 flex items-center justify-evenly ${
+                        minute === 0 && second <= 20
+                          ? `bg-red-500 animate-pulse`
+                          : "bg-green-400"
                       }`}
-                      key={i}
                     >
-                      {isMarking === true &&
-                        ((questionsExam?.tipe_ujian === "pg" && !isAnswerPg) ||
-                          (questionsExam?.tipe_ujian === "essay" &&
-                            !isAnswerEssay)) && (
-                          <Image
-                            src="/img/examsStudent/flag.png"
-                            alt="Mark"
-                            width={200}
-                            height={200}
-                            className="size-2.5 absolute top-[5px] left-1.5"
-                          />
-                        )}
-                      {i + 1}
+                      <Timer className="size-7" />
+                      <span className="text-xl font-semibold">
+                        {formatedTime}
+                      </span>
                     </div>
-                  );
-                })}
+                  )}
+                </div>
+                <div className="mt-7 flex flex-wrap gap-2 rounded-md text-slate-700">
+                  {dataUjianRandom.map((item: any, i: number) => {
+                    const isAnswerPg = clickedAnswerPg[item.id];
+                    const isAnswerEssay = answerEssayExams[item.id];
+                    const isMarking = markQuestions[item.id];
+                    return (
+                      <div
+                        className={`size-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
+                          isAnswerPg || isAnswerEssay
+                            ? "bg-green-400"
+                            : "bg-slate-200"
+                        }`}
+                        key={i}
+                      >
+                        {isMarking === true &&
+                          ((questionsExam?.tipe_ujian === "pg" &&
+                            !isAnswerPg) ||
+                            (questionsExam?.tipe_ujian === "essay" &&
+                              !isAnswerEssay)) && (
+                            <Flag className="size-3 absolute top-[4px] left-1" />
+                          )}
+                        {i + 1}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-
-            <div className="md:basis-1/2">
-              {dataUjianRandom.map((item: any, i: number) => (
-                <div className="mb-5" key={item.id}>
-                  <h1 className="text-lg font-semibold" id="pertannyaan">
-                    {i + 1}. {item.questions}
-                  </h1>
-                  {questionsExam?.tipe_ujian === "pg" ? (
-                    <ul className="mt-3">
-                      {["a", "b", "c", "d", "e"].map((opt) => {
-                        const answerKey = `answer_${opt}`;
-                        const answerText = item.answerPg[answerKey];
-                        const isSelected =
-                          clickedAnswerPg[item.id] === answerText;
-                        return (
-                          <li key={opt} className="flex items-center gap-3">
-                            <Input
-                              type="radio"
-                              name={item.id}
-                              className="cursor-pointer w-5"
-                              checked={isSelected}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  handleSelectedAnswer(item.id, answerText);
-                                }
-                              }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleSelectedAnswer(item.id, answerText);
-                              }}
-                              ref={clickedAnswerQuestions}
-                            />
-                            <label>
-                              {opt.toLocaleUpperCase()}. {answerText}
-                            </label>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  ) : (
-                    <div className="mt-3">
-                      <label
-                        className="mb-1 font-semibold ml-1.5 inline-block"
-                        htmlFor={item.id}
-                      >
-                        Jawab :
-                      </label>
-                      <Textarea
-                        placeholder="Jawab Pertannyaan Kamu Disini"
-                        className="border-slate-600 border-2 h-20 bg-stone-200"
-                        id={item.id}
-                        onCopy={(e) => e.preventDefault()}
-                        onPaste={(e) => e.preventDefault()}
-                        onCut={(e) => e.preventDefault()}
-                        onChange={(e) =>
-                          setAnswerEssayExams((prev: any) => ({
+          </div>
+          <div className="w-11/12 mx-auto md:w-3/5 my-7">
+            <div className="bg-slate-50 rounded-md p-7">
+              <h1 className="text-3xl font-semibold mb-3">
+                Ujian {questionsExam.exams.nama_ujian}
+              </h1>
+              <div className="h-1 bg-slate-700 rounded-lg mt-3 mb-7" />
+              <div className="flex justify-between items-center flex-col md:items-start md:flex-row-reverse md:gap-x-5">
+                <div>
+                  {dataUjianRandom.map((item: any, i: number) => (
+                    <div className="mb-5" key={item.id}>
+                      <h1 className="text-lg font-semibold" id="pertannyaan">
+                        {i + 1}. {item.questions}
+                      </h1>
+                      {questionsExam?.tipe_ujian === "pg" ? (
+                        <ul className="mt-3">
+                          {["a", "b", "c", "d", "e"].map((opt) => {
+                            const answerKey = `answer_${opt}`;
+                            const answerText = item.answerPg[answerKey];
+                            const isSelected =
+                              clickedAnswerPg[item.id] === answerText;
+                            return (
+                              <li key={opt} className="flex items-center gap-3">
+                                <Input
+                                  type="radio"
+                                  name={item.id}
+                                  className="cursor-pointer w-5"
+                                  checked={isSelected}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      handleSelectedAnswer(item.id, answerText);
+                                    }
+                                  }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleSelectedAnswer(item.id, answerText);
+                                  }}
+                                  ref={clickedAnswerQuestions}
+                                />
+                                <label>
+                                  {opt.toLocaleUpperCase()}. {answerText}
+                                </label>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : (
+                        <div className="mt-3">
+                          <label
+                            className="mb-1 font-semibold ml-1.5 inline-block"
+                            htmlFor={item.id}
+                          >
+                            Jawab :
+                          </label>
+                          <Textarea
+                            placeholder="Jawab Pertannyaan Kamu Disini"
+                            className="border-slate-600 border-2 h-20 bg-stone-200"
+                            id={item.id}
+                            onCopy={(e) => e.preventDefault()}
+                            onPaste={(e) => e.preventDefault()}
+                            onCut={(e) => e.preventDefault()}
+                            onChange={(e) =>
+                              setAnswerEssayExams((prev: any) => ({
+                                ...prev,
+                                [item.id]: e.target?.value,
+                              }))
+                            }
+                            defaultValue={answerEssayExams[item.id]}
+                          />
+                        </div>
+                      )}
+                      <Button
+                        className="cursor-pointer text-base mt-3 bg-blue-500"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMarkQuestions((prev: any) => ({
                             ...prev,
-                            [item.id]: e.target?.value,
-                          }))
-                        }
-                        defaultValue={answerEssayExams[item.id]}
-                      />
+                            [item.id]: !prev[item.id],
+                          }));
+                        }}
+                        ref={clickedMarkQuestions}
+                      >
+                        Tandai
+                      </Button>
                     </div>
-                  )}
-                  <Button
-                    className="cursor-pointer text-base mt-3 bg-blue-500"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setMarkQuestions((prev: any) => ({
-                        ...prev,
-                        [item.id]: !prev[item.id],
-                      }));
-                    }}
-                    ref={clickedMarkQuestions}
-                  >
-                    Tandai
-                  </Button>
+                  ))}
                 </div>
-              ))}
+              </div>
+              <AlertDialog open={timeOutDone} onOpenChange={setTimeOutDone}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Ujian telah mencapai batas waktu yang telah ditentukan.
+                      Jawaban Anda akan disimpan secara otomatis.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogAction
+                      className="cursor-pointer"
+                      onClick={handleSendExam}
+                    >
+                      Oke
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <div className="mt-5">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button className="cursor-pointer px-6 py-2 rounded-md font-semibold text-lg border-2 border-slate-800 hover:opacity-60">
+                      Selesai
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      {handleAnswerEmpty() === false ? (
+                        <>
+                          <DialogTitle className="mb-2">
+                            Jawaban Kamu Belum Selesai
+                          </DialogTitle>
+                          <DialogDescription>
+                            Terindikasi Bahwa Jawaban Belum Terisi Semua Apakah
+                            Yakin Ingin Mengakhiri Sesi Ujian Ini ?
+                          </DialogDescription>
+                        </>
+                      ) : (
+                        <>
+                          <DialogTitle className="mb-2">
+                            Konfirmasi Ujian
+                          </DialogTitle>
+                          <DialogDescription>
+                            Apakah Anda Yakin Ingin Menyelesaikan Ujian ini?
+                          </DialogDescription>
+                        </>
+                      )}
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="secondary">Kembali</Button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <Button onClick={handleSendExam}>
+                          Akhiri Sekarang
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
+              <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">
+                <div className="flex flex-col items-center justify-center gap-1 informExam">
+                  <Input
+                    type="checkbox"
+                    className="size-7 cursor-pointer absolute opacity-0 z-20"
+                    onChange={(e) => {
+                      setShowInformationExam(e.target.checked);
+                      setIsClosedContent(false);
+                    }}
+                    checked={showInformationExam}
+                    ref={clickedOutsideCheked}
+                  />
+                  <span className="w-6 h-1 bg-black rounded-lg rotate-45 translate-y-1 transition-all duration-300 ease-in-out"></span>
+                  <span className="w-6 h-1 bg-black rounded-lg -rotate-45 -translate-y-1 transition-all duration-300 ease-in-out"></span>
+                </div>
+              </div>
             </div>
           </div>
-          <AlertDialog open={timeOutDone} onOpenChange={setTimeOutDone}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Ujian telah mencapai batas waktu yang telah ditentukan.
-                  Jawaban Anda akan disimpan secara otomatis.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogAction
-                  className="cursor-pointer"
-                  onClick={handleSendExam}
-                >
-                  Oke
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <div className="mt-5">
-            <Dialog>
-              <DialogTrigger asChild>
-                <button className="cursor-pointer px-6 py-2 rounded-md font-semibold text-lg border-2 border-slate-800 hover:opacity-60">
-                  Selesai
-                </button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  {handleAnswerEmpty() === false ? (
-                    <>
-                      <DialogTitle className="mb-2">
-                        Jawaban Kamu Belum Selesai
-                      </DialogTitle>
-                      <DialogDescription>
-                        Terindikasi Bahwa Jawaban Belum Terisi Semua Apakah
-                        Yakin Ingin Mengakhiri Sesi Ujian Ini ?
-                      </DialogDescription>
-                    </>
-                  ) : (
-                    <>
-                      <DialogTitle className="mb-2">
-                        Konfirmasi Ujian
-                      </DialogTitle>
-                      <DialogDescription>
-                        Apakah Anda Yakin Ingin Menyelesaikan Ujian ini?
-                      </DialogDescription>
-                    </>
-                  )}
-                </DialogHeader>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="secondary">Kembali</Button>
-                  </DialogClose>
-                  <DialogClose asChild>
-                    <Button onClick={handleSendExam}>Akhiri Sekarang</Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
-          <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">
-            <div className="flex flex-col items-center justify-center gap-1 informExam">
-              <Input
-                type="checkbox"
-                className="size-7 cursor-pointer absolute opacity-0 z-20"
-                onChange={(e) => {
-                  setShowInformationExam(e.target.checked);
-                  setIsClosedContent(false);
-                }}
-                checked={showInformationExam}
-                ref={clickedOutsideCheked}
-              />
-              <span className="w-6 h-1 bg-black rounded-lg rotate-45 translate-y-1 transition-all duration-300 ease-in-out"></span>
-              <span className="w-6 h-1 bg-black rounded-lg -rotate-45 -translate-y-1 transition-all duration-300 ease-in-out"></span>
-            </div>
-          </div>
-        </div>
+        </>
       ) : (
         <SkeletonExam />
       )}
-    </div>
+    </LayoutBodyContent>
   );
 }

@@ -1,61 +1,63 @@
 export default function SkeletonExam() {
   return (
-    <div>
-      <div>
-        <div className="w-11/12 mx-auto mb-3">
-          <div className="h-10 w-1/3 bg-slate-500 animate-pulse rounded-md"></div>
-        </div>
-        <div className="w-11/12 h-1 bg-slate-500 animate-pulse rounded-md my-3 mx-auto" />
-      </div>
+    <>
+      {/* nav skeleton */}
+      <div className="hidden md:block md:static md:w-1/3">
+        {/* background panel */}
+        <div className="bg-[#476EAE] fixed h-screen shadow-xl shadow-slate-700 flex flex-col items-center text-slate-200 font-medium text-xl md:w-1/3">
+          <div className="mt-3 p-5 w-full">
+            {/* title */}
+            <div className="h-8 bg-slate-300 rounded-md animate-pulse mb-3 w-3/4" />
 
-      <div className="flex items-center justify-center md:gap-x-3 max-[640px]:flex-col sm:flex-col md:flex-row-reverse">
-        <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-2/5 lg:basis-[30%] flex justify-center">
-          <div className="h-fit bg-slate-500 animate-pulse rounded-md fixed p-5 max-[640px]:w-full sm:w-11/12 max-[640px]:top-0 sm:top-0 md:top-1/4 md:w-2/5 lg:w-[30%]">
-            <div className="flex items-center max-[640px]:justify-around sm:justify-around">
-              <div className="h-8 w-1/3 bg-slate-400 rounded-md"></div>
-              <div className="bg-slate-400 rounded-md w-1/5 h-8"></div>
+            {/* exam type & timer */}
+            <div className="flex items-center justify-around mt-3">
+              <div className="h-6 bg-slate-300 rounded-md animate-pulse w-1/3" />
+              <div className="h-6 bg-slate-300 rounded-md animate-pulse w-1/4" />
             </div>
 
-            <div className="bg-slate-400 rounded-md mt-5 flex flex-wrap gap-2.5 justify-center items-center py-5 px-3">
-              {Array.from({ length: 20 }).map((_: any, i: number) => (
+            {/* question grid */}
+            <div className="mt-7 flex flex-wrap gap-2 rounded-md">
+              {Array.from({ length: 20 }).map((_, i) => (
                 <div
-                  className="bg-slate-500 animate-pulse rounded-md h-10 w-10"
+                  className="size-10 rounded-md bg-slate-300 animate-pulse"
                   key={i}
                 ></div>
               ))}
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="max-[640px]:w-11/12 sm:w-10/12 md:basis-1/2 lg:basis-[60%]">
-          {Array.from({ length: 3 }).map((_: any, i: number) => (
-            <div
-              className="mt-4 bg-slate-500 animate-pulse rounded-md p-5 mr-3 max-[640px]:w-full sm:w-full md:w-auto"
-              key={i}
-            >
-              <div className="bg-slate-400 rounded-md h-6 w-3/4"></div>
-              <ul className="mt-5">
-                <li className="flex gap-4 flex-col">
-                  <div className="bg-slate-400 rounded-md h-5 w-1/4"></div>
-                  <div className="bg-slate-400 rounded-md h-5 w-1/3"></div>
-                  <div className="bg-slate-400 rounded-md h-5 w-1/6"></div>
-                  <div className="bg-slate-400 rounded-md h-5 w-1/2"></div>
-                  <div className="bg-slate-400 rounded-md h-5 w-1/5"></div>
-                </li>
-                <div className="bg-slate-400 rounded-md mt-5 h-8 w-1/6"></div>
-              </ul>
-            </div>
-          ))}
+      {/* content skeleton */}
+      <div className="bg-slate-50 rounded-md p-7 mx-auto w-11/12 md:w-3/5 my-7">
+        {/* title placeholder */}
+        <div className="h-8 bg-slate-400 rounded w-1/2 mb-3 animate-pulse" />
+        <div className="h-1 bg-slate-400 rounded-lg mt-3 mb-7 animate-pulse" />
+
+        <div className="flex justify-between items-center flex-col md:items-start md:flex-row-reverse md:gap-x-5">
+          <div className="w-full">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div className="mb-5" key={i}>
+                <div className="h-6 bg-slate-400 rounded mb-2 animate-pulse" />
+                <ul className="mt-3 space-y-2">
+                  {Array.from({ length: 5 }).map((_, j) => (
+                    <li className="flex items-center gap-3" key={j}>
+                      <div className="h-5 w-5 bg-slate-400 rounded animate-pulse" />
+                      <div className="h-5 bg-slate-400 rounded w-3/4 animate-pulse" />
+                    </li>
+                  ))}
+                </ul>
+                <div className="h-8 w-20 bg-slate-400 rounded mt-3 animate-pulse" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* finish button placeholder */}
+        <div className="mt-5">
+          <div className="h-10 w-32 bg-slate-400 rounded animate-pulse" />
         </div>
       </div>
-
-      <div className="mt-7 max-[640px]:mx-5 sm:mx-7 md:mx-10">
-        <div className="bg-slate-500 animate-pulse rounded-md w-1/12 h-10"></div>
-      </div>
-
-      <div className="bg-slate-400 h-12 w-12 rounded-full fixed bottom-7 right-7 md:hidden flex justify-center items-center">
-        <div className="bg-slate-500 animate-pulse rounded-md w-5 h-5 "></div>
-      </div>
-    </div>
+    </>
   );
 }

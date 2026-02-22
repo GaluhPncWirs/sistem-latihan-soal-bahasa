@@ -273,14 +273,14 @@ tbody > tr > td {
   .informExam input:checked ~ span:nth-child(2){
     background-color: #e2e8f0;
     transform: rotate(12deg);
-    translate: -7px 8px;
+    translate: 1px 8px;
     width: 17px;
   }
 
   .informExam input:checked ~ span:nth-child(3){
     background-color: #e2e8f0;
     transform: rotate(-12deg);
-    translate: 4px -4px;
+    translate: 2px 4px;
   }
 
   /* Hilangkan icon di Chrome, Safari, Edge */

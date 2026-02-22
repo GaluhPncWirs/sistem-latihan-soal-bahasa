@@ -114,7 +114,7 @@ export default function Profil() {
         };
       });
 
-    const sortRanking = calculateTotalEveryScoreExams.sort(
+    const sortRanking = calculateTotalEveryScoreExams?.sort(
       (low: any, high: any) => high.pointExams - low.pointExams,
     );
 
