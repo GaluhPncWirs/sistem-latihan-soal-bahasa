@@ -32,36 +32,13 @@ export default function Teacher() {
   const [dataManageExams, setDataManageExams] = useState<string[]>([]);
   const dataStudentExams = getResultExamDataStudent(getidTeacher);
 
-  function handleClickItem(event: any) {
-    if (event === "scheduleExams") {
-      setDashboardButton({
-        scheduleExams: true,
-        createQuestions: false,
-        viewResult: false,
-        manageStudent: false,
-      });
-    } else if (event === "createQuestions") {
-      setDashboardButton({
-        scheduleExams: false,
-        createQuestions: true,
-        viewResult: false,
-        manageStudent: false,
-      });
-    } else if (event === "viewResult") {
-      setDashboardButton({
-        scheduleExams: false,
-        createQuestions: false,
-        viewResult: true,
-        manageStudent: false,
-      });
-    } else if (event === "manageStudent") {
-      setDashboardButton({
-        scheduleExams: false,
-        createQuestions: false,
-        viewResult: false,
-        manageStudent: true,
-      });
-    }
+  function handleClickItem(event: string) {
+    setDashboardButton({
+      scheduleExams: event === "scheduleExams",
+      createQuestions: event === "createQuestions",
+      viewResult: event === "viewResult",
+      manageStudent: event === "manageStudent",
+    });
   }
 
   const jumlahSiswa = new Set(
@@ -239,18 +216,14 @@ export default function Teacher() {
                       {dataManageExams.length > 0 ? (
                         dataManageExams.map((item: any, i: number) => (
                           <TableRow key={i}>
-                            <TableCell className="text-center">
-                              {i + 1}
-                            </TableCell>
+                            <TableCell>{i + 1}</TableCell>
                             <TableCell>{item.exams?.nama_ujian}</TableCell>
-                            <TableCell className="text-center">
-                              {item.kelas}
-                            </TableCell>
-                            <TableCell className="text-center">
+                            <TableCell>{item.kelas}</TableCell>
+                            <TableCell>
                               {item.dibuat_tgl} {item.tenggat_waktu}
                             </TableCell>
 
-                            <TableCell className="text-center">
+                            <TableCell>
                               {item.lengthStudent.length ===
                               item.lengthStudentCompleteExams?.length
                                 ? "Selesai"

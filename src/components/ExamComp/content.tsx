@@ -218,7 +218,6 @@ export default function ExamsComponent() {
     });
 
     const res = await response.json();
-
     if (res.success) {
       toast("Berhasil ✅", { description: "Ujian Telah Selesai" });
       localStorage.removeItem("timer");
@@ -275,14 +274,16 @@ export default function ExamsComponent() {
   }, []);
 
   useEffect(() => {
-    const handleOutsideContent = (e: any) => {
+    const handleOutsideContent = (e: MouseEvent) => {
       const refs = [
         clickedOutsideCheked.current,
         handleClickedOutsideContent.current,
         clickedMarkQuestions.current,
         clickedAnswerQuestions.current,
       ];
-      const isOutside = refs.every((ref) => ref && !ref.contains(e.target));
+      const isOutside = refs.every(
+        (ref) => ref && !ref.contains(e.target as Node),
+      );
       if (isOutside) {
         setIsClosedContent(true);
       }
@@ -516,7 +517,7 @@ export default function ExamsComponent() {
                   </DialogContent>
                 </Dialog>
               </div>
-              <div className="bg-red-400 h-12 w-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">
+              <div className="bg-red-400 size-12 rounded-full flex justify-center items-center fixed bottom-7 right-7 md:hidden">
                 <div className="flex flex-col items-center justify-center gap-1 informExam">
                   <Input
                     type="checkbox"

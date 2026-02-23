@@ -15,6 +15,7 @@ import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function ButtonAutentications() {
   const getidUsers = useGetIdUsers((state) => state.idUsers);
+  const handleLogout = useHandleLogout();
   return (
     <>
       {getidUsers ? (
@@ -37,7 +38,7 @@ export default function ButtonAutentications() {
                 <Button variant="secondary">Batal</Button>
               </DialogClose>
               <DialogClose asChild>
-                <Button onClick={useHandleLogout()}>Oke</Button>
+                <Button onClick={handleLogout}>Oke</Button>
               </DialogClose>
             </DialogFooter>
           </DialogContent>

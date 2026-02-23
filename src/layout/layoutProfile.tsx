@@ -31,7 +31,7 @@ export default function LayoutProfileUser({
   }
   return (
     <div>
-      <div className="flex justify-center items-center gap-7 mb-5 max-[640px]:flex-col max-[640px]:mb-10">
+      <div className="flex justify-center items-center gap-7 mb-10 flex-col sm:mb-5 sm:flex-row">
         <Dialog>
           <DialogTrigger asChild className="cursor-pointer">
             {previewImgProfil !== null ? (

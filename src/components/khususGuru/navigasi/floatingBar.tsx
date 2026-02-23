@@ -5,10 +5,10 @@ export default function FloatingBarDashboardTeacher({
   dashboardButton,
 }: any) {
   return (
-    <div className="mx-auto sticky top-3 z-10 max-[640px]:w-full sm:w-full lg:w-11/12">
-      <ul className="bg-[#476EAE] flex items-center text-slate-200 font-medium max-[640px]:text-lg sm:text-xl rounded-md max-[640px]:p-4 justify-evenly gap-x-3 sm:p-5">
+    <div className="mx-auto sticky top-3 z-10 w-full lg:w-11/12">
+      <ul className="bg-[#476EAE] flex items-center text-slate-200 font-medium text-base p-4 sm:text-xl rounded-md justify-evenly gap-x-3 shadow-md shadow-slate-700">
         <li
-          className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-y-1 max-[640px]:flex-col sm:flex-col"
+          className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-y-1 flex-col"
           id="scheduleExams"
           onClick={(e) => handleClickItem(e.currentTarget.id)}
         >
@@ -23,10 +23,10 @@ export default function FloatingBarDashboardTeacher({
             height={200}
             className="size-7"
           />
-          <span className="max-[640px]:text-base">Dashboard</span>
+          <span>Dashboard</span>
         </li>
         <li
-          className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-y-1 max-[640px]:flex-col sm:flex-col"
+          className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-y-1 flex-col"
           id="createQuestions"
           onClick={(e) => handleClickItem(e.currentTarget.id)}
         >
@@ -39,10 +39,10 @@ export default function FloatingBarDashboardTeacher({
             height={200}
             className="size-7"
           />
-          <span className="max-[640px]:text-base">Buat Soal</span>
+          <span>Buat Soal</span>
         </li>
         <li
-          className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-y-1 max-[640px]:flex-col sm:flex-col"
+          className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-y-1 flex-col"
           id="viewResult"
           onClick={(e) => handleClickItem(e.currentTarget.id)}
         >
@@ -57,10 +57,10 @@ export default function FloatingBarDashboardTeacher({
             height={200}
             className="size-8"
           />
-          <span className="max-[640px]:text-base">Kelola Ujian</span>
+          <span>Kelola Ujian</span>
         </li>
         <li
-          className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-y-1 max-[640px]:flex-col sm:flex-col"
+          className="cursor-pointer hover:text-slate-300 flex justify-center items-center gap-y-1 flex-col"
           id="manageStudent"
           onClick={(e) => handleClickItem(e.currentTarget.id)}
         >
@@ -75,7 +75,7 @@ export default function FloatingBarDashboardTeacher({
             height={200}
             className="size-8"
           />
-          <span className="max-[640px]:text-base">Nilai Siswa</span>
+          <span>Nilai Siswa</span>
         </li>
       </ul>
     </div>

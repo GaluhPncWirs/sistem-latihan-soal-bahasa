@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
 
-export function getResultExamDataStudent(idTeacher: any) {
+export function getResultExamDataStudent(idTeacher: string | null) {
   const [resultExamsStudent, setResultExamsStudent] = useState<any>([]);
 
   useEffect(() => {
@@ -23,11 +23,9 @@ export function getResultExamDataStudent(idTeacher: any) {
       if (errorStudent || errorHistoryStudent) {
         console.log("data gagal diambil");
       } else {
-        const dataIsNotNull = historyStudent?.filter(
-          (a: any) => a.exams !== null
-        );
+        const dataIsNotNull = historyStudent?.filter((a) => a.exams !== null);
 
-        const idSiswa = dataIsNotNull.reduce((acc: any, cur: any) => {
+        const idSiswa = dataIsNotNull.reduce((acc, cur) => {
           const findId = acc.find((f: any) => f.student_id === cur.student_id);
           if (!findId) {
             acc.push({
@@ -60,7 +58,7 @@ export function getResultExamDataStudent(idTeacher: any) {
 
         const mergedDatas = idSiswa.map((item: any) => {
           const historyExam = student.find(
-            (f: any) => f.idStudent === item.student_id
+            (f) => f.idStudent === item.student_id,
           );
           return {
             ...item,

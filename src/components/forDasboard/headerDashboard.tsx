@@ -32,7 +32,7 @@ export default function HeaderDasboard(props: any) {
   }
 
   return (
-    <div>
+    <>
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Dashboard {user}</h1>
         {informExams()}
@@ -51,6 +51,6 @@ export default function HeaderDasboard(props: any) {
           <span className="block capitalize mt-1.5">{fullName}</span>
         </h1>
       </div>
-    </div>
+    </>
   );
 }

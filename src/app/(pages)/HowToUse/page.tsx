@@ -12,7 +12,7 @@ export default function CaraPakaiSistemUjian() {
           <p className="mb-7 text-xl font-semibold">
             Ikuti Langkah-langkah Berikut ini Untuk Memulai Ujian
           </p>
-          <div className="grid gap-4 max-[640px]:grid-cols-1 sm:grid-cols-1 md:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
             <div className="bg-white p-5 flex rounded-lg gap-x-3">
               <div className="basis-1/3 flex justify-evenly">
                 <h1 className="w-8 h-8 bg-amber-300 rounded-full flex justify-center items-center font-bold">
@@ -113,10 +113,8 @@ export default function CaraPakaiSistemUjian() {
             </div>
           </div>
           <div className="mt-7 bg-white rounded-md p-5">
-            <h1 className="text-2xl font-semibold max-[640px]:text-xl">
-              ✅ Tips :
-            </h1>
-            <ul className="mt-4 flex flex-col gap-y-3 text-lg max-[640px]:text-base">
+            <h1 className="font-semibold text-xl sm:text-2xl">✅ Tips :</h1>
+            <ul className="mt-4 flex flex-col gap-y-3 sm:text-lg">
               <li className="flex items-center gap-x-3">
                 <Image
                   src="/img/howToUse/signal.png"

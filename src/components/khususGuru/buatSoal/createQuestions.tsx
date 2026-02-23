@@ -351,7 +351,7 @@ export default function CreateNewQuestions() {
                 <Input
                   id="nama_ujian"
                   className="border border-black rounded-sm p-1 px-2"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(e) => {
                     handleValueInput(e);
                     setNameExams(e.currentTarget.value);
                   }}
@@ -368,7 +368,7 @@ export default function CreateNewQuestions() {
             <Textarea
               id="questions"
               className="border border-black rounded-sm p-1 px-2 h-20"
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+              onChange={(e) => {
                 handleValueInput(e);
                 setQuestion(e.currentTarget.value);
               }}
@@ -382,7 +382,7 @@ export default function CreateNewQuestions() {
                   Pilihan Jawaban
                 </h1>
                 <div className="flex gap-x-5 gap-y-3 flex-wrap">
-                  {["a", "b", "c", "d", "e"].map((option: any) => {
+                  {["a", "b", "c", "d", "e"].map((option: string) => {
                     const answerKey = `answer_${option}`;
                     return (
                       <div key={`answer-option-${option}`}>
@@ -416,7 +416,7 @@ export default function CreateNewQuestions() {
                     <SelectValue placeholder="Pilih Jawaban Yang Benar" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["a", "b", "c", "d", "e"].map((option: any) => {
+                    {["a", "b", "c", "d", "e"].map((option: string) => {
                       const answerKey = `answer_${option}`;
                       return (
                         <SelectItem key={option} value={option}>

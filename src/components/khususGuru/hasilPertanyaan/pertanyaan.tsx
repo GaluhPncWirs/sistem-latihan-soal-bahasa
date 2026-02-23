@@ -82,7 +82,7 @@ export default function ViewQuestions() {
       );
 
     if (dataPayload.length > 0) {
-      const { error }: any = await supabase
+      const { error } = await supabase
         .from("managed_exams")
         .insert(dataPayload);
       if (error) {
