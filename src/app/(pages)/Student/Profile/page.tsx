@@ -62,83 +62,104 @@ export default function Profil() {
   }, []);
 
   function rankingClasses() {
-    const filterResultExams = resultExamPerClass?.map((fil) => {
-      return {
-        ...fil,
-        hasil_ujian:
-          fil.hasil_ujian !== "telat" && fil.hasil_ujian !== "pending"
-            ? fil.hasil_ujian
-            : "0",
-      };
-    });
-    const rankClass = filterResultExams?.reduce((acc: any[], cur) => {
-      const classes = acc.find(
-        (data: DataHistoryExams) => data.kelas === cur.kelas,
-      );
-      const toNumber = Number(cur.hasil_ujian);
-      if (!classes) {
-        acc.push({
-          kelas: cur.kelas,
-          resultExam: [
-            {
-              student_id: cur.student_id,
-              pointExams: [toNumber],
-            },
-          ],
-        });
-      } else {
-        const studentItem = classes.resultExam.find(
-          (item: DataHistoryExams) => item.student_id === cur.student_id,
-        );
-        if (!studentItem) {
-          classes.resultExam.push({
-            student_id: cur.student_id,
-            pointExams: [toNumber],
+    if (!resultExamPerClass?.length || !dataStudent?.classes) {
+      return { ranking: 0, lenStudentPerClass: 0 };
+    }
+
+    // Step 1: Normalize hasil_ujian values
+    const normalizedResults = resultExamPerClass.map((item) => ({
+      ...item,
+      hasil_ujian:
+        item.hasil_ujian !== "telat" && item.hasil_ujian !== "pending"
+          ? item.hasil_ujian
+          : "0",
+    }));
+
+    // Step 2: Group by class and aggregate student scores
+    type StudentScores = {
+      student_id: string;
+      pointExams: number[];
+    };
+
+    type ClassGroup = {
+      kelas: string;
+      resultExam: StudentScores[];
+    };
+
+    const groupedByClass = normalizedResults.reduce<ClassGroup[]>(
+      (acc, cur) => {
+        const classGroup = acc.find((group) => group.kelas === cur.kelas);
+        const score = Number(cur.hasil_ujian);
+
+        if (!classGroup) {
+          acc.push({
+            kelas: cur.kelas,
+            resultExam: [
+              {
+                student_id: cur.student_id,
+                pointExams: [score],
+              },
+            ],
           });
         } else {
-          studentItem.pointExams.push(toNumber);
+          const studentItem = classGroup.resultExam.find(
+            (item) => item.student_id === cur.student_id,
+          );
+
+          if (studentItem) {
+            studentItem.pointExams.push(score);
+          } else {
+            classGroup.resultExam.push({
+              student_id: cur.student_id,
+              pointExams: [score],
+            });
+          }
         }
-      }
-      return acc;
-    }, []);
 
-    const calculateTotalEveryScoreExams = rankClass
-      .find((fil) => fil.kelas === dataStudent?.classes)
-      ?.resultExam?.map((item: any) => {
-        return {
-          ...item,
-          pointExams: item.pointExams.reduce(
-            (acc: number, cur: number) => acc + cur,
-            0,
-          ),
-        };
-      });
-
-    const sortRanking = calculateTotalEveryScoreExams?.sort(
-      (low: any, high: any) => high.pointExams - low.pointExams,
+        return acc;
+      },
+      [],
     );
 
+    // Step 3: Calculate total scores for current class
+    const currentClassData = groupedByClass.find(
+      (group) => group.kelas === dataStudent.classes,
+    );
+
+    if (!currentClassData?.resultExam.length) {
+      return { ranking: 0, lenStudentPerClass: 0 };
+    }
+
+    const totalScores = currentClassData.resultExam.map((item) => ({
+      ...item,
+      pointExams: item.pointExams.reduce((sum, score) => sum + score, 0),
+    }));
+
+    // Step 4: Sort by score (descending)
+    const sortedByScore = [...totalScores].sort(
+      (a, b) => b.pointExams - a.pointExams,
+    );
+
+    // Step 5: Add ranks (handling ties)
     let lastScore: number | null = null;
-    let lastRank: number = 0;
-    let index: number = 0;
+    let currentRank = 0;
 
-    const addRanking = sortRanking?.map((siswa: any) => {
-      index++;
-      if (siswa.pointExams !== lastScore) {
-        lastRank = index;
-        lastScore = siswa.pointExams;
+    const withRanking = sortedByScore.map((item, index) => {
+      if (item.pointExams !== lastScore) {
+        currentRank = index + 1;
+        lastScore = item.pointExams;
       }
-
-      return { ...siswa, ranking: lastRank };
+      return { ...item, ranking: currentRank };
     });
 
-    const resultChooseRanking = addRanking?.filter(
-      (fil: DataHistoryExams) => fil.student_id === getIdStudent,
+    // Step 6: Find current student's ranking
+    const studentRanking = withRanking.find(
+      (item) => item.student_id === getIdStudent,
     );
 
     return {
-      ranking: resultChooseRanking[0]?.ranking,
-      lenStudentPerClass: calculateTotalEveryScoreExams.length,
+      ranking: studentRanking?.ranking ?? 0,
+      lenStudentPerClass: totalScores.length,
     };
   }
 

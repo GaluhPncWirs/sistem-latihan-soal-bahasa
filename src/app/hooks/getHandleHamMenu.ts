@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 
 export function useHandleClickedHamburgerMenu() {
   const [isCheked, setIsCheked] = useState<boolean>(false);
-  const [isTrue, setIsTrue] = useState<boolean>(false);
   const clickOutsidePath = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -11,7 +10,7 @@ export function useHandleClickedHamburgerMenu() {
         clickOutsidePath.current &&
         !clickOutsidePath.current.contains(event.target as Node)
       ) {
-        setIsTrue(true);
+        setIsCheked(false);
       }
     }
 
@@ -22,17 +21,9 @@ export function useHandleClickedHamburgerMenu() {
     };
   }, []);
 
-  useEffect(() => {
-    if (isTrue) {
-      setIsCheked(false);
-      setIsTrue(false);
-    }
-  }, [isTrue]);
-
   return {
     isCheked,
     clickOutsidePath,
     setIsCheked,
-    setIsTrue,
   };
 }

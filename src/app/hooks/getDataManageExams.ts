@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export function useManageExamsData(id: any) {
+export function useManageExamsData(id: string | undefined) {
   const [viewQuestions, setViewQuestions] = useState<any>([]);
 
   useEffect(() => {

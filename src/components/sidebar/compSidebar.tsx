@@ -3,7 +3,7 @@ import ListSidebar from "./listSidebar/content";
 import { useHandleClickedHamburgerMenu } from "@/app/hooks/getHandleHamMenu";
 
 export default function HamburgerMenuBar() {
-  const { isCheked, clickOutsidePath, setIsCheked, setIsTrue } =
+  const { isCheked, clickOutsidePath, setIsCheked } =
     useHandleClickedHamburgerMenu();
 
   return (
@@ -13,10 +13,7 @@ export default function HamburgerMenuBar() {
           type="checkbox"
           className="absolute size-6 cursor-pointer z-20 opacity-0"
           checked={isCheked}
-          onChange={() => {
-            setIsCheked((prev) => !prev);
-            setIsTrue(false);
-          }}
+          onChange={() => setIsCheked((prev) => !prev)}
         />
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
