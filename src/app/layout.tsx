@@ -1,4 +1,6 @@
+"use client";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { Open_Sans } from "next/font/google";
 
@@ -15,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={fontStyle.className}>
-        <Toaster richColors />
-        {children}
+        <SessionProvider>
+          <Toaster richColors />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );

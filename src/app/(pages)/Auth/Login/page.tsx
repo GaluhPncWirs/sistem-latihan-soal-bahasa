@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import LayoutFormAccount from "@/layout/formAccount";
 import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -132,6 +133,16 @@ export default function LoginAccount() {
           {isLoading ? <Loader2 className="animate-spin size-7" /> : "Login"}
         </button>
       </form>
+      <button
+        onClick={() =>
+          signIn("google", {
+            redirect: false,
+            callbackUrl: "/Student/Dashboard",
+          })
+        }
+      >
+        Masuk dengan akun <span className="text-blue-600">Google</span>
+      </button>
     </LayoutFormAccount>
   );
 }
