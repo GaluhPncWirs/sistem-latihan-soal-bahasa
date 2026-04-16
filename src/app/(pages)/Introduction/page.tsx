@@ -20,6 +20,7 @@ export default function Introduction() {
   const getidUsers = useGetIdUsers((state) => state.role);
   const [isSizeMobile, setIsSizeMobile] = useState(false);
   const session = useSession();
+  // console.log(session);
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 640px)");
     function handler(e: MediaQueryListEvent | MediaQueryList) {

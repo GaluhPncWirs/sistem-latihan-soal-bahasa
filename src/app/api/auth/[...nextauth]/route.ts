@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase/data";
 import jwt from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXT_AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
       name: "google",
@@ -15,6 +15,15 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
+      // if (account && user) {
+      //   return {
+      //     ...token,
+      //     accessToken: account.access_token,
+      //     id: user.id,
+      //     email: user.email,
+      //   };
+      // }
+
       if (account?.provider === "google") {
         const dataUser = {
           fullName: user.name,
@@ -41,15 +50,12 @@ export const authOptions: NextAuthOptions = {
             console.log("gagal menyimpan data");
           } else {
             ((token.idStudent = dataUser.idStudent),
-              (token.fullName = dataUser.fullName),
-              (token.email = dataUser.email),
-              (token.profilImage = dataUser.profilImage),
-              (token.role = dataUser.role),
-              (token.typeAccount = dataUser.typeAccount));
-            console.log("berhasil menyimpan data");
+              (token.role = dataUser.role));
+            console.log("berhasil buat akun");
           }
         }
       }
+      console.log(token);
       return token;
     },
 
