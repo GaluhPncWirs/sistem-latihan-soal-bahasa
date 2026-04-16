@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { useRandomId } from "@/app/hooks/getRandomId";
 import { supabase } from "@/lib/supabase/data";
+import jwt from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXT_AUTH_SECRET,
@@ -21,7 +22,7 @@ export const authOptions: NextAuthOptions = {
           profilImage: user.image,
           role: "pelajar",
           idStudent: useRandomId(7, "STD"),
-          type: "google",
+          typeAccount: "google",
         };
         // harus dari database
         const { data, error }: any = await supabase
@@ -33,17 +34,18 @@ export const authOptions: NextAuthOptions = {
         } else if (error) {
           console.log("gagal mengambil data");
         } else {
-          const { error } = await supabase
+          const { error }: any = await supabase
             .from("account-student")
             .insert(dataUser);
           if (error) {
             console.log("gagal menyimpan data");
           } else {
-            ((token.fullName = dataUser.fullName),
+            ((token.idStudent = dataUser.idStudent),
+              (token.fullName = dataUser.fullName),
               (token.email = dataUser.email),
               (token.profilImage = dataUser.profilImage),
               (token.role = dataUser.role),
-              (token.type = dataUser.type));
+              (token.typeAccount = dataUser.typeAccount));
             console.log("berhasil menyimpan data");
           }
         }
@@ -56,7 +58,8 @@ export const authOptions: NextAuthOptions = {
       session.user.email = token.email;
       session.user.profileImage = token.profileImage;
       session.user.role = token.role;
-      session.user.type = token.type;
+      session.user.idStudent = token.idStudent;
+      session.user.typeAccount = token.typeAccount;
       return session;
     },
   },

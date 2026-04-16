@@ -13,11 +13,13 @@ import { useEffect, useState } from "react";
 import CompFiturUnggulan from "@/components/beranda/fiturUnggulan/content";
 import CompAlurUjian from "@/components/beranda/alurUjian/content";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Introduction() {
   const getidUsers = useGetIdUsers((state) => state.role);
   const [isSizeMobile, setIsSizeMobile] = useState(false);
-
+  const session = useSession();
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 640px)");
     function handler(e: MediaQueryListEvent | MediaQueryList) {

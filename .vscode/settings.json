@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "sedang menambahkan fitur untuk opsi login menggunakan akun google"
+        "sedang menambahkan fitur untuk opsi login menggunakan akun google",
+        "selesai untuk membuat fitur login menggunakan akun google"
     ]
 }
