@@ -3,24 +3,35 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const tokenJWTFromCokies: any = req.cookies.get("token")?.value;
-  const role = req.cookies.get("role")?.value;
-  const tokenFormGoogle = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
-  console.log(tokenFormGoogle);
+  const tokenJWTFromCokies = req.cookies.get("tokenLogin")?.value;
+  const tokenFromGoogleCookies = req.cookies.get(
+    "next-auth.session-token",
+  )?.value;
   try {
-    const resultDecodeJWT = jwtDecode(tokenJWTFromCokies);
+    if (tokenFromGoogleCookies) {
+      const tokenFromGoogle = await getToken({
+        req,
+        secret: process.env.NEXTAUTH_SECRET,
+      });
+      return NextResponse.json({
+        status: true,
+        message: "Berhasil Decode Token",
+        data: tokenFromGoogle,
+        role: tokenFromGoogle?.role,
+        expired: tokenFromGoogle?.exp,
+      });
+    }
 
-    return NextResponse.json({
-      status: true,
-      message: "Berhasil Decode Token",
-      data: resultDecodeJWT,
-      role: role,
-      expired: resultDecodeJWT.exp,
-    });
+    if (tokenJWTFromCokies) {
+      const resultDecodeJWT: any = jwtDecode(tokenJWTFromCokies);
+      return NextResponse.json({
+        status: true,
+        message: "Berhasil Decode Token",
+        data: resultDecodeJWT,
+        role: resultDecodeJWT.role,
+        expired: resultDecodeJWT.exp,
+      });
+    }
   } catch (err) {
     return NextResponse.json({
       status: false,

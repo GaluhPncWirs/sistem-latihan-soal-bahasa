@@ -24,6 +24,7 @@ export async function POST(req: Request) {
         idStudent: dataStudent.idStudent,
         email: valueEmail,
         name: dataStudent.fullName,
+        role: "pelajar",
       },
       process.env.JWT_SECRET || "mySecretKey123",
       { expiresIn: "3h" },
@@ -34,12 +35,8 @@ export async function POST(req: Request) {
       tipe: valueTypeAccount,
       message: "Masuk Akun Berhasil",
     });
-    res.cookies.set("role", "pelajar", {
-      path: "/",
-      httpOnly: true,
-      sameSite: "lax",
-    });
-    res.cookies.set("token", token, {
+
+    res.cookies.set("tokenLogin", token, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",
@@ -65,6 +62,7 @@ export async function POST(req: Request) {
         idTeacher: dataTeacher.id_teacher,
         email: valueEmail,
         name: dataTeacher.fullName,
+        role: "pengajar",
       },
       process.env.JWT_SECRET || "mySecretKey123",
       {
@@ -76,12 +74,7 @@ export async function POST(req: Request) {
       tipe: valueTypeAccount,
       message: "Masuk Akun Berhasil",
     });
-    res.cookies.set("role", "pengajar", {
-      path: "/",
-      httpOnly: true,
-      sameSite: "lax",
-    });
-    res.cookies.set("token", token, {
+    res.cookies.set("tokenLogin", token, {
       httpOnly: true,
       secure: true,
       sameSite: "strict",

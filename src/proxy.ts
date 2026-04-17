@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "./lib/supabase/data";
 import { jwtVerify } from "jose";
+import { jwtDecode } from "jwt-decode";
 
 export async function proxy(req: NextRequest) {
   const { pathname, searchParams } = req.nextUrl;
-  const role = req.cookies.get("role")?.value;
   const isStartExam = req.cookies.get("startExam")?.value;
-  const token = req.cookies.get("token")?.value;
+  const token: any = req.cookies.get("tokenLogin")?.value;
 
   if (pathname.startsWith("/Student/Exams/StartExam")) {
     const examId = searchParams.get("idExams");
@@ -111,14 +111,18 @@ export async function proxy(req: NextRequest) {
     return NextResponse.redirect(new URL("/Student/Dashboard", req.url));
   }
 
-  // proteksi halaman guru
-  if (pathname.startsWith("/Teacher") && role !== "pengajar") {
-    return NextResponse.redirect(new URL("/", req.url));
-  }
+  // proteksi halaman
+  if (token) {
+    // proteksi halaman guru
+    const decodeJWT: any = jwtDecode(token);
+    if (pathname.startsWith("/Teacher") && decodeJWT.role !== "pengajar") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
 
-  //proteksi halaman pelajar
-  if (pathname.startsWith("/Student") && role !== "pelajar") {
-    return NextResponse.redirect(new URL("/", req.url));
+    //proteksi halaman pelajar
+    if (pathname.startsWith("/Student") && decodeJWT.role !== "pelajar") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 
   // //proteksi jika belum login

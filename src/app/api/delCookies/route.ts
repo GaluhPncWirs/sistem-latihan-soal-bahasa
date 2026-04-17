@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function DELETE() {
   const cookieStore = await cookies();
-  cookieStore.delete("role");
-  cookieStore.delete("token");
+  cookieStore.delete("tokenLogin");
+  cookieStore.delete("next-auth.session-token");
 
   const res = NextResponse.json({
     status: 200,

@@ -15,15 +15,6 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      // if (account && user) {
-      //   return {
-      //     ...token,
-      //     accessToken: account.access_token,
-      //     id: user.id,
-      //     email: user.email,
-      //   };
-      // }
-
       if (account?.provider === "google") {
         const dataUser = {
           fullName: user.name,
@@ -55,7 +46,6 @@ export const authOptions: NextAuthOptions = {
           }
         }
       }
-      console.log(token);
       return token;
     },
 
