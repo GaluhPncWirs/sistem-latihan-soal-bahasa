@@ -15,47 +15,54 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      if (account?.provider === "google") {
-        const dataUser = {
-          fullName: user.name,
-          email: user.email,
-          profilImage: user.image,
-          role: "pelajar",
-          idStudent: useRandomId(7, "STD"),
-          typeAccount: "google",
-        };
-        // harus dari database
-        const { data, error }: any = await supabase
+      if (account?.provider === "google" && user) {
+        // 1. Cek apa user sudah ada di database
+        const { data: existingUser, error } = await supabase
           .from("account-student")
-          .select("email")
-          .eq("email", user.email);
-        if (data?.length > 0) {
-          console.log("akun email sudah ada");
-        } else if (error) {
-          console.log("gagal mengambil data");
+          .select("idStudent, role")
+          .eq("email", user.email)
+          .single();
+
+        if (existingUser) {
+          // 2. Jika user SUDAH ADA, ambil id dan role dari database
+          token.idStudent = existingUser.idStudent;
+          token.role = existingUser.role;
         } else {
-          const { error }: any = await supabase
+          // 3. Jika user BELUM ADA, buat data baru
+          const newId = useRandomId(7, "STD");
+          const dataUser = {
+            fullName: user.name,
+            email: user.email,
+            profilImage: user.image,
+            role: "pelajar",
+            idStudent: newId,
+            typeAccount: "google",
+          };
+
+          const { error: insertError } = await supabase
             .from("account-student")
             .insert(dataUser);
-          if (error) {
-            console.log("gagal menyimpan data");
-          } else {
-            ((token.idStudent = dataUser.idStudent),
-              (token.role = dataUser.role));
-            console.log("berhasil buat akun");
+
+          if (!insertError) {
+            token.idStudent = dataUser.idStudent;
+            token.role = dataUser.role;
+            console.log("User baru berhasil didaftarkan");
           }
         }
       }
+
       return token;
     },
 
     async session({ session, token }: any) {
-      session.user.fullname = token.fullname;
-      session.user.email = token.email;
-      session.user.profileImage = token.profileImage;
-      session.user.role = token.role;
-      session.user.idStudent = token.idStudent;
-      session.user.typeAccount = token.typeAccount;
+      if (session.user) {
+        session.user.fullname = token.fullname;
+        session.user.email = token.email;
+        session.user.profileImage = token.profileImage;
+        session.user.role = token.role;
+        session.user.idStudent = token.idStudent;
+        session.user.typeAccount = token.typeAccount;
+      }
       return session;
     },
   },

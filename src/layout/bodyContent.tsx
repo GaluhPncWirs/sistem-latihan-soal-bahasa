@@ -5,18 +5,24 @@ import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 import { usePathname } from "next/navigation";
 import { useLocationPage } from "@/store/useLocationPage/state";
 import ListSidebar from "@/components/sidebar/listSidebar/content";
+import { useShallow } from "zustand/shallow";
 
 export default function LayoutBodyContent({
   children,
 }: React.PropsWithChildren) {
   const { loadingSession, statusToken } = useVerifyToken();
   const getDataUsers = useGetDataUsers((state) => state.setGetDataUsers);
-  const getidUsers = useGetIdUsers((state) => state.setHandleGetIdUsers);
+  const { setHandleGetIdUsers, idUsers, role } = useGetIdUsers(
+    useShallow((state) => ({
+      setHandleGetIdUsers: state.setHandleGetIdUsers,
+      idUsers: state.idUsers,
+      role: state.role,
+    })),
+  );
   useEffect(() => {
-    getidUsers();
+    setHandleGetIdUsers();
   }, []);
-  const idUsers = useGetIdUsers((state) => state.idUsers);
-  const role = useGetIdUsers((state) => state.role);
+
   useEffect(() => {
     if (role === "pelajar") {
       getDataUsers(idUsers, "account-student", "idStudent");
