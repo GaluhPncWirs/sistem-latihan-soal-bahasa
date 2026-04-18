@@ -47,13 +47,13 @@ export default function ButtonAutentications() {
         <>
           <Link
             href="/Auth/Daftar"
-            className="bg-blue-400 hover:bg-blue-500 hover:text-slate-200 py-1.5 px-5 rounded-lg cursor-pointer font-semibold text-lg"
+            className="border border-blue-600 hover:text-blue-500 py-1.5 px-5 rounded-md cursor-pointer font-semibold text-lg"
           >
             Daftar
           </Link>
           <Link
             href="/Auth/Login"
-            className="border-2 border-slate-700 hover:opacity-70 py-1.5 px-5 rounded-lg cursor-pointer font-semibold text-lg"
+            className="bg-blue-500 hover:bg-blue-600 py-1.5 px-5 rounded-lg cursor-pointer font-semibold text-lg text-white"
           >
             Login
           </Link>

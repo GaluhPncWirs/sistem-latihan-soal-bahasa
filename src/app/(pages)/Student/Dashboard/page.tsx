@@ -39,7 +39,6 @@ import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 export default function DashboardStudent() {
   const getIdStudent = useGetIdUsers((state) => state.idUsers);
   const dataStudent = useGetDataUsers((state) => state.dataUsers);
-  console.log(getIdStudent);
   const scheduleExams = useDataExams(dataStudent, getIdStudent);
   const { push } = useRouter();
   const processedLateExams = useRef<Set<string>>(new Set());

@@ -2,8 +2,17 @@ import { jwtDecode } from "jwt-decode";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
+type ValueTokenJWTFromLoginDefault = {
+  idStudent: string;
+  email: string;
+  name: string;
+  role: string;
+  iat: number;
+  exp: number;
+};
+
 export async function GET(req: NextRequest) {
-  const tokenJWTFromCokies = req.cookies.get("tokenLogin")?.value;
+  const tokenJWTFromLoginDefaultCookies = req.cookies.get("tokenLogin")?.value;
   const tokenFromGoogleCookies = req.cookies.get(
     "next-auth.session-token",
   )?.value;
@@ -22,8 +31,10 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    if (tokenJWTFromCokies) {
-      const resultDecodeJWT: any = jwtDecode(tokenJWTFromCokies);
+    if (tokenJWTFromLoginDefaultCookies) {
+      const resultDecodeJWT: ValueTokenJWTFromLoginDefault = jwtDecode(
+        tokenJWTFromLoginDefaultCookies,
+      );
       return NextResponse.json({
         status: true,
         message: "Berhasil Decode Token",
@@ -32,7 +43,12 @@ export async function GET(req: NextRequest) {
         expired: resultDecodeJWT.exp,
       });
     }
-  } catch (err) {
+
+    return NextResponse.json({
+      status: false,
+      message: "Token tidak ditemukan",
+    });
+  } catch {
     return NextResponse.json({
       status: false,
       message: "Token Gagal Di Decode",

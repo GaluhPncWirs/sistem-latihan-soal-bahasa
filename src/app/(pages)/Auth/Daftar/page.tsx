@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function RegisterAccount() {
   const [clearForm, setClearForm] = useState(false);
@@ -95,7 +96,7 @@ export default function RegisterAccount() {
             type="text"
             id="fullname"
             placeholder="adam jobs"
-            className="w-full rounded-md p-2.5 bg-teal-100"
+            className="w-full rounded-md p-2.5 bg-white"
             onChange={handleValueInput}
             value={formMustFilled.fullname}
           />
@@ -111,7 +112,7 @@ export default function RegisterAccount() {
             type="text"
             id="kelas"
             placeholder="Tp 5"
-            className="w-full rounded-md p-2.5 bg-teal-100"
+            className="w-full rounded-md p-2.5 bg-white"
             onChange={handleValueInput}
             value={formMustFilled.kelas}
           />
@@ -127,7 +128,7 @@ export default function RegisterAccount() {
             type="email"
             id="email"
             placeholder="adamJobs@gmail.com"
-            className="w-full rounded-md p-2.5 bg-teal-100"
+            className="w-full rounded-md p-2.5 bg-white"
             onChange={handleValueInput}
             value={formMustFilled.email}
           />
@@ -143,19 +144,19 @@ export default function RegisterAccount() {
             type="password"
             id="password"
             placeholder="**********"
-            className="w-full rounded-md p-2.5 bg-teal-100"
+            className="w-full rounded-md p-2.5 bg-white"
             onChange={handleValueInput}
             value={formMustFilled.password}
           />
         </div>
 
-        <button
-          className="bg-blue-400 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-500 hover:text-slate-200 disabled:cursor-not-allowed cursor-pointer flex justify-center text-lg"
+        <Button
+          className="bg-blue-400 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-500 text-black cursor-pointer text-lg"
           type="submit"
           disabled={!isFormFilled()}
         >
           {isLoading ? <Loader2 className="animate-spin size-7" /> : "Register"}
-        </button>
+        </Button>
       </form>
     </LayoutFormAccount>
   );

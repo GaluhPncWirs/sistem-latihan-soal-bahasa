@@ -21,8 +21,8 @@ export default function CompFiturUnggulan(props: propsFeature) {
           className="size-12"
         />
       </div>
-      <div className="shadow-lg shadow-slate-600">
-        <h1 className="bg-blue-500 text-slate-200 px-5 py-3 rounded-t-lg text-center font-semibold text-lg">
+      <div className="shadow-md shadow-slate-500 rounded-lg">
+        <h1 className="bg-blue-500 text-white tracking-wide py-3 rounded-t-lg text-center font-semibold text-lg">
           {titleFeature}
         </h1>
         <p className="py-4 px-5 bg-white rounded-b-lg">{descFeature}</p>

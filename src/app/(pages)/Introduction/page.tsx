@@ -13,14 +13,10 @@ import { useEffect, useState } from "react";
 import CompFiturUnggulan from "@/components/beranda/fiturUnggulan/content";
 import CompAlurUjian from "@/components/beranda/alurUjian/content";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 export default function Introduction() {
   const getidUsers = useGetIdUsers((state) => state.role);
   const [isSizeMobile, setIsSizeMobile] = useState(false);
-  const session = useSession();
-  // console.log(session);
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 640px)");
     function handler(e: MediaQueryListEvent | MediaQueryList) {
@@ -51,7 +47,7 @@ export default function Introduction() {
                     ? "/Teacher/dashboard"
                     : "/Auth/Login"
               }
-              className="text-center bg-blue-400 hover:bg-blue-500 rounded-md py-2 text-lg font-semibold cursor-pointer inline-block shadow-md shadow-slate-600 w-32"
+              className="text-center bg-blue-400 hover:text-blue-50 rounded-md py-2 text-lg font-semibold cursor-pointer inline-block shadow-md shadow-slate-600 w-32"
             >
               Mulai
             </Link>
@@ -71,7 +67,7 @@ export default function Introduction() {
         </div>
       </div>
 
-      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
+      <div className="bg-slate-50 bg-gradient-to-b from-slate-100">
         <div className="mx-auto w-10/12 py-14" id="content">
           <h1 className="text-4xl font-bold mb-12 text-[#0F4C75] tracking-wide">
             Fitur Unggulan
@@ -113,13 +109,13 @@ export default function Introduction() {
         className="absolute"
       >
         <path
-          fill="#71C9CE"
+          fill="#f8fafc"
           fillOpacity="1"
           d="M0,128L48,138.7C96,149,192,171,288,165.3C384,160,480,128,576,106.7C672,85,768,75,864,90.7C960,107,1056,149,1152,149.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
         ></path>
       </svg>
 
-      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] pt-14 sm:pt-20 lg:pt-32">
+      <div className="bg-blue-50 bg-gradient-to-b from-blue-100 pt-14 sm:pt-20 lg:pt-32">
         <div className="mx-auto py-16 w-10/12">
           <h1 className="text-4xl font-bold mb-5 text-[#0F4C75] tracking-wide">
             Tampilan Sistem
@@ -186,13 +182,13 @@ export default function Introduction() {
         className="absolute"
       >
         <path
-          fill="#71C9CE"
+          fill="#eff6ff"
           fillOpacity="1"
           d="M0,192L30,170.7C60,149,120,107,180,101.3C240,96,300,128,360,144C420,160,480,160,540,138.7C600,117,660,75,720,96C780,117,840,203,900,229.3C960,256,1020,224,1080,176C1140,128,1200,64,1260,42.7C1320,21,1380,43,1410,53.3L1440,64L1440,0L1410,0C1380,0,1320,0,1260,0C1200,0,1140,0,1080,0C1020,0,960,0,900,0C840,0,780,0,720,0C660,0,600,0,540,0C480,0,420,0,360,0C300,0,240,0,180,0C120,0,60,0,30,0L0,0Z"
         ></path>
       </svg>
 
-      <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] pt-32 sm:pt-40 md:pt-52">
+      <div className="bg-gray-50 bg-gradient-to-t from-gray-100 pt-32 sm:pt-40 md:pt-52">
         <div className="mx-auto w-10/12 lg:w-2/3">
           <div className="flex items-center gap-x-5 mb-5">
             <Image
@@ -275,6 +271,18 @@ export default function Introduction() {
           </CompAlurUjian>
         </div>
       </div>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute"
+        viewBox="0 0 1440 320"
+      >
+        <path
+          fill="#f3f4f6"
+          fillOpacity="1"
+          d="M0,256L34.3,224C68.6,192,137,128,206,133.3C274.3,139,343,213,411,234.7C480,256,549,224,617,224C685.7,224,754,256,823,250.7C891.4,245,960,203,1029,170.7C1097.1,139,1166,117,1234,122.7C1302.9,128,1371,160,1406,176L1440,192L1440,0L1405.7,0C1371.4,0,1303,0,1234,0C1165.7,0,1097,0,1029,0C960,0,891,0,823,0C754.3,0,686,0,617,0C548.6,0,480,0,411,0C342.9,0,274,0,206,0C137.1,0,69,0,34,0L0,0Z"
+        ></path>
+      </svg>
     </LayoutIntroductionsSystem>
   );
 }

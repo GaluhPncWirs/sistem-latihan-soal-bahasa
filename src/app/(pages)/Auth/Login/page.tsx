@@ -1,5 +1,6 @@
 "use client";
 import { useHandleInput } from "@/app/hooks/getHandleInput";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -72,77 +73,86 @@ export default function LoginAccount() {
 
   return (
     <LayoutFormAccount formTitle={"Login"}>
-      <form
-        className="flex justify-center flex-col w-3/4 gap-y-3 mx-auto"
-        onSubmit={(e) => handleLogin(e)}
-      >
-        <div>
-          <label
-            htmlFor="akunGuru"
-            className="text-xl font-semibold text-blue-500 inline-block mb-3"
-          >
-            Jenis Akun
-          </label>
-          <Select onValueChange={(val) => setValueTypeAccount(val)}>
-            <SelectTrigger className="w-full bg-teal-100 cursor-pointer">
-              <SelectValue placeholder="Pilih Jenis" />
-            </SelectTrigger>
-            <SelectContent className="bg-teal-100 p-1">
-              <SelectItem value="guru">Guru</SelectItem>
-              <SelectItem value="siswa">Siswa</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <label
-            htmlFor="email"
-            className="text-xl font-semibold text-blue-500 inline-block mb-3"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            placeholder="adamJobs@gmail.com"
-            className="w-full rounded-md p-2.5 bg-teal-100"
-            onChange={handleValueInput}
-            value={formMustFilled.email}
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="password"
-            className="text-xl font-semibold text-blue-500 inline-block mb-3"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            placeholder="**********"
-            className="w-full rounded-md p-2.5 bg-teal-100"
-            onChange={handleValueInput}
-            value={formMustFilled.password}
-          />
-        </div>
-        <button
-          className="bg-blue-400 font-semibold rounded-md w-full py-2 mt-3 hover:bg-blue-500 hover:text-slate-200 disabled:cursor-not-allowed cursor-pointer flex justify-center text-lg"
-          type="submit"
-          disabled={!isFormFilled()}
+      <div className="w-3/4 mx-auto">
+        <form
+          className="flex justify-center flex-col gap-y-3"
+          onSubmit={(e) => handleLogin(e)}
         >
-          {isLoading ? <Loader2 className="animate-spin size-7" /> : "Login"}
-        </button>
-      </form>
-      <button
-        onClick={() =>
-          signIn("google", {
-            redirect: false,
-            callbackUrl: "/Student/Dashboard",
-          })
-        }
-      >
-        Masuk dengan akun <span className="text-blue-600">Google</span>
-      </button>
+          <div>
+            <label
+              htmlFor="akunGuru"
+              className="text-xl font-semibold text-blue-500 inline-block mb-3"
+            >
+              Jenis Akun
+            </label>
+            <Select onValueChange={(val) => setValueTypeAccount(val)}>
+              <SelectTrigger className="w-full bg-white cursor-pointer">
+                <SelectValue placeholder="Pilih Jenis" />
+              </SelectTrigger>
+              <SelectContent className="bg-white p-1">
+                <SelectItem value="guru">Guru</SelectItem>
+                <SelectItem value="siswa">Siswa</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <label
+              htmlFor="email"
+              className="text-xl font-semibold text-blue-500 inline-block mb-3"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              placeholder="adamJobs@gmail.com"
+              className="w-full rounded-md p-2.5 bg-white"
+              onChange={handleValueInput}
+              value={formMustFilled.email}
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="password"
+              className="text-xl font-semibold text-blue-500 inline-block mb-3"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="**********"
+              className="w-full rounded-md p-2.5 bg-white"
+              onChange={handleValueInput}
+              value={formMustFilled.password}
+            />
+          </div>
+          <Button
+            className="bg-blue-400 rounded-md font-semibold w-full py-1.5 mt-3 hover:bg-blue-500 text-black cursor-pointer text-lg"
+            type="submit"
+            disabled={!isFormFilled()}
+          >
+            {isLoading ? <Loader2 className="animate-spin size-7" /> : "Login"}
+          </Button>
+        </form>
+        <div
+          className="text-right mt-2"
+          onClick={() =>
+            signIn("google", {
+              redirect: false,
+              callbackUrl: "/Student/Dashboard",
+            })
+          }
+        >
+          Masuk dengan akun{" "}
+          <Button
+            variant="link"
+            className="text-blue-600 px-0 text-base font-semibold"
+          >
+            Google
+          </Button>
+        </div>
+      </div>
     </LayoutFormAccount>
   );
 }

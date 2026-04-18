@@ -10,10 +10,10 @@ export default function LayoutIntroductionsSystem({ children }: any) {
     getidUsers();
   }, []);
   return (
-    <div className="bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9]">
+    <main>
       <NavigasiBar />
       {children}
       <FooterComponent />
-    </div>
+    </main>
   );
 }
