@@ -6,8 +6,8 @@ import { supabase } from "@/lib/supabase/data";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import FormInput from "@/components/local/formInput/content";
+import FormButton from "@/components/local/formButton/content";
 
 export default function RegisterAccount() {
   const [clearForm, setClearForm] = useState(false);
@@ -85,78 +85,39 @@ export default function RegisterAccount() {
         className="flex justify-center flex-col w-3/4 gap-y-3 mx-auto"
         onSubmit={(e) => handleRegister(e)}
       >
-        <div>
-          <label
-            htmlFor="fullname"
-            className="text-xl font-semibold text-blue-500 inline-block mb-3"
-          >
-            Nama
-          </label>
-          <input
-            type="text"
-            id="fullname"
-            placeholder="adam jobs"
-            className="w-full rounded-md p-2.5 bg-white"
-            onChange={handleValueInput}
-            value={formMustFilled.fullname}
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="kelas"
-            className="text-xl font-semibold text-blue-500 inline-block mb-3"
-          >
-            Kelas
-          </label>
-          <input
-            type="text"
-            id="kelas"
-            placeholder="Tp 5"
-            className="w-full rounded-md p-2.5 bg-white"
-            onChange={handleValueInput}
-            value={formMustFilled.kelas}
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="email"
-            className="text-xl font-semibold text-blue-500 inline-block mb-3"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            placeholder="adamJobs@gmail.com"
-            className="w-full rounded-md p-2.5 bg-white"
-            onChange={handleValueInput}
-            value={formMustFilled.email}
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="password"
-            className="text-xl font-semibold text-blue-500 inline-block mb-3"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            placeholder="**********"
-            className="w-full rounded-md p-2.5 bg-white"
-            onChange={handleValueInput}
-            value={formMustFilled.password}
-          />
-        </div>
-
-        <Button
-          className="bg-blue-400 rounded-md font-semibold w-full py-1.5 my-3 hover:bg-blue-500 text-black cursor-pointer text-lg"
-          type="submit"
-          disabled={!isFormFilled()}
-        >
-          {isLoading ? <Loader2 className="animate-spin size-7" /> : "Register"}
-        </Button>
+        <FormInput
+          typeInput="text"
+          placeholder="adam jobs"
+          labelTitle="Nama"
+          nameInput="fullname"
+          handleValueInput={handleValueInput}
+          formMustFilled={formMustFilled.fullname}
+        />
+        <FormInput
+          typeInput="text"
+          placeholder="TP2"
+          labelTitle="Kelas"
+          nameInput="kelas"
+          handleValueInput={handleValueInput}
+          formMustFilled={formMustFilled.kelas}
+        />
+        <FormInput
+          typeInput="email"
+          placeholder="adamJobs@gmail.com"
+          labelTitle="Email"
+          nameInput="email"
+          handleValueInput={handleValueInput}
+          formMustFilled={formMustFilled.email}
+        />
+        <FormInput
+          typeInput="password"
+          placeholder="**********"
+          labelTitle="Password"
+          nameInput="password"
+          handleValueInput={handleValueInput}
+          formMustFilled={formMustFilled.password}
+        />
+        <FormButton isFormFilled={isFormFilled} isLoading={isLoading} />
       </form>
     </LayoutFormAccount>
   );

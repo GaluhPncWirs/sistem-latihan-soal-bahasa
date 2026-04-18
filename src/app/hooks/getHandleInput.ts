@@ -6,8 +6,8 @@ export function useHandleInput(initState: any) {
   function handleValueInput(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) {
-    const { id, value } = event.target;
-    return setFormMustFilled({ ...formMustFilled, [id]: value });
+    const { name, value } = event.target;
+    return setFormMustFilled({ ...formMustFilled, [name]: value });
   }
 
   function isFormFilled() {

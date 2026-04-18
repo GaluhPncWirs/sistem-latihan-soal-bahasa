@@ -1,5 +1,7 @@
 "use client";
 import { useHandleInput } from "@/app/hooks/getHandleInput";
+import FormButton from "@/components/local/formButton/content";
+import FormInput from "@/components/local/formInput/content";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -9,7 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import LayoutFormAccount from "@/layout/formAccount";
-import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -86,7 +87,7 @@ export default function LoginAccount() {
               Jenis Akun
             </label>
             <Select onValueChange={(val) => setValueTypeAccount(val)}>
-              <SelectTrigger className="w-full bg-white cursor-pointer">
+              <SelectTrigger className="w-full bg-white cursor-pointer p-2.5">
                 <SelectValue placeholder="Pilih Jenis" />
               </SelectTrigger>
               <SelectContent className="bg-white p-1">
@@ -95,57 +96,33 @@ export default function LoginAccount() {
               </SelectContent>
             </Select>
           </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="text-xl font-semibold text-blue-500 inline-block mb-3"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              placeholder="adamJobs@gmail.com"
-              className="w-full rounded-md p-2.5 bg-white"
-              onChange={handleValueInput}
-              value={formMustFilled.email}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="text-xl font-semibold text-blue-500 inline-block mb-3"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              placeholder="**********"
-              className="w-full rounded-md p-2.5 bg-white"
-              onChange={handleValueInput}
-              value={formMustFilled.password}
-            />
-          </div>
-          <Button
-            className="bg-blue-400 rounded-md font-semibold w-full py-1.5 mt-3 hover:bg-blue-500 text-black cursor-pointer text-lg"
-            type="submit"
-            disabled={!isFormFilled()}
-          >
-            {isLoading ? <Loader2 className="animate-spin size-7" /> : "Login"}
-          </Button>
+          <FormInput
+            typeInput="email"
+            placeholder="adamJobs@gmail.com"
+            labelTitle="Email"
+            nameInput="email"
+            handleValueInput={handleValueInput}
+            formMustFilled={formMustFilled.email}
+          />
+          <FormInput
+            typeInput="password"
+            placeholder="**********"
+            labelTitle="Password"
+            nameInput="password"
+            handleValueInput={handleValueInput}
+            formMustFilled={formMustFilled.password}
+          />
+          <FormButton isFormFilled={isFormFilled} isLoading={isLoading} />
         </form>
-        <div
-          className="text-right mt-2"
-          onClick={() =>
-            signIn("google", {
-              redirect: false,
-              callbackUrl: "/Student/Dashboard",
-            })
-          }
-        >
+        <div className="text-right mt-2">
           Masuk dengan akun{" "}
           <Button
+            onClick={() =>
+              signIn("google", {
+                redirect: false,
+                callbackUrl: "/Student/Dashboard",
+              })
+            }
             variant="link"
             className="text-blue-600 px-0 text-base font-semibold"
           >
