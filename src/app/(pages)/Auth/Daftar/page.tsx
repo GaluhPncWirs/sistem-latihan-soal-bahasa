@@ -6,8 +6,8 @@ import { supabase } from "@/lib/supabase/data";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import FormInput from "@/components/local/formInput/content";
-import FormButton from "@/components/local/formButton/content";
+import FormInput from "@/components/local/authFormInput/formInput/content";
+import FormButton from "@/components/local/authFormInput/formButton/content";
 
 export default function RegisterAccount() {
   const [clearForm, setClearForm] = useState(false);

@@ -1,7 +1,7 @@
 import LayoutBodyContent from "@/layout/bodyContent";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 import Link from "next/link";
 import SkeletonResultExams from "./skeleton";
 

@@ -1,5 +1,5 @@
 "use client";
-import ResultExamComponent from "@/components/ResultExamComp/content";
+import ResultExamComponent from "@/components/local/ResultExamComp/content";
 import { Suspense } from "react";
 
 export default function ResultExam() {

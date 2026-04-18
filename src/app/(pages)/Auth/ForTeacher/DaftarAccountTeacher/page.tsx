@@ -5,8 +5,8 @@ import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import LayoutFormAccount from "@/layout/formAccount";
-import FormInput from "@/components/local/formInput/content";
-import FormButton from "@/components/local/formButton/content";
+import FormInput from "@/components/local/authFormInput/formInput/content";
+import FormButton from "@/components/local/authFormInput/formButton/content";
 
 export default function RegisterAccountTeacher() {
   const [clearForm, setClearForm] = useState<boolean>(false);

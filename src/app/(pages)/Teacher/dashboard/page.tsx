@@ -1,7 +1,7 @@
 "use client";
-import CreateNewQuestions from "@/components/khususGuru/buatSoal/createQuestions";
-import ViewQuestions from "@/components/khususGuru/hasilPertanyaan/pertanyaan";
-import ManageStudent from "@/components/khususGuru/kelolaSiswa/manageStudent";
+import CreateNewQuestions from "@/components/local/khususGuru/buatSoal/createQuestions";
+import ViewQuestions from "@/components/local/khususGuru/hasilPertanyaan/pertanyaan";
+import ManageStudent from "@/components/local/khususGuru/kelolaSiswa/manageStudent";
 import {
   Table,
   TableBody,
@@ -14,8 +14,8 @@ import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import HeaderDasboard from "@/components/forDasboard/headerDashboard";
-import FloatingBarDashboardTeacher from "@/components/khususGuru/navigasi/floatingBar";
+import HeaderDasboard from "@/components/local/forDasboard/content";
+import FloatingBarDashboardTeacher from "@/components/local/khususGuru/navigasi/floatingBar";
 import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";

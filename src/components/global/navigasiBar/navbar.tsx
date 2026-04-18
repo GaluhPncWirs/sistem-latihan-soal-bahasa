@@ -1,14 +1,14 @@
 "use client";
 import Image from "next/image";
-import HamburgerMenu from "./hamburgerMenu/hamburgerMenu";
+import HamburgerMenu from "../hamburgerMenu/content";
 import ButtonAutentications from "./buttonAuth/content";
 import ListContent from "./listContent/content";
 
 export default function NavigasiBar() {
   return (
-    <div className="w-full h-20 bg-slate-50 fixed shadow-lg shadow-slate-500 z-20">
+    <div className="w-full h-20 bg-slate-50 fixed shadow-lg shadow-slate-500 z-[9999]">
       <div className="flex justify-between md:justify-evenly h-full">
-        <div className="flex items-center w-2/3 pl-5 md:w-1/4 md:pl-0">
+        <div className="flex items-center justify-between w-full mx-5 md:w-1/4 md:mx-0">
           <Image
             src="/img/global/logo.png"
             alt="Logo"
@@ -17,7 +17,12 @@ export default function NavigasiBar() {
             className="w-56"
             loading="eager"
           />
-          <HamburgerMenu />
+          <HamburgerMenu>
+            <div className="grid grid-cols-2 gap-7 place-content-center place-items-center mt-7">
+              <ListContent />
+              <ButtonAutentications />
+            </div>
+          </HamburgerMenu>
         </div>
         <div className="hidden md:flex md:justify-end md:items-center md:gap-5 md:w-2/3">
           <div className="flex w-1/2 justify-evenly">

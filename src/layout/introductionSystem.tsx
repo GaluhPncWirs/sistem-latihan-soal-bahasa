@@ -1,6 +1,6 @@
 "use client";
-import FooterComponent from "@/components/footer/footerComp";
-import NavigasiBar from "@/components/navigasiBar/navbar";
+import FooterComponent from "@/components/global/footer/footerComp";
+import NavigasiBar from "@/components/global/navigasiBar/navbar";
 import { useEffect } from "react";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 

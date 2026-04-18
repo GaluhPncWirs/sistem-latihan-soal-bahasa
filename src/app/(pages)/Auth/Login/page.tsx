@@ -1,7 +1,7 @@
 "use client";
 import { useHandleInput } from "@/app/hooks/getHandleInput";
-import FormButton from "@/components/local/formButton/content";
-import FormInput from "@/components/local/formInput/content";
+import FormButton from "@/components/local/authFormInput/formButton/content";
+import FormInput from "@/components/local/authFormInput/formInput/content";
 import { Button } from "@/components/ui/button";
 import {
   Select,

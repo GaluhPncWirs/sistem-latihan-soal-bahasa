@@ -4,7 +4,7 @@ import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 import { usePathname } from "next/navigation";
 import { useLocationPage } from "@/store/useLocationPage/state";
-import ListSidebar from "@/components/sidebar/listSidebar/content";
+import ListSidebar from "@/components/global/listSidebar/content";
 import { useShallow } from "zustand/shallow";
 
 export default function LayoutBodyContent({

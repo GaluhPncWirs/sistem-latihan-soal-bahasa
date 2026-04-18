@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/carousel";
 import LayoutIntroductionsSystem from "@/layout/introductionSystem";
 import { useEffect, useState } from "react";
-import CompFiturUnggulan from "@/components/beranda/fiturUnggulan/content";
-import CompAlurUjian from "@/components/beranda/alurUjian/content";
+import CompFiturUnggulan from "@/components/local/beranda/fiturUnggulan/content";
+import CompAlurUjian from "@/components/local/beranda/alurUjian/content";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function Introduction() {

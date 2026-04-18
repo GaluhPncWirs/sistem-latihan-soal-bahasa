@@ -1,5 +1,5 @@
 "use client";
-import CorrectionEssayComponent from "@/components/correctionEssayComp/content";
+import CorrectionEssayComponent from "@/components/local/correctionEssayComp/content";
 import { Suspense } from "react";
 
 export default function CorrectionEssay() {

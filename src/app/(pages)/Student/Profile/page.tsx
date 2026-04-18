@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import HamburgerMenuBar from "@/components/sidebar/compSidebar";
+import HamburgerMenuBar from "@/components/global/hamburgerMenu/content";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";

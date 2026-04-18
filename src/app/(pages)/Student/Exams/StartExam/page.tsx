@@ -1,5 +1,5 @@
 "use client";
-import ExamsComponent from "@/components/ExamComp/content";
+import ExamsComponent from "@/components/local/examComp/content";
 import { Suspense } from "react";
 
 export default function Soal() {

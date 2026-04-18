@@ -1,6 +1,7 @@
 import Image from "next/image";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import HamburgerMenuBar from "../sidebar/compSidebar";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import HamburgerMenu from "@/components/global/hamburgerMenu/content";
+import ListSidebar from "@/components/global/listSidebar/content";
 
 export default function HeaderDashboard({ remainder, isLocationPage }: any) {
   return (
@@ -39,7 +40,9 @@ export default function HeaderDashboard({ remainder, isLocationPage }: any) {
           className="size-8"
         />
       )}
-      <HamburgerMenuBar />
+      <HamburgerMenu>
+        <ListSidebar />
+      </HamburgerMenu>
     </div>
   );
 }

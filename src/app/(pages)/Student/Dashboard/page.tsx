@@ -30,7 +30,7 @@ import { DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import HeaderDasboard from "@/components/forDasboard/headerDashboard";
+import HeaderDasboard from "@/components/local/forDasboard/content";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { toast } from "sonner";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";

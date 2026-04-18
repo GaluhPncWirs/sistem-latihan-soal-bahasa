@@ -20,10 +20,10 @@ export default function ListSidebar() {
   const isLocationPage = useLocationPage((state) => state.curentLocationPage);
   return (
     <>
-      <div className="bg-slate-200 rounded-md w-52 mx-auto flex items-center shadow-lg shadow-slate-700 md:w-10/12 p-2">
+      <div className="hidden md:flex bg-slate-200 rounded-md w-52 mx-auto items-center shadow-lg shadow-slate-700 md:w-10/12 p-2">
         <Image src="/img/global/logo.png" alt="Logo" width={400} height={400} />
       </div>
-      <div className="flex flex-col justify-evenly h-96">
+      <div className="grid grid-cols-2 gap-7 place-content-center place-items-center mt-7 md:place-items-baseline md:mt-0 md:grid-cols-1 md:h-96">
         <Link
           href={
             getIdUsers.includes("pelajar")
@@ -46,7 +46,7 @@ export default function ListSidebar() {
             height={200}
             className="size-8"
           />
-          <span className="text-slate-200">Dashboard</span>
+          <span>Dashboard</span>
         </Link>
         <Link
           href={
@@ -70,7 +70,7 @@ export default function ListSidebar() {
             height={200}
             className="size-9"
           />
-          <span className="text-slate-200">Profil</span>
+          <span>Profil</span>
         </Link>
         <Link href="/" className="cursor-pointer flex items-center gap-x-3">
           <Image
@@ -80,7 +80,7 @@ export default function ListSidebar() {
             height={200}
             className="size-9"
           />
-          <span className="text-slate-200">Beranda</span>
+          <span>Beranda</span>
         </Link>
         <div className="cursor-pointer flex items-center gap-x-3">
           <Image
@@ -92,7 +92,7 @@ export default function ListSidebar() {
           />
           <Dialog>
             <DialogTrigger asChild>
-              <span className="text-slate-200">Logout</span>
+              <span>Logout</span>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

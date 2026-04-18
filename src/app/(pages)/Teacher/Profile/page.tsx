@@ -1,5 +1,5 @@
 "use client";
-import HamburgerMenuBar from "@/components/sidebar/compSidebar";
+import HamburgerMenuBar from "@/components/global/hamburgerMenu/content";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
