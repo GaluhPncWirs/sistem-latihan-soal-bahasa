@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import LayoutFormAccount from "@/layout/formAccount";
+import FormAuth from "@/layout/formAuth/content";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -73,7 +73,7 @@ export default function LoginAccount() {
   }
 
   return (
-    <LayoutFormAccount formTitle={"Login"}>
+    <FormAuth formTitle={"Login"}>
       <div className="w-3/4 mx-auto">
         <form
           className="flex justify-center flex-col gap-y-3"
@@ -134,6 +134,6 @@ export default function LoginAccount() {
           </Button>
         </div>
       </div>
-    </LayoutFormAccount>
+    </FormAuth>
   );
 }

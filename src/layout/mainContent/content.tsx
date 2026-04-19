@@ -38,7 +38,7 @@ export default function MainContent({ children }: React.PropsWithChildren) {
   return (
     <div className="bg-black">
       <div
-        className={`bg-[#71C9CE] bg-gradient-to-t to-[#A6E3E9] flex ${
+        className={`bg-blue-100 flex ${
           loadingSession && `opacity-50 animate-pulse`
         }`}
       >

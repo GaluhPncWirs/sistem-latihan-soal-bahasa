@@ -404,7 +404,7 @@ export default function DashboardStudent() {
                     </div>
                     <Table>
                       <TableHeader>
-                        <TableRow className="bg-[#3282B8]">
+                        <TableRow className="bg-blue-300">
                           <TableHead>No</TableHead>
                           <TableHead>Nama Ujian</TableHead>
                           <TableHead>Waktu Tenggat</TableHead>
@@ -468,7 +468,7 @@ export default function DashboardStudent() {
 
                     <Table>
                       <TableHeader>
-                        <TableRow className="bg-[#3282B8]">
+                        <TableRow className="bg-blue-300">
                           <TableHead>No</TableHead>
                           <TableHead>Nama Ujian</TableHead>
                           <TableHead>Tgl Pengerjaan</TableHead>

@@ -25,7 +25,7 @@ export default function ManageStudent() {
       </h1>
       <Table>
         <TableHeader>
-          <TableRow className="bg-[#3282B8]">
+          <TableRow className="bg-blue-300">
             <TableHead>No</TableHead>
             <TableHead>Nama Siswa</TableHead>
             <TableHead>Ujian</TableHead>

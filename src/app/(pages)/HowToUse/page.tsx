@@ -1,9 +1,9 @@
-import LayoutIntroductionsSystem from "@/layout/introductionSystem";
+import Homepage from "@/layout/homepage/content";
 import Image from "next/image";
 
 export default function CaraPakaiSistemUjian() {
   return (
-    <LayoutIntroductionsSystem>
+    <Homepage>
       <div className="pt-24 bg-slate-100">
         <div className="mt-7 mx-auto w-11/12 lg:w-10/12">
           <h1 className="text-4xl font-bold text-blue-900 mb-5 tracking-wide">
@@ -151,6 +151,6 @@ export default function CaraPakaiSistemUjian() {
           </div>
         </div>
       </div>
-    </LayoutIntroductionsSystem>
+    </Homepage>
   );
 }

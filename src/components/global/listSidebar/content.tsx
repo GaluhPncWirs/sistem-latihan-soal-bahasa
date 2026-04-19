@@ -39,8 +39,7 @@ export default function ListSidebar() {
           className="cursor-pointer flex items-center gap-x-3"
         >
           <LayoutDashboard className="size-7" />
-
-          <span>Dashboard</span>
+          <span className="font-semibold">Dashboard</span>
         </Link>
         <Link
           href={
@@ -53,18 +52,20 @@ export default function ListSidebar() {
           className="cursor-pointer flex items-center gap-x-3"
         >
           <User2 className="size-7" />
-
-          <span>Profil</span>
+          <span className="font-semibold">Profil</span>
         </Link>
-        <Link href="/" className="cursor-pointer flex items-center gap-x-3">
+        <Link
+          href="/Introduction"
+          className="cursor-pointer flex items-center gap-x-3"
+        >
           <Home className="size-7" />
-          <span>Beranda</span>
+          <span className="font-semibold">Beranda</span>
         </Link>
         <div className="cursor-pointer flex items-center gap-x-3">
           <LogOut className="size-7" />
           <Dialog>
             <DialogTrigger asChild>
-              <span>Logout</span>
+              <span className="font-semibold">Logout</span>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -73,7 +74,6 @@ export default function ListSidebar() {
                   Apakah Anda Yakin Ingin Logout Dari Sistem ini ?
                 </DialogDescription>
               </DialogHeader>
-
               <DialogFooter>
                 <DialogClose asChild>
                   <Button variant="secondary">Batal</Button>

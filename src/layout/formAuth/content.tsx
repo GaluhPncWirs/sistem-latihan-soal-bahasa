@@ -9,11 +9,11 @@ type PropsFormAccount = {
   children: React.ReactNode;
 };
 
-export default function LayoutFormAccount(props: PropsFormAccount) {
+export default function FormAuth(props: PropsFormAccount) {
   const { formTitle, children } = props;
   const pathName = usePathname();
   return (
-    <div className="h-screen flex justify-center items-center flex-col bg-slate-100">
+    <div className="h-screen flex justify-center items-center bg-slate-100">
       <div>
         <Link
           href="/Introduction"
@@ -22,8 +22,8 @@ export default function LayoutFormAccount(props: PropsFormAccount) {
           <ArrowLeft /> <span>Kembali</span>
         </Link>
         <div className="bg-blue-100 mt-3">
-          <div className="rounded-md shadow-lg shadow-slate-500 py-5 w-10/12 sm:w-2/3 md:w-lg">
-            <h1 className="text-2xl font-bold text-blue-500 text-center mb-3 tracking-wider">
+          <div className="rounded-md shadow-lg shadow-slate-500 py-5 w-md sm:w-lg">
+            <h1 className="text-3xl font-bold text-blue-500 text-center mb-3 tracking-wider">
               {formTitle}
             </h1>
             {children}

@@ -4,9 +4,9 @@ import { useHandleInput } from "@/app/hooks/getHandleInput";
 import { supabase } from "@/lib/supabase/data";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import LayoutFormAccount from "@/layout/formAccount";
 import FormInput from "@/components/local/authFormInput/formInput/content";
 import FormButton from "@/components/local/authFormInput/formButton/content";
+import FormAuth from "@/layout/formAuth/content";
 
 export default function RegisterAccountTeacher() {
   const [clearForm, setClearForm] = useState<boolean>(false);
@@ -78,7 +78,7 @@ export default function RegisterAccountTeacher() {
   }, [clearForm]);
 
   return (
-    <LayoutFormAccount formTitle={"Daftar Akun Guru"}>
+    <FormAuth formTitle={"Daftar Akun Guru"}>
       <form
         className="flex justify-center flex-col w-3/4 gap-3 mx-auto"
         onSubmit={(e) => handleCreateAccountTeacher(e)}
@@ -113,6 +113,6 @@ export default function RegisterAccountTeacher() {
           isLoading={isLoading}
         />
       </form>
-    </LayoutFormAccount>
+    </FormAuth>
   );
 }

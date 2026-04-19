@@ -16,7 +16,7 @@ import { User2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function LayoutProfileUser({
+export default function HeaderProfile({
   children,
 }: {
   children: React.ReactNode;

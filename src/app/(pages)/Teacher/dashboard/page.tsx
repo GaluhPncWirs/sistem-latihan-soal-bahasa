@@ -11,7 +11,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { supabase } from "@/lib/supabase/data";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import HeaderDasboard from "@/components/local/forDasboard/content";
 import FloatingBarDashboardTeacher from "@/components/local/khususGuru/navigasi/floatingBar";
@@ -19,6 +18,7 @@ import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 import MainContent from "@/layout/mainContent/content";
+import { BarChart3, ClipboardCheck, Layers } from "lucide-react";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -153,49 +153,28 @@ export default function Teacher() {
             </h1>
             <div className="flex justify-evenly my-7 text-slate-200">
               <div className="bg-[#476EAE] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
-                <Image
-                  src="/img/dashboardTeacher/complete.png"
-                  alt="Complete"
-                  width={200}
-                  height={200}
-                  className="mx-auto size-10"
-                />
+                <ClipboardCheck className="size-9 mx-auto" />
                 <span className="text-3xl font-bold block py-2 sm:text-4xl">
                   {dataManageExams.length || "0"}
                 </span>
                 <h1 className="font-semibold">Ujian Dibuat</h1>
               </div>
               <div className="bg-[#476EAE] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
-                <Image
-                  src="/img/dashboardTeacher/count.png"
-                  alt="Jumlah"
-                  width={200}
-                  height={200}
-                  className="mx-auto size-10"
-                />
+                <Layers className="size-9 mx-auto" />
                 <span className="text-3xl font-bold block my-1.5 sm:text-4xl">
                   {jumlahSiswa.size || "0"}
                 </span>
                 <h1 className="font-semibold">Jumlah Siswa</h1>
               </div>
               <div className="bg-[#476EAE] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
-                <Image
-                  src="/img/dashboardTeacher/average.png"
-                  alt="Rata-Rata"
-                  width={200}
-                  height={200}
-                  className="mx-auto size-10"
-                />
+                <BarChart3 className="size-9 mx-auto" />
                 <span className="text-3xl font-bold block my-2 sm:text-4xl">
                   {Math.round(averageValueExam / jumlahSiswa.size) || "0"}
                 </span>
                 <h1 className="font-semibold">Nilai Rata-Rata</h1>
               </div>
             </div>
-            <FloatingBarDashboardTeacher
-              handleClickItem={handleClickItem}
-              dashboardButton={dashboardButton}
-            />
+            <FloatingBarDashboardTeacher handleClickItem={handleClickItem} />
             <div className="mt-5">
               {dashboardButton.scheduleExams === true ? (
                 <div>
@@ -204,7 +183,7 @@ export default function Teacher() {
                   </h1>
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-[#3282B8]">
+                      <TableRow className="bg-blue-300">
                         <TableHead>No</TableHead>
                         <TableHead>Nama Ujian</TableHead>
                         <TableHead>Kelas</TableHead>

@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -24,13 +23,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import HamburgerMenuBar from "@/components/global/hamburgerMenu/content";
-import LayoutProfileUser from "@/layout/layoutProfile";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 import MainContent from "@/layout/mainContent/content";
 import { Check, History, Trophy } from "lucide-react";
+import HamburgerMenu from "@/components/global/hamburgerMenu/content";
+import ListSidebar from "@/components/global/listSidebar/content";
+import HeaderProfile from "@/layout/headerProfile/content";
 
 type DataHistoryExams = {
   student_id: string;
@@ -67,7 +67,6 @@ export default function Profil() {
       return { ranking: 0, lenStudentPerClass: 0 };
     }
 
-    // Step 1: Normalize hasil_ujian values
     const normalizedResults = resultExamPerClass.map((item) => ({
       ...item,
       hasil_ujian:
@@ -76,7 +75,6 @@ export default function Profil() {
           : "0",
     }));
 
-    // Step 2: Group by class and aggregate student scores
     type StudentScores = {
       student_id: string;
       pointExams: number[];
@@ -206,11 +204,13 @@ export default function Profil() {
         <>
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-4xl font-bold">Profil Siswa</h1>
-            <HamburgerMenuBar />
+            <HamburgerMenu>
+              <ListSidebar />
+            </HamburgerMenu>
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">
-            <LayoutProfileUser>
+            <HeaderProfile>
               <div className="basis-3/4 flex flex-col gap-y-1.5">
                 <h1 className="capitalize font-semibold text-4xl xl:text-5xl">
                   {dataStudent?.fullName || ""}
@@ -274,7 +274,7 @@ export default function Profil() {
                   </form>
                 </DialogContent>
               </Dialog>
-            </LayoutProfileUser>
+            </HeaderProfile>
 
             <div>
               <div className="mb-5 flex items-center gap-3">

@@ -1,13 +1,13 @@
 "use client";
 import { useRandomId } from "@/app/hooks/getRandomId";
 import { useHandleInput } from "@/app/hooks/getHandleInput";
-import LayoutFormAccount from "@/layout/formAccount";
 import { supabase } from "@/lib/supabase/data";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import FormInput from "@/components/local/authFormInput/formInput/content";
 import FormButton from "@/components/local/authFormInput/formButton/content";
+import FormAuth from "@/layout/formAuth/content";
 
 export default function RegisterAccount() {
   const [clearForm, setClearForm] = useState(false);
@@ -80,7 +80,7 @@ export default function RegisterAccount() {
   }, [clearForm]);
 
   return (
-    <LayoutFormAccount formTitle={"Buat Akun"}>
+    <FormAuth formTitle={"Buat Akun"}>
       <form
         className="flex justify-center flex-col w-3/4 gap-y-3 mx-auto"
         onSubmit={(e) => handleRegister(e)}
@@ -123,6 +123,6 @@ export default function RegisterAccount() {
           isLoading={isLoading}
         />
       </form>
-    </LayoutFormAccount>
+    </FormAuth>
   );
 }

@@ -2,7 +2,6 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { useRandomId } from "@/app/hooks/getRandomId";
 import { supabase } from "@/lib/supabase/data";
-import jwt from "jsonwebtoken";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,

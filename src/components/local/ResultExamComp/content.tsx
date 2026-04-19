@@ -15,7 +15,10 @@ export default function ResultExamComponent() {
     if (!paramIdExam) return;
     async function getDataAnswer() {
       try {
-        const req = await fetch(`/api/resultExam?id=${paramIdExam}`);
+        const req = await fetch(`/api/resultExam?id=${paramIdExam}`, {
+          method: "GET",
+          cache: "no-store",
+        });
         const response = await req.json();
         setGetDataStudentAnswer(response.dataResultExams);
       } catch (err) {

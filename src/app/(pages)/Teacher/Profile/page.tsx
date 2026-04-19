@@ -1,5 +1,4 @@
 "use client";
-import HamburgerMenuBar from "@/components/global/hamburgerMenu/content";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,14 +24,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import LayoutProfileUser from "@/layout/layoutProfile";
 import { supabase } from "@/lib/supabase/data";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 import MainContent from "@/layout/mainContent/content";
+import HamburgerMenu from "@/components/global/hamburgerMenu/content";
+import ListSidebar from "@/components/global/listSidebar/content";
+import { History } from "lucide-react";
+import HeaderProfile from "@/layout/headerProfile/content";
 
 export default function TeacherProfile() {
   const getidTeacher = useGetIdUsers((state) => state.idUsers);
@@ -198,11 +199,13 @@ export default function TeacherProfile() {
         <>
           <div className="flex justify-between items-center mb-3">
             <h1 className="text-4xl font-bold">Profil Guru</h1>
-            <HamburgerMenuBar />
+            <HamburgerMenu>
+              <ListSidebar />
+            </HamburgerMenu>
           </div>
           <div className="w-full h-1 bg-slate-700 rounded-lg mt-3" />
           <div className="mt-7">
-            <LayoutProfileUser>
+            <HeaderProfile>
               <div className="basis-3/4 flex flex-col gap-y-1.5">
                 <h1 className="capitalize font-semibold text-4xl xl:text-5xl">
                   {getProfileTeacher?.fullName || ""}
@@ -292,17 +295,11 @@ export default function TeacherProfile() {
                   </form>
                 </DialogContent>
               </Dialog>
-            </LayoutProfileUser>
+            </HeaderProfile>
 
             <div>
               <div className="mb-5 flex items-center gap-3">
-                <Image
-                  src="/img/global/history.png"
-                  alt="History"
-                  width={200}
-                  height={200}
-                  className="size-8"
-                />
+                <History className="size-8" />
                 <h1 className="text-2xl font-semibold">
                   Riwayat Ujian Yang Dibuat
                 </h1>

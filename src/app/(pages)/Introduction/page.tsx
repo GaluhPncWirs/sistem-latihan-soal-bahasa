@@ -8,11 +8,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import LayoutIntroductionsSystem from "@/layout/introductionSystem";
 import { useEffect, useState } from "react";
 import CompFiturUnggulan from "@/components/local/beranda/fiturUnggulan/content";
 import CompAlurUjian from "@/components/local/beranda/alurUjian/content";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import {
+  Award,
+  ChevronDown,
+  LogIn,
+  MousePointerClick,
+  PencilLine,
+  Route,
+} from "lucide-react";
+import Homepage from "@/layout/homepage/content";
 
 export default function Introduction() {
   const getidUsers = useGetIdUsers((state) => state.role);
@@ -29,7 +37,7 @@ export default function Introduction() {
   }, []);
 
   return (
-    <LayoutIntroductionsSystem>
+    <Homepage>
       <div className="heroSectionImg flex items-center">
         <div className="relative tracking-wide px-5 lg:px-14 w-full">
           <div className="flex flex-col gap-4 max-w-lg mb-5">
@@ -53,21 +61,15 @@ export default function Introduction() {
             </Link>
           </div>
           <Link href="#content" className="cursor-pointer">
-            <span className="font-semibold text-lg mr-3">
+            <span className="font-semibold text-lg mr-2">
               Pelajari Lebih Lanjut Dibawah ini
             </span>
-            <Image
-              src="/img/beranda/arrowDown.png"
-              alt="arrow down"
-              height={50}
-              width={50}
-              className="inline animate-bounce size-5"
-            />
+            <ChevronDown className="inline animate-bounce size-6" />
           </Link>
         </div>
       </div>
 
-      <div className="bg-slate-50 bg-gradient-to-b from-slate-100">
+      <div className="bg-slate-50 bg-linear-to-b from-slate-100">
         <div className="mx-auto w-10/12 py-14" id="content">
           <h1 className="text-4xl font-bold mb-12 text-[#0F4C75] tracking-wide">
             Fitur Unggulan
@@ -188,16 +190,10 @@ export default function Introduction() {
         ></path>
       </svg>
 
-      <div className="bg-slate-50 bg-gradient-to-t from-slate-100 pt-32 sm:pt-40 md:pt-52">
+      <div className="bg-slate-50 bg-linear-to-t from-slate-100 pt-32 sm:pt-40 md:pt-52">
         <div className="mx-auto w-10/12 lg:w-2/3">
           <div className="flex items-center gap-x-5 mb-5">
-            <Image
-              src="/img/beranda/roadmap.png"
-              alt="roadmap"
-              className="size-12"
-              width={500}
-              height={500}
-            />
+            <Route className="size-10" />
             <h1 className="text-4xl font-bold text-[#0F4C75] tracking-wide">
               Alur Ujian
             </h1>
@@ -207,13 +203,7 @@ export default function Introduction() {
               <h1 className="font-bold text-2xl tracking-wide">
                 Daftar / Login
               </h1>
-              <Image
-                src="/img/beranda/login.png"
-                alt="login"
-                className="size-9"
-                width={100}
-                height={100}
-              />
+              <LogIn className="size-8" />
             </div>
             <h2 className="font-semibold mt-3 text-justify text-[#393E46] text-lg sm:text-xl">
               Buat akun baru atau masuk dengan akun yang sudah ada untuk
@@ -223,13 +213,7 @@ export default function Introduction() {
           <CompAlurUjian>
             <div className="flex gap-3 items-center">
               <h1 className="font-bold text-2xl tracking-wide">Pilih Ujian</h1>
-              <Image
-                src="/img/beranda/choose.png"
-                alt="choose"
-                className="size-9"
-                width={100}
-                height={100}
-              />
+              <MousePointerClick className="size-8" />
             </div>
             <h2 className="font-semibold mt-3 text-justify text-[#393E46] text-lg sm:text-xl">
               Telusuri dan pilih ujian yang tersedia sesuai jadwal yang ingin
@@ -241,13 +225,7 @@ export default function Introduction() {
               <h1 className="font-bold text-2xl tracking-wide">
                 Kerjakan Ujiannya
               </h1>
-              <Image
-                src="/img/beranda/write.png"
-                alt="working"
-                className="size-9"
-                width={100}
-                height={100}
-              />
+              <PencilLine className="size-8" />
             </div>
             <h2 className="font-semibold mt-3 text-justify text-[#393E46] text-lg sm:text-xl">
               Kerjakan soal secara online melalui antarmuka yang sederhana,
@@ -257,13 +235,7 @@ export default function Introduction() {
           <CompAlurUjian>
             <div className="flex gap-3 items-center">
               <h1 className="font-bold text-2xl tracking-wide">Lihat Nilai</h1>
-              <Image
-                src="/img/beranda/nilai.png"
-                alt="Nilai"
-                className="size-9"
-                width={100}
-                height={100}
-              />
+              <Award className="size-8" />
             </div>
             <h2 className="font-semibold mt-3 text-justify text-[#393E46] text-lg sm:text-xl">
               Setelah selesai, langsung dapatkan hasil ujian dan nilai anda
@@ -271,6 +243,6 @@ export default function Introduction() {
           </CompAlurUjian>
         </div>
       </div>
-    </LayoutIntroductionsSystem>
+    </Homepage>
   );
 }
