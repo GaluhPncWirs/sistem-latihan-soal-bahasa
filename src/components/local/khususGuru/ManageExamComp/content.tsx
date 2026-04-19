@@ -17,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Toaster } from "@/components/ui/sonner";
 import {
   Table,
   TableBody,
@@ -26,7 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -34,6 +32,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SkeletonManageExams from "./skeleton";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import MainContent from "@/layout/mainContent/content";
 
 export default function ManageExamComponent() {
   const [viewQuestions, setViewQuestions] = useState<any>({});
@@ -167,7 +166,7 @@ export default function ManageExamComponent() {
   }
 
   return (
-    <LayoutBodyContent>
+    <MainContent>
       {Object.values(viewQuestions).length > 0 ? (
         <>
           <h1 className="text-3xl font-bold">Kelola Soal Ujian</h1>
@@ -571,6 +570,6 @@ export default function ManageExamComponent() {
       ) : (
         <SkeletonManageExams />
       )}
-    </LayoutBodyContent>
+    </MainContent>
   );
 }

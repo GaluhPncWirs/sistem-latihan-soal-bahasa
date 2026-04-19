@@ -9,6 +9,7 @@
         "memperbaiki struktur code agar lebih reusable khususnya bagian autentikasi",
         "sedang refaktor code agarr lebih rapih",
         "selesai memperbaiki bagian hamburger menu yang overlaping",
-        "sedang memperbaiki struktur code dan folder"
+        "sedang memperbaiki struktur code dan folder",
+        "memperbaiki masalah pada import component layout"
     ]
 }
