@@ -1,9 +1,9 @@
-import LayoutBodyContent from "@/layout/bodyContent";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Textarea } from "../../ui/textarea";
 import Link from "next/link";
 import SkeletonResultExams from "./skeleton";
+import MainContent from "@/layout/mainContent/content";
 
 export default function ResultExamComponent() {
   const [getDataStudentAnswer, setGetDataStudentAnswer] = useState<any | null>(
@@ -33,7 +33,7 @@ export default function ResultExamComponent() {
   }
 
   return (
-    <LayoutBodyContent>
+    <MainContent>
       {getDataStudentAnswer ? (
         <div>
           <h1 className="text-3xl font-semibold">Hasil Ujian</h1>
@@ -108,6 +108,6 @@ export default function ResultExamComponent() {
       ) : (
         <SkeletonResultExams />
       )}
-    </LayoutBodyContent>
+    </MainContent>
   );
 }

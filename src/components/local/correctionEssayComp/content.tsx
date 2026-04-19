@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import SkeletonCorrectionEssay from "./skeleton";
+import MainContent from "@/layout/mainContent/content";
 
 export default function CorrectionEssayComponent() {
   const [viewQuestionsExams, setViewQuestionsExams] = useState<any>({});
@@ -89,7 +89,7 @@ export default function CorrectionEssayComponent() {
   }
 
   return (
-    <LayoutBodyContent>
+    <MainContent>
       {Object.values(viewQuestionsExams).length > 0 ? (
         <>
           <h1 className="text-3xl font-semibold">Koreksi Soal Essay</h1>
@@ -256,6 +256,6 @@ export default function CorrectionEssayComponent() {
       ) : (
         <SkeletonCorrectionEssay />
       )}
-    </LayoutBodyContent>
+    </MainContent>
   );
 }

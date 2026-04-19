@@ -27,8 +27,8 @@ import {
 import { SoalUjian } from "@/types/halamanUjian";
 import SkeletonExam from "./skeleton";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
-import LayoutBodyContent from "@/layout/bodyContent";
 import { Flag, Timer } from "lucide-react";
+import MainContent from "@/layout/mainContent/content";
 
 export default function ExamsComponent() {
   const router = useRouter();
@@ -301,7 +301,7 @@ export default function ExamsComponent() {
   }, [isClosedContent]);
 
   return (
-    <LayoutBodyContent>
+    <MainContent>
       {questionsExam ? (
         <>
           <div
@@ -539,6 +539,6 @@ export default function ExamsComponent() {
       ) : (
         <SkeletonExam />
       )}
-    </LayoutBodyContent>
+    </MainContent>
   );
 }
