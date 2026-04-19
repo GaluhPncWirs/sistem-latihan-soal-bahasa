@@ -6,6 +6,7 @@
         "berrhasil memperbaiki masalah pada login menggunakan akun google",
         "selesai untuk menambahkan fitur untuk login menggunakan akun google",
         "sedang memperbaiki desain ui/ux nya",
-        "memperbaiki struktur code agar lebih reusable khususnya bagian autentikasi"
+        "memperbaiki struktur code agar lebih reusable khususnya bagian autentikasi",
+        "sedang refaktor code agarr lebih rapih"
     ]
 }

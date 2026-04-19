@@ -2,10 +2,19 @@ import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import HamburgerMenu from "@/components/global/hamburgerMenu/content";
 import ListSidebar from "@/components/global/listSidebar/content";
+import { Bell } from "lucide-react";
 
-export default function HeaderDashboard({ remainder, isLocationPage }: any) {
+type PropsHeaderDashboard = {
+  remainder: any[];
+  isLocationPage: string;
+};
+
+export default function HeaderDashboard({
+  remainder,
+  isLocationPage,
+}: PropsHeaderDashboard) {
   return (
-    <div className="flex items-center justify-end gap-x-3">
+    <div className="flex items-center justify-end gap-x-3 relative z-90">
       {remainder.length > 0 ? (
         <Popover>
           <PopoverTrigger asChild>
@@ -13,13 +22,7 @@ export default function HeaderDashboard({ remainder, isLocationPage }: any) {
               <div className="size-4 bg-red-400 absolute rounded-md flex justify-center items-center">
                 <span className="text-xs font-bold">{remainder.length}</span>
               </div>
-              <Image
-                src="/img/global/bell.png"
-                alt="Notification"
-                width={200}
-                height={200}
-                className="size-8"
-              />
+              <Bell className="size-7" />
             </div>
           </PopoverTrigger>
           <PopoverContent className="w-fit p-3">
@@ -32,13 +35,7 @@ export default function HeaderDashboard({ remainder, isLocationPage }: any) {
           </PopoverContent>
         </Popover>
       ) : (
-        <Image
-          src="/img/global/bell.png"
-          alt="Notification"
-          width={200}
-          height={200}
-          className="size-8"
-        />
+        <Bell className="size-7" />
       )}
       <HamburgerMenu>
         <ListSidebar />

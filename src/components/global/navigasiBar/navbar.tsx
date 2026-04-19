@@ -14,11 +14,11 @@ export default function NavigasiBar() {
             alt="Logo"
             width={500}
             height={500}
-            className="w-56"
+            className="w-56 z-150"
             loading="eager"
           />
           <HamburgerMenu>
-            <div className="grid grid-cols-2 gap-7 place-content-center place-items-center mt-7">
+            <div className="grid grid-cols-2 gap-7 place-content-center place-items-center mt-20">
               <ListContent />
               <ButtonAutentications />
             </div>

@@ -49,7 +49,7 @@ export default function LayoutBodyContent({
         ) : (
           <>
             <div className="md:w-1/4 lg:w-1/5 hidden md:block">
-              <div className="bg-[#476EAE] md:w-1/4 lg:w-1/5 fixed h-screen shadow-xl shadow-slate-700 flex flex-col items-center pt-14 text-slate-200 font-medium text-xl">
+              <div className="bg-slate-50 md:w-1/4 lg:w-1/5 fixed h-screen shadow-xl shadow-slate-700 flex flex-col items-center pt-14 font-medium text-xl">
                 <ListSidebar />
               </div>
             </div>

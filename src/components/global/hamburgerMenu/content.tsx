@@ -1,12 +1,9 @@
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 
 export default function HamburgerMenu({ children }: React.PropsWithChildren) {
   const [isCheked, setIsCheked] = useState<boolean>(false);
   const clickOutsidePath = useRef<HTMLDivElement | null>(null);
-
-  console.log(isCheked);
 
   useEffect(() => {
     function handleClickOutsideNavbar(event: MouseEvent) {
@@ -27,10 +24,11 @@ export default function HamburgerMenu({ children }: React.PropsWithChildren) {
 
   return (
     <div className="md:hidden" ref={clickOutsidePath}>
-      <div className="menu flex flex-col items-center gap-y-1">
+      {/* Tombol Hamburger */}
+      <div className="menu flex flex-col items-center gap-y-1 relative z-110">
         <Input
           type="checkbox"
-          className="size-5 absolute z-50 cursor-pointer opacity-0"
+          className="size-5 absolute cursor-pointer opacity-0 z-120"
           checked={isCheked}
           onChange={() => setIsCheked((prev) => !prev)}
         />
@@ -38,17 +36,12 @@ export default function HamburgerMenu({ children }: React.PropsWithChildren) {
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
       </div>
+
+      {/* Konten Menu */}
       <div
-        className={`absolute right-0 left-0 top-0 bg-slate-50 w-full transition-all duration-300 text-xl font-semibold h-60 p-5
-      ${isCheked ? `translate-y-0` : `-translate-y-full`}`}
+        className={`fixed inset-0 top-0 left-0 w-full h-60 bg-slate-50 transition-all duration-300 text-xl font-semibold p-5 z-100
+    ${isCheked ? `translate-y-0` : `-translate-y-full`}`}
       >
-        <Image
-          src="/img/global/logo.png"
-          alt="Logo"
-          width={400}
-          height={400}
-          className="w-52"
-        />
         {children}
       </div>
     </div>

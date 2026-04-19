@@ -14,16 +14,20 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
+import { Home, LayoutDashboard, LogOut, User2 } from "lucide-react";
 
 export default function ListSidebar() {
   const getIdUsers = useGetIdUsers((state) => state.role);
-  const isLocationPage = useLocationPage((state) => state.curentLocationPage);
   return (
     <>
-      <div className="hidden md:flex bg-slate-200 rounded-md w-52 mx-auto items-center shadow-lg shadow-slate-700 md:w-10/12 p-2">
-        <Image src="/img/global/logo.png" alt="Logo" width={400} height={400} />
-      </div>
-      <div className="grid grid-cols-2 gap-7 place-content-center place-items-center mt-7 md:place-items-baseline md:mt-0 md:grid-cols-1 md:h-96">
+      <Image
+        src="/img/global/logo.png"
+        alt="Logo"
+        width={400}
+        height={400}
+        className="w-52"
+      />
+      <div className="grid grid-cols-2 gap-7 place-content-center place-items-center mt-7 md:place-items-baseline md:mt-0 md:grid-cols-1 md:h-83">
         <Link
           href={
             getIdUsers.includes("pelajar")
@@ -34,18 +38,8 @@ export default function ListSidebar() {
           }
           className="cursor-pointer flex items-center gap-x-3"
         >
-          <Image
-            src={`/img/global/${
-              isLocationPage === "/Student/Dashboard" ||
-              isLocationPage === "/Teacher/dashboard"
-                ? "dashboard-full"
-                : "dashboard-outline"
-            }.png`}
-            alt="Dashboard"
-            width={200}
-            height={200}
-            className="size-8"
-          />
+          <LayoutDashboard className="size-7" />
+
           <span>Dashboard</span>
         </Link>
         <Link
@@ -58,38 +52,16 @@ export default function ListSidebar() {
           }
           className="cursor-pointer flex items-center gap-x-3"
         >
-          <Image
-            src={`/img/global/${
-              isLocationPage === "/Student/Profile" ||
-              isLocationPage === "/Teacher/Profile"
-                ? "user-full"
-                : "user-outline"
-            }.png`}
-            alt="Profile"
-            width={200}
-            height={200}
-            className="size-9"
-          />
+          <User2 className="size-7" />
+
           <span>Profil</span>
         </Link>
         <Link href="/" className="cursor-pointer flex items-center gap-x-3">
-          <Image
-            src="/img/global/home.png"
-            alt="Home"
-            width={200}
-            height={200}
-            className="size-9"
-          />
+          <Home className="size-7" />
           <span>Beranda</span>
         </Link>
         <div className="cursor-pointer flex items-center gap-x-3">
-          <Image
-            src="/img/global/logout.png"
-            alt="Logout"
-            width={200}
-            height={200}
-            className="size-9"
-          />
+          <LogOut className="size-7" />
           <Dialog>
             <DialogTrigger asChild>
               <span>Logout</span>
