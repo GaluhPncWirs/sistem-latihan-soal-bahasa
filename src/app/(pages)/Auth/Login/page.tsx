@@ -112,7 +112,11 @@ export default function LoginAccount() {
             handleValueInput={handleValueInput}
             formMustFilled={formMustFilled.password}
           />
-          <FormButton isFormFilled={isFormFilled} isLoading={isLoading} />
+          <FormButton
+            buttonName="Login"
+            isFormFilled={isFormFilled}
+            isLoading={isLoading}
+          />
         </form>
         <div className="text-right mt-2">
           Masuk dengan akun{" "}

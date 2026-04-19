@@ -107,7 +107,11 @@ export default function RegisterAccountTeacher() {
           handleValueInput={handleValueInput}
           formMustFilled={formMustFilled.password}
         />
-        <FormButton isFormFilled={isFormFilled} isLoading={isLoading} />
+        <FormButton
+          buttonName="Register"
+          isFormFilled={isFormFilled}
+          isLoading={isLoading}
+        />
       </form>
     </LayoutFormAccount>
   );

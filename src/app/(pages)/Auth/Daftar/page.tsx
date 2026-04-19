@@ -117,7 +117,11 @@ export default function RegisterAccount() {
           handleValueInput={handleValueInput}
           formMustFilled={formMustFilled.password}
         />
-        <FormButton isFormFilled={isFormFilled} isLoading={isLoading} />
+        <FormButton
+          buttonName="Register"
+          isFormFilled={isFormFilled}
+          isLoading={isLoading}
+        />
       </form>
     </LayoutFormAccount>
   );

@@ -7,7 +7,6 @@ import {
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase/data";
-import LayoutBodyContent from "@/layout/bodyContent";
 import {
   Table,
   TableBody,
@@ -29,12 +28,19 @@ import {
 import { DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import HeaderDasboard from "@/components/local/forDasboard/content";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { toast } from "sonner";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
+import MainContent from "@/layout/mainContent/content";
+import {
+  BarChart3,
+  BellRing,
+  CalendarClock,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 export default function DashboardStudent() {
   const getIdStudent = useGetIdUsers((state) => state.idUsers);
@@ -267,7 +273,7 @@ export default function DashboardStudent() {
   }, [accepted]);
 
   return (
-    <LayoutBodyContent>
+    <MainContent>
       {dataStudent !== null ? (
         <>
           <HeaderDasboard
@@ -282,13 +288,7 @@ export default function DashboardStudent() {
             <div className="mt-8">
               <div className="flex justify-around items-center">
                 <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
-                  <Image
-                    src="/img/dashboardStudent/schedule.png"
-                    alt="Jadwal"
-                    width={300}
-                    height={300}
-                    className="size-9"
-                  />
+                  <CalendarClock className="size-9" strokeWidth={1.5} />
                   <h1 className="text-lg">Ujian Terjadwal</h1>
                   <span className="text-xl">
                     {scheduleExams.filter(
@@ -298,13 +298,7 @@ export default function DashboardStudent() {
                   </span>
                 </div>
                 <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
-                  <Image
-                    src="/img/dashboardStudent/average.png"
-                    alt="Average"
-                    width={300}
-                    height={300}
-                    className="size-9"
-                  />
+                  <BarChart3 className="size-9" strokeWidth={1.5} />
                   <h1 className="text-lg">Nilai Rata Rata</h1>
                   <span className="text-xl">
                     {Math.round(averageValue) || "0"}
@@ -319,13 +313,7 @@ export default function DashboardStudent() {
                     </h1>
                     <div className="bg-sky-300 flex justify-between gap-x-4 p-5 items-center rounded-xl shadow-md shadow-slate-600">
                       <div className="flex justify-center items-center gap-x-5">
-                        <Image
-                          src="/img/dashboardStudent/notification.png"
-                          alt="Notifikasi"
-                          width={300}
-                          height={300}
-                          className="size-9"
-                        />
+                        <BellRing className="size-9" strokeWidth={1.5} />
                         <div>
                           <h1 className="text-xl font-semibold mb-1.5">
                             {deadlineUjianTercepatHariIni()?.exams.nama_ujian}
@@ -407,12 +395,8 @@ export default function DashboardStudent() {
                       <span className="text-xl">Ujian Tersedia</span>
                       <div className="flex">
                         {Array.from({ length: 6 }).map((_, i) => (
-                          <Image
-                            src="/img/dashboardStudent/right.png"
-                            alt="Arrow Right"
-                            width={500}
-                            height={500}
-                            className="size-8"
+                          <ChevronRight
+                            className="size-8 text-amber-300"
                             key={i}
                           />
                         ))}
@@ -474,12 +458,8 @@ export default function DashboardStudent() {
                       <span className="text-xl text-end">Nilai Terakhir</span>
                       <div className="flex">
                         {Array.from({ length: 6 }).map((_, i) => (
-                          <Image
-                            src="/img/dashboardStudent/left.png"
-                            alt="Arrow Right"
-                            width={500}
-                            height={500}
-                            className="size-8"
+                          <ChevronLeft
+                            className="size-8 text-amber-300"
                             key={i}
                           />
                         ))}
@@ -645,6 +625,6 @@ export default function DashboardStudent() {
           </div>
         </>
       )}
-    </LayoutBodyContent>
+    </MainContent>
   );
 }

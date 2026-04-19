@@ -7,9 +7,7 @@ import { useLocationPage } from "@/store/useLocationPage/state";
 import ListSidebar from "@/components/global/listSidebar/content";
 import { useShallow } from "zustand/shallow";
 
-export default function LayoutBodyContent({
-  children,
-}: React.PropsWithChildren) {
+export default function MainContent({ children }: React.PropsWithChildren) {
   const { loadingSession, statusToken } = useVerifyToken();
   const getDataUsers = useGetDataUsers((state) => state.setGetDataUsers);
   const { setHandleGetIdUsers, idUsers, role } = useGetIdUsers(

@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import LayoutBodyContent from "@/layout/bodyContent";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -30,6 +29,8 @@ import LayoutProfileUser from "@/layout/layoutProfile";
 import { useDataExams } from "@/app/hooks/getDataExams";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
+import MainContent from "@/layout/mainContent/content";
+import { Check, History, Trophy } from "lucide-react";
 
 type DataHistoryExams = {
   student_id: string;
@@ -200,7 +201,7 @@ export default function Profil() {
   }
 
   return (
-    <LayoutBodyContent>
+    <MainContent>
       {getHistoryStudent.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">
@@ -277,38 +278,21 @@ export default function Profil() {
 
             <div>
               <div className="mb-5 flex items-center gap-3">
-                <Image
-                  src="/img/global/history.png"
-                  alt="History"
-                  width={200}
-                  height={200}
-                  className="size-8"
-                />
+                <History className="size-7" />
+
                 <h1 className="text-2xl font-semibold">Riwayat Ujian</h1>
               </div>
 
               <div className="flex justify-evenly items-center my-10">
                 <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
-                  <Image
-                    src="/img/profileStudent/done.png"
-                    alt="Selesai"
-                    width={200}
-                    height={200}
-                    className="size-9"
-                  />
+                  <Check className="size-7" />
                   <h1 className="text-lg">Ujian Selesai</h1>
                   <p className="text-2xl font-bold">
                     {getHistoryStudent.length || "0"}
                   </p>
                 </div>
                 <div className="bg-[#3396D3] rounded-lg p-5 font-semibold flex flex-col justify-center items-center gap-y-2 w-44 shadow-md shadow-slate-700">
-                  <Image
-                    src="/img/profileStudent/rank.png"
-                    alt="Rank"
-                    width={200}
-                    height={200}
-                    className="size-9"
-                  />
+                  <Trophy className="size-7" />
                   <h1 className="text-lg">Peringkat Kelas</h1>
                   <p className="text-2xl font-bold">
                     {`${rankingClasses().ranking || "0"} / ${
@@ -412,6 +396,6 @@ export default function Profil() {
           </div>
         </>
       )}
-    </LayoutBodyContent>
+    </MainContent>
   );
 }

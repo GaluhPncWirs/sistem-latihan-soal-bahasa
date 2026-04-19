@@ -25,7 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import LayoutBodyContent from "@/layout/bodyContent";
 import LayoutProfileUser from "@/layout/layoutProfile";
 import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
@@ -33,6 +32,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
+import MainContent from "@/layout/mainContent/content";
 
 export default function TeacherProfile() {
   const getidTeacher = useGetIdUsers((state) => state.idUsers);
@@ -193,7 +193,7 @@ export default function TeacherProfile() {
   }
 
   return (
-    <LayoutBodyContent>
+    <MainContent>
       {getHistoryExams.length > 0 ? (
         <>
           <div className="flex justify-between items-center mb-3">
@@ -399,6 +399,6 @@ export default function TeacherProfile() {
           </div>
         </>
       )}
-    </LayoutBodyContent>
+    </MainContent>
   );
 }

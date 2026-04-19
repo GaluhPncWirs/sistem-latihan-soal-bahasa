@@ -10,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import LayoutBodyContent from "@/layout/bodyContent";
 import { supabase } from "@/lib/supabase/data";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -19,6 +18,7 @@ import FloatingBarDashboardTeacher from "@/components/local/khususGuru/navigasi/
 import { getResultExamDataStudent } from "@/app/hooks/getDataResultStudent";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
+import MainContent from "@/layout/mainContent/content";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -139,7 +139,7 @@ export default function Teacher() {
   }, [getidTeacher]);
 
   return (
-    <LayoutBodyContent>
+    <MainContent>
       {dataManageExams.length > 0 ? (
         <div>
           <HeaderDasboard
@@ -308,6 +308,6 @@ export default function Teacher() {
           </div>
         </>
       )}
-    </LayoutBodyContent>
+    </MainContent>
   );
 }

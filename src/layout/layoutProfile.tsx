@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
+import { User2 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -79,13 +80,7 @@ export default function LayoutProfileUser({
 
       <div className="mb-5">
         <div className="flex items-center mb-5 gap-3">
-          <Image
-            src="/img/global/account.png"
-            alt="Informasi Akun"
-            width={200}
-            height={200}
-            className="size-8"
-          />
+          <User2 className="size-7" />
           <h1 className="text-2xl font-semibold">Informasi Akun</h1>
         </div>
         <Table>
