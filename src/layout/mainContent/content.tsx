@@ -6,15 +6,26 @@ import { usePathname } from "next/navigation";
 import { useLocationPage } from "@/store/useLocationPage/state";
 import ListSidebar from "@/components/global/listSidebar/content";
 import { useShallow } from "zustand/shallow";
+import { Dialog } from "@radix-ui/react-dialog";
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function MainContent({ children }: React.PropsWithChildren) {
   const { loadingSession, statusToken } = useVerifyToken();
   const getDataUsers = useGetDataUsers((state) => state.setGetDataUsers);
-  const { setHandleGetIdUsers, idUsers, role } = useGetIdUsers(
+  const { setHandleGetIdUsers, idUsers, role, typeAccount } = useGetIdUsers(
     useShallow((state) => ({
       setHandleGetIdUsers: state.setHandleGetIdUsers,
       idUsers: state.idUsers,
       role: state.role,
+      typeAccount: state.typeAccount,
     })),
   );
   useEffect(() => {
@@ -42,6 +53,19 @@ export default function MainContent({ children }: React.PropsWithChildren) {
           loadingSession && `opacity-50 animate-pulse`
         }`}
       >
+        <Dialog open={typeAccount === "google" ? true : false}>
+          <DialogContent>
+            <DialogHeader>Terindikasi Login Menggunakan Google</DialogHeader>
+            <DialogDescription>
+              Sistem mendeteksi bahwa Anda login menggunakan Google. maka dari
+              itu anda harus menambahkan kelas pada akun ada ini untuk bisa
+              menggunakan sistem ini.
+            </DialogDescription>
+            <DialogFooter>
+              <Link href="/Student/Profile">Oke</Link>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         {pathName === "/Student/Exams/StartExam" ? (
           children
         ) : (

@@ -30,14 +30,16 @@ export default function RegisterAccount() {
       password: e.target.password.value,
       role: "pelajar",
       idStudent: useRandomId(7, "STD"),
+      typeAccount: "default",
     };
     try {
       setIsLoading(true);
       const { data, error }: any = await supabase
         .from("account-student")
         .select("email")
-        .eq("email", e.target.email.value);
-      if (data.length > 0) {
+        .eq("email", e.target.email.value)
+        .single();
+      if (data) {
         toast("Gagal ❌", {
           description: "Nama Email Sudah Ada. Buat kembali Yang Berbeda",
         });

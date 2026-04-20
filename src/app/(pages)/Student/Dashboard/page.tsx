@@ -97,7 +97,8 @@ export default function DashboardStudent() {
       .from("history-exam-student")
       .select("hasil_ujian,exam_id")
       .eq("hasil_ujian", "telat")
-      .eq("exam_id", idUjian);
+      .eq("exam_id", idUjian)
+      .single();
 
     if (errHistoryExams) {
       toast("❌ Gagal Simpan Data", {

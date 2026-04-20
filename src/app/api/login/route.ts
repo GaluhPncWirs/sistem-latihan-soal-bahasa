@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   if (valueTypeAccount === "siswa") {
     const { data: dataStudent, error }: any = await supabase
       .from("account-student")
-      .select("idStudent,fullName")
+      .select("idStudent,typeAccount")
       .eq("email", valueEmail)
       .eq("password", valuePassword)
       .single();
@@ -22,8 +22,7 @@ export async function POST(req: Request) {
     const token = jwt.sign(
       {
         idStudent: dataStudent.idStudent,
-        email: valueEmail,
-        name: dataStudent.fullName,
+        typeAccount: dataStudent.typeAccount,
         role: "pelajar",
       },
       process.env.JWT_SECRET || "mySecretKey123",
@@ -46,7 +45,7 @@ export async function POST(req: Request) {
   } else if (valueTypeAccount === "guru") {
     const { data: dataTeacher, error }: any = await supabase
       .from("account_teacher")
-      .select("id_teacher, fullName")
+      .select("id_teacher")
       .eq("email", valueEmail)
       .eq("password", valuePassword)
       .single();
@@ -60,8 +59,6 @@ export async function POST(req: Request) {
     const token = jwt.sign(
       {
         idTeacher: dataTeacher.id_teacher,
-        email: valueEmail,
-        name: dataTeacher.fullName,
         role: "pengajar",
       },
       process.env.JWT_SECRET || "mySecretKey123",

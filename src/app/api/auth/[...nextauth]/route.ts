@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
         // 1. Cek apa user sudah ada di database
         const { data: existingUser, error } = await supabase
           .from("account-student")
-          .select("idStudent, role")
+          .select("email, idStudent, role, typeAccount")
           .eq("email", user.email)
           .single();
 
@@ -26,6 +26,7 @@ export const authOptions: NextAuthOptions = {
           // 2. Jika user SUDAH ADA, ambil id dan role dari database
           token.idStudent = existingUser.idStudent;
           token.role = existingUser.role;
+          token.typeAccount = existingUser.typeAccount;
         } else {
           // 3. Jika user BELUM ADA, buat data baru
           const newId = useRandomId(7, "STD");
@@ -36,6 +37,7 @@ export const authOptions: NextAuthOptions = {
             role: "pelajar",
             idStudent: newId,
             typeAccount: "google",
+            classes: "belum diisi",
           };
 
           const { error: insertError } = await supabase
@@ -45,6 +47,7 @@ export const authOptions: NextAuthOptions = {
           if (!insertError) {
             token.idStudent = dataUser.idStudent;
             token.role = dataUser.role;
+            token.typeAccount = dataUser.typeAccount;
             console.log("User baru berhasil didaftarkan");
           }
         }
@@ -61,6 +64,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role;
         session.user.idStudent = token.idStudent;
         session.user.typeAccount = token.typeAccount;
+        session.user.classes = token.classes;
       }
       return session;
     },
