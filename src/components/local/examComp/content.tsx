@@ -315,7 +315,7 @@ export default function ExamsComponent() {
               }`
             } `}
           >
-            <div className="bg-[#476EAE] fixed h-screen shadow-xl shadow-slate-700 flex flex-col items-center text-slate-200 font-medium text-xl md:w-1/3">
+            <div className="bg-slate-50 fixed h-screen shadow-xl shadow-slate-700 flex flex-col items-center text-slate-700 font-medium text-xl md:w-1/3">
               <div className="mt-3 p-5">
                 <h1 className="text-2xl font-semibold">Navigasi Soal</h1>
                 <div className="flex items-center justify-around mt-3">
@@ -349,7 +349,7 @@ export default function ExamsComponent() {
                         className={`size-10 rounded-md flex items-center justify-center font-bold text-lg relative ${
                           isAnswerPg || isAnswerEssay
                             ? "bg-green-400"
-                            : "bg-slate-200"
+                            : "bg-slate-300"
                         }`}
                         key={i}
                       >
