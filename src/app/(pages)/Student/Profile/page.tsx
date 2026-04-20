@@ -166,21 +166,8 @@ export default function Profil() {
     event: React.FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
-    const idInputPayload = ["email", "password"];
-    const payloadUser = idInputPayload.map(
-      (id: string) => event.currentTarget[id].value || "",
-    );
-
-    const resultPayload = idInputPayload.reduce(
-      (acc: any, id: string, i: number) => {
-        const isPayload = payloadUser[i];
-        if (isPayload !== "") {
-          acc[id] = isPayload;
-        }
-        return acc;
-      },
-      {},
-    );
+    const formData = new FormData(event.currentTarget);
+    const resultPayload = Object.fromEntries(formData.entries());
 
     const { error } = await supabase
       .from("account-student")
@@ -237,22 +224,22 @@ export default function Profil() {
                     className="grid gap-5"
                     onSubmit={(event) => handleEditProfileStudent(event)}
                   >
-                    <DialogHeader className="text-start">
+                    <DialogHeader>
                       <DialogTitle className="text-xl">Edit Profil</DialogTitle>
-                      <DialogDescription className="mt-1">
+                      <DialogDescription>
                         Edit Seluruh Informasi Profil Kamu Disini
                       </DialogDescription>
                       <div>
                         <label htmlFor="email" className="mb-2 block">
                           Email
                         </label>
-                        <Input type="email" id="email" />
+                        <Input type="email" name="email" id="email" />
                       </div>
                       <div>
                         <label htmlFor="password" className="mb-2 block">
                           Ubah Password
                         </label>
-                        <Input type="password" id="password" />
+                        <Input type="password" name="password" id="password" />
                       </div>
                       <span className="font-semibold block text-xs text-red-500 text-end">
                         *Jika Ingin Diubah Hanya Salah Satu Maka Sisanya
@@ -261,14 +248,10 @@ export default function Profil() {
                     </DialogHeader>
                     <DialogFooter>
                       <DialogClose asChild>
-                        <Button variant="outline" className="cursor-pointer">
-                          Cancel
-                        </Button>
+                        <Button variant="outline">Cancel</Button>
                       </DialogClose>
                       <DialogClose asChild>
-                        <Button type="submit" className="cursor-pointer">
-                          Confirm
-                        </Button>
+                        <Button type="submit">Confirm</Button>
                       </DialogClose>
                     </DialogFooter>
                   </form>
