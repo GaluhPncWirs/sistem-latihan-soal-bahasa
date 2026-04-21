@@ -9,9 +9,11 @@ export function useHandleLogout() {
       credentials: "include",
     });
     const messageRespons = await responseDelCookies.json();
-    push("/Auth/Login");
-    toast("Berhasil ✅", { description: messageRespons.message });
+    if (messageRespons.status === 200) {
+      localStorage.removeItem("alreadyShownTypeAccountDialog");
+      push("/Auth/Login");
+      toast("Berhasil ✅", { description: messageRespons.message });
+    }
   }
-
   return handleLogout;
 }

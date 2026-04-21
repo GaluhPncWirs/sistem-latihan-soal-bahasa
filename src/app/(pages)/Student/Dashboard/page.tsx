@@ -50,6 +50,7 @@ export default function DashboardStudent() {
   const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(false);
+  const [lateExam, setLateExam] = useState([]);
 
   const filterScoreExams = scheduleExams.filter(
     (avg: { status_exam: boolean; hasil_ujian: string }) =>
@@ -93,35 +94,42 @@ export default function DashboardStudent() {
   }
 
   async function lateExams(idUjian: number) {
-    const { error: errHistoryExams } = await supabase
+    const { error } = await supabase
       .from("history-exam-student")
-      .select("hasil_ujian,exam_id")
+      .select("hasil_ujian, exam_id")
       .eq("hasil_ujian", "telat")
       .eq("exam_id", idUjian)
-      .single();
+      .eq("student_id", getIdStudent);
 
-    if (errHistoryExams) {
+    if (error) {
+      console.error("ERROR SUPABASE:", error);
+      toast("❌ Gagal Ambil Data", {
+        description: "Terjadi kesalahan saat cek data",
+      });
+      return;
+    }
+
+    // ✅ kalau BELUM ADA → insert
+    const payload = {
+      created_at: new Date().toISOString(),
+      student_id: getIdStudent,
+      exam_id: Number(idUjian),
+      answer_student: null,
+      hasil_ujian: "telat",
+      status_exam: true,
+      kelas: dataStudent?.classes,
+    };
+
+    const { error: insertError } = await supabase
+      .from("history-exam-student")
+      .insert(payload);
+
+    if (insertError) {
       toast("❌ Gagal Simpan Data", {
-        description: "Data Hasil Ujian Sudah Ada",
+        description: insertError.message,
       });
     } else {
-      const payload = {
-        created_at: new Date().toISOString(),
-        student_id: getIdStudent,
-        exam_id: Number(idUjian),
-        answer_student: null,
-        hasil_ujian: "telat",
-        status_exam: true,
-        kelas: dataStudent?.classes,
-      };
-      const { error } = await supabase
-        .from("history-exam-student")
-        .insert(payload);
-      if (error) {
-        toast("❌ Gagal Simpan Data", {
-          description: "Data Hasil Ujian Sudah Ada",
-        });
-      }
+      console.log("Berhasil insert data telat");
     }
   }
 
@@ -149,77 +157,53 @@ export default function DashboardStudent() {
     return [toMinute(startTimeExam), toMinute(endTimeExams)];
   }
 
-  function getExamsStatusAndHandleLateExam(
-    tenggat_waktu: string,
-    nama_ujian: string,
-    idUjian: number,
-    tgl_ujian: string,
-  ) {
-    const startAndEndExams = convertToNumber(tenggat_waktu);
+  type ExamStatus =
+    | "Ujian Belum Dimulai"
+    | "Sedang Berlangsung"
+    | "Ujian Telah Lewat Batas Waktu";
 
-    const mulaiUjian = startAndEndExams[0];
-    const akhirUjian = startAndEndExams[1];
+  function getExamStatus(tenggat_waktu: string, tgl_ujian: string): ExamStatus {
+    const [startExams, endExams] = convertToNumber(tenggat_waktu);
+
     const hariIni = toMinute(waktuDurasiIni);
+    const todayISO = convertDateToISO(waktuHariIni);
+    const examISO = convertDateToISO(tgl_ujian);
 
-    let messageExams = "";
+    if (examISO > todayISO) return "Ujian Belum Dimulai";
 
-    if (tgl_ujian === waktuHariIni) {
-      if (hariIni < mulaiUjian) {
-        messageExams += "Ujian Belum Dimulai";
-      } else if (hariIni > akhirUjian) {
-        messageExams += "Ujian Telah Lewat Batas Waktu";
-        handleLateExam(idUjian, getIdStudent);
-      } else {
-        return (
-          <Dialog>
-            <DialogTrigger asChild>
-              <button
-                className="hover:underline hover:text-blue-700 cursor-pointer"
-                onClick={() => setAccepted(true)}
-              >
-                Sedang Berlangsung
-              </button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="mb-2">
-                  Konfirmasi Masuk Ujian
-                </DialogTitle>
-                <DialogDescription>
-                  Apakah Anda Yakin ingin Mengerjakan Soal{" "}
-                  <span className="font-bold">"{nama_ujian}"</span> Ini ?
-                  Persiapkan Diri Anda Dikarenakan Jika Sudah Masuk Kedalam
-                  Halaman Ujian Maka Sudah Tidak Bisa Kembali Lagi.
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline">Batal</Button>
-                </DialogClose>
-                <DialogClose asChild>
-                  <Button
-                    onClick={() =>
-                      push(`/Student/Exams/StartExam?idExams=${idUjian}`)
-                    }
-                    className="cursor-pointer"
-                    disabled={accepted}
-                  >
-                    {confirm <= 0 ? "Oke" : confirm}
-                  </Button>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        );
-      }
-    } else if (convertDateToISO(tgl_ujian) > convertDateToISO(waktuHariIni)) {
-      messageExams += "Ujian Belum Dimulai";
-    } else {
-      messageExams += "Ujian Telah Lewat Batas Waktu";
-      handleLateExam(idUjian, getIdStudent);
+    if (examISO === todayISO) {
+      if (hariIni < startExams) return "Ujian Belum Dimulai";
+      if (hariIni > endExams) return "Ujian Telah Lewat Batas Waktu";
+      return "Sedang Berlangsung";
     }
-    return messageExams;
+
+    return "Ujian Telah Lewat Batas Waktu";
   }
+
+  useEffect(() => {
+    const lateExamsList = scheduleExams.filter(
+      (data: {
+        tenggat_waktu: string;
+        dibuat_tgl: string;
+        idExams: number;
+      }) => {
+        const status = getExamStatus(data.tenggat_waktu, data.dibuat_tgl);
+        return status === "Ujian Telah Lewat Batas Waktu";
+      },
+    );
+
+    setLateExam(lateExamsList);
+
+    lateExamsList.forEach(
+      (data: {
+        tenggat_waktu: string;
+        dibuat_tgl: string;
+        idExams: number;
+      }) => {
+        handleLateExam(data.idExams, getIdStudent);
+      },
+    );
+  }, [scheduleExams, getIdStudent]);
 
   function deadlineUjianTercepatHariIni() {
     const hariIni = toMinute(waktuDurasiIni);
@@ -415,32 +399,76 @@ export default function DashboardStudent() {
                       </TableHeader>
                       <TableBody>
                         {scheduleExams.length > 0 ? (
-                          scheduleExams.map((data: any, i: number) => (
-                            <TableRow key={i}>
-                              <TableCell>{i + 1}</TableCell>
-                              <TableCell>{data.exams.nama_ujian}</TableCell>
-                              <TableCell>
-                                {data.dibuat_tgl} {data.tenggat_waktu}
-                              </TableCell>
-                              <TableCell>
-                                {data.account_teacher.fullName}
-                              </TableCell>
-                              <TableCell>
-                                {data.status_exam === true &&
-                                data.hasil_ujian !== "telat"
-                                  ? "Selesai"
-                                  : data.status_exam === true &&
-                                      data.hasil_ujian === "telat"
-                                    ? "Telat"
-                                    : getExamsStatusAndHandleLateExam(
-                                        data.tenggat_waktu,
-                                        data.exams.nama_ujian,
-                                        data.idExams,
-                                        data.dibuat_tgl,
-                                      )}
-                              </TableCell>
-                            </TableRow>
-                          ))
+                          scheduleExams.map((data: any, i: number) => {
+                            const status = getExamStatus(
+                              data.tenggat_waktu,
+                              data.dibuat_tgl,
+                            );
+                            return (
+                              <TableRow key={i}>
+                                <TableCell>{i + 1}</TableCell>
+                                <TableCell>{data.exams.nama_ujian}</TableCell>
+                                <TableCell>
+                                  {data.dibuat_tgl} {data.tenggat_waktu}
+                                </TableCell>
+                                <TableCell>
+                                  {data.account_teacher.fullName}
+                                </TableCell>
+                                <TableCell>
+                                  {data.status_exam === true &&
+                                  data.hasil_ujian !== "telat" ? (
+                                    "Selesai"
+                                  ) : data.status_exam === true &&
+                                    data.hasil_ujian === "telat" ? (
+                                    "Telat"
+                                  ) : status === "Ujian Belum Dimulai" ? (
+                                    "Ujian Belum Dimulai"
+                                  ) : status ===
+                                    "Ujian Telah Lewat Batas Waktu" ? (
+                                    "Ujian Telah Lewat Batas Waktu"
+                                  ) : (
+                                    <Dialog>
+                                      <DialogTrigger asChild>
+                                        <button className="hover:underline text-blue-700">
+                                          Sedang Berlangsung
+                                        </button>
+                                      </DialogTrigger>
+
+                                      <DialogContent>
+                                        <DialogHeader>
+                                          <DialogTitle>
+                                            Konfirmasi Masuk Ujian
+                                          </DialogTitle>
+                                          <DialogDescription>
+                                            Yakin masuk "{data.exams.nama_ujian}
+                                            "?
+                                          </DialogDescription>
+                                        </DialogHeader>
+
+                                        <DialogFooter>
+                                          <DialogClose asChild>
+                                            <Button variant="outline">
+                                              Batal
+                                            </Button>
+                                          </DialogClose>
+
+                                          <Button
+                                            onClick={() =>
+                                              push(
+                                                `/Student/Exams/StartExam?idExams=${data.idExams}`,
+                                              )
+                                            }
+                                          >
+                                            Mulai
+                                          </Button>
+                                        </DialogFooter>
+                                      </DialogContent>
+                                    </Dialog>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })
                         ) : (
                           <TableRow>
                             <TableCell
@@ -528,12 +556,7 @@ export default function DashboardStudent() {
                                     : "Tidak Ada Nilai"}
                                 </TableCell>
                               </TableRow>
-                            ) : getExamsStatusAndHandleLateExam(
-                                item.tenggat_waktu,
-                                item.exams.nama_ujian,
-                                item.idExams,
-                                item.dibuat_tgl,
-                              ) === "Ujian Telah Lewat Batas Waktu" ? (
+                            ) : lateExam.length > 0 ? (
                               <TableRow key={i}>
                                 <TableCell
                                   colSpan={4}

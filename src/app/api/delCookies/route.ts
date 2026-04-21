@@ -5,7 +5,6 @@ export async function DELETE() {
   const cookieStore = await cookies();
   cookieStore.delete("tokenLogin");
   cookieStore.delete("next-auth.session-token");
-  cookieStore.delete("alreadyShownTypeAccountDialog");
 
   const res = NextResponse.json({
     status: 200,
