@@ -1,21 +1,25 @@
 import Image from "next/image";
 import HeaderDashboard from "../headerDashboard/content";
-import { useLocationPage } from "@/store/useLocationPage/state";
+import { usePathname } from "next/navigation";
 
-export default function HeaderDasboard(props: any) {
+type propsHeaderDahboard = {
+  user: string;
+  fullName: string;
+  exams: any;
+};
+
+export default function HeaderDasboard(props: propsHeaderDahboard) {
   const { user, fullName, exams } = props;
-  const locationPage = useLocationPage(
-    (state: any) => state.curentLocationPage,
-  );
+  const pathName = usePathname();
   function informExams() {
-    if (locationPage === "/Student/Dashboard") {
+    if (pathName === "/Student/Dashboard") {
       const filterSisaUjian = exams.filter(
         (done: any) => done.status_exam !== true,
       );
       return (
         <HeaderDashboard
           remainder={filterSisaUjian}
-          isLocationPage={locationPage}
+          isLocationPage={pathName}
         />
       );
     } else {
@@ -25,7 +29,7 @@ export default function HeaderDasboard(props: any) {
       return (
         <HeaderDashboard
           remainder={filterNilaiSiswa}
-          isLocationPage={locationPage}
+          isLocationPage={pathName}
         />
       );
     }

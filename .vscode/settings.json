@@ -12,6 +12,7 @@
         "sedang memperbaiki struktur code dan folder",
         "memperbaiki masalah pada import component layout",
         "sedang mengerjakan bagian jika user login menggunakan akun google maka bisa masuk kedalam sistem ujian",
-        "selesai untuk memperbaiki masalah pada dialog saat user menggunakan akun google"
+        "selesai untuk memperbaiki masalah pada dialog saat user menggunakan akun google",
+        "selesai memperbaiki bug saat ada ujian yang telat dan juga merefaktor code"
     ]
 }

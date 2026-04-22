@@ -1,5 +1,23 @@
 import { create } from "zustand";
 
+type dataUserManual = {
+  idUser: string;
+  role: string;
+  typeAccount: string;
+};
+
+type dataUserGoogle = {
+  classes: string;
+  email: string;
+  idUser: string;
+  name: string;
+  nis: number;
+  noTlp: string;
+  picture: string;
+  role: string;
+  typeAccount: string;
+};
+
 type GetIdUsersState = {
   idUsers: string;
   role: string;

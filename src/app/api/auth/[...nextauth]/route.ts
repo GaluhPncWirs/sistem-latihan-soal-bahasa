@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
         // 1. Cek apa user sudah ada di database
         const { data: existingUser, error } = await supabase
           .from("account-student")
-          .select("email, idStudent, role, typeAccount")
+          .select("email, idStudent, role, typeAccount, classes,nis,noTlp")
           .eq("email", user.email)
           .single();
 
@@ -27,6 +27,9 @@ export const authOptions: NextAuthOptions = {
           token.idStudent = existingUser.idStudent;
           token.role = existingUser.role;
           token.typeAccount = existingUser.typeAccount;
+          token.classes = existingUser.classes;
+          token.nis = existingUser.nis;
+          token.noTlp = existingUser.noTlp;
         } else {
           // 3. Jika user BELUM ADA, buat data baru
           const newId = useRandomId(7, "STD");

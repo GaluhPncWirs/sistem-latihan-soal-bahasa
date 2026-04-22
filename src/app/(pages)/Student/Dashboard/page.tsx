@@ -133,13 +133,13 @@ export default function DashboardStudent() {
     }
   }
 
-  async function handleLateExam(idUjian: number, student_id: string) {
-    const key = `${idUjian}-${student_id}`;
-    if (!processedLateExams.current.has(key)) {
-      processedLateExams.current.add(key);
-      await lateExams(idUjian);
-    }
-  }
+  // async function handleLateExam(idUjian: number, student_id: string) {
+  //   const key = `${idUjian}-${student_id}`;
+  //   if (!processedLateExams.current.has(key)) {
+  //     processedLateExams.current.add(key);
+  //     await lateExams(idUjian);
+  //   }
+  // }
 
   function convertDateToISO(dateStr: string) {
     const date = new Date(dateStr);
@@ -194,15 +194,15 @@ export default function DashboardStudent() {
 
     setLateExam(lateExamsList);
 
-    lateExamsList.forEach(
-      (data: {
-        tenggat_waktu: string;
-        dibuat_tgl: string;
-        idExams: number;
-      }) => {
-        handleLateExam(data.idExams, getIdStudent);
-      },
-    );
+    // lateExamsList.forEach(
+    //   (data: {
+    //     tenggat_waktu: string;
+    //     dibuat_tgl: string;
+    //     idExams: number;
+    //   }) => {
+    //     handleLateExam(data.idExams, getIdStudent);
+    //   },
+    // );
   }, [scheduleExams, getIdStudent]);
 
   function deadlineUjianTercepatHariIni() {

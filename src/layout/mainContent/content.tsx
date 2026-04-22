@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 import { usePathname } from "next/navigation";
-import { useLocationPage } from "@/store/useLocationPage/state";
 import ListSidebar from "@/components/global/listSidebar/content";
 import { useShallow } from "zustand/shallow";
 import DialogFormAddDataUser from "@/components/global/dialogTipeAkun/content";
@@ -18,9 +17,7 @@ export default function MainContent({ children }: React.PropsWithChildren) {
       role: state.role,
     })),
   );
-
   const pathName = usePathname();
-  const setLocationPage = useLocationPage((state) => state.setLocationPage);
 
   useEffect(() => {
     setHandleGetIdUsers();
@@ -33,10 +30,6 @@ export default function MainContent({ children }: React.PropsWithChildren) {
       getDataUsers(idUsers, "account_teacher", "id_teacher");
     }
   }, [role, idUsers, getDataUsers]);
-
-  useEffect(() => {
-    setLocationPage(pathName);
-  }, [pathName]);
 
   return (
     <div className="bg-black">
