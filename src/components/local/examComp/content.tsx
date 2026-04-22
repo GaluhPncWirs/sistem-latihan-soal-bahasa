@@ -33,7 +33,7 @@ import MainContent from "@/layout/mainContent/content";
 export default function ExamsComponent() {
   const router = useRouter();
   const idExams = useSearchParams().get("idExams");
-  const getIdStudent = useGetIdUsers((state) => state.idUsers);
+  const getIdStudent = useGetIdUsers((state) => state.idUser);
   const [questionsExam, setQuestionsExam] = useState<SoalUjian | null>(null);
   const [dataStudent, setDataStudent] = useState<any>(null);
   const [clickedAnswerPg, setClickedAnswerPg] = useState<{

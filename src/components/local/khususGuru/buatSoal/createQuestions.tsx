@@ -27,7 +27,7 @@ import { useHandleInput } from "@/app/hooks/getHandleInput";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function CreateNewQuestions() {
-  const idTeacher = useGetIdUsers((state) => state.idUsers);
+  const idTeacher = useGetIdUsers((state) => state.idUser);
   const [answer, setAnswer] = useState<any>({
     answer_a: "",
     answer_b: "",

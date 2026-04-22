@@ -40,7 +40,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function ViewQuestions() {
-  const idTeacher = useGetIdUsers((state) => state.idUsers);
+  const idTeacher = useGetIdUsers((state) => state.idUser);
   const [chooseClass, setChooseClass] = useState<string[]>([]);
   const [chooseTimeExam, setChooseTimeExam] = useState<string[]>([]);
   const [dates, setDates] = useState<(Date | undefined)[]>([]);

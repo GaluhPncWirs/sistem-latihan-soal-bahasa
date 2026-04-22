@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 
 export default function ButtonAutentications() {
-  const getidUsers = useGetIdUsers((state) => state.idUsers);
+  const getidUsers = useGetIdUsers((state) => state.idUser);
   const handleLogout = useHandleLogout();
   return (
     <>

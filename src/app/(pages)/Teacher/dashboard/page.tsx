@@ -27,7 +27,7 @@ export default function Teacher() {
     viewResult: false,
     manageStudent: false,
   });
-  const getidTeacher = useGetIdUsers((state) => state.idUsers);
+  const getidTeacher = useGetIdUsers((state) => state.idUser);
   const dataUserTeacher = useGetDataUsers((state) => state.dataUsers);
   const [dataManageExams, setDataManageExams] = useState<string[]>([]);
   const dataStudentExams = getResultExamDataStudent(getidTeacher);
@@ -144,7 +144,7 @@ export default function Teacher() {
         <div>
           <HeaderDasboard
             user="Pengajar"
-            fullName={dataUserTeacher?.fullName}
+            fullName={dataUserTeacher?.fullName ?? ""}
             exams={dataStudentExams}
           />
           <div className="mt-5">

@@ -16,7 +16,7 @@ import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import Link from "next/link";
 
 export default function ManageStudent() {
-  const idTeacher = useGetIdUsers((state) => state.idUsers);
+  const idTeacher = useGetIdUsers((state) => state.idUser);
   const dataStudentExams = getResultExamDataStudent(idTeacher);
   return (
     <div>

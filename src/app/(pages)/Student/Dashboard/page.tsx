@@ -43,7 +43,7 @@ import {
 } from "lucide-react";
 
 export default function DashboardStudent() {
-  const getIdStudent = useGetIdUsers((state) => state.idUsers);
+  const getIdStudent = useGetIdUsers((state) => state.idUser);
   const dataStudent = useGetDataUsers((state) => state.dataUsers);
   const scheduleExams = useDataExams(dataStudent, getIdStudent);
   const { push } = useRouter();

@@ -48,7 +48,7 @@ export default function ManageExamComponent() {
   const [updateQuestion, setUpdateQuestion] = useState<string>("");
   const searchParams = useSearchParams();
   const getParamId = searchParams.get("id");
-  const getidTeacher = useGetIdUsers((state) => state.idUsers);
+  const getidTeacher = useGetIdUsers((state) => state.idUser);
 
   useEffect(() => {
     if (!getidTeacher) return;

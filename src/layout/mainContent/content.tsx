@@ -9,15 +9,15 @@ import DialogFormAddDataUser from "@/components/global/dialogTipeAkun/content";
 
 export default function MainContent({ children }: React.PropsWithChildren) {
   const { loadingSession, statusToken } = useVerifyToken();
+  const pathName = usePathname();
   const getDataUsers = useGetDataUsers((state) => state.setGetDataUsers);
   const { setHandleGetIdUsers, idUsers, role } = useGetIdUsers(
     useShallow((state) => ({
       setHandleGetIdUsers: state.setHandleGetIdUsers,
-      idUsers: state.idUsers,
+      idUsers: state.idUser,
       role: state.role,
     })),
   );
-  const pathName = usePathname();
 
   useEffect(() => {
     setHandleGetIdUsers();

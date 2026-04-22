@@ -19,10 +19,14 @@ export default function DialogFormAddDataUser({
   idUsers: string;
 }) {
   const typeAccount = useGetIdUsers((state) => state.typeAccount);
+  const hasNotFilled = useGetIdUsers((state) => state.hasNotFilled);
+  const notFill = Object.values(hasNotFilled ?? "").every(
+    (value) => value === undefined,
+  );
   const [isTypeAccount, setIsTypeAccount] = useState<boolean>(false);
   useEffect(() => {
     const alreadyShown = localStorage.getItem("alreadyShownTypeAccountDialog");
-    if (!alreadyShown && typeAccount === "google") {
+    if (!alreadyShown && typeAccount === "google" && notFill) {
       setIsTypeAccount(true);
     }
   }, [typeAccount]);

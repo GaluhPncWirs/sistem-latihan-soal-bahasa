@@ -40,7 +40,7 @@ type DataHistoryExams = {
 };
 
 export default function Profil() {
-  const getIdStudent = useGetIdUsers((state) => state.idUsers);
+  const getIdStudent = useGetIdUsers((state) => state.idUser);
   const dataStudent = useGetDataUsers((state) => state.dataUsers);
   const getHistoryStudent = useDataExams(dataStudent, getIdStudent);
   const [resultExamPerClass, setResultExamPerClass] = useState<

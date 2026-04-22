@@ -36,7 +36,7 @@ import { History } from "lucide-react";
 import HeaderProfile from "@/layout/headerProfile/content";
 
 export default function TeacherProfile() {
-  const getidTeacher = useGetIdUsers((state) => state.idUsers);
+  const getidTeacher = useGetIdUsers((state) => state.idUser);
   const [getHistoryExams, setGetHistoryExams] = useState<string[]>([]);
   const getProfileTeacher = useGetDataUsers((state) => state.dataUsers);
 

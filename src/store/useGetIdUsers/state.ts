@@ -1,26 +1,33 @@
 import { create } from "zustand";
 
-type dataUserManual = {
-  idUser: string;
-  role: string;
-  typeAccount: string;
-};
+// type dataUserManual = {
+//   idUser: string;
+//   role: string;
+//   typeAccount: string;
+// };
 
-type dataUserGoogle = {
-  classes: string;
-  email: string;
-  idUser: string;
-  name: string;
-  nis: number;
-  noTlp: string;
-  picture: string;
-  role: string;
-  typeAccount: string;
+// type dataUserGoogle = {
+//   classes: string;
+//   email: string;
+//   idUser: string;
+//   name: string;
+//   nis: number;
+//   noTlp: string;
+//   picture: string;
+//   role: string;
+//   typeAccount: string;
+// };
+
+type dataUserFromGoogleHasNotFilled = {
+  classes: string | null;
+  nis: number | null;
+  noTlp: string | null;
 };
 
 type GetIdUsersState = {
-  idUsers: string;
+  idUser: string;
   role: string;
+  hasNotFilled: dataUserFromGoogleHasNotFilled | null;
   typeAccount: string;
   isLoading: boolean;
   message: string;
@@ -28,8 +35,9 @@ type GetIdUsersState = {
 };
 
 export const useGetIdUsers = create<GetIdUsersState>((set) => ({
-  idUsers: "",
+  idUser: "",
   role: "",
+  hasNotFilled: null,
   typeAccount: "",
   isLoading: false,
   message: "",
@@ -44,26 +52,31 @@ export const useGetIdUsers = create<GetIdUsersState>((set) => ({
       if (response.status) {
         if (response.role === "pelajar") {
           set({
-            idUsers: response.data.idStudent,
+            idUser: response.data.idStudent,
             role: response.data.role,
             typeAccount: response.data.typeAccount,
+            hasNotFilled: {
+              classes: response.data.classes,
+              nis: response.data.nis,
+              noTlp: response.data.noTlp,
+            },
             isLoading: false,
             message: "ID berhasil di ambil",
           });
         } else if (response.role === "pengajar") {
           set({
-            idUsers: response.data.idTeacher,
+            idUser: response.data.idTeacher,
             role: response.data.role,
             isLoading: false,
             message: "ID berhasil di ambil",
           });
         }
       } else {
-        set({ idUsers: "", isLoading: false, message: "ID gagal di ambil" });
+        set({ idUser: "", isLoading: false, message: "ID gagal di ambil" });
       }
     } catch (error) {
       set({
-        idUsers: "",
+        idUser: "",
         isLoading: false,
         message: "Gagal decode token / token tidak valid",
       });
