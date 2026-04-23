@@ -136,7 +136,7 @@ export default function Introduction() {
               <CarouselContent className="max-h-60 sm:max-h-56 md:max-h-72 lg:max-h-96">
                 <CarouselItem className="flex items-center justify-center p-5">
                   <Image
-                    src="/img/beranda/dashboard.jpeg"
+                    src="/img/beranda/dashboardSiswa.jpeg"
                     alt="Dashboard Page"
                     width={500}
                     height={500}
@@ -145,7 +145,7 @@ export default function Introduction() {
                 </CarouselItem>
                 <CarouselItem className="flex items-center justify-center p-5">
                   <Image
-                    src="/img/beranda/profile.jpeg"
+                    src="/img/beranda/profileSiswa.jpeg"
                     alt="Profile Page"
                     width={500}
                     height={500}

@@ -96,43 +96,28 @@ export default function DashboardStudent() {
 
   async function lateExams(idUjian: number) {
     if (!getIdStudent) return;
-    const { data, error } = await supabase
+    const payload = {
+      created_at: new Date().toISOString(),
+      student_id: getIdStudent,
+      exam_id: Number(idUjian),
+      answer_student: null,
+      hasil_ujian: "telat",
+      status_exam: true,
+      kelas: dataStudent?.classes,
+    };
+
+    const { error: insertError } = await supabase
       .from("history-exam-student")
-      .select("hasil_ujian, exam_id")
-      .eq("hasil_ujian", "telat")
-      .eq("exam_id", idUjian)
-      .eq("student_id", getIdStudent);
-
-    if (error) {
-      console.error("ERROR SUPABASE:", error);
-      toast("❌ Gagal Ambil Data", {
-        description: "Terjadi kesalahan saat cek data",
+      .upsert(payload, {
+        onConflict: "student_id,exam_id",
       });
-      return;
-    } else if (data.length > 0) {
-      return;
+
+    if (insertError) {
+      toast("❌ Gagal Simpan Data", {
+        description: insertError.message,
+      });
     } else {
-      const payload = {
-        created_at: new Date().toISOString(),
-        student_id: getIdStudent,
-        exam_id: Number(idUjian),
-        answer_student: null,
-        hasil_ujian: "telat",
-        status_exam: true,
-        kelas: dataStudent?.classes,
-      };
-
-      const { error: insertError } = await supabase
-        .from("history-exam-student")
-        .insert(payload);
-
-      if (insertError) {
-        toast("❌ Gagal Simpan Data", {
-          description: insertError.message,
-        });
-      } else {
-        console.log("Berhasil insert data telat");
-      }
+      console.log("Berhasil insert data telat");
     }
   }
 

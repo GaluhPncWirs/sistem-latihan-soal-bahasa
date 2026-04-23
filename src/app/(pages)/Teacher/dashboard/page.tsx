@@ -19,6 +19,7 @@ import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useGetDataUsers } from "@/store/useGetDataUsers/state";
 import MainContent from "@/layout/mainContent/content";
 import { BarChart3, ClipboardCheck, Layers } from "lucide-react";
+import { useManageDataExams } from "@/app/hooks/getManageDataExams";
 
 export default function Teacher() {
   const [dashboardButton, setDashboardButton] = useState({
@@ -29,7 +30,7 @@ export default function Teacher() {
   });
   const getidTeacher = useGetIdUsers((state) => state.idUser);
   const dataUserTeacher = useGetDataUsers((state) => state.dataUsers);
-  const [dataManageExams, setDataManageExams] = useState<string[]>([]);
+  const manageDataExams = useManageDataExams(getidTeacher);
   const dataStudentExams = getResultExamDataStudent(getidTeacher);
 
   function handleClickItem(event: string) {
@@ -42,105 +43,18 @@ export default function Teacher() {
   }
 
   const jumlahSiswa = new Set(
-    dataManageExams.flatMap((a: any) => a.lengthStudent),
+    manageDataExams.flatMap((a: any) => a.lengthStudent),
   );
 
-  const averageValueExam = dataManageExams
+  const averageValueExam = manageDataExams
     ?.flatMap((item: any) => item.hasil_ujian)
     .filter((a: string) => a !== "pending" && a !== "telat")
     .map(Number)
     .reduce((acc: number, cur: number) => acc + cur, 0);
 
-  useEffect(() => {
-    if (!getidTeacher) return;
-    async function getDataManageExams() {
-      const [
-        { data: datasManageExams, error: errorDatasManageExams },
-        { data: isCompleteExam, error: errorIsCompleteExam },
-        { data: lengthStudent, error: errorLengthStudent },
-      ] = await Promise.all([
-        supabase
-          .from("managed_exams")
-          .select("*, exams(nama_ujian)")
-          .eq("id_Teacher", getidTeacher),
-        supabase
-          .from("history-exam-student")
-          .select(
-            "exam_id,student_id,kelas,hasil_ujian,status_exam,exams(idTeacher)",
-          )
-          .eq("exams.idTeacher", getidTeacher),
-        supabase.from("account-student").select("classes,idStudent"),
-      ]);
-
-      if (errorDatasManageExams || errorIsCompleteExam || errorLengthStudent) {
-        console.log("data error ditampilkan");
-      } else {
-        const filterNull = isCompleteExam?.filter(
-          (isNull: any) => isNull.exams !== null,
-        );
-        const completeExams = filterNull.reduce((acc: any, cur: any) => {
-          const found = acc.find(
-            (item: { kelas: string }) => item.kelas === cur.kelas,
-          );
-          if (!found) {
-            acc.push({
-              kelas: cur.kelas,
-              exam_id: [cur.exam_id],
-              student_id: [cur.student_id],
-              hasil_ujian: [cur.hasil_ujian],
-            });
-          } else {
-            found.student_id.push(cur.student_id);
-            found.exam_id.push(cur.exam_id);
-            found.hasil_ujian.push(cur.hasil_ujian);
-          }
-          return acc;
-        }, []);
-
-        const totalStudent = lengthStudent.reduce((acc: any, cur: any) => {
-          const foundClass = acc.find(
-            (item: { classes: string }) => item.classes === cur.classes,
-          );
-          if (!foundClass) {
-            acc.push({
-              classes: cur.classes,
-              idStudent: [cur.idStudent],
-            });
-          } else {
-            foundClass.idStudent.push(cur.idStudent);
-          }
-          return acc;
-        }, []);
-
-        const mergedData = datasManageExams?.map((item: any) => {
-          const findsExams = completeExams.find(
-            (f: any) =>
-              f.kelas === item.kelas && f.exam_id.includes(item.idExams),
-          );
-
-          const studentCompleteExams = findsExams?.student_id.filter(
-            (_: any, i: number) => findsExams.exam_id[i] === item.idExams,
-          );
-
-          const findStudent = totalStudent.find(
-            (f: any) => f.classes === item.kelas,
-          );
-          return {
-            ...item,
-            lengthStudent: findStudent?.idStudent ?? [],
-            lengthStudentCompleteExams: studentCompleteExams,
-            hasil_ujian: findsExams?.hasil_ujian ?? [],
-          };
-        });
-        setDataManageExams(mergedData);
-      }
-    }
-    getDataManageExams();
-  }, [getidTeacher]);
-
   return (
     <MainContent>
-      {dataManageExams.length > 0 ? (
+      {manageDataExams.length > 0 ? (
         <div>
           <HeaderDasboard
             user="Pengajar"
@@ -155,7 +69,7 @@ export default function Teacher() {
               <div className="bg-[#476EAE] rounded-md p-4 sm:basis-[30%] lg:basis-1/5 lg:p-5">
                 <ClipboardCheck className="size-9 mx-auto" />
                 <span className="text-3xl font-bold block py-2 sm:text-4xl">
-                  {dataManageExams.length || "0"}
+                  {manageDataExams.length || "0"}
                 </span>
                 <h1 className="font-semibold">Ujian Dibuat</h1>
               </div>
@@ -192,8 +106,8 @@ export default function Teacher() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {dataManageExams.length > 0 ? (
-                        dataManageExams.map((item: any, i: number) => (
+                      {manageDataExams.length > 0 ? (
+                        manageDataExams.map((item: any, i: number) => (
                           <TableRow key={i}>
                             <TableCell>{i + 1}</TableCell>
                             <TableCell>{item.exams?.nama_ujian}</TableCell>

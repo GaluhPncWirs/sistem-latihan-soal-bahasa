@@ -8,6 +8,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/lib/supabase/data";
 import { useGetIdUsers } from "@/store/useGetIdUsers/state";
 import { useEffect, useState } from "react";
@@ -34,11 +42,11 @@ export default function DialogFormAddDataUser({
   async function handleAddDataUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const resultPayload = Object.fromEntries(formData.entries());
+    const resultInputPayload = Object.fromEntries(formData.entries());
 
     const { error } = await supabase
       .from("account-student")
-      .update(resultPayload)
+      .update(resultInputPayload)
       .eq("idStudent", idUsers)
       .single();
 
@@ -70,7 +78,18 @@ export default function DialogFormAddDataUser({
               <label htmlFor="classes" className="mb-2 block">
                 Kelas
               </label>
-              <Input type="text" id="classes" name="classes" required />
+              <Select required name="classes">
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Pilih Kelas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="1A">1A</SelectItem>
+                    <SelectItem value="2B">2B</SelectItem>
+                    <SelectItem value="3A">3A</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <label htmlFor="nis" className="mb-2 block">
