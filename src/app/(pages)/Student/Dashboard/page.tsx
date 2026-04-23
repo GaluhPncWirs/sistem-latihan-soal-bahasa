@@ -94,7 +94,8 @@ export default function DashboardStudent() {
   }
 
   async function lateExams(idUjian: number) {
-    const { error } = await supabase
+    if (!getIdStudent) return;
+    const { data, error } = await supabase
       .from("history-exam-student")
       .select("hasil_ujian, exam_id")
       .eq("hasil_ujian", "telat")
@@ -107,39 +108,41 @@ export default function DashboardStudent() {
         description: "Terjadi kesalahan saat cek data",
       });
       return;
-    }
-
-    // ✅ kalau BELUM ADA → insert
-    const payload = {
-      created_at: new Date().toISOString(),
-      student_id: getIdStudent,
-      exam_id: Number(idUjian),
-      answer_student: null,
-      hasil_ujian: "telat",
-      status_exam: true,
-      kelas: dataStudent?.classes,
-    };
-
-    const { error: insertError } = await supabase
-      .from("history-exam-student")
-      .insert(payload);
-
-    if (insertError) {
-      toast("❌ Gagal Simpan Data", {
-        description: insertError.message,
-      });
+    } else if (data.length > 0) {
+      return;
     } else {
-      console.log("Berhasil insert data telat");
+      const payload = {
+        created_at: new Date().toISOString(),
+        student_id: getIdStudent,
+        exam_id: Number(idUjian),
+        answer_student: null,
+        hasil_ujian: "telat",
+        status_exam: true,
+        kelas: dataStudent?.classes,
+      };
+
+      const { error: insertError } = await supabase
+        .from("history-exam-student")
+        .insert(payload);
+
+      if (insertError) {
+        toast("❌ Gagal Simpan Data", {
+          description: insertError.message,
+        });
+      } else {
+        console.log("Berhasil insert data telat");
+      }
     }
   }
 
-  // async function handleLateExam(idUjian: number, student_id: string) {
-  //   const key = `${idUjian}-${student_id}`;
-  //   if (!processedLateExams.current.has(key)) {
-  //     processedLateExams.current.add(key);
-  //     await lateExams(idUjian);
-  //   }
-  // }
+  async function handleLateExam(idUjian: number, student_id: string) {
+    if (!student_id) return;
+    const key = `${idUjian}-${student_id}`;
+    if (!processedLateExams.current.has(key)) {
+      processedLateExams.current.add(key);
+      await lateExams(idUjian);
+    }
+  }
 
   function convertDateToISO(dateStr: string) {
     const date = new Date(dateStr);
@@ -181,6 +184,7 @@ export default function DashboardStudent() {
   }
 
   useEffect(() => {
+    if (!scheduleExams.length || !getIdStudent) return;
     const lateExamsList = scheduleExams.filter(
       (data: {
         tenggat_waktu: string;
@@ -194,15 +198,15 @@ export default function DashboardStudent() {
 
     setLateExam(lateExamsList);
 
-    // lateExamsList.forEach(
-    //   (data: {
-    //     tenggat_waktu: string;
-    //     dibuat_tgl: string;
-    //     idExams: number;
-    //   }) => {
-    //     handleLateExam(data.idExams, getIdStudent);
-    //   },
-    // );
+    lateExamsList.forEach(
+      (data: {
+        tenggat_waktu: string;
+        dibuat_tgl: string;
+        idExams: number;
+      }) => {
+        handleLateExam(data.idExams, getIdStudent);
+      },
+    );
   }, [scheduleExams, getIdStudent]);
 
   function deadlineUjianTercepatHariIni() {
