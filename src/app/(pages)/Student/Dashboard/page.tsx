@@ -42,12 +42,13 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+type ExamStatus = "BELUM_MULAI" | "BERLANGSUNG" | "LEWAT";
+
 export default function DashboardStudent() {
   const getIdStudent = useGetIdUsers((state) => state.idUser);
   const dataStudent = useGetDataUsers((state) => state.dataUsers);
   const scheduleExams = useDataExams(dataStudent, getIdStudent);
   const { push } = useRouter();
-  const processedLateExams = useRef<Set<string>>(new Set());
   const [confirm, setConfirm] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(false);
   const [lateExam, setLateExam] = useState([]);
@@ -135,15 +136,6 @@ export default function DashboardStudent() {
     }
   }
 
-  async function handleLateExam(idUjian: number, student_id: string) {
-    if (!student_id) return;
-    const key = `${idUjian}-${student_id}`;
-    if (!processedLateExams.current.has(key)) {
-      processedLateExams.current.add(key);
-      await lateExams(idUjian);
-    }
-  }
-
   function convertDateToISO(dateStr: string) {
     const date = new Date(dateStr);
     const year = date.getFullYear();
@@ -160,11 +152,6 @@ export default function DashboardStudent() {
     return [toMinute(startTimeExam), toMinute(endTimeExams)];
   }
 
-  type ExamStatus =
-    | "Ujian Belum Dimulai"
-    | "Sedang Berlangsung"
-    | "Ujian Telah Lewat Batas Waktu";
-
   function getExamStatus(tenggat_waktu: string, tgl_ujian: string): ExamStatus {
     const [startExams, endExams] = convertToNumber(tenggat_waktu);
 
@@ -172,42 +159,39 @@ export default function DashboardStudent() {
     const todayISO = convertDateToISO(waktuHariIni);
     const examISO = convertDateToISO(tgl_ujian);
 
-    if (examISO > todayISO) return "Ujian Belum Dimulai";
+    if (examISO > todayISO) return "BELUM_MULAI";
 
     if (examISO === todayISO) {
-      if (hariIni < startExams) return "Ujian Belum Dimulai";
-      if (hariIni > endExams) return "Ujian Telah Lewat Batas Waktu";
-      return "Sedang Berlangsung";
+      if (hariIni < startExams) return "BELUM_MULAI";
+      if (hariIni > endExams) return "LEWAT";
+      return "BERLANGSUNG";
     }
-
-    return "Ujian Telah Lewat Batas Waktu";
+    return "LEWAT";
   }
 
   useEffect(() => {
-    if (!scheduleExams.length || !getIdStudent) return;
-    const lateExamsList = scheduleExams.filter(
-      (data: {
-        tenggat_waktu: string;
-        dibuat_tgl: string;
-        idExams: number;
-      }) => {
-        const status = getExamStatus(data.tenggat_waktu, data.dibuat_tgl);
-        return status === "Ujian Telah Lewat Batas Waktu";
-      },
-    );
+    if (!scheduleExams.length) return;
+    async function handleLateExams() {
+      const lateExamsList = scheduleExams.filter(
+        (data: {
+          tenggat_waktu: string;
+          dibuat_tgl: string;
+          idExams: number;
+        }) => {
+          const status = getExamStatus(data.tenggat_waktu, data.dibuat_tgl);
+          return status === "LEWAT";
+        },
+      );
 
-    setLateExam(lateExamsList);
-
-    lateExamsList.forEach(
-      (data: {
-        tenggat_waktu: string;
-        dibuat_tgl: string;
-        idExams: number;
-      }) => {
-        handleLateExam(data.idExams, getIdStudent);
-      },
-    );
-  }, [scheduleExams, getIdStudent]);
+      if (lateExamsList.length > 0) {
+        for (const dataExam of lateExamsList as any[]) {
+          await lateExams(dataExam.idExams);
+        }
+      }
+      setLateExam(lateExamsList);
+    }
+    handleLateExams();
+  }, [scheduleExams]);
 
   function deadlineUjianTercepatHariIni() {
     const hariIni = toMinute(waktuDurasiIni);
@@ -425,10 +409,9 @@ export default function DashboardStudent() {
                                   ) : data.status_exam === true &&
                                     data.hasil_ujian === "telat" ? (
                                     "Telat"
-                                  ) : status === "Ujian Belum Dimulai" ? (
+                                  ) : status === "BELUM_MULAI" ? (
                                     "Ujian Belum Dimulai"
-                                  ) : status ===
-                                    "Ujian Telah Lewat Batas Waktu" ? (
+                                  ) : status === "LEWAT" ? (
                                     "Ujian Telah Lewat Batas Waktu"
                                   ) : (
                                     <Dialog>
@@ -566,7 +549,7 @@ export default function DashboardStudent() {
                                   colSpan={4}
                                   className="text-center text-lg font-semibold"
                                 >
-                                  Tidak Ada Nilai (Ujian Telat)
+                                  Telat Melakukan Ujian
                                 </TableCell>
                               </TableRow>
                             ) : (

@@ -13,6 +13,7 @@
         "memperbaiki masalah pada import component layout",
         "sedang mengerjakan bagian jika user login menggunakan akun google maka bisa masuk kedalam sistem ujian",
         "selesai untuk memperbaiki masalah pada dialog saat user menggunakan akun google",
-        "selesai memperbaiki bug saat ada ujian yang telat dan juga merefaktor code"
+        "selesai memperbaiki bug saat ada ujian yang telat dan juga merefaktor code",
+        "berhasil untuk memperbaiki bug saat ujian telat"
     ]
 }
